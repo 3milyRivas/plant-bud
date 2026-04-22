@@ -11,7 +11,7 @@ import { middleware } from '#start/kernel'
 import { controllers } from '#generated/controllers'
 import router from '@adonisjs/core/services/router'
 
-router.on('/').render('pages/home').as('home')
+router.on('/').render('pages/welcome').as('home')
 
 router
   .group(() => {
@@ -28,3 +28,7 @@ router
     router.post('logout', [controllers.Session, 'destroy'])
   })
   .use(middleware.auth())
+
+  router.on('/welcome.edge').render('pages/welcome').as('home')
+
+router.on('/plants.edge').render('pages/plants').as('plants')
