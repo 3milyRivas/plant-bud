@@ -29,6 +29,6 @@ router
   })
   .use(middleware.auth())
 
-  router.on('/welcome.edge').render('pages/welcome').as('home')
-
+router.on('/homepage').render('pages/clients/homepage')
+router.on('/welcome.edge').render('pages/welcome').as('welcome')
 router.on('/plants.edge').render('pages/plants').as('plants')
