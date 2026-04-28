@@ -1,31 +1,62 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>
-      Plant bud
-    </title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @stack('dumper')
-  </head>
-  <body>
- <h1 class="font-sans">Plant Bud</h1>
-<div>
-  <div>Plants</div>
-  <div>Community</div>
-  <div>Maintenance</div>
-  <div>Plant Nursery</div>
-</div>
-<div>
-  <div>
-    <h1>Welcome to Plant Bud</h1>
-    <p>We as a team are proud to offer you te best experience on the maintenance
-      and care of plants. </p>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>
+    Plant bud
+  </title>
+  @vite(['resources/css/app.css', 'resources/js/app.js'])
+  @stack('dumper')
+</head>
+
+<body
+  class="bg-[#6C8E6B] bg-[radial-gradient(circle_at_20%_20%,rgba(237,231,214,0.25)_0%,transparent_60%),radial-gradient(circle_at_80%_80%,rgba(217,217,217,0.2)_0%,transparent_60%)]">
+
+ <div
+  class="bg-[url('/assets/resources/images/bg-homepage.png')] bg-cover bg-center text-white"
+
+>
+
+  <div class="bg-green-900 bg-opacity-60">
+
+    <header class="flex justify-between items-center p-6">
+      <h1 class="text-2xl font-bold"> Plant Bud</h1>
+      <p class="italic">Plants make better life</p>
+    </header>
+
+
+    <div class="text-center py-10">
+      <h2 class="text-5xl font-extrabold">Plant-Bud</h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-10 pb-10 bg-white-900 bg-opacity-60">
+      <div class="text-center">
+        <h3 class="text-xl font-semibold">Plants</h3>
+        <p>Not all the plants need the same conditions.</p>
+      </div>
+      <div class="text-center">
+        <h3 class="text-xl font-semibold">Community</h3>
+        <p>Keep track of other people’s gardens.</p>
+      </div>
+      <div class="text-center">
+        <h3 class="text-xl font-semibold">Maintenance</h3>
+        <p>Maintain your garden to keep it alive.</p>
+      </div>
+      <div class="text-center">
+        <h3 class="text-xl font-semibold">Plant Nursery</h3>
+        <p>Find your new bud in our listed shops.</p>
+      </div>
+    </div>
+
   </div>
-
 </div>
-  </body>
+
+
+
+
+
+</body>
+
 </html>
-
-
