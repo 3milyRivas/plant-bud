@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/css/leaves.css'])
     <link rel="icon" href="resources/images/essential/icono.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="resources/css/leaves.css">
@@ -73,15 +73,15 @@
                 <img src="resources/images/welcome/header.png" alt="" class="w-full block">
 
                 <div class="absolute top-6 right-10 flex gap-4 z-20">
-                    <button
+                    <a href="/register"
                         class="px-5 py-2 rounded-full bg-[#EDE7D6] text-[#1E3D19] font-semibold font-poppins shadow-md hover:scale-105 transition">
                         Sign Up
-                    </button>
+                    </a>
 
-                    <button
+                    <a href="/login"
                         class="px-5 py-2 rounded-full border border-[#EDE7D6] text-[#EDE7D6] font-semibold font-poppins hover:bg-[#EDE7D6] hover:text-[#1E3D19] transition">
                         Login
-                    </button>
+                    </a>
                 </div>
 
                 <div
