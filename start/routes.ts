@@ -31,3 +31,4 @@ router
 
 router.on('/homepage').render('pages/clients/homepage')
 router.on('/plants.edge').render('pages/plants').as('plants')
+router.on('/profile').render('pages/clients/profile').as('profile')
