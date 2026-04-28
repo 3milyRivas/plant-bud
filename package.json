@@ -55,6 +55,7 @@
     "prettier": "^3.8.2",
     "typescript": "^6.0.3",
     "vite": "^7.3.1",
+    "vite-plugin-static-copy": "^4.1.0",
     "youch": "^4.1.1"
   },
   "dependencies": {
