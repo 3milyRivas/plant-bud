@@ -11,7 +11,6 @@ export type ScannedRoutes = {
     'session.create': { paramsTuple?: []; params?: {} }
     'session.store': { paramsTuple?: []; params?: {} }
     'session.destroy': { paramsTuple?: []; params?: {} }
-    'plants': { paramsTuple?: []; params?: {} }
     'profile': { paramsTuple?: []; params?: {} }
   }
   GET: {
@@ -19,7 +18,6 @@ export type ScannedRoutes = {
     'plants': { paramsTuple?: []; params?: {} }
     'new_account.create': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
-    'plants': { paramsTuple?: []; params?: {} }
     'profile': { paramsTuple?: []; params?: {} }
   }
   HEAD: {
@@ -27,7 +25,6 @@ export type ScannedRoutes = {
     'plants': { paramsTuple?: []; params?: {} }
     'new_account.create': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
-    'plants': { paramsTuple?: []; params?: {} }
     'profile': { paramsTuple?: []; params?: {} }
   }
   POST: {
