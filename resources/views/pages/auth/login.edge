@@ -1,34 +1,117 @@
-@layout()
-  <div class="form-container">
-    <div>
-      <h1> Login </h1>
-      <p>
-        Enter your email and password below to log in
-      </p>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/css/leaves.css'])
+
+  <link rel="icon" href="resources/images/essential/icono.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+
+  <title>Login</title>
+</head>
+
+<body
+  class="bg-[#6C8E6B] bg-[radial-gradient(circle_at_20%_20%,rgba(237,231,214,0.25)_0%,transparent_60%),radial-gradient(circle_at_80%_80%,rgba(217,217,217,0.2)_0%,transparent_60%)] font-poppins">
+
+  <div class="leaves pointer-events-none fixed inset-0 overflow-hidden z-0">
+    <svg class="leaf" viewBox="0 0 24 24">
+      <path d="M12 2C8 6 4 10 4 14a8 8 0 0016 0c0-4-4-8-8-12z" />
+    </svg>
+    <svg class="leaf" viewBox="0 0 24 24">
+      <path d="M12 2C8 6 4 10 4 14a8 8 0 0016 0c0-4-4-8-8-12z" />
+    </svg>
+    <svg class="leaf" viewBox="0 0 24 24">
+      <path d="M12 2C8 6 4 10 4 14a8 8 0 0016 0c0-4-4-8-8-12z" />
+    </svg>
+    <svg class="leaf" viewBox="0 0 24 24">
+      <path d="M12 2C8 6 4 10 4 14a8 8 0 0016 0c0-4-4-8-8-12z" />
+    </svg>
+    <svg class="leaf" viewBox="0 0 24 24">
+      <path d="M12 2C8 6 4 10 4 14a8 8 0 0016 0c0-4-4-8-8-12z" />
+    </svg>
+    <svg class="leaf" viewBox="0 0 24 24">
+      <path d="M12 2C8 6 4 10 4 14a8 8 0 0016 0c0-4-4-8-8-12z" />
+    </svg>
+    <svg class="leaf" viewBox="0 0 24 24">
+      <path d="M12 2C8 6 4 10 4 14a8 8 0 0016 0c0-4-4-8-8-12z" />
+    </svg>
+  </div>
+
+  <div class="flex min-h-screen relative z-10">
+    <div class="w-1/2 hidden md:block h-screen overflow-hidden">
+      <img src="resources/images/login/login-first.png" alt="Login Image" class="w-full h-full object-cover">
     </div>
 
-    <div>
-      @form({ route: 'session.store', method: 'POST' })
-        <div>
+    <div class="w-full md:w-1/2 flex items-center justify-center">
+
+      <div class="w-full max-w-md px-8">
+
+        <div class="mb-6 text-center relative flex justify-center">
+          <div class="absolute w-60 h-50 bg-white opacity-30 blur-3xl rounded-full"></div>
+          <img src="/resources/images/essential/logo-v2.png" alt="Logo" class="relative w-70">
+        </div>
+
+        <div class="mb-8 mt-8 text-center">
+          <h1 class="text-3xl font-bold text-[#EDE7D6] drop-shadow-[0_6px_10px_rgba(0,0,0,0.3)]">
+            Welcome Back!
+          </h1>
+        </div>
+
+        @form({ route: 'session.store', method: 'POST' })
+        <div class="mb-4">
           @field.root({ name: 'email' })
-            @!field.label({ text: 'Email' })
-            @!input.control({ type: 'email' })
-            @!field.error()
+          @!field.label({ text: 'Email', class: 'text-[#EDE7D6] text-sm' })
+          @!input.control({
+          type: 'email',
+          placeholder: 'Type email address',
+          class: 'w-full mt-1 px-4 py-2 rounded-lg bg-white/90 focus:outline-none'
+          })
+          @!field.error({ class: 'text-red-300 text-xs mt-1' })
           @end
         </div>
 
-        <div>
+        <div class="mb-6">
           @field.root({ name: 'password' })
-            @!field.label({ text: 'Password' })
-            @!input.control({ type: 'password' })
-            @!field.error()
+          @!field.label({ text: 'Password', class: 'text-[#EDE7D6] text-sm' })
+
+          @!input.control({
+          type: 'password',
+          placeholder: 'Type your password',
+          class: 'w-full mt-1 px-4 py-2 rounded-lg bg-white/90 focus:outline-none'
+          })
+
+          <div class="flex justify-end mt-1">
+            <a href="/forgot-password" class="text-xs text-[#1E3D19] font-semibold hover:underline">
+              Forgot your password?
+            </a>
+          </div>
+
+          @!field.error({ class: 'text-red-300 text-xs mt-1' })
           @end
         </div>
 
-        <div>
-          @!button({ text: 'Login', type: 'submit' })
+        <div class="mb-6">
+          @!button({
+          text: 'Login',
+          type: 'submit',
+          class: 'w-full bg-[#113E14] text-white py-3 rounded-lg font-bold hover:opacity-90 transition'
+          })
         </div>
-      @end
+
+        @end
+
+        <p class="text-center text-sm font-semibold text-[#EDE7D6]">
+          You don’t have an account?
+          <a href="/register" class="underline text-[#1E3D19] font-bold hover:opacity-80">
+            Create one here!
+          </a>
+        </p>
+      </div>
     </div>
   </div>
-@end
+</body>
+
+</html>
