@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
+
+<head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     {{{ await $slots.title()}}}
@@ -9,6 +10,7 @@
     @stack('dumper')
 
     <!--fonts-->
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <script>
         module.exports = {
@@ -16,13 +18,16 @@
                 extend: {
                     fontFamily: {
                         poppins: ['Poppins', 'sans-serif'],
+                        abril: ['Abril Fatface', 'serif'],
                     },
                 },
             },
         }
     </script>
-  </head>
-  <body class="bg-[#6C8E6B] bg-[radial-gradient(circle_at_20%_20%,rgba(237,231,214,0.25)_0%,transparent_60%),radial-gradient(circle_at_80%_80%,rgba(217,217,217,0.2)_0%,transparent_60%)]">
+</head>
+
+<body
+    class="bg-[#6C8E6B] bg-[radial-gradient(circle_at_20%_20%,rgba(237,231,214,0.25)_0%,transparent_60%),radial-gradient(circle_at_80%_80%,rgba(217,217,217,0.2)_0%,transparent_60%)]">
     <div class="leaves pointer-events-none fixed inset-0 overflow-hidden z-0">
         <svg class="leaf" viewBox="0 0 24 24">
             <path d="M12 2C8 6 4 10 4 14a8 8 0 0016 0c0-4-4-8-8-12z" />
@@ -63,5 +68,6 @@
     </div>
 
     {{{ await $slots.main() }}}
-  </body>
+</body>
+
 </html>
