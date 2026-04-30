@@ -20,7 +20,10 @@ router.on('/plants').render('pages/plants').as('plants')
 router.on('/homepage').render('pages/clients/homepage')
 router.on('/nurseries').render('pages/clients/nurseries')
 router.on('/profile').render('pages/clients/profile').as('profile')
+
+/*services views*/
 router.on('/request').render('pages/services/request').as('request')
+router.on('/maintenance').render('pages/services/maintenance').as('maintenance')
 
 router
   .group(() => {
