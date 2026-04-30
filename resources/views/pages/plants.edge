@@ -1,37 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Abril+Fatface&display=swap"
-        rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        poppins: ['Poppins', 'sans-serif'],
-                        abril: ['Abril Fatface', 'serif'],
-                    },
-                },
-            },
-        }
-    </script>
-    <title>PlantsSection</title>
-</head>
-
-
-<body class="bg-[#6B8C6C]">
-
+@layout()
+@slot('title')
+<title>Plants</title>
+@endslot
+<div class="relative z-10">
     <div class="relative">
-
         <img src="resources/images/plants/plant.budd.png" alt="photo" class="w-full h-auto">
         <div class="absolute top-14 left-0 w-full flex items-center justify-between px-14">
             <div class="transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110">
@@ -74,7 +46,6 @@
 
             <img src="resources/images/plants/leaf.png" alt="logo" class="w-14 h-14">
         </div>
-    </div>
     </div>
 
     <div class="px-12 mt-8">
@@ -123,7 +94,8 @@
                 <div class="absolute top-[35%] rounded-l-[57px] right-[-35px] w-[85px] h-[130px] bg-[#6f8f6a]">
                 </div>
 
-                <img src="resources/images/plants/icon.flower.png" class="absolute top-10 left-1/2 -translate-x-1/2 w-8" />
+                <img src="resources/images/plants/icon.flower.png"
+                    class="absolute top-10 left-1/2 -translate-x-1/2 w-8" />
 
 
                 <div
@@ -132,7 +104,8 @@
                 </div>
 
 
-                <img src="resources/images/plants/icon.plant.png" class="absolute bottom-12 left-1/2 -translate-x-1/2 w-8" />
+                <img src="resources/images/plants/icon.plant.png"
+                    class="absolute bottom-12 left-1/2 -translate-x-1/2 w-8" />
 
             </div>
 
@@ -144,7 +117,8 @@
                     class="bg-[#D3DCCB] w-[240px] rounded-[28px] p-6 flex flex-col items-center relative overflow-hidden">
 
                     <div class="w-full rounded-[20px] p-[0.5]">
-                        <img src="resources/images/plants/curry.png" alt="curry-leaf-tree" class="w-full h-[200px] object-cover rounded-[20px]">
+                        <img src="resources/images/plants/curry.png" alt="curry-leaf-tree"
+                            class="w-full h-[200px] object-cover rounded-[20px]">
                     </div>
                     <div class="w-[120px] h-[3px] mx-auto bg-[#6C8E6B]/100 rounded-full blur-sm mt-2">
                     </div>
@@ -165,7 +139,8 @@
                 <div
                     class="bg-[#D3DCCB] w-[240px] rounded-[28px] p-6 flex flex-col items-center relative overflow-hidden">
                     <div class="w-full  rounded-[20px] p-[0.5]">
-                        <img src="resources/images/plants/rue.png" alt="rue" class="w-full h-[200px] object-cover rounded-[20px]">
+                        <img src="resources/images/plants/rue.png" alt="rue"
+                            class="w-full h-[200px] object-cover rounded-[20px]">
                     </div>
                     <div class="w-[120px] h-[3px] mx-auto bg-[#6C8E6B]/100 rounded-full blur-sm mt-2">
                     </div>
@@ -185,7 +160,8 @@
                 <div
                     class="bg-[#D3DCCB] w-[240px] rounded-[28px] p-6 flex flex-col items-center relative overflow-hidden">
                     <div class="w-full rounded-[20px] p-[0.5]">
-                        <img src="resources/images/plants/gas-plant.png" alt="gas-plant" class="w-full h-[200px] object-cover rounded-[20px]">
+                        <img src="resources/images/plants/gas-plant.png" alt="gas-plant"
+                            class="w-full h-[200px] object-cover rounded-[20px]">
                     </div>
                     <div class="w-[120px] h-[3px] mx-auto bg-[#6C8E6B]/100 rounded-full blur-sm mt-2">
                     </div>
@@ -204,7 +180,5 @@
             </div>
         </div>
     </div>
-
-</body>
-
-</html>
+</div>
+@end

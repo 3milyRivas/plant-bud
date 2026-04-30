@@ -1,350 +1,284 @@
-<!DOCTYPE html>
-<html lang="en">
+@layout()
+@slot('title')
+<title>Plant Bud</title>
+@endslot
+<div class="relative z-10">
+    <!--Header-->
+    <header class="relative">
+        <div>
+            <img src="resources/images/welcome/header.png" alt="" class="w-full block">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/css/leaves.css'])
-    <link rel="icon" href="resources/images/essential/icono.png" type="image/png">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="resources/css/leaves.css">
-    <title>Plant Bud</title>
+            <div class="absolute top-6 right-10 flex gap-4 z-20">
+                <a href="/register"
+                    class="px-5 py-2 rounded-full bg-[#EDE7D6] text-[#1E3D19] font-semibold font-poppins shadow-md hover:scale-105 transition">
+                    Sign Up
+                </a>
 
-    <script>
-        module.exports = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        poppins: ['Poppins', 'sans-serif'],
-                    },
-                },
-            },
-        }
-    </script>
-</head>
+                <a href="/login"
+                    class="px-5 py-2 rounded-full border border-[#EDE7D6] text-[#EDE7D6] font-semibold font-poppins hover:bg-[#EDE7D6] hover:text-[#1E3D19] transition">
+                    Login
+                </a>
+            </div>
 
-<body
-    class="bg-[#6C8E6B] bg-[radial-gradient(circle_at_20%_20%,rgba(237,231,214,0.25)_0%,transparent_60%),radial-gradient(circle_at_80%_80%,rgba(217,217,217,0.2)_0%,transparent_60%)]">
+            <div
+                class="absolute top-[75%] left-[75%] transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center transition-all duration-500 hover:scale-110 hover:rotate-1 hover:drop-shadow-[0_20px_60px_rgba(30,61,25,0.35)]">
+                <img src="resources/images/essential/logo.png" alt=""
+                    class="w-[600px] relative z-10 transition duration-500 hover:brightness-110">
+            </div>
+        </div>
+    </header>
 
-    <div class="leaves pointer-events-none fixed inset-0 overflow-hidden z-1">
-        <svg class="leaf" viewBox="0 0 24 24">
-            <path d="M12 2C8 6 4 10 4 14a8 8 0 0016 0c0-4-4-8-8-12z" />
-        </svg>
-        <svg class="leaf" viewBox="0 0 24 24">
-            <path d="M12 2C8 6 4 10 4 14a8 8 0 0016 0c0-4-4-8-8-12z" />
-        </svg>
-        <svg class="leaf" viewBox="0 0 24 24">
-            <path d="M12 2C8 6 4 10 4 14a8 8 0 0016 0c0-4-4-8-8-12z" />
-        </svg>
-        <svg class="leaf" viewBox="0 0 24 24">
-            <path d="M12 2C8 6 4 10 4 14a8 8 0 0016 0c0-4-4-8-8-12z" />
-        </svg>
-        <svg class="leaf" viewBox="0 0 24 24">
-            <path d="M12 2C8 6 4 10 4 14a8 8 0 0016 0c0-4-4-8-8-12z" />
-        </svg>
-        <svg class="leaf" viewBox="0 0 24 24">
-            <path d="M12 2C8 6 4 10 4 14a8 8 0 0016 0c0-4-4-8-8-12z" />
-        </svg>
-        <svg class="leaf" viewBox="0 0 24 24">
-            <path d="M12 2C8 6 4 10 4 14a8 8 0 0016 0c0-4-4-8-8-12z" />
-        </svg>
-        <svg class="leaf" viewBox="0 0 24 24">
-            <path d="M12 2C8 6 4 10 4 14a8 8 0 0016 0c0-4-4-8-8-12z" />
-        </svg>
-        <svg class="leaf" viewBox="0 0 24 24">
-            <path d="M12 2C8 6 4 10 4 14a8 8 0 0016 0c0-4-4-8-8-12z" />
-        </svg>
-        <svg class="leaf" viewBox="0 0 24 24">
-            <path d="M12 2C8 6 4 10 4 14a8 8 0 0016 0c0-4-4-8-8-12z" />
-        </svg>
-        <svg class="leaf" viewBox="0 0 24 24">
-            <path d="M12 2C8 6 4 10 4 14a8 8 0 0016 0c0-4-4-8-8-12z" />
-        </svg>
-        <svg class="leaf" viewBox="0 0 24 24">
-            <path d="M12 2C8 6 4 10 4 14a8 8 0 0016 0c0-4-4-8-8-12z" />
-        </svg>
+    <!--Section 1-->
+    <div class="flex justify-center my-16">
+        <div class="w-40 h-[2px] bg-[#EDE7D6] rounded-full opacity-70"></div>
     </div>
 
-    <div class="relative z-10">
+    <div class="flex flex-col justify-center pt-7 w-full max-w-5xl mx-auto px-20">
+        <h1 class="text-white text-7xl font-bold text-left drop-shadow-[0_6px_10px_rgba(0,0,0,0.3)]">
+            Grow <span class="text-[#1E3D19]">Plants</span> for
+        </h1>
 
-        <!--Header-->
-        <header class="relative">
-            <div>
-                <img src="resources/images/welcome/header.png" alt="" class="w-full block">
+        <div class="w-24 h-[3px] bg-[#1E3D19] mt-4 rounded-full"></div>
 
-                <div class="absolute top-6 right-10 flex gap-4 z-20">
-                    <a href="/register"
-                        class="px-5 py-2 rounded-full bg-[#EDE7D6] text-[#1E3D19] font-semibold font-poppins shadow-md hover:scale-105 transition">
-                        Sign Up
-                    </a>
+        <h1 class="text-white text-7xl font-bold text-right drop-shadow-[0_6px_10px_rgba(0,0,0,0.3)]">
+            a Better life!
+        </h1>
+    </div>
 
-                    <a href="/login"
-                        class="px-5 py-2 rounded-full border border-[#EDE7D6] text-[#EDE7D6] font-semibold font-poppins hover:bg-[#EDE7D6] hover:text-[#1E3D19] transition">
-                        Login
-                    </a>
-                </div>
+    <div class="mt-20 flex justify-center">
+        <div
+            class="relative bg-[#D5DCD4] py-7 px-20 w-full max-w-5xl rounded-xl shadow-xl border border-[#D9D9D9]/40 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:border-[#6C8E6B]/40">
 
-                <div
-                    class="absolute top-[75%] left-[75%] transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center transition-all duration-500 hover:scale-110 hover:rotate-1 hover:drop-shadow-[0_20px_60px_rgba(30,61,25,0.35)]">
-                    <img src="resources/images/essential/logo.png" alt=""
-                        class="w-[600px] relative z-10 transition duration-500 hover:brightness-110">
-                </div>
+            <img src="resources/images/welcome/first-icon.png"
+                class="absolute -top-10 left-20 w-40 drop-shadow-md transition duration-300 hover:scale-110">
+            <h2 class="font-poppins font-bold text-5xl text-right pb-3 tracking-wide">
+                What is Plant Bud?
+            </h2>
+            <div
+                class="w-16 h-[2px] bg-[#6C8E6B] ml-auto mb-4 rounded-full transition-all duration-300 group-hover:w-24">
             </div>
-        </header>
-
-        <!--Section 1-->
-        <div class="flex justify-center my-16">
-            <div class="w-40 h-[2px] bg-[#EDE7D6] rounded-full opacity-70"></div>
+            <p class="font-poppins text-[#728B6F] text-right font-semibold tracking-wide text-xl leading-relaxed">
+                <span class="text-[#1E3D19]">Plant Bud</span> is a web site
+                in wihich not only you learn about <span class="text-[#1E3D19]">plants</span> <br>
+                <span class="text-[#1E3D19]">carement</span>, but also you have access to <span
+                    class="text-[#1E3D19]">profesional services</span> of <span class="text-[#1E3D19]">garden</span>
+                <br>
+                <span class="text-[#1E3D19]">maintance</span>, encouraging you to <span class="text-[#1E3D19]">grow
+                    plants</span> in your home or <br>
+                workplace, marketing it a more <span class="text-[#1E3D19]">beautiful and healthy</span> space.
+            </p>
         </div>
+    </div>
 
-        <div class="flex flex-col justify-center pt-7 w-full max-w-5xl mx-auto px-20">
-            <h1 class="text-white text-7xl font-bold text-left drop-shadow-[0_6px_10px_rgba(0,0,0,0.3)]">
-                Grow <span class="text-[#1E3D19]">Plants</span> for
+    <div class="flex justify-center my-24">
+        <div class="w-40 h-[2px] bg-[#EDE7D6] rounded-full opacity-70"></div>
+    </div>
+
+    <div class="mt-40">
+        <div class="flex flex-col justify-center w-full max-w-5xl mx-auto px-20">
+            <h1 class="text-[#1E3D19] text-7xl font-bold text-left drop-shadow-[0_6px_10px_rgba(0,0,0,0.3)]">
+                Benefits that
             </h1>
 
             <div class="w-24 h-[3px] bg-[#1E3D19] mt-4 rounded-full"></div>
 
             <h1 class="text-white text-7xl font-bold text-right drop-shadow-[0_6px_10px_rgba(0,0,0,0.3)]">
-                a Better life!
+                Plant Bud <span class="text-[#1E3D19]">Offers You</span>
             </h1>
         </div>
 
-        <div class="mt-20 flex justify-center">
-            <div
-                class="relative bg-[#D5DCD4] py-7 px-20 w-full max-w-5xl rounded-xl shadow-xl border border-[#D9D9D9]/40 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:border-[#6C8E6B]/40">
+        <div class="mt-20">
+            <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
 
-                <img src="resources/images/welcome/first-icon.png"
-                    class="absolute -top-10 left-20 w-40 drop-shadow-md transition duration-300 hover:scale-110">
-                <h2 class="font-poppins font-bold text-5xl text-right pb-3 tracking-wide">
-                    What is Plant Bud?
-                </h2>
                 <div
-                    class="w-16 h-[2px] bg-[#6C8E6B] ml-auto mb-4 rounded-full transition-all duration-300 group-hover:w-24">
+                    class="bg-[#D5DCD4] rounded-xl px-5 py-4 h-56 shadow-xl border border-[#D9D9D9]/40 flex flex-col justify-center items-center text-center transition duration-300 hover:-translate-y-2 hover:shadow-2xl">
+                    <img src="resources/images/welcome/benefit1.png"
+                        class="w-32 mb-2 transition duration-300 hover:scale-110" alt="">
+                    <p class="font-semibold font-poppins text-2xl">
+                        Easy Access
+                        <span class="text-[#728B6F]">to Quality <br> Information</span>
+                    </p>
                 </div>
-                <p class="font-poppins text-[#728B6F] text-right font-semibold tracking-wide text-xl leading-relaxed">
-                    <span class="text-[#1E3D19]">Plant Bud</span> is a web site
-                    in wihich not only you learn about <span class="text-[#1E3D19]">plants</span> <br>
-                    <span class="text-[#1E3D19]">carement</span>, but also you have access to <span
-                        class="text-[#1E3D19]">profesional services</span> of <span class="text-[#1E3D19]">garden</span>
-                    <br>
-                    <span class="text-[#1E3D19]">maintance</span>, encouraging you to <span class="text-[#1E3D19]">grow
-                        plants</span> in your home or <br>
-                    workplace, marketing it a more <span class="text-[#1E3D19]">beautiful and healthy</span> space.
+
+                <div
+                    class="bg-[#D5DCD4] rounded-xl px-5 py-4 h-56 shadow-xl border border-[#D9D9D9]/40 flex flex-col justify-center items-center text-center transition duration-300 hover:-translate-y-2 hover:shadow-2xl">
+                    <img src="resources/images/welcome/benefit2.png"
+                        class="w-32 mb-2 transition duration-300 hover:scale-110" alt="">
+                    <p class="font-semibold font-poppins text-2xl">
+                        Access
+                        <span class="text-[#728B6F]">to Professional <br> Services</span>
+                    </p>
+                </div>
+
+                <div
+                    class="bg-[#D5DCD4] rounded-xl px-5 py-4 h-56 shadow-xl border border-[#D9D9D9]/40 flex flex-col justify-center items-center text-center transition duration-300 hover:-translate-y-2 hover:shadow-2xl">
+                    <img src="resources/images/welcome/benefit3.png"
+                        class="w-32 mb-2 transition duration-300 hover:scale-110" alt="">
+                    <p class="font-semibold font-poppins text-2xl">
+                        Save Time
+                        <span class="text-[#728B6F]">by Contacting <br> Gardeners</span>
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="mt-6 max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <div
+                    class="bg-[#D5DCD4] rounded-xl px-5 py-4 h-56 shadow-xl border border-[#D9D9D9]/40 flex flex-col justify-center items-center text-center transition duration-300 hover:-translate-y-2 hover:shadow-2xl">
+                    <img src="resources/images/welcome/benefit4.png"
+                        class="w-32 mb-2 transition duration-300 hover:scale-110" alt="">
+                    <p class="font-semibold font-poppins text-2xl">
+                        Contact
+                        <span class="text-[#728B6F]">with Other Plant <br> Stores</span>
+                    </p>
+                </div>
+
+                <div
+                    class="bg-[#D5DCD4] rounded-xl px-5 py-4 h-56 shadow-xl border border-[#D9D9D9]/40 flex flex-col justify-center items-center text-center transition duration-300 hover:-translate-y-2 hover:shadow-2xl">
+                    <img src="resources/images/welcome/benefit5.png"
+                        class="w-32 mb-2 transition duration-300 hover:scale-110" alt="">
+                    <p class="font-semibold font-poppins text-2xl">
+                        Connection
+                        <span class="text-[#728B6F]">with Other <br> People</span>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!--Section 2-->
+    <div class="flex justify-center my-16">
+        <div class="w-40 h-[2px] bg-[#EDE7D6] rounded-full opacity-70"></div>
+    </div>
+
+    <div class="bg-[#D9D9D9] pb-20">
+        <div>
+            <img src="resources/images/welcome/section2.jpg" alt="" class="w-full block">
+        </div>
+
+        <div class="flex flex-col justify-center w-full max-w-md mx-auto px-20 pt-40">
+            <h1 class="text-[#1E3D19] text-7xl font-bold text-center drop-shadow-[0_6px_10px_rgba(0,0,0,0.3)]">
+                Our
+            </h1>
+
+            <div class="w-24 h-[3px] bg-[#1E3D19] mt-4 rounded-full self-center"></div>
+
+            <h1 class="text-[#1E3D19] text-7xl font-bold text-center drop-shadow-[0_6px_10px_rgba(0,0,0,0.3)]">
+                Values
+            </h1>
+        </div>
+
+        <div class="relative max-w-6xl mx-auto mt-20">
+            <div class="grid grid-cols-2 gap-x-2 gap-y-14 place-items-center">
+                <div
+                    class="bg-[#646863] w-96 h-40 rounded-xl shadow-xl -translate-y-6 flex flex-col justify-center items-center text-center p-4 relative z-10 hover:scale-[1.03] transition duration-300">
+                    <img src="resources/images/welcome/value1.png" class="w-14 mb-2" alt="">
+                    <p class="text-white font-semibold font-poppins text-lg tracking-wide">Empathy</p>
+                </div>
+
+                <div
+                    class="bg-[#646863] w-96 h-40 rounded-xl shadow-xl translate-y-6 flex flex-col justify-center items-center text-center p-4 relative z-10 hover:scale-[1.03] transition duration-300">
+                    <img src="resources/images/welcome/value2.png" class="w-14 mb-2" alt="">
+                    <p class="text-white font-semibold font-poppins text-lg tracking-wide">Responsability</p>
+                </div>
+
+                <div
+                    class="bg-[#646863] w-96 h-40 rounded-xl shadow-xl -translate-y-6 flex flex-col justify-center items-center text-center p-4 relative z-10 hover:scale-[1.03] transition duration-300">
+                    <img src="resources/images/welcome/value3.png" class="w-14 mb-2" alt="">
+                    <p class="text-white font-semibold font-poppins text-lg tracking-wide">Sustainability</p>
+                </div>
+
+                <div
+                    class="bg-[#646863] w-96 h-40 rounded-xl shadow-xl translate-y-6 flex flex-col justify-center items-center text-center p-4 relative z-10 hover:scale-[1.03] transition duration-300">
+                    <img src="resources/images/welcome/value4.png" class="w-14 mb-2" alt="">
+                    <p class="text-white font-semibold font-poppins text-lg tracking-wide">Passion</p>
+                </div>
+
+            </div>
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
+                <img src="resources/images/essential/logo.png" class="w-72 scale-110 drop-shadow-2xl">
+            </div>
+        </div>
+
+        <div class="w-full flex items-center justify-center mt-40">
+            <div class="w-3/4 h-[4px] bg-[#1E3D19] rounded-full"></div>
+        </div>
+
+
+        <div class="flex flex-col justify-center w-full max-w-xl mx-auto px-20 pt-40">
+            <h1 class="text-[#1E3D19] text-7xl font-bold text-left drop-shadow-[0_6px_10px_rgba(0,0,0,0.3)]">
+                Mission
+            </h1>
+
+            <div class="w-24 h-[3px] bg-[#1E3D19] mt-4 rounded-full"></div>
+
+            <h1 class="text-[#1E3D19] text-3xl font-bold text-center drop-shadow-[0_6px_10px_rgba(0,0,0,0.3)]">
+                And
+            </h1>
+
+            <h1 class="text-[#1E3D19] text-7xl font-bold text-right drop-shadow-[0_6px_10px_rgba(0,0,0,0.3)]">
+                Vision
+            </h1>
+        </div>
+
+        <div class="max-w-5xl mt-16 mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div
+                class="bg-[#646863] rounded-2xl shadow-xl p-10 flex flex-col items-center text-center hover:scale-[1.02] transition duration-300 border border-white/20">
+                <div class="bg-white p-4 rounded-full mb-4 shadow-md">
+                    <img src="resources/images/welcome/mission.png" class="w-20" alt="">
+                </div>
+
+                <h3 class="text-white font-bold text-3xl font-poppins tracking-wide">Mission</h3>
+
+                <div class="w-16 h-[2px] bg-white mt-3 mb-4 rounded-full opacity-70"></div>
+                <p class="text-white font-semibold text-base font-poppins leading-relaxed opacity-80">
+                    To provide a tool where people can receive advice on plant care and promote a lifestyle that
+                    connects sustainability and botany.
+                </p>
+            </div>
+
+            <div
+                class="bg-[#646863] rounded-2xl shadow-xl p-10 flex flex-col items-center text-center hover:scale-[1.02] transition duration-300 border border-white/20">
+                <div class="bg-white p-4 rounded-full mb-4 shadow-md">
+                    <img src="resources/images/welcome/vision.png" class="w-20" alt="">
+                </div>
+
+                <h3 class="text-white font-bold text-3xl font-poppins tracking-wide">Vision</h3>
+
+                <div class="w-16 h-[2px] bg-white mt-3 mb-4 rounded-full opacity-70"></div>
+                <p class="text-white font-semibold text-base font-poppins leading-relaxed opacity-80">
+                    Inspiring the community with natural beauty, integrating green spaces into their homes, and
+                    contributing to personal well-being and environmental sustainability.
                 </p>
             </div>
         </div>
+    </div>
 
-        <div class="flex justify-center my-24">
-            <div class="w-40 h-[2px] bg-[#EDE7D6] rounded-full opacity-70"></div>
+    <!--Section 3-->
+    <div class="pt-40 pb-40 flex flex-col items-center justify-center text-center px-6">
+        <h1 class="text-white text-6xl font-bold drop-shadow-[0_6px_10px_rgba(0,0,0,0.3)] leading-tight">
+            What Are <span class="text-[#1E3D19]">You</span> Waiting For?
+        </h1>
+
+        <div class="w-24 h-[3px] bg-[#EDE7D6] mt-6 mb-6 rounded-full opacity-80"></div>
+
+        <p class="text-white font-semibold text-xl max-w-2xl font-poppins leading-relaxed opacity-90">
+            Start improving your plant care experience today and connect with a greener lifestyle in a simple and
+            meaningful way.
+        </p>
+        <h2 class="text-white text-5xl font-bold mt-10 drop-shadow-[0_6px_10px_rgba(0,0,0,0.3)]">
+            Choose to Be
+        </h2>
+        <h1 class="text-white text-6xl font-bold mt-2 drop-shadow-[0_6px_10px_rgba(0,0,0,0.3)]">
+            The <span class="text-[#1E3D19]">Plant's Best Bud</span>
+        </h1>
+        <div class="mt-10">
+            <a href="/register"
+                class="bg-[#EDE7D6] text-[#1E3D19] font-poppins font-bold px-10 py-4 rounded-full text-lg shadow-lg hover:scale-105 hover:shadow-2xl transition duration-300">
+                Start Now
+            </a>
         </div>
-
-        <div class="mt-40">
-            <div class="flex flex-col justify-center w-full max-w-5xl mx-auto px-20">
-                <h1 class="text-[#1E3D19] text-7xl font-bold text-left drop-shadow-[0_6px_10px_rgba(0,0,0,0.3)]">
-                    Benefits that
-                </h1>
-
-                <div class="w-24 h-[3px] bg-[#1E3D19] mt-4 rounded-full"></div>
-
-                <h1 class="text-white text-7xl font-bold text-right drop-shadow-[0_6px_10px_rgba(0,0,0,0.3)]">
-                    Plant Bud <span class="text-[#1E3D19]">Offers You</span>
-                </h1>
-            </div>
-
-            <div class="mt-20">
-                <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
-
-                    <div
-                        class="bg-[#D5DCD4] rounded-xl px-5 py-4 h-56 shadow-xl border border-[#D9D9D9]/40 flex flex-col justify-center items-center text-center transition duration-300 hover:-translate-y-2 hover:shadow-2xl">
-                        <img src="resources/images/welcome/benefit1.png"
-                            class="w-32 mb-2 transition duration-300 hover:scale-110" alt="">
-                        <p class="font-semibold font-poppins text-2xl">
-                            Easy Access
-                            <span class="text-[#728B6F]">to Quality <br> Information</span>
-                        </p>
-                    </div>
-
-                    <div
-                        class="bg-[#D5DCD4] rounded-xl px-5 py-4 h-56 shadow-xl border border-[#D9D9D9]/40 flex flex-col justify-center items-center text-center transition duration-300 hover:-translate-y-2 hover:shadow-2xl">
-                        <img src="resources/images/welcome/benefit2.png"
-                            class="w-32 mb-2 transition duration-300 hover:scale-110" alt="">
-                        <p class="font-semibold font-poppins text-2xl">
-                            Access
-                            <span class="text-[#728B6F]">to Professional <br> Services</span>
-                        </p>
-                    </div>
-
-                    <div
-                        class="bg-[#D5DCD4] rounded-xl px-5 py-4 h-56 shadow-xl border border-[#D9D9D9]/40 flex flex-col justify-center items-center text-center transition duration-300 hover:-translate-y-2 hover:shadow-2xl">
-                        <img src="resources/images/welcome/benefit3.png"
-                            class="w-32 mb-2 transition duration-300 hover:scale-110" alt="">
-                        <p class="font-semibold font-poppins text-2xl">
-                            Save Time
-                            <span class="text-[#728B6F]">by Contacting <br> Gardeners</span>
-                        </p>
-                    </div>
-
-                </div>
-
-                <div class="mt-6 max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-
-                    <div
-                        class="bg-[#D5DCD4] rounded-xl px-5 py-4 h-56 shadow-xl border border-[#D9D9D9]/40 flex flex-col justify-center items-center text-center transition duration-300 hover:-translate-y-2 hover:shadow-2xl">
-                        <img src="resources/images/welcome/benefit4.png"
-                            class="w-32 mb-2 transition duration-300 hover:scale-110" alt="">
-                        <p class="font-semibold font-poppins text-2xl">
-                            Contact
-                            <span class="text-[#728B6F]">with Other Plant <br> Stores</span>
-                        </p>
-                    </div>
-
-                    <div
-                        class="bg-[#D5DCD4] rounded-xl px-5 py-4 h-56 shadow-xl border border-[#D9D9D9]/40 flex flex-col justify-center items-center text-center transition duration-300 hover:-translate-y-2 hover:shadow-2xl">
-                        <img src="resources/images/welcome/benefit5.png"
-                            class="w-32 mb-2 transition duration-300 hover:scale-110" alt="">
-                        <p class="font-semibold font-poppins text-2xl">
-                            Connection
-                            <span class="text-[#728B6F]">with Other <br> People</span>
-                        </p>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <!--Section 2-->
-        <div class="flex justify-center my-16">
-            <div class="w-40 h-[2px] bg-[#EDE7D6] rounded-full opacity-70"></div>
-        </div>
-
-        <div class="bg-[#D9D9D9] pb-20">
-            <div>
-                <img src="resources/images/welcome/section2.jpg" alt="" class="w-full block">
-            </div>
-
-            <div class="flex flex-col justify-center w-full max-w-md mx-auto px-20 pt-40">
-                <h1 class="text-[#1E3D19] text-7xl font-bold text-center drop-shadow-[0_6px_10px_rgba(0,0,0,0.3)]">
-                    Our
-                </h1>
-
-                <div class="w-24 h-[3px] bg-[#1E3D19] mt-4 rounded-full self-center"></div>
-
-                <h1 class="text-[#1E3D19] text-7xl font-bold text-center drop-shadow-[0_6px_10px_rgba(0,0,0,0.3)]">
-                    Values
-                </h1>
-            </div>
-
-            <div class="relative max-w-6xl mx-auto mt-20">
-                <div class="grid grid-cols-2 gap-x-2 gap-y-14 place-items-center">
-                    <div
-                        class="bg-[#646863] w-96 h-40 rounded-xl shadow-xl -translate-y-6 flex flex-col justify-center items-center text-center p-4 relative z-10 hover:scale-[1.03] transition duration-300">
-                        <img src="resources/images/welcome/value1.png" class="w-14 mb-2" alt="">
-                        <p class="text-white font-semibold font-poppins text-lg tracking-wide">Empathy</p>
-                    </div>
-
-                    <div
-                        class="bg-[#646863] w-96 h-40 rounded-xl shadow-xl translate-y-6 flex flex-col justify-center items-center text-center p-4 relative z-10 hover:scale-[1.03] transition duration-300">
-                        <img src="resources/images/welcome/value2.png" class="w-14 mb-2" alt="">
-                        <p class="text-white font-semibold font-poppins text-lg tracking-wide">Responsability</p>
-                    </div>
-
-                    <div
-                        class="bg-[#646863] w-96 h-40 rounded-xl shadow-xl -translate-y-6 flex flex-col justify-center items-center text-center p-4 relative z-10 hover:scale-[1.03] transition duration-300">
-                        <img src="resources/images/welcome/value3.png" class="w-14 mb-2" alt="">
-                        <p class="text-white font-semibold font-poppins text-lg tracking-wide">Sustainability</p>
-                    </div>
-
-                    <div
-                        class="bg-[#646863] w-96 h-40 rounded-xl shadow-xl translate-y-6 flex flex-col justify-center items-center text-center p-4 relative z-10 hover:scale-[1.03] transition duration-300">
-                        <img src="resources/images/welcome/value4.png" class="w-14 mb-2" alt="">
-                        <p class="text-white font-semibold font-poppins text-lg tracking-wide">Passion</p>
-                    </div>
-
-                </div>
-                <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
-                    <img src="resources/images/essential/logo.png" class="w-72 scale-110 drop-shadow-2xl">
-                </div>
-            </div>
-
-            <div class="w-full flex items-center justify-center mt-40">
-                <div class="w-3/4 h-[4px] bg-[#1E3D19] rounded-full"></div>
-            </div>
-
-
-            <div class="flex flex-col justify-center w-full max-w-xl mx-auto px-20 pt-40">
-                <h1 class="text-[#1E3D19] text-7xl font-bold text-left drop-shadow-[0_6px_10px_rgba(0,0,0,0.3)]">
-                    Mission
-                </h1>
-
-                <div class="w-24 h-[3px] bg-[#1E3D19] mt-4 rounded-full"></div>
-
-                <h1 class="text-[#1E3D19] text-3xl font-bold text-center drop-shadow-[0_6px_10px_rgba(0,0,0,0.3)]">
-                    And
-                </h1>
-
-                <h1 class="text-[#1E3D19] text-7xl font-bold text-right drop-shadow-[0_6px_10px_rgba(0,0,0,0.3)]">
-                    Vision
-                </h1>
-            </div>
-
-            <div class="max-w-5xl mt-16 mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div
-                    class="bg-[#646863] rounded-2xl shadow-xl p-10 flex flex-col items-center text-center hover:scale-[1.02] transition duration-300 border border-white/20">
-                    <div class="bg-white p-4 rounded-full mb-4 shadow-md">
-                        <img src="resources/images/welcome/mission.png" class="w-20" alt="">
-                    </div>
-
-                    <h3 class="text-white font-bold text-3xl font-poppins tracking-wide">Mission</h3>
-
-                    <div class="w-16 h-[2px] bg-white mt-3 mb-4 rounded-full opacity-70"></div>
-                    <p class="text-white font-semibold text-base font-poppins leading-relaxed opacity-80">
-                        To provide a tool where people can receive advice on plant care and promote a lifestyle that
-                        connects sustainability and botany.
-                    </p>
-                </div>
-
-                <div
-                    class="bg-[#646863] rounded-2xl shadow-xl p-10 flex flex-col items-center text-center hover:scale-[1.02] transition duration-300 border border-white/20">
-                    <div class="bg-white p-4 rounded-full mb-4 shadow-md">
-                        <img src="resources/images/welcome/vision.png" class="w-20" alt="">
-                    </div>
-
-                    <h3 class="text-white font-bold text-3xl font-poppins tracking-wide">Vision</h3>
-
-                    <div class="w-16 h-[2px] bg-white mt-3 mb-4 rounded-full opacity-70"></div>
-                    <p class="text-white font-semibold text-base font-poppins leading-relaxed opacity-80">
-                        Inspiring the community with natural beauty, integrating green spaces into their homes, and
-                        contributing to personal well-being and environmental sustainability.
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <!--Section 3-->
-        <div class="pt-40 pb-40 flex flex-col items-center justify-center text-center px-6">
-            <h1 class="text-white text-6xl font-bold drop-shadow-[0_6px_10px_rgba(0,0,0,0.3)] leading-tight">
-                What Are <span class="text-[#1E3D19]">You</span> Waiting For?
-            </h1>
-
-            <div class="w-24 h-[3px] bg-[#EDE7D6] mt-6 mb-6 rounded-full opacity-80"></div>
-
-            <p class="text-white font-semibold text-xl max-w-2xl font-poppins leading-relaxed opacity-90">
-                Start improving your plant care experience today and connect with a greener lifestyle in a simple and
-                meaningful way.
-            </p>
-            <h2 class="text-white text-5xl font-bold mt-10 drop-shadow-[0_6px_10px_rgba(0,0,0,0.3)]">
-                Choose to Be
-            </h2>
-            <h1 class="text-white text-6xl font-bold mt-2 drop-shadow-[0_6px_10px_rgba(0,0,0,0.3)]">
-                The <span class="text-[#1E3D19]">Plant's Best Bud</span>
-            </h1>
-            <div class="mt-10">
-                <a
-                  href="/register" class="bg-[#EDE7D6] text-[#1E3D19] font-poppins font-bold px-10 py-4 rounded-full text-lg shadow-lg hover:scale-105 hover:shadow-2xl transition duration-300">
-                    Start Now
-                </a>
-            </div>
-        </div>
-</body>
-
-</html>
+    </div>
+    @end
