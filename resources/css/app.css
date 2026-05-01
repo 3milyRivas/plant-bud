@@ -1,12 +1,9 @@
+/*FONTS*/
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Abril+Fatface&display=swap');
+
 @import "tailwindcss";
+
 @source "../views";
-
-
-/*fonts list*/
-@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
-
-@import "tailwindcss";
 
 @theme {
   --font-poppins: "Poppins", sans-serif;
