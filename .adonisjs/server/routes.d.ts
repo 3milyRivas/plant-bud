@@ -8,32 +8,35 @@ export type ScannedRoutes = {
     'plants': { paramsTuple?: []; params?: {} }
     'profile': { paramsTuple?: []; params?: {} }
     'request': { paramsTuple?: []; params?: {} }
-    'new_account.create': { paramsTuple?: []; params?: {} }
-    'new_account.store': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
     'session.store': { paramsTuple?: []; params?: {} }
     'session.destroy': { paramsTuple?: []; params?: {} }
+    'signup.client': { paramsTuple?: []; params?: {} }
+    'signup.gardener': { paramsTuple?: []; params?: {} }
+    'new_account.store': { paramsTuple?: []; params?: {} }
   }
   GET: {
     'home': { paramsTuple?: []; params?: {} }
     'plants': { paramsTuple?: []; params?: {} }
     'profile': { paramsTuple?: []; params?: {} }
     'request': { paramsTuple?: []; params?: {} }
-    'new_account.create': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
+    'signup.client': { paramsTuple?: []; params?: {} }
+    'signup.gardener': { paramsTuple?: []; params?: {} }
   }
   HEAD: {
     'home': { paramsTuple?: []; params?: {} }
     'plants': { paramsTuple?: []; params?: {} }
     'profile': { paramsTuple?: []; params?: {} }
     'request': { paramsTuple?: []; params?: {} }
-    'new_account.create': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
+    'signup.client': { paramsTuple?: []; params?: {} }
+    'signup.gardener': { paramsTuple?: []; params?: {} }
   }
   POST: {
-    'new_account.store': { paramsTuple?: []; params?: {} }
     'session.store': { paramsTuple?: []; params?: {} }
     'session.destroy': { paramsTuple?: []; params?: {} }
+    'new_account.store': { paramsTuple?: []; params?: {} }
   }
 }
 declare module '@adonisjs/core/types/http' {
