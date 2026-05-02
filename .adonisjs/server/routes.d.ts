@@ -5,9 +5,7 @@ type ParamValue = string | number | bigint | boolean
 export type ScannedRoutes = {
   ALL: {
     'home': { paramsTuple?: []; params?: {} }
-    'plants': { paramsTuple?: []; params?: {} }
     'profile': { paramsTuple?: []; params?: {} }
-    'request': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
     'session.store': { paramsTuple?: []; params?: {} }
     'session.destroy': { paramsTuple?: []; params?: {} }
@@ -17,18 +15,14 @@ export type ScannedRoutes = {
   }
   GET: {
     'home': { paramsTuple?: []; params?: {} }
-    'plants': { paramsTuple?: []; params?: {} }
     'profile': { paramsTuple?: []; params?: {} }
-    'request': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
     'signup.client': { paramsTuple?: []; params?: {} }
     'signup.gardener': { paramsTuple?: []; params?: {} }
   }
   HEAD: {
     'home': { paramsTuple?: []; params?: {} }
-    'plants': { paramsTuple?: []; params?: {} }
     'profile': { paramsTuple?: []; params?: {} }
-    'request': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
     'signup.client': { paramsTuple?: []; params?: {} }
     'signup.gardener': { paramsTuple?: []; params?: {} }
