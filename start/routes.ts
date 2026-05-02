@@ -6,15 +6,31 @@ import NewAccountController from '#controllers/new_account_controller'
 /* general views */
 router.on('/').render('pages/welcome').as('home')
 router.on('/register').render('pages/register')
-router.on('/plants').render('pages/plants').as('plants')
+router.on('/plants').render('pages/plants')
 
 /* clients views */
-router.on('/homepage').render('pages/clients/homepage')
-router.on('/nurseries').render('pages/clients/nurseries')
-router.on('/profile').render('pages/clients/profile').as('profile')
-router.on('/request').render('pages/services/request').as('request')
+router
+  .group(() => {
+    router.on('/homepage').render('pages/client/homepage')
+    router.on('/nurseries').render('pages/client/nurseries')
+  })
+  .use([middleware.auth(), middleware.role(['client'])])
+
+/* gardeners views */
+router
+  .group(() => {
+    router.on('/gardener/dashboard').render('pages/gardener/dashboard')
+  })
+  .use([middleware.auth(), middleware.role(['gardener'])])
 
 /* auth (login only) */
+router
+  .group(() => {
+    router.on('/profile').render('pages/client/profile').as('profile')
+  })
+  .use([middleware.auth()])
+
+  
 router
   .group(() => {
     router.get('login', [controllers.Session, 'create'])
@@ -29,7 +45,6 @@ router
   })
   .use(middleware.auth())
 
-/* SIGNUP (nuevo sistema) */
 router.get('/signup/client', [NewAccountController, 'createClient']).as('signup.client')
 router.get('/signup/gardener', [NewAccountController, 'createGardener']).as('signup.gardener')
 router.post('/signup', [NewAccountController, 'store']).as('new_account.store')
