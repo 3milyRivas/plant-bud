@@ -3,12 +3,14 @@
 <title>Login</title>
 @endslot
 
-<div class="flex min-h-screen relative z-10">
-  <div class="w-1/2 hidden md:block h-screen overflow-hidden">
-    <img src="resources/images/login/login-first.png" alt="Login Image" class="w-full h-full object-cover">
+<div class="flex min-h-dvh relative z-10">
+
+  <div class="w-1/2 hidden md:block relative">
+    <img src="/resources/images/login/login-first.png" alt="Login Image"
+      class="absolute inset-0 w-full h-full object-cover" />
   </div>
 
-  <div class="w-full md:w-1/2 flex items-center justify-center">
+  <div class="w-full md:w-1/2 flex items-center justify-center py-10">
 
     <div class="w-full max-w-md px-8">
 
@@ -24,6 +26,7 @@
       </div>
 
       @form({ route: 'session.store', method: 'POST' })
+
       <div class="mb-4">
         @field.root({ name: 'email' })
         @!field.label({ text: 'Email', class: 'text-[#EDE7D6] text-sm' })
@@ -72,6 +75,7 @@
           Create one here!
         </a>
       </p>
+
     </div>
   </div>
 </div>

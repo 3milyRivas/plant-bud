@@ -2,52 +2,212 @@
 @slot('title')
 <title>Sign Up - Gardener</title>
 @endslot
-  <div class="form-container">
-    <div>
-      <h1> Signup </h1>
-      <p>
-        Enter your details below to create your account
-      </p>
-    </div>
 
-    <div>
+<div class="flex min-h-dvh relative z-10">
+
+  <div class="w-1/2 hidden md:block relative">
+    <img src="/resources/images/signup/register-gardener.png" alt="Signup Image"
+      class="absolute inset-0 w-full h-full object-cover" />
+  </div>
+
+  <div class="w-full md:w-1/2 flex items-center justify-center py-10">
+
+    <div class="w-full max-w-md px-8">
+
+      <div class="mb-4 text-center relative flex justify-center">
+        <div class="absolute w-44 h-40 bg-white opacity-30 blur-3xl rounded-full"></div>
+        <img src="/resources/images/essential/logo-v2.png" alt="Logo" class="relative w-48">
+      </div>
+
+      <div class="mb-6 text-center">
+        <h1 class="text-2xl font-bold text-white drop-shadow-[0_6px_10px_rgba(0,0,0,0.3)]">
+          Create Account
+        </h1>
+        <p class="text-xs text-white font-bold mt-1">
+          Sign up as a gardener
+        </p>
+      </div>
+
       @form({ route: 'new_account.store', method: 'POST' })
-        <div>
-          @field.root({ name: 'fullName' })
-            @!field.label({ text: 'Full name' })
-            @!input.control()
-            @!field.error()
+
+      <input type="hidden" name="role" value="gardener">
+
+      <div class="mb-3">
+        @field.root({ name: 'username' })
+        @!field.label({ text: 'Username', class: 'text-[#EDE7D6] text-xs' })
+        @!input.control({
+        placeholder: 'Choose username',
+        value: flashMessages.get('old')?.username,
+        class: 'w-full mt-1 px-3 py-2 text-sm rounded-lg bg-white focus:outline-none'
+        })
+        @!field.error({ class: 'text-red-800 font-bold text-xs mt-1' })
+
+        @if(flashMessages.get('errors')?.username)
+        <p class="text-red-800 font-bold text-xs mt-1">
+          {{ flashMessages.get('errors').username[0] }}
+        </p>
+        @endif
+        @end
+      </div>
+
+      <div class="mb-3 flex gap-3">
+        <div class="w-1/2">
+          @field.root({ name: 'first_name' })
+          @!field.label({ text: 'First Name', class: 'text-[#EDE7D6] text-xs' })
+          @!input.control({
+          placeholder: 'First name',
+          value: flashMessages.get('old')?.first_name,
+          class: 'w-full mt-1 px-3 py-2 text-sm rounded-lg bg-white focus:outline-none'
+          })
+          @!field.error({ class: 'text-red-800 font-bold text-xs mt-1' })
           @end
         </div>
 
-        <div>
-          @field.root({ name: 'email' })
-            @!field.label({ text: 'Email' })
-            @!input.control({ type: 'email', autocomplete: 'email' })
-            @!field.error()
+        <div class="w-1/2">
+          @field.root({ name: 'last_name' })
+          @!field.label({ text: 'Last Name', class: 'text-[#EDE7D6] text-xs' })
+          @!input.control({
+          placeholder: 'Last name',
+          value: flashMessages.get('old')?.last_name,
+          class: 'w-full mt-1 px-3 py-2 text-sm rounded-lg bg-white focus:outline-none'
+          })
+          @!field.error({ class: 'text-red-800 font-bold text-xs mt-1' })
           @end
         </div>
+      </div>
 
-        <div>
-          @field.root({ name: 'password' })
-            @!field.label({ text: 'Password' })
-            @!input.control({ type: 'password', autocomplete: 'new-password' })
-            @!field.error()
-          @end
-        </div>
+      <div class="mb-3">
+        @field.root({ name: 'email' })
+        @!field.label({ text: 'Email', class: 'text-[#EDE7D6] text-xs' })
+        @!input.control({
+        type: 'email',
+        placeholder: 'Email address',
+        value: flashMessages.get('old')?.email,
+        class: 'w-full mt-1 px-3 py-2 text-sm rounded-lg bg-white focus:outline-none'
+        })
+        @!field.error({ class: 'text-red-800 font-bold text-xs mt-1' })
 
-        <div>
-          @field.root({ name: 'passwordConfirmation' })
-            @!field.label({ text: 'Confirm password' })
-            @!input.control({ type: 'password', autocomplete: 'new-password' })
-            @!field.error()
-          @end
-        </div>
+        @if(flashMessages.get('errors')?.email)
+        <p class="text-red-800 font-bold text-xs mt-1">
+          {{ flashMessages.get('errors').email[0] }}
+        </p>
+        @endif
+        @end
+      </div>
 
-        <div>
-          @!button({ text: 'Sign up', type: 'submit' })
-        </div>
+      <div class="mb-3">
+        @field.root({ name: 'phone' })
+        @!field.label({ text: 'Phone Number', class: 'text-[#EDE7D6] text-xs' })
+        @!input.control({
+        placeholder: '0000-0000',
+        value: flashMessages.get('old')?.phone,
+        class: 'w-full mt-1 px-3 py-2 text-sm rounded-lg bg-white focus:outline-none'
+        })
+        @!field.error({ class: 'text-red-800 font-bold text-xs mt-1' })
+
+        @if(flashMessages.get('errors')?.phone)
+        <p class="text-red-800 font-bold text-xs mt-1">
+          {{ flashMessages.get('errors').phone[0] }}
+        </p>
+        @endif
+        @end
+      </div>
+
+      <div class="mb-3">
+        @field.root({ name: 'dui' })
+        @!field.label({ text: 'DUI', class: 'text-[#EDE7D6] text-xs' })
+        @!input.control({
+        placeholder: '01234567-8',
+        value: flashMessages.get('old')?.dui,
+        class: 'w-full mt-1 px-3 py-2 text-sm rounded-lg bg-white focus:outline-none'
+        })
+        @!field.error({ class: 'text-red-800 font-bold text-xs mt-1' })
+
+        @if(flashMessages.get('errors')?.dui)
+        <p class="text-red-800 font-bold text-xs mt-1">
+          {{ flashMessages.get('errors').dui[0] }}
+        </p>
+        @endif
+        @end
+      </div>
+
+      <div class="mb-3">
+        @field.root({ name: 'password' })
+        @!field.label({ text: 'Password', class: 'text-[#EDE7D6] text-xs' })
+        @!input.control({
+        type: 'password',
+        placeholder: 'Password',
+        class: 'w-full mt-1 px-3 py-2 text-sm rounded-lg bg-white focus:outline-none'
+        })
+        @!field.error({ class: 'text-red-800 font-bold text-xs mt-1' })
+        @end
+      </div>
+
+      <div class="mb-4">
+        @field.root({ name: 'passwordConfirmation' })
+        @!field.label({ text: 'Confirm Password', class: 'text-[#EDE7D6] text-xs' })
+        @!input.control({
+        type: 'password',
+        placeholder: 'Repeat password',
+        class: 'w-full mt-1 px-3 py-2 text-sm rounded-lg bg-white focus:outline-none'
+        })
+        @!field.error({ class: 'text-red-800 font-bold text-xs mt-1' })
+        @end
+      </div>
+
+      <div class="mb-4">
+        @!button({
+        text: 'Sign Up',
+        type: 'submit',
+        class: 'w-full bg-[#113E14] text-white py-2.5 rounded-lg font-bold hover:opacity-90 transition'
+        })
+      </div>
+
       @end
+
+      <p class="text-center text-xs font-semibold text-white">
+        Already have an account?
+        <a href="/login" class="underline text-[#1E3D19] font-bold hover:opacity-80">
+          Login here
+        </a>
+      </p>
+
     </div>
   </div>
+</div>
+
+<script>
+  function formatPhone(value) {
+    value = value.replace(/\D/g, '').slice(0, 8)
+    if (value.length > 4) {
+      return value.slice(0, 4) + '-' + value.slice(4)
+    }
+    return value
+  }
+
+  function formatDui(value) {
+    value = value.replace(/\D/g, '').slice(0, 9)
+    if (value.length > 8) {
+      return value.slice(0, 8) + '-' + value.slice(8)
+    }
+    return value
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const phoneInput = document.querySelector('input[name="phone"]')
+    const duiInput = document.querySelector('input[name="dui"]')
+
+    if (phoneInput) {
+      phoneInput.addEventListener('input', (e) => {
+        e.target.value = formatPhone(e.target.value)
+      })
+    }
+
+    if (duiInput) {
+      duiInput.addEventListener('input', (e) => {
+        e.target.value = formatDui(e.target.value)
+      })
+    }
+  })
+</script>
 @end

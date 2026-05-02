@@ -4,27 +4,47 @@
 @endslot
 
 <div class="relative z-10">
+
     <!--Header-->
     <header class="relative">
         <div>
             <img src="resources/images/welcome/header.png" alt="" class="w-full block">
-
-            <div class="absolute top-6 right-10 flex gap-4 z-20">
-                <a href="/register"
-                    class="px-5 py-2 rounded-full bg-[#EDE7D6] text-[#1E3D19] font-semibold font-poppins shadow-md hover:scale-105 transition">
-                    Sign Up
-                </a>
-
-                <a href="/login"
-                    class="px-5 py-2 rounded-full border border-[#EDE7D6] text-[#EDE7D6] font-semibold font-poppins hover:bg-[#EDE7D6] hover:text-[#1E3D19] transition">
-                    Login
-                </a>
-            </div>
-
             <div
                 class="absolute top-[75%] left-[75%] transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center transition-all duration-500 hover:scale-110 hover:rotate-1 hover:drop-shadow-[0_20px_60px_rgba(30,61,25,0.35)]">
                 <img src="resources/images/essential/logo.png" alt=""
                     class="w-[600px] relative z-10 transition duration-500 hover:brightness-110">
+            </div>
+
+            <div class="fixed top-6 right-10 z-50">
+                <div class="relative group">
+
+                    <button
+                        class="px-5 py-2 rounded-full bg-[#EDE7D6]/90 backdrop-blur-md text-[#1E3D19] font-semibold font-poppins shadow-md border border-white/40 hover:scale-105 transition flex items-center gap-2">
+                        Menu
+                        <svg class="w-4 h-4 transition-transform duration-300 group-hover:rotate-180" fill="none"
+                            stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div class="absolute top-full left-0 w-full h-3"></div>
+                    <div
+                        class="absolute right-0 mt-3 w-52 bg-[#EDE7D6]/80 backdrop-blur-xl border border-white/40 shadow-2xl rounded-2xl opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-200">
+
+                        <a href="/register"
+                            class="block px-4 py-3 text-sm text-[#1E3D19] hover:bg-white/40 rounded-t-2xl transition">
+                            Sign Up
+                        </a>
+
+                        <a href="/login" class="block px-4 py-3 text-sm text-[#1E3D19] hover:bg-white/40 transition">
+                            Login
+                        </a>
+
+                        <a href="/community"
+                            class="block px-4 py-3 text-sm text-[#1E3D19] hover:bg-white/40 rounded-b-2xl transition">
+                            Go to Community
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
