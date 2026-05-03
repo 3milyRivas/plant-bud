@@ -6,7 +6,8 @@ import NewAccountController from '#controllers/new_account_controller'
 /* general views */
 router.on('/').render('pages/welcome').as('home')
 router.on('/register').render('pages/register')
-router.on('/plants').render('pages/plants')
+router.on('/amaryllidaceae').render('pages/amaryllidaceae')
+router.on('/brassicaceae').render('pages/brassicaceae')
 
 /* clients views */
 router
@@ -48,3 +49,10 @@ router
 router.get('/signup/client', [NewAccountController, 'createClient']).as('signup.client')
 router.get('/signup/gardener', [NewAccountController, 'createGardener']).as('signup.gardener')
 router.post('/signup', [NewAccountController, 'store']).as('new_account.store')
+
+
+/* Plants-Horticultural */
+
+
+
+
