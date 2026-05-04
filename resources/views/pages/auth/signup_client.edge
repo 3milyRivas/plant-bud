@@ -1,0 +1,144 @@
+@layout()
+@slot('title')
+<title>Sign Up - Client</title>
+@endslot
+
+<div class="flex min-h-dvh relative z-10">
+
+  <div class="w-1/2 hidden md:block relative">
+    <img src="/resources/images/signup/register-client.png" alt="Signup Image"
+      class="absolute inset-0 w-full h-full object-cover" />
+  </div>
+
+  <div class="w-full md:w-1/2 flex items-center justify-center py-10">
+
+    <div class="w-full max-w-md px-8">
+
+      <div class="mb-6 text-center relative flex justify-center">
+        <div class="absolute w-60 h-50 bg-white opacity-30 blur-3xl rounded-full"></div>
+        <img src="/resources/images/essential/logo-v2.png" alt="Logo" class="relative w-70">
+      </div>
+
+      <div class="mb-8 mt-8 text-center">
+        <h1 class="text-3xl font-bold text-white drop-shadow-[0_6px_10px_rgba(0,0,0,0.3)]">
+          Create Account
+        </h1>
+        <p class="text-sm text-white font-bold mt-2">
+          Sign up as a client
+        </p>
+      </div>
+
+      @form({ route: 'new_account.store', method: 'POST' })
+
+      <input type="hidden" name="role" value="client">
+
+      <div class="mb-4">
+        @field.root({ name: 'username' })
+        @!field.label({ text: 'Username', class: 'text-[#EDE7D6] text-sm' })
+        @!input.control({
+          placeholder: 'Choose a username',
+          value: flashMessages.get('old')?.username,
+          class: 'w-full mt-1 px-4 py-2 rounded-lg bg-white focus:outline-none'
+        })
+        @!field.error({ class: 'text-red-800 font-bold text-xs mt-1' })
+
+        @if(flashMessages.get('errors')?.username)
+          <p class="text-red-800 font-bold text-xs mt-1">
+            {{ flashMessages.get('errors').username[0] }}
+          </p>
+        @endif
+        @end
+      </div>
+
+      <div class="mb-4 flex gap-4">
+        <div class="w-1/2">
+          @field.root({ name: 'first_name' })
+          @!field.label({ text: 'First Name', class: 'text-[#EDE7D6] text-sm' })
+          @!input.control({
+            placeholder: 'First name',
+            value: flashMessages.get('old')?.first_name,
+            class: 'w-full mt-1 px-4 py-2 rounded-lg bg-white focus:outline-none'
+          })
+          @!field.error({ class: 'text-red-800 font-bold text-xs mt-1' })
+          @end
+        </div>
+
+        <div class="w-1/2">
+          @field.root({ name: 'last_name' })
+          @!field.label({ text: 'Last Name', class: 'text-[#EDE7D6] text-sm' })
+          @!input.control({
+            placeholder: 'Last name',
+            value: flashMessages.get('old')?.last_name,
+            class: 'w-full mt-1 px-4 py-2 rounded-lg bg-white focus:outline-none'
+          })
+          @!field.error({ class: 'text-red-800 font-bold text-xs mt-1' })
+          @end
+        </div>
+      </div>
+
+      <!-- EMAIL -->
+      <div class="mb-4">
+        @field.root({ name: 'email' })
+        @!field.label({ text: 'Email', class: 'text-[#EDE7D6] text-sm' })
+        @!input.control({
+          type: 'email',
+          placeholder: 'Type email address',
+          value: flashMessages.get('old')?.email,
+          class: 'w-full mt-1 px-4 py-2 rounded-lg bg-white focus:outline-none'
+        })
+        @!field.error({ class: 'text-red-800 font-bold text-xs mt-1' })
+
+        @if(flashMessages.get('errors')?.email)
+          <p class="text-red-800 font-bold text-xs mt-1">
+            {{ flashMessages.get('errors').email[0] }}
+          </p>
+        @endif
+        @end
+      </div>
+
+      <div class="mb-4">
+        @field.root({ name: 'password' })
+        @!field.label({ text: 'Password', class: 'text-[#EDE7D6] text-sm' })
+        @!input.control({
+          type: 'password',
+          placeholder: 'Create a password',
+          class: 'w-full mt-1 px-4 py-2 rounded-lg bg-white focus:outline-none'
+        })
+        @!field.error({ class: 'text-red-800 font-bold text-xs mt-1' })
+        @end
+      </div>
+
+      <!-- CONFIRM -->
+      <div class="mb-6">
+        @field.root({ name: 'passwordConfirmation' })
+        @!field.label({ text: 'Confirm Password', class: 'text-[#EDE7D6] text-sm' })
+        @!input.control({
+          type: 'password',
+          placeholder: 'Repeat your password',
+          class: 'w-full mt-1 px-4 py-2 rounded-lg bg-white focus:outline-none'
+        })
+        @!field.error({ class: 'text-red-800 font-bold text-xs mt-1' })
+        @end
+      </div>
+
+      <div class="mb-6">
+        @!button({
+          text: 'Sign Up',
+          type: 'submit',
+          class: 'w-full bg-[#113E14] text-white py-3 rounded-lg font-bold hover:opacity-90 transition'
+        })
+      </div>
+
+      @end
+
+      <p class="text-center text-sm font-semibold text-white">
+        Already have an account?
+        <a href="/login" class="underline text-[#1E3D19] font-bold hover:opacity-80">
+          Login here
+        </a>
+      </p>
+
+    </div>
+  </div>
+</div>
+@end

@@ -26,6 +26,7 @@ server.use([
   () => import('#middleware/container_bindings_middleware'),
   () => import('@adonisjs/static/static_middleware'),
   () => import('@adonisjs/vite/vite_middleware'),
+  // ❌ role_middleware eliminado de aquí
 ])
 
 /**
@@ -47,4 +48,5 @@ router.use([
 export const middleware = router.named({
   guest: () => import('#middleware/guest_middleware'),
   auth: () => import('#middleware/auth_middleware'),
+  role: () => import('#middleware/role_middleware'), // ✅ aquí va correctamente
 })
