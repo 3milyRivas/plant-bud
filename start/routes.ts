@@ -8,6 +8,9 @@ router.on('/').render('pages/welcome').as('home')
 router.on('/register').render('pages/register')
 router.on('/amaryllidaceae').render('pages/amaryllidaceae')
 router.on('/brassicaceae').render('pages/brassicaceae')
+router.on('/apiaceae').render('pages/apiaceae')
+router.on('/cucurbitaceae').render('pages/cucurbitaceae')
+router.on('/solanaceae').render('pages/solanaceae')
 
 /* clients views */
 router
@@ -51,7 +54,6 @@ router.get('/signup/gardener', [NewAccountController, 'createGardener']).as('sig
 router.post('/signup', [NewAccountController, 'store']).as('new_account.store')
 
 
-/* Plants-Horticultural */
 
 
 
