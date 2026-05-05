@@ -28,12 +28,17 @@ router
   })
   .use([middleware.auth(), middleware.role(['gardener'])])
 
-/* auth (login only) */
+/* auth (login only) 
 router
   .group(() => {
     router.on('/profile').render('pages/client/profile').as('profile')
   })
-  .use([middleware.auth()])
+  .use([middleware.auth()])*/
+  router.on('/profile').render('pages/client/profile').as('profile')
+
+  /*services*/
+  router.on('/maintenance').render('pages/services/maintenance').as('maintenance')
+  router.on('/request').render('pages/services/request').as('request')
 
 router
   .group(() => {

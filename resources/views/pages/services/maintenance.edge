@@ -1,7 +1,81 @@
 @layout()
 @slot('title')
-<title>maintenance</title>
+<title>Maintenance</title>
 @endslot
 
+<!-- HERO / BUSCADOR -->
+<div class="bg-[url('/resources/images/plants/plant.budd.png')] bg-cover bg-center w-full h-64 flex items-center justify-center">
+    <form class="bg-white/80 backdrop-blur p-4 rounded-lg flex gap-2 shadow-md">
+        <input 
+            class="px-3 py-2 rounded border focus:outline-none" 
+            type="text" 
+            placeholder="Buscar..." 
+            name="q">
+        <button class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+            Buscar
+        </button>
+    </form>
+</div>
+
+<!-- HEADER -->
+<div class="bg-[#D5DCD4] py-4 text-center">
+    <h1 class="text-2xl">Maintenance</h1>
+</div>
+
+<div class="p-4">
+    <a href="" class="hover:underline">Back</a>
+</div>
+
+<!-- LISTADO -->
+<div class="space-y-6 p-4">
+
+    <!-- CARD (REUTILIZABLE) -->
+    <div class="flex gap-6 bg-white p-6 rounded-xl shadow-md">
+        
+        <!-- IMAGEN -->
+        <img 
+            src="/resources/images/profile/lady.png" 
+            alt="Foto de perfil" 
+            class="w-40 h-40 rounded-full object-cover border-4 border-white shadow-md">
+
+        <!-- INFO PRINCIPAL -->
+        <div class="flex-1 grid grid-cols-2 gap-4">
+
+            <!-- DATOS PERSONALES -->
+            <div>
+                <h2 class="text-xl font-semibold">Ana Isabel Pérez Vásquez</h2>
+                <p class="text-gray-600">Lawn Care</p>
+                <p class="text-sm text-gray-500">6 years of experience</p>
+
+                <div class="mt-3 text-sm">
+                    <p>Santa Tecla</p>
+                    <p>+503 7678-7645</p>
+                    <p>ana.isabel@gmail.com</p>
+                </div>
+            </div>
+
+            <!-- SERVICIOS -->
+            <div>
+                <h3 class="font-semibold mb-2">Servicios específicos</h3>
+                <ul class="list-disc list-inside text-sm text-gray-700">
+                    <li>Corte de césped</li>
+                    <li>Fertilización orgánica</li>
+                    <li>Control de plagas</li>
+                </ul>
+
+                <div class="mt-3 text-sm">
+                    <p>Disponible de lunes a viernes</p>
+                    <p>8:00am - 6:00pm</p>
+                </div>
+
+                <a href="" class="inline-block mt-3 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                    Contact
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+</div>
 
 @end
