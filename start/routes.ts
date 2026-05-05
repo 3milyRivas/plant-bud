@@ -12,6 +12,8 @@ router.on('/apiaceae').render('pages/apiaceae')
 router.on('/cucurbitaceae').render('pages/cucurbitaceae')
 router.on('/solanaceae').render('pages/solanaceae')
 router.on('/araceae').render('pages/araceae')
+router.on('/community').render('pages/community')
+
 
 router.on('/profile').render('pages/client/profile').as('profile')
 
@@ -31,7 +33,7 @@ router
   })
   .use([middleware.auth(), middleware.role(['gardener'])])
 
-/* auth (login only) 
+/* auth (login only)
 router
   .group(() => {
     router.on('/profile').render('pages/client/profile').as('profile')
