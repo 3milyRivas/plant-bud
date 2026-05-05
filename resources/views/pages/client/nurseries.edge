@@ -1,183 +1,177 @@
-<!DOCTYPE html>
-<html lang="en-us">
+@layout()
+@slot('title')
+<title>Nurseries</title>
+@endslot
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>
-    Plant bud
-  </title>
-  @vite(['resources/css/app.css', 'resources/js/app.js'])
-  @stack('dumper')
-</head>
-
-<body class="min-h-screen bg-[#7f9a7a] font-sans">
-
-  <div class="relative h-[300px] bg-[url('/images/plants-bg.jpg')] bg-cover bg-center px-10 py-6">
-    <div class="flex items-center justify-between">
+<div class="relative z-10 flex items-center justify-between px-10 py-6">
 
 
-      <div class="flex items-center gap-4">
-        <div
-          class="flex h-14 w-14 flex-col items-center justify-center rounded-full bg-green-900 text-xs font-bold text-white">
-          <span>Plant</span>
-          <span>BUD</span>
+  <div class="bg-white/80 rounded-full px-4 py-2 text-green-800 font-semibold">
+    Plant <span class="font-bold">BUD</span>
+  </div>
+
+
+  <div class="flex items-center gap-3 bg-white/70 rounded-full px-5 py-3 w-96">
+    <input type="text" placeholder="Search"
+      class="w-full bg-transparent outline-none text-sm text-gray-700 placeholder-gray-500" />
+    <div class="text-gray-600">🔍</div>
+  </div>
+
+  <div class="bg-white/70 rounded-full px-4 py-3">
+    👤
+  </div>
+
+</div>
+
+
+<div class="relative z-10 px-10">
+  <div class="inline-block bg-white/70 rounded-full px-8 py-3 text-gray-700 font-medium">
+    Back
+  </div>
+</div>
+
+<div class="mt-1 px-10 pt-15">
+  <div class="bg-white rounded-2xl shadow-lg p-12 flex items-center gap-16">
+
+    <div class="w-1/2">
+      <div class="text-4xl font-serif text-gray-900 mb-6">
+        Pick up the plants you’ve been dreaming of !
+      </div>
+
+      <div class="text-gray-600 mb-10">
+        Look all the plants stores we offer
+      </div>
+
+      <div class="inline-block bg-green-900 text-white px-12 py-3 rounded-full font-semibold">
+        Contact
+      </div>
+    </div>
+
+    <div class="w-1/2 flex justify-center">
+      <img src="resources/images/nurseries/nurse1.png" alt="Plants" class="w-full max-w-md">
+    </div>
+
+  </div>
+</div>
+<div class="flex justify-center text-white font-bold pt-8">
+  <div>A jubilation brought by the purchase of another new form of life</div>
+</div>
+
+<div class="w-full flex justify-center py-16">
+
+  <!-- Contenido para mi canal de youtube -->
+  <div class="w-full max-w-4xl flex flex-col gap-10">
+    <div class="bg-[#DDE6DB] rounded-xl p-6 flex flex-col gap-6">
+
+      <!-- Card 1 -->
+      <div class="flex justify-between items-start gap-6">
+        <div class="flex flex-col gap-2 max-w-xl">
+          <div class="text-xl font-semibold text-gray-800">
+            El Bambú Nursery
+          </div>
+          <div class="text-yellow-500 text-2xl">
+            ★★★★☆
+          </div>
+          <div class="text-base text-gray-700">
+            A family-owned nursery focused on fruit trees and large palms.
+          </div>
+          <div class="text-base text-gray-600">
+            Calle Chiltiupán, residencial Cumbres de Santa Tecla
+          </div>
+          <div class="text-base text-gray-600">
+            Schedule: 6:00 AM - 4:00 PM
+          </div>
+          <div class="flex gap-6 text-base text-gray-700 mt-3">
+            <div class="flex items-center gap-1">📷 @ElBambuNursery</div>
+            <div class="flex items-center gap-1">📞 +503 7777-3456</div>
+            <div class="flex items-center gap-1">📘 ElBambuVivero</div>
+          </div>
         </div>
-
-        <div class="rounded-full bg-white/70 px-6 py-2 text-sm font-semibold">
-          Back
+        <div class="w-40 h-40 overflow-hidden rounded-lg">
+          <img src="resources/images/nurseries/nursery1.png" alt="El Bambú Nursery" class="w-full h-full object-cover"/>
         </div>
       </div>
 
+      <!-- Divisor tío -->
+      <div class="h-0.5 bg-gray-600"></div>
 
-      <div class="flex w-72 items-center rounded-full bg-white/80 px-4 py-2">
-        <input type="text" placeholder="Search" class="w-full bg-transparent text-sm outline-none" />
+      <!-- Card 2 -->
+      <div class="flex justify-between items-start gap-6">
+        <div class="flex flex-col gap-2 max-w-xl">
+          <div class="text-xl font-semibold text-gray-800">
+            The Tecla Plant House
+          </div>
+          <div class="text-yellow-500 text-2xl">
+            ★★★★★
+          </div>
+          <div class="text-base text-gray-700">
+            Your go-to spot for indoor plants and unique pots.
+          </div>
+          <div class="text-base text-gray-600">
+            Avenida El Boquerón, Km 5, Santa Tecla
+          </div>
+          <div class="text-base text-gray-600">
+            Schedule: 6:00 AM - 3:00 PM
+          </div>
+          <div class="flex gap-6 text-base text-gray-700 mt-3">
+            <div>📷 @TeclaPlantHouse</div>
+            <div>📞 +503 7777-9012</div>
+            <div>📘 TheTeclaPlantHouse</div>
+          </div>
+        </div>
+        <div class="w-40 h-40 overflow-hidden rounded-lg">
+          <img src="resources/images/nurseries/nursery2.png" alt="The Tecla Plant House" class="w-full h-full object-cover"/>
+        </div>
       </div>
 
-      <!-- USER -->
-      <div class="flex h-10 w-10 items-center justify-center rounded-full bg-white/70">
-        👤
+      <!-- Divider -->
+      <div class="h-0.5 bg-gray-600"></div>
+
+      <!-- Card 3 -->
+      <div class="flex justify-between items-start gap-6">
+
+        <div class="flex flex-col gap-2 max-w-xl">
+
+          <div class="text-lg font-semibold text-gray-800">
+            Vivero La Esmeralda
+          </div>
+
+          <div class="text-yellow-500 text-sm">
+            ★★★★☆
+          </div>
+
+          <div class="text-sm text-gray-700">
+            Urban oasis of indoor plants and vertical gardens.
+          </div>
+
+          <div class="text-xs text-gray-600">
+            Avenida del Sol #123, Colonia Jardines del Valle
+          </div>
+
+          <div class="text-xs text-gray-600">
+            Schedule: 9:00 AM - 3:00 PM
+          </div>
+
+          <div class="flex gap-6 text-xs text-gray-700 mt-3">
+            <div>📷 @ViveroLaEsmeralda</div>
+            <div>📞 +503 7777-2244</div>
+            <div>📘 ViveroLaEsmeralda</div>
+          </div>
+
+        </div>
+
+        <div class="w-40 h-40 overflow-hidden rounded-lg">
+          <img
+            src="vivero-esmeralda.jpg"
+            alt="Vivero La Esmeralda"
+            class="w-full h-full object-cover"
+          />
+        </div>
+
       </div>
 
     </div>
   </div>
+</div>
 
-
-  <div class="-mt-24 px-10">
-    <div class="flex items-center justify-between gap-10 rounded-2xl bg-[#d7d4d3] p-10">
-
-      <div class="pl-12 max-w-lg">
-        <div class="text-4xl font-bold leading-tight text-black">
-          Pick up the plants you’ve been dreaming of!
-        </div>
-
-        <div class="mt-4 text-lg text-gray-700">
-          Look all the plants stores we offer
-        </div>
-
-        <div class="mt-6 inline-block rounded-full bg-green-900 px-10 py-2 text-sm font-semibold text-white">
-          Contact
-        </div>
-      </div>
-      <div>
-        <img src="resources/images/plants/nurse1.png">
-      </div>
-
-
-    </div>
-  </div>
-
-  <div class="mt-20 pb-10">
-    <div class="mx-auto max-w-md text-center text-2xl text-white font-bold">
-      A jubilation brought by the purchase of another new form of life
-    </div>
-  </div>
-
-  <div class="mx-auto max-w-7xl px-10 space-y-12">
-    <!-- 1 -->
-    <div class="flex items-center justify-between rounded-2xl bg-[#dbe3db] p-8">
-      <div class="max-w-xl text-green-900 space-y-2">
-        <div class="text-2xl font-semibold">
-          El Bambú Nursery
-        </div>
-        <div class="text-yellow-500 text-2xl">
-          ★★★★★
-        </div>
-        <div class="text-lg opacity-80">
-          A family-owned nursery focused on fruit trees and large palms.
-        </div>
-        <div class="text-base opacity-70">
-          Schedule: 6:00 AM – 4:00 PM
-        </div>
-        <div class="flex items-center gap-6 text-base pt-2">
-          <div>@BambuNursery</div>
-          <div>📞 503 7777‑3366</div>
-          <div>ⓕ ElBambuVivero</div>
-        </div>
-      </div>
-      <div class="h-40 w-56 rounded-xl bg-[url('/assets/resources/images/nursery-1.jpg')] bg-cover bg-center"></div>
-    </div>
-
-    <!-- 2 -->
-    <div class="flex items-center justify-between rounded-2xl bg-[#dbe3db] p-8">
-      <div class="max-w-xl text-green-900 space-y-2">
-        <div class="text-2xl font-semibold">
-          The Tecla Plant House
-        </div>
-        <div class="text-yellow-500 text-2xl">
-          ★★★★★
-        </div>
-        <div class="text-lg opacity-80">
-          Your go-to spot for indoor plants and unique pots.
-        </div>
-        <div class="text-base opacity-70">
-          Schedule: 8:00 AM – 3:00 PM
-        </div>
-        <div class="flex items-center gap-6 text-base pt-2">
-          <div>@TeclaPlantHouse</div>
-          <div>📞 503 7777‑9012</div>
-          <div>ⓕ TheTeclaPlantHouse</div>
-        </div>
-      </div>
-      <div class="h-40 w-56 rounded-xl bg-[url('/assets/resources/images/nursery-2.jpg')] bg-cover bg-center"></div>
-    </div>
-
-    <!-- 3 -->
-    <div class="flex items-center justify-between rounded-2xl bg-[#dbe3db] p-8">
-      <div class="max-w-xl text-green-900 space-y-2">
-        <div class="text-2xl font-semibold">
-          Vivero La Esmeralda
-        </div>
-        <div class="text-yellow-500 text-2xl">
-          ★★★★★
-        </div>
-        <div class="text-lg opacity-80">
-          Urban oasis of indoor plants and vertical gardens.
-        </div>
-        <div class="text-base opacity-70">
-          Schedule: 8:00 AM – 3:00 PM
-        </div>
-        <div class="flex items-center gap-6 text-base pt-2">
-          <div>@ViveroEsmeralda</div>
-          <div>📞 503 7011‑7244</div>
-          <div>ⓕ Vivero La Esmeralda</div>
-        </div>
-      </div>
-      <div class="h-40 w-56 rounded-xl bg-[url('/assets/resources/images/nursery-3.jpg')] bg-cover bg-center"></div>
-    </div>
-    <!-- 4 -->
-    <div class="flex items-center justify-between rounded-2xl bg-[#dbe3db] p-8">
-      <div class="max-w-xl text-green-900 space-y-2">
-        <div class="text-2xl font-semibold">
-          Green Heaven Nurseries
-        </div>
-        <div class="text-yellow-500 text-2xl">
-          ★★★★★
-        </div>
-        <div class="text-lg opacity-80">
-          A tranquil space dedicated to tropical and native plants.
-        </div>
-        <div class="text-base opacity-70">
-          Schedule: 7:30 AM – 1:00 PM
-        </div>
-        <div class="flex items-center gap-6 text-base pt-2">
-          <div>@GreenHeavenSV</div>
-          <div>📞 503 7777‑1234</div>
-          <div>ⓕ GreenHavenNurserySV</div>
-        </div>
-      </div>
-      <div class="h-30 w-46 flex items-center justify-center rounded-xl order-last"><img
-          src="resources/images/nurseries/vivero1.jpg" class=""></div>
-    </div>
-
-    <div class="flex justify-center text-white pt-12 ">The brands, store names, and businesses shown in this design are
-      fictitious and used for illustrative purposes only. They do not represent real stores and are not affiliated with
-      any existing companies.</div>
-
-  </div>
-
-
-</body>
-
-
-</html>
+@end
