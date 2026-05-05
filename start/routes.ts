@@ -11,6 +11,9 @@ router.on('/brassicaceae').render('pages/brassicaceae')
 router.on('/apiaceae').render('pages/apiaceae')
 router.on('/cucurbitaceae').render('pages/cucurbitaceae')
 router.on('/solanaceae').render('pages/solanaceae')
+router.on('/araceae').render('pages/araceae')
+
+router.on('/profile').render('pages/client/profile').as('profile')
 
 /* clients views */
 /*router
