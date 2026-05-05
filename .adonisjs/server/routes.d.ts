@@ -6,6 +6,8 @@ export type ScannedRoutes = {
   ALL: {
     'home': { paramsTuple?: []; params?: {} }
     'profile': { paramsTuple?: []; params?: {} }
+    'maintenance': { paramsTuple?: []; params?: {} }
+    'request': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
     'session.store': { paramsTuple?: []; params?: {} }
     'session.destroy': { paramsTuple?: []; params?: {} }
@@ -16,6 +18,8 @@ export type ScannedRoutes = {
   GET: {
     'home': { paramsTuple?: []; params?: {} }
     'profile': { paramsTuple?: []; params?: {} }
+    'maintenance': { paramsTuple?: []; params?: {} }
+    'request': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
     'signup.client': { paramsTuple?: []; params?: {} }
     'signup.gardener': { paramsTuple?: []; params?: {} }
@@ -23,6 +27,8 @@ export type ScannedRoutes = {
   HEAD: {
     'home': { paramsTuple?: []; params?: {} }
     'profile': { paramsTuple?: []; params?: {} }
+    'maintenance': { paramsTuple?: []; params?: {} }
+    'request': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
     'signup.client': { paramsTuple?: []; params?: {} }
     'signup.gardener': { paramsTuple?: []; params?: {} }
