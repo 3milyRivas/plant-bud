@@ -12,12 +12,10 @@ router.on('/apiaceae').render('pages/apiaceae')
 router.on('/cucurbitaceae').render('pages/cucurbitaceae')
 router.on('/solanaceae').render('pages/solanaceae')
 router.on('/araceae').render('pages/araceae')
-<<<<<<< Updated upstream
-router.on('/community').render('pages/community')
 
-=======
 router.on('/profile').render('pages/client/profile').as('profile')
->>>>>>> Stashed changes
+router.on('/maintenance').render('pages/services/maintenance').as('maintenance')
+router.on('/request').render('pages/services/request').as('request')
 
 /* clients views */
 /*router
@@ -41,9 +39,6 @@ router
     router.on('/profile').render('pages/client/profile').as('profile')
   })
   .use([middleware.auth()])*/
-/*services*/
-router.on('/maintenance').render('pages/services/maintenance').as('maintenance')
-router.on('/request').render('pages/services/request').as('request')
 
 router
   .group(() => {
