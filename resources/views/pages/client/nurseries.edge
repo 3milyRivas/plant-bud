@@ -3,31 +3,32 @@
 <title>Nurseries</title>
 @endslot
 
-<div class="relative z-10 flex items-center justify-between px-10 py-6">
+<div
+  class="bg-[url('/resources/images/plant.budd.png')] bg-cover bg-center relative z-10 flex items-center justify-between px-10 py-6">
 
 
-  <div class="bg-white/80 rounded-full px-4 py-2 text-green-800 font-semibold">
-    Plant <span class="font-bold">BUD</span>
+  <div class="flex flex-col px-4 py-2">
+    <img src="resources/images/essential/logo.png" class="pl-0.5 h-22 w-22">
+
+    <div>
+      <div class="inline-block bg-white/70 rounded-full px-8 py-3 text-gray-700 font-medium">
+        Back
+      </div>
+    </div>
+
   </div>
 
 
   <div class="flex items-center gap-3 bg-white/70 rounded-full px-5 py-3 w-96">
     <input type="text" placeholder="Search"
       class="w-full bg-transparent outline-none text-sm text-gray-700 placeholder-gray-500" />
-    <div class="text-gray-600">🔍</div>
+    <div class="text-gray-600"></div>
   </div>
 
-  <div class="bg-white/70 rounded-full px-4 py-3">
-    👤
+  <div class="px-4 py-3">
+    <img src="resources/images/logo-perfil.png" class="h-15 w-15">
   </div>
 
-</div>
-
-
-<div class="relative z-10 px-10">
-  <div class="inline-block bg-white/70 rounded-full px-8 py-3 text-gray-700 font-medium">
-    Back
-  </div>
 </div>
 
 <div class="mt-1 px-10 pt-15">
@@ -43,7 +44,7 @@
       </div>
 
       <div class="inline-block bg-green-900 text-white px-12 py-3 rounded-full font-semibold">
-        Contact
+        50% off if you're premium
       </div>
     </div>
 
@@ -63,7 +64,7 @@
   <div class="w-full max-w-4xl flex flex-col gap-10">
     <div class="bg-[#DDE6DB] rounded-xl p-6 flex flex-col gap-6">
 
-      <!-- Card 1 -->
+      <!-- Vivero 1 -->
       <div class="flex justify-between items-start gap-6">
         <div class="flex flex-col gap-2 max-w-xl">
           <div class="text-xl font-semibold text-gray-800">
@@ -87,15 +88,15 @@
             <div class="flex items-center gap-1">📘 ElBambuVivero</div>
           </div>
         </div>
-        <div class="w-40 h-40 overflow-hidden rounded-lg">
-          <img src="resources/images/nurseries/nursery1.png" alt="El Bambú Nursery" class="w-full h-full object-cover"/>
+        <div class="overflow-hidden rounded-lg">
+          <img src="resources/images/nurseries/nursery1.png" alt="El Bambú Nursery" class="w-46 h-60 object-cover" />
         </div>
       </div>
 
       <!-- Divisor tío -->
       <div class="h-0.5 bg-gray-600"></div>
 
-      <!-- Card 2 -->
+      <!-- Vivero 2 -->
       <div class="flex justify-between items-start gap-6">
         <div class="flex flex-col gap-2 max-w-xl">
           <div class="text-xl font-semibold text-gray-800">
@@ -119,40 +120,41 @@
             <div>📘 TheTeclaPlantHouse</div>
           </div>
         </div>
-        <div class="w-40 h-40 overflow-hidden rounded-lg">
-          <img src="resources/images/nurseries/nursery2.png" alt="The Tecla Plant House" class="w-full h-full object-cover"/>
+        <div class="overflow-hidden rounded-lg">
+          <img src="resources/images/nurseries/nursery2.png" alt="The Tecla Plant House"
+            class="w-46 h-60 object-cover" />
         </div>
       </div>
 
       <!-- Divider -->
       <div class="h-0.5 bg-gray-600"></div>
 
-      <!-- Card 3 -->
+      <!-- Vivero 3 -->
       <div class="flex justify-between items-start gap-6">
 
         <div class="flex flex-col gap-2 max-w-xl">
 
-          <div class="text-lg font-semibold text-gray-800">
+          <div class="text-xl font-semibold text-gray-800">
             Vivero La Esmeralda
           </div>
 
-          <div class="text-yellow-500 text-sm">
+          <div class="text-yellow-500 text-2xl">
             ★★★★☆
           </div>
 
-          <div class="text-sm text-gray-700">
+          <div class="text-base text-gray-700">
             Urban oasis of indoor plants and vertical gardens.
           </div>
 
-          <div class="text-xs text-gray-600">
+          <div class="text-base text-gray-600">
             Avenida del Sol #123, Colonia Jardines del Valle
           </div>
 
-          <div class="text-xs text-gray-600">
+          <div class="text-base text-gray-600">
             Schedule: 9:00 AM - 3:00 PM
           </div>
 
-          <div class="flex gap-6 text-xs text-gray-700 mt-3">
+          <div class="flex gap-6 text-base text-gray-700 mt-3">
             <div>📷 @ViveroLaEsmeralda</div>
             <div>📞 +503 7777-2244</div>
             <div>📘 ViveroLaEsmeralda</div>
@@ -160,18 +162,101 @@
 
         </div>
 
-        <div class="w-40 h-40 overflow-hidden rounded-lg">
-          <img
-            src="vivero-esmeralda.jpg"
-            alt="Vivero La Esmeralda"
-            class="w-full h-full object-cover"
-          />
+        <div class="overflow-hidden rounded-lg">
+          <img src="resources/images/nurseries/nursery3.png" alt="Vivero La Esmeralda" class="h-60 w-46 object-cover" />
+        </div>
+
+      </div>
+      <!--Divisor-->
+      <div class="h-0.5 bg-gray-600"></div>
+      <!-- Vivero 4 -->
+      <div class="flex justify-between items-start gap-6">
+
+        <div class="flex flex-col gap-2 max-w-xl">
+
+          <div class="text-xl font-semibold text-gray-800">
+            Green Heaven Nursery
+          </div>
+
+          <div class="text-yellow-500 text-2xl">
+            ★★☆☆☆
+          </div>
+
+          <div class="text-base text-gray-700">
+            A tranquil space dedicated to tropical and native plants.
+          </div>
+
+          <div class="text-base text-gray-600">
+            5a Calle Oriente, Santa Tecla, La Libertad
+          </div>
+
+          <div class="text-base text-gray-600">
+            Schedule: 7:30 AM - 1:00 PM
+          </div>
+
+          <div class="flex gap-6 text-base text-gray-700 mt-3">
+            <div>📷 @GreenHavenSV</div>
+            <div>📞 +503 7777-1234</div>
+            <div>📘 GreenHeavenNurseriesSV</div>
+          </div>
+
+        </div>
+
+        <div class=" overflow-hidden rounded-lg">
+          <img src="resources/images/nurseries/nursery4.png" alt="Green Heaven Nursery"
+            class="h-60 w-46 object-cover" />
+        </div>
+
+      </div>
+      <!--Divisor-->
+      <div class="h-0.5 bg-gray-600"></div>
+      <!-- Vivero 5 -->
+      <div class="flex justify-between items-start gap-6">
+
+        <div class="flex flex-col gap-2 max-w-xl">
+
+          <div class="text-xl font-semibold text-gray-800">
+            Terra Flora Garden
+          </div>
+
+          <div class="text-yellow-500 text-2xl">
+            ★★★★★
+          </div>
+
+          <div class="text-base text-gray-700">
+            Specializing in exotic flowers and succulents.
+          </div>
+
+          <div class="text-base text-gray-600">
+            Boulevard Sur, Jardines de Merliot, Santa Tecla
+          </div>
+
+          <div class="text-base text-gray-600">
+            Schedule: 8:00 AM - 4:00 PM
+          </div>
+
+          <div class="flex gap-6 text-base text-gray-700 mt-3">
+            <div>📷 @TerraFloraGarden</div>
+            <div>📞 +503 7333 -2164</div>
+            <div>📘 TerraFloraSV</div>
+          </div>
+
+        </div>
+
+        <div class=" overflow-hidden rounded-lg">
+          <img src="resources/images/nurseries/nursery5.png" alt="Green Heaven Nursery"
+            class="h-60 w-46 object-cover" />
         </div>
 
       </div>
 
     </div>
+    <div class="flex flex-col items-center justify-center text-center text-white text-sm font-bold">
+      <div>The brands, store names, and businesses shown in this design are fictitious and used for illustrative
+        purposes only.</div>
+      <div>They do not represent real stores and are not affiliated with any existing companies</div>
+    </div>
   </div>
-</div>
 
-@end
+
+  @end
