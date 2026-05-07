@@ -17,7 +17,7 @@ router.on('/community').render('pages/community')
 router.on('/profile').render('pages/client/profile').as('profile')
 router.on('/maintenance').render('pages/services/maintenance').as('maintenance')
 router.on('/request').render('pages/services/request').as('request')
-router.on('/care').render('pages/client/Plants/careO')
+router.on('/care').render('pages/client/Plants/careo')
 
 /* clients views */
 /*router
