@@ -1,0 +1,61 @@
+.leaves {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.leaf {
+    position: absolute;
+    top: -10%;
+    width: 22px;
+    height: 22px;
+    fill: #1E3D19;
+    opacity: 0.5;
+    will-change: transform;
+    animation: fall linear infinite;
+}
+
+.leaf:nth-child(1) { left: 10%; animation-duration: 12s; animation-delay: 0s; }
+.leaf:nth-child(2) { left: 25%; animation-duration: 14s; animation-delay: -3s; }
+.leaf:nth-child(3) { left: 40%; animation-duration: 10s; animation-delay: -6s; }
+.leaf:nth-child(4) { left: 60%; animation-duration: 16s; animation-delay: -2s; }
+.leaf:nth-child(5) { left: 75%; animation-duration: 11s; animation-delay: -5s; }
+.leaf:nth-child(6) { left: 90%; animation-duration: 13s; animation-delay: -1s; }
+
+@keyframes fall {
+    0% {
+        transform: translate3d(0, -10vh, 0) rotate(0deg);
+    }
+    25% {
+        transform: translate3d(20px, 25vh, 0) rotate(90deg);
+    }
+    50% {
+        transform: translate3d(-20px, 50vh, 0) rotate(180deg);
+    }
+    75% {
+        transform: translate3d(15px, 75vh, 0) rotate(270deg);
+    }
+    100% {
+        transform: translate3d(-10px, 110vh, 0) rotate(360deg);
+    }
+}
+
+
+@keyframes windMove {
+    0% {
+        transform: translateX(-10%);
+        opacity: 0.2;
+    }
+    50% {
+        opacity: 0.35;
+    }
+    100% {
+        transform: translateX(10%);
+        opacity: 0.2;
+    }
+}
+
+.wind-line {
+    animation: windMove 8s ease-in-out infinite;
+}

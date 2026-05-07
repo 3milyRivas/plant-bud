@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import adonisjs from '@adonisjs/vite/client'
 import tailwindcss from '@tailwindcss/vite'
+import { viteStaticCopy } from 'vite-plugin-static-copy'
 
 export default defineConfig({
   plugins: [
@@ -17,6 +18,14 @@ export default defineConfig({
       reload: ['resources/views/**/*.edge'],
     }),
     tailwindcss(),
+    viteStaticCopy({
+      targets: [
+        {
+          src: 'resources/images/*',
+          dest: '',
+        },
+      ],
+    }),
   ],
 
   server: {
