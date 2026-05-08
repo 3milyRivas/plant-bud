@@ -13,6 +13,8 @@ router.on('/cucurbitaceae').render('pages/cucurbitaceae')
 router.on('/solanaceae').render('pages/solanaceae')
 router.on('/araceae').render('pages/araceae')
 
+router.on('/test').render('pages/newwelcome')
+
 router.on('/homepage2').render('pages/client/homepage2')
 
 router.on('/community').render('pages/community')
