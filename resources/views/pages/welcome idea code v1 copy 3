@@ -1,0 +1,868 @@
+@layout()
+@slot('title')
+<title>Plant Bud</title>
+@endslot
+
+<div class="relative overflow-hidden bg-[#728B6F] text-white scroll-smooth">
+
+    <!-- ================= GLOBAL BG ================= -->
+
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+
+        <div
+            class="absolute top-[-10%] left-[-10%] w-[700px] h-[700px] bg-[#EDE7D6]/10 rounded-full blur-3xl">
+        </div>
+
+        <div
+            class="absolute bottom-[-15%] right-[-10%] w-[650px] h-[650px] bg-[#1E3D19]/20 rounded-full blur-3xl">
+        </div>
+
+        <div
+            class="absolute top-[45%] left-[50%] -translate-x-1/2 w-[900px] h-[900px] bg-white/[0.03] rounded-full blur-3xl">
+        </div>
+
+    </div>
+
+    <!-- ================= NAVBAR ================= -->
+
+    <header class="fixed top-0 left-0 w-full z-50 px-6 lg:px-10 py-6">
+
+        <div
+            class="max-w-7xl mx-auto bg-white/10 backdrop-blur-xl border border-white/10 rounded-full px-6 py-4 flex items-center justify-between shadow-[0_10px_40px_rgba(0,0,0,0.15)]">
+
+            <div class="flex items-center gap-4">
+
+                <img src="resources/images/essential/logo.png"
+                    class="w-14 hover:rotate-6 transition duration-500"
+                    alt="">
+
+                <h1 class="text-2xl font-black tracking-wide">
+                    Plant
+                    <span class="text-[#EDE7D6]">
+                        Bud
+                    </span>
+                </h1>
+
+            </div>
+
+            <div class="hidden md:flex items-center gap-10 font-semibold text-white/90">
+
+                <a href="#about"
+                    class="hover:text-[#EDE7D6] transition">
+                    About
+                </a>
+
+                <a href="#benefits"
+                    class="hover:text-[#EDE7D6] transition">
+                    Benefits
+                </a>
+
+                <a href="#values"
+                    class="hover:text-[#EDE7D6] transition">
+                    Values
+                </a>
+
+                <a href="#purpose"
+                    class="hover:text-[#EDE7D6] transition">
+                    Purpose
+                </a>
+
+            </div>
+
+            <div class="flex items-center gap-4">
+
+                <a href="/login"
+                    class="hidden sm:flex font-semibold hover:text-[#EDE7D6] transition">
+                    Login
+                </a>
+
+                <a href="/register"
+                    class="bg-[#EDE7D6] text-[#1E3D19] font-black px-6 py-3 rounded-full hover:scale-105 transition-all duration-300 shadow-lg">
+                    Get Started
+                </a>
+
+            </div>
+
+        </div>
+
+    </header>
+
+    <!-- ================= HERO ================= -->
+
+    <section
+        class="relative min-h-screen flex items-center overflow-hidden pt-40 pb-24 px-6">
+
+        <img src="resources/images/welcome/header.png"
+            class="absolute inset-0 w-full h-full object-cover scale-105 animate-[slowZoom_18s_ease-in-out_infinite]"
+            alt="">
+
+        <div class="absolute inset-0 bg-black/45"></div>
+
+        <div
+            class="absolute inset-0 bg-gradient-to-b from-[#1E3D19]/30 via-[#728B6F]/30 to-[#728B6F]">
+        </div>
+
+        <div
+            class="relative z-20 max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center">
+
+            <!-- LEFT -->
+
+            <div class="text-center lg:text-left">
+
+                <div
+                    class="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/10 backdrop-blur-md border border-white/10 shadow-xl mb-8">
+
+                    <div class="w-2 h-2 bg-[#EDE7D6] rounded-full animate-ping">
+                    </div>
+
+                    <span class="tracking-wide font-medium">
+                        Green Spaces Start Here
+                    </span>
+
+                </div>
+
+                <h1
+                    class="text-6xl md:text-7xl xl:text-[95px] font-black leading-[0.95] drop-shadow-2xl animate-slideUp">
+
+                    Grow Your
+
+                    <span class="text-[#EDE7D6]">
+                        Plants
+                    </span>
+
+                    <br>
+
+                    Live a
+
+                    <span class="text-[#1E3D19]">
+                        Better Life
+                    </span>
+
+                </h1>
+
+                <div
+                    class="w-40 h-[5px] bg-[#EDE7D6] rounded-full mt-10 mx-auto lg:mx-0 animate-expand">
+                </div>
+
+                <p
+                    class="mt-10 text-white/85 text-xl leading-relaxed max-w-2xl">
+
+                    Learn how to care for your plants, discover gardening
+                    professionals, and create healthier environments filled
+                    with nature.
+
+                </p>
+
+                <div
+                    class="mt-12 flex flex-wrap gap-5 justify-center lg:justify-start">
+
+                    <a href="/register"
+                        class="group bg-[#EDE7D6] text-[#1E3D19] font-black px-10 py-5 rounded-full shadow-[0_15px_40px_rgba(0,0,0,0.25)] hover:scale-105 transition-all duration-300 flex items-center gap-3">
+
+                        Start Now
+
+                        <svg class="w-5 h-5 group-hover:translate-x-1 transition"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            viewBox="0 0 24 24">
+
+                            <path d="M5 12h14"></path>
+                            <path d="M13 5l7 7-7 7"></path>
+
+                        </svg>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT -->
+
+            <div class="relative flex justify-center">
+
+                <div
+                    class="absolute w-[450px] h-[450px] bg-[#EDE7D6]/15 rounded-full blur-3xl animate-pulse">
+                </div>
+
+                <div
+                    class="absolute w-[520px] h-[520px] border border-white/10 rounded-full animate-spinSlow">
+                </div>
+
+                <img src="resources/images/essential/logo.png"
+                    class="relative w-[320px] md:w-[420px] animate-float drop-shadow-[0_25px_60px_rgba(0,0,0,0.45)]"
+                    alt="">
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ================= CONTENT ================= -->
+
+    <main class="relative z-30">
+
+        <!-- ================= ABOUT ================= -->
+
+        <section id="about"
+            class="relative py-24 px-6">
+
+            <div class="max-w-7xl mx-auto">
+
+                <div
+                    class="grid lg:grid-cols-[1fr_0.9fr] gap-14 items-center">
+
+                    <!-- LEFT -->
+
+                    <div
+                        class="scroll-card opacity-0 translate-y-16 transition-all duration-1000">
+
+                        <span
+                            class="text-[#EDE7D6] uppercase tracking-[4px] font-bold text-sm">
+                            About Plant Bud
+                        </span>
+
+                        <h2
+                            class="text-5xl md:text-6xl font-black mt-5 leading-tight">
+
+                            A Modern Space
+                            <br>
+
+                            For
+
+                            <span class="text-[#1E3D19]">
+                                Plant Lovers
+                            </span>
+
+                        </h2>
+
+                        <div
+                            class="w-32 h-[5px] bg-[#EDE7D6] rounded-full mt-8">
+                        </div>
+
+                        <p
+                            class="mt-8 text-white/85 text-xl leading-relaxed max-w-2xl">
+
+                            Plant Bud helps people learn about plant care,
+                            discover gardening services, connect with plant
+                            stores, and build healthier environments through nature.
+
+                        </p>
+
+                    </div>
+
+                    <!-- RIGHT -->
+
+                    <div
+                        class="scroll-card opacity-0 translate-y-16 transition-all duration-1000 relative flex justify-center">
+
+                        <div
+                            class="absolute w-[350px] h-[350px] bg-[#EDE7D6]/10 rounded-full blur-3xl">
+                        </div>
+
+                        <img src="resources/images/welcome/first-icon.png"
+                            class="relative w-[360px] hover:scale-105 transition duration-500 drop-shadow-2xl"
+                            alt="">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ================= BENEFITS ================= -->
+
+        <section id="benefits"
+            class="relative py-20 px-6">
+
+            <div class="max-w-7xl mx-auto">
+
+                <!-- TITLE -->
+
+                <div
+                    class="text-center mb-16 scroll-card opacity-0 translate-y-16 transition-all duration-1000">
+
+                    <span
+                        class="text-[#EDE7D6] uppercase tracking-[4px] font-bold text-sm">
+                        Benefits
+                    </span>
+
+                    <h2
+                        class="text-5xl md:text-6xl font-black mt-5 leading-tight">
+
+                        Everything You Need
+                        <br>
+                        To Grow Better
+
+                    </h2>
+
+                </div>
+
+                <!-- BENEFITS GRID -->
+
+                <div
+                    class="grid md:grid-cols-2 xl:grid-cols-5 gap-5">
+
+                    <!-- CARD -->
+
+                    <div
+                        class="scroll-card opacity-0 translate-y-16 transition-all duration-1000 group bg-white/10 backdrop-blur-md border border-white/10 rounded-[28px] p-6 hover:bg-white/15 hover:-translate-y-2 transition">
+
+                        <img src="resources/images/welcome/benefit1.png"
+                            class="w-20 mb-6 group-hover:scale-110 transition duration-300"
+                            alt="">
+
+                        <h3
+                            class="text-2xl font-black leading-tight">
+                            Easy
+                            Access
+                        </h3>
+
+                        <p
+                            class="text-white/70 mt-4 leading-relaxed text-sm">
+                            Reliable information about plant care.
+                        </p>
+
+                    </div>
+
+                    <div
+                        class="scroll-card opacity-0 translate-y-16 transition-all duration-1000 delay-100 group bg-white/10 backdrop-blur-md border border-white/10 rounded-[28px] p-6 hover:bg-white/15 hover:-translate-y-2 transition">
+
+                        <img src="resources/images/welcome/benefit2.png"
+                            class="w-20 mb-6 group-hover:scale-110 transition duration-300"
+                            alt="">
+
+                        <h3
+                            class="text-2xl font-black leading-tight">
+                            Professional
+                            Help
+                        </h3>
+
+                        <p
+                            class="text-white/70 mt-4 leading-relaxed text-sm">
+                            Gardening experts available for you.
+                        </p>
+
+                    </div>
+
+                    <div
+                        class="scroll-card opacity-0 translate-y-16 transition-all duration-1000 delay-200 group bg-white/10 backdrop-blur-md border border-white/10 rounded-[28px] p-6 hover:bg-white/15 hover:-translate-y-2 transition">
+
+                        <img src="resources/images/welcome/benefit3.png"
+                            class="w-20 mb-6 group-hover:scale-110 transition duration-300"
+                            alt="">
+
+                        <h3
+                            class="text-2xl font-black leading-tight">
+                            Save
+                            Time
+                        </h3>
+
+                        <p
+                            class="text-white/70 mt-4 leading-relaxed text-sm">
+                            Quickly find what your plants need.
+                        </p>
+
+                    </div>
+
+                    <div
+                        class="scroll-card opacity-0 translate-y-16 transition-all duration-1000 delay-300 group bg-white/10 backdrop-blur-md border border-white/10 rounded-[28px] p-6 hover:bg-white/15 hover:-translate-y-2 transition">
+
+                        <img src="resources/images/welcome/benefit4.png"
+                            class="w-20 mb-6 group-hover:scale-110 transition duration-300"
+                            alt="">
+
+                        <h3
+                            class="text-2xl font-black leading-tight">
+                            Plant
+                            Stores
+                        </h3>
+
+                        <p
+                            class="text-white/70 mt-4 leading-relaxed text-sm">
+                            Discover products and local businesses.
+                        </p>
+
+                    </div>
+
+                    <div
+                        class="scroll-card opacity-0 translate-y-16 transition-all duration-1000 delay-500 group bg-[#EDE7D6] text-[#1E3D19] rounded-[28px] p-6 hover:-translate-y-2 transition shadow-xl">
+
+                        <img src="resources/images/welcome/benefit5.png"
+                            class="w-20 mb-6 hover:scale-110 transition duration-300"
+                            alt="">
+
+                        <h3
+                            class="text-2xl font-black leading-tight">
+                            Community
+                        </h3>
+
+                        <p
+                            class="mt-4 leading-relaxed text-sm text-[#4E694A]">
+                            Connect with people who love plants.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ================= VALUES + PURPOSE ================= -->
+
+        <section id="values"
+            class="relative py-24 px-6">
+
+            <div class="max-w-7xl mx-auto">
+
+                <div
+                    class="grid xl:grid-cols-[0.8fr_1.2fr] gap-14 items-start">
+
+                    <!-- LEFT -->
+
+                    <div
+                        class="scroll-card opacity-0 translate-y-16 transition-all duration-1000 sticky top-32">
+
+                        <span
+                            class="text-[#EDE7D6] uppercase tracking-[4px] font-bold text-sm">
+                            Core Values
+                        </span>
+
+                        <h2
+                            class="text-5xl md:text-6xl font-black mt-5 leading-tight">
+
+                            What Makes
+                            <br>
+
+                            Plant Bud
+                            Different
+
+                        </h2>
+
+                        <p
+                            class="mt-8 text-white/80 text-lg leading-relaxed">
+
+                            Our values shape the way we connect people,
+                            nature, and sustainability together.
+
+                        </p>
+
+                    </div>
+
+                    <!-- RIGHT -->
+
+                    <div
+                        class="grid sm:grid-cols-2 gap-5">
+
+                        <!-- VALUE -->
+
+                        <div
+                            class="scroll-card opacity-0 translate-y-16 transition-all duration-1000 bg-white/10 backdrop-blur-md border border-white/10 rounded-[30px] p-7 hover:bg-white/15 transition">
+
+                            <div
+                                class="w-16 h-16 rounded-2xl bg-[#EDE7D6]/10 flex items-center justify-center mb-6">
+
+                                <img src="resources/images/welcome/value1.png"
+                                    class="w-9"
+                                    alt="">
+                            </div>
+
+                            <h3
+                                class="text-3xl font-black mb-4">
+                                Empathy
+                            </h3>
+
+                            <p
+                                class="text-white/70 leading-relaxed">
+                                Understanding people and nature together.
+                            </p>
+
+                        </div>
+
+                        <div
+                            class="scroll-card opacity-0 translate-y-16 transition-all duration-1000 delay-100 bg-white/10 backdrop-blur-md border border-white/10 rounded-[30px] p-7 hover:bg-white/15 transition mt-10">
+
+                            <div
+                                class="w-16 h-16 rounded-2xl bg-[#EDE7D6]/10 flex items-center justify-center mb-6">
+
+                                <img src="resources/images/welcome/value2.png"
+                                    class="w-9"
+                                    alt="">
+                            </div>
+
+                            <h3
+                                class="text-3xl font-black mb-4">
+                                Responsibility
+                            </h3>
+
+                            <p
+                                class="text-white/70 leading-relaxed">
+                                Building sustainable and conscious spaces.
+                            </p>
+
+                        </div>
+
+                        <div
+                            class="scroll-card opacity-0 translate-y-16 transition-all duration-1000 delay-200 bg-white/10 backdrop-blur-md border border-white/10 rounded-[30px] p-7 hover:bg-white/15 transition -mt-5">
+
+                            <div
+                                class="w-16 h-16 rounded-2xl bg-[#EDE7D6]/10 flex items-center justify-center mb-6">
+
+                                <img src="resources/images/welcome/value3.png"
+                                    class="w-9"
+                                    alt="">
+                            </div>
+
+                            <h3
+                                class="text-3xl font-black mb-4">
+                                Sustainability
+                            </h3>
+
+                            <p
+                                class="text-white/70 leading-relaxed">
+                                Encouraging greener lifestyles every day.
+                            </p>
+
+                        </div>
+
+                        <div
+                            class="scroll-card opacity-0 translate-y-16 transition-all duration-1000 delay-300 bg-[#EDE7D6] text-[#1E3D19] rounded-[30px] p-7 hover:-translate-y-1 transition shadow-xl">
+
+                            <div
+                                class="w-16 h-16 rounded-2xl bg-[#728B6F]/10 flex items-center justify-center mb-6">
+
+                                <img src="resources/images/welcome/value4.png"
+                                    class="w-9"
+                                    alt="">
+                            </div>
+
+                            <h3
+                                class="text-3xl font-black mb-4">
+                                Passion
+                            </h3>
+
+                            <p
+                                class="leading-relaxed text-[#4E694A]">
+                                Loving plants means loving healthier lives.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ================= PURPOSE ================= -->
+
+        <section id="purpose"
+            class="relative py-24 px-6">
+
+            <div class="max-w-6xl mx-auto">
+
+                <div
+                    class="grid lg:grid-cols-2 gap-8 items-stretch">
+
+                    <!-- MISSION -->
+
+                    <div
+                        class="scroll-card opacity-0 translate-y-16 transition-all duration-1000 relative overflow-hidden rounded-[35px] bg-white/10 backdrop-blur-md border border-white/10 p-8">
+
+                        <div
+                            class="absolute top-0 right-0 w-40 h-40 bg-[#EDE7D6]/10 rounded-full blur-3xl">
+                        </div>
+
+                        <div
+                            class="relative z-10">
+
+                            <div
+                                class="flex items-center gap-5 mb-8">
+
+                                <div
+                                    class="w-20 h-20 rounded-3xl bg-[#EDE7D6] flex items-center justify-center shadow-xl">
+
+                                    <img src="resources/images/welcome/mission.png"
+                                        class="w-10"
+                                        alt="">
+
+                                </div>
+
+                                <div>
+
+                                    <span
+                                        class="text-[#EDE7D6] uppercase tracking-[3px] text-sm font-bold">
+                                        Purpose
+                                    </span>
+
+                                    <h3
+                                        class="text-4xl font-black mt-2">
+                                        Mission
+                                    </h3>
+
+                                </div>
+
+                            </div>
+
+                            <p
+                                class="text-white/80 text-lg leading-relaxed">
+
+                                Help people connect with nature by providing
+                                plant education, gardening services, and a
+                                community focused on greener lifestyles.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <!-- VISION -->
+
+                    <div
+                        class="scroll-card opacity-0 translate-y-16 transition-all duration-1000 delay-150 relative overflow-hidden rounded-[35px] bg-[#EDE7D6] text-[#1E3D19] p-8 shadow-2xl">
+
+                        <div
+                            class="absolute bottom-0 left-0 w-40 h-40 bg-[#728B6F]/10 rounded-full blur-3xl">
+                        </div>
+
+                        <div
+                            class="relative z-10">
+
+                            <div
+                                class="flex items-center gap-5 mb-8">
+
+                                <div
+                                    class="w-20 h-20 rounded-3xl bg-[#728B6F]/10 flex items-center justify-center shadow-lg">
+
+                                    <img src="resources/images/welcome/vision.png"
+                                        class="w-10"
+                                        alt="">
+
+                                </div>
+
+                                <div>
+
+                                    <span
+                                        class="uppercase tracking-[3px] text-sm font-bold text-[#728B6F]">
+                                        Future
+                                    </span>
+
+                                    <h3
+                                        class="text-4xl font-black mt-2">
+                                        Vision
+                                    </h3>
+
+                                </div>
+
+                            </div>
+
+                            <p
+                                class="text-[#4E694A] text-lg leading-relaxed">
+
+                                Inspire communities to integrate plants,
+                                sustainability, and natural beauty into daily life
+                                for healthier and happier environments.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- ================= CTA ================= -->
+
+    <section
+        class="relative py-32 px-6 overflow-hidden">
+
+        <div
+            class="absolute inset-0 bg-gradient-to-r from-[#1E3D19] via-[#4E694A] to-[#728B6F]">
+        </div>
+
+        <div class="relative z-10 max-w-5xl mx-auto text-center">
+
+            <h2
+                class="text-5xl md:text-7xl font-black leading-tight">
+
+                Ready To Become
+
+                <span class="text-[#EDE7D6]">
+                    Your Plant's Best Bud?
+                </span>
+
+            </h2>
+
+            <div
+                class="w-40 h-[5px] bg-[#EDE7D6] rounded-full mx-auto mt-10">
+            </div>
+
+            <p
+                class="text-white/80 text-xl max-w-3xl mx-auto mt-10 leading-relaxed">
+
+                Join a growing community that loves plants,
+                sustainability, and healthier environments.
+
+            </p>
+
+            <div class="mt-14">
+
+                <a href="/register"
+                    class="group inline-flex items-center gap-4 bg-[#EDE7D6] text-[#1E3D19] text-xl font-black px-12 py-6 rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.3)] hover:scale-105 transition-all duration-300">
+
+                    Start Your Journey
+
+                    <svg class="w-6 h-6 group-hover:translate-x-1 transition"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        viewBox="0 0 24 24">
+
+                        <path d="M5 12h14"></path>
+                        <path d="M13 5l7 7-7 7"></path>
+
+                    </svg>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+<!-- ================= ANIMATIONS ================= -->
+
+<style>
+
+    @keyframes float {
+
+        0%,100% {
+            transform: translateY(0px);
+        }
+
+        50% {
+            transform: translateY(-15px);
+        }
+
+    }
+
+    .animate-float {
+        animation: float 5s ease-in-out infinite;
+    }
+
+    @keyframes slowZoom {
+
+        0% {
+            transform: scale(1.05);
+        }
+
+        50% {
+            transform: scale(1.12);
+        }
+
+        100% {
+            transform: scale(1.05);
+        }
+
+    }
+
+    @keyframes slideUp {
+
+        0% {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateY(0px);
+        }
+
+    }
+
+    .animate-slideUp {
+        animation: slideUp 1s ease forwards;
+    }
+
+    @keyframes expand {
+
+        from {
+            width: 0;
+        }
+
+        to {
+            width: 10rem;
+        }
+
+    }
+
+    .animate-expand {
+        animation: expand 1.2s ease forwards;
+    }
+
+    @keyframes spinSlow {
+
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+
+    }
+
+    .animate-spinSlow {
+        animation: spinSlow 25s linear infinite;
+    }
+
+</style>
+
+<!-- ================= SCROLL REVEAL ================= -->
+
+<script>
+
+    const scrollCards = document.querySelectorAll('.scroll-card');
+
+    const observer = new IntersectionObserver((entries) => {
+
+        entries.forEach((entry) => {
+
+            if (entry.isIntersecting) {
+
+                entry.target.classList.remove('opacity-0', 'translate-y-16');
+                entry.target.classList.add('opacity-100', 'translate-y-0');
+
+            }
+
+        });
+
+    }, {
+        threshold: 0.15
+    });
+
+    scrollCards.forEach((card) => {
+        observer.observe(card);
+    });
+
+</script>
+
+@end
