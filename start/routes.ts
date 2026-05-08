@@ -16,6 +16,7 @@ router.on('/araceae').render('pages/araceae')
 router.on('/homepage2').render('pages/client/homepage2')
 
 router.on('/community').render('pages/community')
+router.on('/favorites').render('pages/favorites')
 
 
 router.on('/profile').render('pages/client/profile').as('profile')
