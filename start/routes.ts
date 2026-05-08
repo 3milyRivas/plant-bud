@@ -12,11 +12,16 @@ router.on('/apiaceae').render('pages/apiaceae')
 router.on('/cucurbitaceae').render('pages/cucurbitaceae')
 router.on('/solanaceae').render('pages/solanaceae')
 router.on('/araceae').render('pages/araceae')
+
 router.on('/homepage2').render('pages/client/homepage2')
+
+router.on('/community').render('pages/community')
+
 
 router.on('/profile').render('pages/client/profile').as('profile')
 router.on('/maintenance').render('pages/services/maintenance').as('maintenance')
 router.on('/request').render('pages/services/request').as('request')
+router.on('/care').render('pages/client/Plants/careo')
 
 /* clients views */
 /*router
