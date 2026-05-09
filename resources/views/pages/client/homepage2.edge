@@ -35,11 +35,11 @@
 
 
         <nav class="hidden lg:flex items-center gap-10 text-[15px] font-medium">
-            <a href="#" class="hover:text-[#48AE4D] transition">Inicio</a>
-            <a href="#" class="hover:text-[#48AE4D] transition">Categorías</a>
-            <a href="#" class="hover:text-[#48AE4D] transition">Escaneo</a>
-            <a href="#" class="hover:text-[#48AE4D] transition">Diseño Jardín</a>
-            <a href="#" class="hover:text-[#48AE4D] transition">Comunidad</a>
+            <a href="#" class="hover:text-[#48AE4D] transition">Home</a>
+            <a href="#" class="hover:text-[#48AE4D] transition">Categories</a>
+            <a href="#" class="hover:text-[#48AE4D] transition">Escanner</a>
+            <a href="#" class="hover:text-[#48AE4D] transition">Garden Desing</a>
+            <a href="#" class="hover:text-[#48AE4D] transition">Community</a>
         </nav>
 
 
@@ -52,7 +52,7 @@
                         d="M21 21l-4.35-4.35M10 18a8 8 0 100-16 8 8 0 000 16z" />
                 </svg>
 
-                <input type="text" placeholder="Buscar plantas..."
+                <input type="text" placeholder="search plants"
                     class="bg-transparent outline-none text-sm placeholder:text-[#636863]">
 
             </div>
@@ -67,17 +67,45 @@
     <section class="relative z-10 px-8 pt-16">
         <div class="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-                <h1 class="text-6xl text-white leading-[1.1] font-abril mb-8">
-                    Discover,
-                    tend and design
-                    your ideal garden.
-                </h1>
+                <div class="max-w-2xl">
 
-                <p class="text-gray text-lg leading-relaxed max-w-xl mb-10 font-poppins">
-                    Explore ornamental, succulent and vegetable plants.
-                    Design stunning gardens, connect with fellow gardeners
-                    and use artificial intelligence to scan plants.
-                </p>
+                    <span class="uppercase tracking-[0.3em] text-white/60 text-sm font-medium">
+                        Smart Gardening Platform
+                    </span>
+
+                    <div class="max-w-xl">
+
+                        <div class="flex items-center gap-3 mb-8">
+
+                            <div class="w-12 h-[1px] bg-white/50"></div>
+
+                            <span class="uppercase tracking-[0.3em] text-white/60 text-sm">
+                                Green living
+                            </span>
+
+                        </div>
+
+
+                        <h1 class="font-abril text-white text-5xl 
+                        lg:text-6xl leading-[1]">
+                            Your garden,
+                            reimagined
+                            with nature
+                            and technology.
+                        </h1>
+
+
+                        <p class="mt-4 text-white/70
+                          text-lg leading-loose max-w-md mb-8">
+
+                            Explore plants, discover inspiring spaces,
+                            connect with gardeners and scan species
+                            using artificial intelligence.
+
+                        </p>
+
+                    </div>
+                </div>
 
 
                 <div class="flex flex-wrap gap-5">
@@ -94,23 +122,7 @@
                 </div>
 
 
-                <div class="flex flex-wrap gap-10 mt-14">
-
-                    <div>
-                        <h3 class="text-4xl font-bold">3222</h3>
-                        <p class="text-[#636863]">Especies</p>
-                    </div>
-
-                    <div>
-                        <h3 class="text-4xl font-bold">222</h3>
-                        <p class="text-[#636863]">Gardeners</p>
-                    </div>
-
-                    <div>
-                        <h3 class="text-4xl font-bold">4000</h3>
-                        <p class="text-[#636863]">Nurseries</p>
-                    </div>
-                </div>
+                
             </div>
 
 
@@ -127,6 +139,7 @@
 
                         <div class="w-16 h-16 rounded-2xl bg-[#48AE4D]/20
                         flex items-center justify-center text-3xl">
+                        <img src="resources/images/homepagee/scanner.png" alt="scanner">
                         </div>
 
 
@@ -153,14 +166,16 @@
     <section class="relative z-10 px-8 py-28">
 
         <div class="flex items-center justify-between mb-12">
-            <div>
-                <h2 class="text-5xl font-abril text-white mb-3">
+            <div class="relative z-10 max-w-xl">
+
+                <h2 class="text-5xl md:text-6xl font-abril text-white font-semibold tracking-wide drop-shadow-lg">
                     Categories
                 </h2>
 
-                <p class="text-[#636863] font-poppins">
-                    Discover different types of plants
+                <p class="mt-4 text-green-50/90 text-lg leading-relaxed font-light">
+                    Discover Diferrent types of plants
                 </p>
+
             </div>
         </div>
 
@@ -278,9 +293,9 @@
                   rounded-[32px] p-8 shadow-xl hover:-translate-y-2 transition">
 
                 <div class="text-5xl mb-6">
-                    <img src="resources/images/homepagee/maintenance.png" alt="maintenance" class="w-18 h-18">
+                    <img src="resources/images/homepagee/tulip.png" alt="maintenance" class="w-18 h-18">
                 </div>
-
+                <i class="fa-solid fa-seedling"></i>
                 <h3 class="text-2xl font-semibold mb-4">
                     Garden Design
                 </h3>
@@ -301,7 +316,7 @@
                   rounded-[32px] p-8 shadow-xl hover:-translate-y-2 transition">
 
                 <div class="text-5xl mb-6">
-                    <img src="resources/img/phot.jpg" alt="plant-icon" class="h-18 w-18">
+                    <img src="resources/images/homepagee/hand.png" alt="plant-icon" class="h-18 w-18">
                 </div>
 
                 <h3 class="text-2xl font-semibold font-poppins mb-4">
@@ -324,7 +339,7 @@
                   rounded-[32px] p-8 shadow-xl hover:-translate-y-2 transition">
 
                 <div class="text-5xl mb-6">
-                    <img src="resources/img/img4.png" alt="nuersery" class="h-18 w-18">
+                    <img src="resources/images/homepagee/store.png" alt="nuersery" class="h-18 w-18">
                 </div>
 
                 <h3 class="text-2xl font-semibold font-poppins mb-4">
@@ -345,14 +360,23 @@
 
     <section class="relative z-10 px-8 pb-28">
         <div class="flex items-center justify-between mb-12">
-            <div>
-                <div class="absolute w-100 h-50 bg-white opacity-30 blur-3xl rounded-full"></div>
-                <h2 class="text-5xl font-abril text-white mb-3">
-                    Comunidad
-                </h2>
-                <p class="text-[#636863] text-white">
-                    Share your plants and gardens.
-                </p>
+            <div class="relative">
+
+                <div
+                    class="absolute -top-6 -left-6 w-72 h-72 bg-white/10 blur-3xl rounded-full inset-0 bg-gradient-to-r from-black/20 to-transparent">
+                </div>
+
+                <div class="relative z-10 max-w-xl">
+
+                    <h2 class="text-5xl md:text-6xl font-abril text-white font-semibold tracking-wide drop-shadow-lg">
+                        Community
+                    </h2>
+
+                    <p class="mt-4 text-green-50/90 text-lg leading-relaxed font-light">
+                        Share your plants and gardens.
+                    </p>
+
+                </div>
             </div>
         </div>
 
