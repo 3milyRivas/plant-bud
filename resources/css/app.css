@@ -9,3 +9,56 @@
   --font-poppins: "Poppins", sans-serif;
   --font-abril: "Abril Fatface", serif;
 }
+
+
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-15px);
+  }
+
+}
+
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+}
+
+@keyframes slideUp {
+
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+
+}
+
+.animate-slideUp {
+  animation: slideUp 1s ease forwards;
+}
+
+@keyframes expand {
+
+  from {
+    width: 0;
+  }
+
+  to {
+    width: 10rem;
+  }
+
+}
+
+.animate-expand {
+  animation: expand 1.2s ease forwards;
+}

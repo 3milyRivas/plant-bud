@@ -2,7 +2,13 @@ import vine from '@vinejs/vine'
 
 export const signupValidator = vine.compile(
   vine.object({
-    username: vine.string().trim().minLength(3).maxLength(30),
+    username: vine
+      .string()
+      .trim()
+      .toLowerCase()
+      .minLength(3)
+      .maxLength(30)
+      .regex(/^[a-z0-9_]+$/),
 
     first_name: vine.string().trim().minLength(2).maxLength(50),
 

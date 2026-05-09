@@ -1,7 +1,6 @@
 import User from '#models/user'
 import { signupValidator } from '#validators/user'
 import type { HttpContext } from '@adonisjs/core/http'
-import Hash from '@adonisjs/core/services/hash'
 import GardenerProfile from '#models/gardener_profile'
 
 export default class NewAccountController {
@@ -14,64 +13,63 @@ export default class NewAccountController {
   }
 
   async store({ request, response, auth, session }: HttpContext) {
-    console.log('🔥 STORE HIT')
+    try {
+      const payload = await request.validateUsing(signupValidator)
 
-    const payload = await request.validateUsing(signupValidator)
+      const username = payload.username.toLowerCase().replace(/[^a-z0-9_]/g, '')
 
-    const errors: Record<string, string[]> = {}
+      const emailExists = await User.findBy('email', payload.email)
+      const usernameExists = await User.findBy('username', username)
 
-    const existingEmail = await User.findBy('email', payload.email)
-    if (existingEmail) {
-      errors.email = ['This email is already in use']
-    }
+      const phoneExists = payload.phone
+        ? await User.findBy('phone', payload.phone)
+        : null
 
-    const existingUsername = await User.findBy('username', payload.username)
-    if (existingUsername) {
-      errors.username = ['This username is already in use']
-    }
+      const duiExists = payload.dui
+        ? await User.findBy('dui', payload.dui)
+        : null
 
-    if (payload.phone) {
-      const existingPhone = await User.findBy('phone', payload.phone)
-      if (existingPhone) {
-        errors.phone = ['This phone number is already in use']
+      const errors: Record<string, string[]> = {}
+
+      if (emailExists) errors.email = ['Email already exists']
+      if (usernameExists) errors.username = ['Username already exists']
+      if (phoneExists) errors.phone = ['Phone already exists']
+      if (duiExists) errors.dui = ['DUI already exists']
+
+      if (Object.keys(errors).length > 0) {
+        session.flash('errors', errors)
+        session.flash('old', request.all())
+        return response.redirect().back()
       }
-    }
 
-    if (payload.dui) {
-      const existingDui = await User.findBy('dui', payload.dui)
-      if (existingDui) {
-        errors.dui = ['This DUI is already in use']
+      const user = await User.create({
+        username,
+        first_name: payload.first_name,
+        last_name: payload.last_name,
+        email: payload.email,
+        password: payload.password,
+        role: payload.role,
+        phone: payload.phone ?? null,
+        dui: payload.dui ?? null,
+      })
+
+      if (payload.role === 'gardener') {
+        await GardenerProfile.create({
+          userId: user.id,
+          availabilitySchedule: '',
+          servicesOffered: '',
+        })
       }
-    }
 
-    if (Object.keys(errors).length > 0) {
-      session.flash('errors', errors)
-      session.flash('old', request.all())
+      await auth.use('web').login(user)
+
+      return response.redirect().toRoute('home')
+    } catch {
+      session.flash('errors', {
+        auth: ['Signup failed'],
+      })
 
       return response.redirect().back()
     }
-
-    const user = await User.create({
-      username: payload.username,
-      first_name: payload.first_name,
-      last_name: payload.last_name,
-      email: payload.email,
-      password: await Hash.make(payload.password),
-      role: payload.role,
-      phone: payload.phone ?? null,
-      dui: payload.dui ?? null,
-    })
-
-    if (payload.role === 'gardener') {
-      await GardenerProfile.create({
-        userId: user.id,
-        availabilitySchedule: '',
-        servicesOffered: '',
-      })
-    }
-
-    await auth.use('web').login(user)
-
-    return response.redirect().toRoute('home')
   }
 }

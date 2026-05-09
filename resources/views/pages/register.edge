@@ -1,61 +1,114 @@
 @layout()
 @slot('title')
+
 <title>Sign Up</title>
 @endslot
-<div class="relative z-10 min-h-screen flex flex-col items-center justify-center px-6">
-  <a href="/" class="absolute top-6 left-6 px-4 py-2 rounded-full border border-[#EDE7D6] text-[#EDE7D6] font-poppins text-sm
-     hover:bg-[#EDE7D6] hover:text-[#1E3D19] transition">
-    ← Back
+
+<div class="relative z-10 min-h-screen overflow-hidden flex items-center justify-center px-6 py-6">
+  <div class="absolute inset-0">
+    <img src="resources/images/welcome/header3.png" class="w-full h-full object-cover" alt="">
+    <div class="absolute inset-0 bg-black/55"></div>
+    <div class="absolute inset-0 bg-gradient-to-br from-[#1E3D19]/85 via-[#728B6F]/65 to-[#6B8C6C]/85"></div>
+    <div class="absolute top-16 left-16 w-72 h-72 bg-[#EDE7D6]/10 rounded-full blur-3xl animate-pulse"></div>
+    <div class="absolute bottom-16 right-16 w-96 h-96 bg-white/5 rounded-full blur-3xl animate-pulse"></div>
+    <div class="absolute inset-0 backdrop-blur-[2px]"></div>
+  </div>
+
+  <a href="/" class="absolute top-6 left-6 z-30 group inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/10 backdrop-blur-xl border border-white/10 text-[#EDE7D6] font-semibold shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:bg-[#EDE7D6] hover:text-[#1E3D19] hover:-translate-y-0.5 transition-all duration-300">
+    <svg class="w-4 h-4 group-hover:-translate-x-0.5 transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path d="M15 19l-7-7 7-7"></path>
+    </svg>
+    Back
   </a>
 
-  <div class="mb-10 flex flex-col items-center">
-    <div class="w-40 h-40 flex items-center justify-center hover:scale-105 transition">
-      <img src="resources/images/essential/logo.png">
+  <div class="relative z-20 w-full max-w-5xl">
+    <div class="absolute -inset-3 bg-gradient-to-r from-white/10 via-[#EDE7D6]/10 to-white/10 blur-3xl rounded-[3.5rem] opacity-90"></div>
+
+<div class="relative bg-white/10 backdrop-blur-3xl border border-white/10 rounded-[3.5rem] px-8 py-10 md:px-12 md:py-12 shadow-[0_35px_120px_rgba(0,0,0,0.35)] overflow-hidden">
+  <div class="absolute -top-24 -left-24 w-72 h-72 bg-[#EDE7D6]/10 rounded-full blur-3xl"></div>
+  <div class="absolute -bottom-24 -right-24 w-80 h-80 bg-[#1E3D19]/20 rounded-full blur-3xl"></div>
+  <div class="absolute inset-0 rounded-[3.5rem] bg-gradient-to-br from-white/10 via-transparent to-white/5 pointer-events-none"></div>
+
+  <div class="relative z-10 grid lg:grid-cols-[1.05fr_0.95fr] gap-10 items-center">
+    <div class="text-center lg:text-left">
+      <div class="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-white/10 backdrop-blur-xl border border-white/10 shadow-lg mb-6">
+        <div class="w-2 h-2 rounded-full bg-[#EDE7D6] animate-pulse"></div>
+        <span class="text-sm font-bold tracking-[0.18em] text-white/80 uppercase">Join Plant Bud</span>
+      </div>
+
+      <div class="mb-8 flex justify-center lg:justify-start">
+        <a href="/" class="relative group inline-flex items-center justify-center">
+          <div class="absolute inset-0 bg-[#EDE7D6]/10 rounded-full blur-2xl scale-125 group-hover:scale-150 transition duration-500"></div>
+          <div class="relative w-28 h-28 rounded-full bg-white/10 backdrop-blur-xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.3)] flex items-center justify-center group-hover:-translate-y-1 group-hover:scale-105 transition duration-500">
+            <img src="resources/images/essential/logo.png" class="w-20 drop-shadow-[0_10px_25px_rgba(0,0,0,0.3)]" alt="">
+          </div>
+        </a>
+      </div>
+
+      <h1 class="text-4xl md:text-5xl xl:text-6xl font-black text-white leading-tight drop-shadow-xl">
+        Welcome to <span class="text-[#EDE7D6]">Plant Bud</span>
+      </h1>
+
+      <div class="w-24 h-1 bg-[#EDE7D6] rounded-full mt-6 mx-auto lg:mx-0"></div>
+
+      <p class="mt-6 text-white/85 text-base md:text-lg font-semibold leading-relaxed max-w-xl mx-auto lg:mx-0">
+        Choose how you want to register and start your journey with a greener and healthier lifestyle.
+      </p>
+
+      <p class="mt-6 text-white/70 text-sm md:text-base font-semibold">
+        Already have an account?
+        <a href="/login" class="text-[#EDE7D6] font-black hover:text-white transition">Log in here</a>
+      </p>
+    </div>
+
+    <div class="grid gap-5">
+      <a href="/signup/client" class="group relative overflow-hidden rounded-[2.5rem] bg-[#EDE7D6] text-[#1E3D19] px-7 py-6 shadow-[0_22px_70px_rgba(0,0,0,0.18)] hover:-translate-y-1.5 hover:scale-[1.01] hover:shadow-[0_30px_90px_rgba(0,0,0,0.22)] transition-all duration-500">
+        <div class="absolute -top-10 -right-10 w-28 h-28 bg-white/40 rounded-full blur-2xl"></div>
+        <div class="relative flex items-start gap-5">
+          <div class="w-16 h-16 rounded-3xl bg-white shadow-lg flex items-center justify-center shrink-0 group-hover:rotate-6 group-hover:scale-110 transition duration-500">
+            <img src="resources/images/register/clients.png" class="w-9" alt="">
+          </div>
+          <div class="flex-1">
+            <h2 class="text-2xl font-black leading-tight">Register as Client</h2>
+            <p class="mt-2 text-[#2F3E2D]/75 font-bold leading-relaxed">
+              Find gardeners and manage your plant care needs with ease.
+            </p>
+            <div class="mt-4 inline-flex items-center gap-2 text-sm font-black tracking-wide uppercase">
+              Get Started
+              <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M5 12h14"></path>
+                <path d="M13 5l7 7-7 7"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <a href="/signup/gardener" class="group relative overflow-hidden rounded-[2.5rem] bg-[#EDE7D6] text-[#1E3D19] px-7 py-6 shadow-[0_22px_70px_rgba(0,0,0,0.18)] hover:-translate-y-1.5 hover:scale-[1.01] hover:shadow-[0_30px_90px_rgba(0,0,0,0.22)] transition-all duration-500">
+        <div class="absolute -bottom-10 -left-10 w-28 h-28 bg-[#1E3D19]/10 rounded-full blur-2xl"></div>
+        <div class="relative flex items-start gap-5">
+          <div class="w-16 h-16 rounded-3xl bg-white shadow-lg flex items-center justify-center shrink-0 group-hover:-rotate-6 group-hover:scale-110 transition duration-500">
+            <img src="resources/images/register/gardeners.png" class="w-9" alt="">
+          </div>
+          <div class="flex-1">
+            <h2 class="text-2xl font-black leading-tight">Register as Gardener</h2>
+            <p class="mt-2 text-[#2F3E2D]/75 font-bold leading-relaxed">
+              Offer your gardening services and grow your professional profile.
+            </p>
+            <div class="mt-4 inline-flex items-center gap-2 text-sm font-black tracking-wide uppercase">
+              Start Growing
+              <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M5 12h14"></path>
+                <path d="M13 5l7 7-7 7"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </a>
     </div>
   </div>
-
-  <div class="text-center mb-7 max-w-xl">
-    <h1 class="text-[#EDE7D6] font-bold font-poppins text-4xl font-bold tracking-wide">
-      Welcome to Plant Bud!
-    </h1>
-
-    <p class="text-[#EDE7D6] font-semibold font-poppins mt-4 text-sm md:text-base leading-relaxed">
-      Please choose how you would like to register and start your journey with us. <br>
-    </p>
-  </div>
-
-  <div class="flex flex-col md:flex-row gap-10">
-
-    <a href="/signup/client" class="group w-80 h-56 flex flex-col items-center justify-center gap-4 rounded-2xl bg-[#EDE7D6] text-[#1E3D19] font-poppins shadow-lg
-       hover:scale-105 hover:shadow-2xl transition duration-300">
-
-      <div class="w-16 h-16 flex items-center justify-center group-hover:scale-110 transition">
-        <img src="resources/images/register/clients.png">
-      </div>
-
-      <h2 class="font-bold text-lg">Register as Client</h2>
-
-      <p class="text-md font-semibold opacity-70 text-center px-6">
-        Find gardeners and manage your plant care needs.
-      </p>
-    </a>
-
-    <a href="/signup/gardener" class="group w-80 h-56 flex flex-col items-center justify-center gap-4 rounded-2xl bg-[#EDE7D6] text-[#1E3D19] font-poppins shadow-lg
-       hover:scale-105 hover:shadow-2xl transition duration-300">
-
-      <div class="w-16 h-16 flex items-center justify-center group-hover:scale-110 transition">
-        <img src="resources/images/register/gardeners.png">
-      </div>
-
-      <h2 class="font-bold text-lg">Register as Gardener</h2>
-
-      <p class="text-md font-semibold opacity-70 text-center px-6">
-        Offer your gardening services and grow your profile.
-      </p>
-    </a>
-  </div>
-  <p class="text-[#EDE7D6] font-semibold font-poppins mt-4 text-sm md:text-base leading-relaxed">If you already have
-    an account with us, please <a href="/login" class="text-[#1E3D19] font-bold"><u>click here.</u></a></p>
 </div>
+
+  </div>
 </div>
 @end

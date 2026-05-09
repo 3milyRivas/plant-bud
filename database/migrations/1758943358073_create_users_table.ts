@@ -10,21 +10,21 @@ export default class CreateUsersTable extends BaseSchema {
       table.string('first_name', 50).notNullable()
       table.string('last_name', 50).notNullable()
 
-      table.string('username', 50).unique().notNullable()
+      table.string('username', 50).notNullable().unique()
 
-      table.string('email', 254).unique().notNullable()
+      table.string('email', 254).notNullable().unique()
 
       table.string('password').notNullable()
 
       table.string('phone', 20).nullable()
       table.string('dui', 20).nullable()
 
-      table.string('profile_picture').nullable()
+      table.string('profile_picture', 255).nullable()
 
       table.enum('role', ['client', 'gardener']).notNullable().defaultTo('client')
 
-      table.timestamp('created_at', { useTz: true })
-      table.timestamp('updated_at', { useTz: true })
+      table.timestamp('created_at', { useTz: true }).defaultTo(this.now())
+      table.timestamp('updated_at', { useTz: true }).defaultTo(this.now())
     })
   }
 
