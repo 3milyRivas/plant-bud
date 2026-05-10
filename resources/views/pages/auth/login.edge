@@ -3,80 +3,140 @@
 <title>Login</title>
 @endslot
 
-<div class="flex min-h-dvh relative z-10">
+<div class="relative z-10 min-h-dvh overflow-hidden">
 
-  <div class="w-1/2 hidden md:block relative">
-    <img src="/resources/images/login/login-first.png" alt="Login Image"
-      class="absolute inset-0 w-full h-full object-cover" />
+  <div class="absolute inset-0 pointer-events-none">
+    <div class="absolute w-[500px] h-[500px] bg-[#EDE7D6]/10 blur-3xl rounded-full top-[-120px] left-1/2 -translate-x-1/2"></div>
+    <div class="absolute w-[420px] h-[420px] bg-[#1E3D19]/10 blur-3xl rounded-full bottom-[-180px] right-[-120px]"></div>
   </div>
 
-  <div class="w-full md:w-1/2 flex items-center justify-center py-10">
+  <div class="relative grid lg:grid-cols-2 min-h-dvh">
 
-    <div class="w-full max-w-md px-8">
+    <div class="hidden lg:block relative">
+      <img src="/resources/images/login/login-first.png" class="absolute inset-0 w-full h-full object-cover" alt="">
+      <div class="absolute inset-0 bg-gradient-to-br from-black/70 via-[#1E3D19]/40 to-black/80"></div>
 
-      <div class="mb-6 text-center relative flex justify-center">
-        <div class="absolute w-60 h-50 bg-white opacity-30 blur-3xl rounded-full"></div>
-        <img src="/resources/images/essential/logo-v2.png" alt="Logo" class="relative w-70">
-      </div>
-
-      <div class="mb-8 mt-8 text-center">
-        <h1 class="text-3xl font-bold text-white drop-shadow-[0_6px_10px_rgba(0,0,0,0.3)]">
-          Welcome Back!
-        </h1>
-      </div>
-
-      @form({ route: 'session.store', method: 'POST' })
-
-      <div class="mb-4">
-        @field.root({ name: 'email' })
-        @!field.label({ text: 'Email', class: 'text-[#EDE7D6] text-sm' })
-        @!input.control({
-        type: 'email',
-        placeholder: 'Type email address',
-        class: 'w-full mt-1 px-4 py-2 rounded-lg bg-white focus:outline-none'
-        })
-        @!field.error({ class: 'text-red-300 text-xs mt-1' })
-        @end
-      </div>
-
-      <div class="mb-6">
-        @field.root({ name: 'password' })
-        @!field.label({ text: 'Password', class: 'text-[#EDE7D6] text-sm' })
-
-        @!input.control({
-        type: 'password',
-        placeholder: 'Type your password',
-        class: 'w-full mt-1 px-4 py-2 rounded-lg bg-white focus:outline-none'
-        })
-
-        <div class="flex justify-end mt-1">
-          <a href="/forgot-password" class="text-xs text-[#1E3D19] font-semibold hover:underline">
-            Forgot your password?
-          </a>
+      <div class="absolute bottom-0 left-0 p-14 xl:p-16 max-w-lg">
+        <div class="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-white/10 backdrop-blur-xl border border-white/10 mb-6">
+          <div class="w-2 h-2 bg-[#EDE7D6] rounded-full animate-pulse"></div>
+          <span class="text-white/80 text-sm font-bold tracking-[0.16em]">WELCOME BACK</span>
         </div>
 
-        @!field.error({ class: 'text-red-300 text-xs mt-1' })
-        @end
+        <h2 class="text-5xl xl:text-6xl font-black text-white leading-tight">
+          Keep Your
+          <span class="text-[#EDE7D6] block">Plants Alive</span>
+        </h2>
+
+        <div class="w-24 h-1 bg-[#EDE7D6] rounded-full mt-8 mb-8"></div>
+
+        <p class="text-white/80 font-semibold leading-relaxed">
+          Sign in and continue managing your plants, gardeners, and green spaces in one place.
+        </p>
       </div>
-
-      <div class="mb-6">
-        @!button({
-        text: 'Login',
-        type: 'submit',
-        class: 'w-full bg-[#113E14] text-white py-3 rounded-lg font-bold hover:opacity-90 transition'
-        })
-      </div>
-
-      @end
-
-      <p class="text-center text-sm font-semibold text-[#EDE7D6]">
-        You don’t have an account?
-        <a href="/register" class="underline text-[#1E3D19] font-bold hover:opacity-80">
-          Create one here!
-        </a>
-      </p>
-
     </div>
+
+    <div class="relative flex items-center justify-center px-6 py-10 lg:px-14">
+
+      <a href="/register"
+         class="absolute top-6 left-6 inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-white/10 backdrop-blur-xl border border-white/10 text-[#EDE7D6] font-bold text-sm hover:bg-[#EDE7D6] hover:text-[#1E3D19] transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path d="M15 19l-7-7 7-7"></path>
+        </svg>
+        Back
+      </a>
+
+      <div class="w-full max-w-md">
+
+        <div class="text-center mb-10">
+          <div class="relative inline-block mb-6">
+            <div class="absolute inset-0 bg-white/20 blur-3xl rounded-full scale-110"></div>
+            <img src="/resources/images/essential/logo-v2.png" class="relative w-40 mx-auto" alt="">
+          </div>
+
+          <h1 class="text-4xl font-black text-white">Welcome Back</h1>
+
+          <div class="w-20 h-1 bg-[#EDE7D6] rounded-full mx-auto mt-5"></div>
+
+          <p class="mt-4 text-sm text-white/75 font-semibold leading-relaxed">
+            Sign in to continue your plant care journey
+          </p>
+        </div>
+
+        <div class="relative">
+          <div class="absolute -inset-2 bg-white/10 blur-3xl rounded-[2.5rem]"></div>
+
+          <div class="relative bg-white/10 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] p-8 shadow-[0_30px_90px_rgba(0,0,0,0.25)] overflow-hidden">
+
+            @if(flashMessages.get('errors')?.auth)
+              <p class="text-red-300 text-sm text-center mb-4">
+                {{ flashMessages.get('errors').auth[0] }}
+              </p>
+            @endif
+
+            @form({ route: 'session.store', method: 'POST' })
+
+            <div class="space-y-5 relative z-10">
+
+              <div>
+                @field.root({ name: 'email' })
+                @!field.label({ text: 'Email', class: 'text-[#EDE7D6] text-sm font-semibold' })
+                @!input.control({
+                  type: 'email',
+                  placeholder: 'Enter your email',
+                  value: flashMessages.get('old')?.email,
+                  class: 'w-full mt-2 px-4 py-3 rounded-xl bg-white/95 focus:outline-none shadow-lg'
+                })
+                @if(flashMessages.get('errors')?.email)
+                  <p class="text-red-300 text-xs mt-2">{{ flashMessages.get('errors').email[0] }}</p>
+                @endif
+                @end
+              </div>
+
+              <div>
+                @field.root({ name: 'password' })
+                @!field.label({ text: 'Password', class: 'text-[#EDE7D6] text-sm font-semibold' })
+                @!input.control({
+                  type: 'password',
+                  placeholder: 'Enter your password',
+                  class: 'w-full mt-2 px-4 py-3 rounded-xl bg-white/95 focus:outline-none shadow-lg'
+                })
+
+                <div class="flex justify-end mt-2">
+                  <a href="/forgot-password" class="text-xs text-[#EDE7D6]/80 hover:text-[#EDE7D6] font-semibold">
+                    Forgot password?
+                  </a>
+                </div>
+
+                @if(flashMessages.get('errors')?.password)
+                  <p class="text-red-300 text-xs mt-2">{{ flashMessages.get('errors').password[0] }}</p>
+                @endif
+                @end
+              </div>
+
+              @!button({
+                text: 'Login',
+                type: 'submit',
+                class: 'w-full bg-[#EDE7D6] text-[#1E3D19] py-3.5 rounded-xl font-black shadow-lg hover:scale-[1.02] transition'
+              })
+
+            </div>
+
+            @end
+
+            <div class="mt-6 pt-5 border-t border-white/10 text-center relative z-10">
+              <p class="text-sm font-semibold text-white/80">
+                Don’t have an account?
+                <a href="/register" class="text-[#EDE7D6] font-bold hover:underline">Create one</a>
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
   </div>
 </div>
 @end

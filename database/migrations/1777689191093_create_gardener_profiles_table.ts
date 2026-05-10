@@ -14,10 +14,11 @@ export default class extends BaseSchema {
         .inTable('users')
         .onDelete('CASCADE')
 
-      table.string('availability_schedule').nullable()
-      table.string('services_offered').nullable()
+      table.string('availability_schedule', 255).nullable()
+      table.string('services_offered', 255).nullable()
 
-      table.timestamps(true)
+      table.timestamp('created_at', { useTz: true }).defaultTo(this.now())
+      table.timestamp('updated_at', { useTz: true }).defaultTo(this.now())
     })
   }
 

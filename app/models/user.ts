@@ -1,15 +1,11 @@
-import { BaseModel, column } from '@adonisjs/lucid/orm'
-import hash from '@adonisjs/core/services/hash'
-import { compose } from '@adonisjs/core/helpers'
+import { BaseModel, column, beforeSave } from '@adonisjs/lucid/orm'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
+import hash from '@adonisjs/core/services/hash'
 
-export default class User extends compose(
-  BaseModel,
-  withAuthFinder(() => hash, {
-    uids: ['email'],
-    passwordColumnName: 'password',
-  })
-) {
+export default class User extends withAuthFinder(() => hash, {
+  uids: ['email'],
+  passwordColumnName: 'password',
+})(BaseModel) {
   @column({ isPrimary: true })
   declare id: number
 
@@ -36,4 +32,13 @@ export default class User extends compose(
 
   @column({ serializeAs: null })
   declare password: string
+
+  @beforeSave()
+  static normalizeUsername(user: User) {
+    if (user.username) {
+      user.username = user.username
+        .toLowerCase()
+        .replace(/[^a-z0-9_]/g, '')
+    }
+  }
 }

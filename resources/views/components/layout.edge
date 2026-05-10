@@ -6,12 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     {{{ await $slots.title()}}}
     <link rel="icon" href="/resources/images/essential/icono.png" type="image/png">
-    @vite(['resources/css/app.css', 'resources/js/app.js', "resources/css/leaves.css"])
+    @vite(['resources/css/app.css', 'resources/js/app.js', "resources/css/leaves.css", "resources/js/tips.js"])
     @stack('dumper')
 </head>
 
 <body
-    class="bg-[#6B8C6C] bg-[#6B8C6C]">
+    class="bg-[#6B8C6C]">
     <div class="leaves pointer-events-none fixed inset-0 overflow-hidden z-0">
         <svg class="leaf" viewBox="0 0 24 24">
             <path d="M12 2C8 6 4 10 4 14a8 8 0 0016 0c0-4-4-8-8-12z" />
