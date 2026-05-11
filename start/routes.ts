@@ -21,11 +21,11 @@ router.on('/community').render('pages/community')
 router.on('/favorites').render('pages/favorites')
 router.on('/notification').render('pages/notification')
 
-
 router.on('/profile').render('pages/client/profile').as('profile')
 router.on('/maintenance').render('pages/services/maintenance').as('maintenance')
 router.on('/request').render('pages/services/request').as('request')
 router.on('/care').render('pages/client/Plants/careo')
+router.on('/care2').render('pages/client/Plants/careS')
 
 /* clients views */
 /*router
