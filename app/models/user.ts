@@ -28,7 +28,7 @@ export default class User extends withAuthFinder(() => hash, {
   declare dui: string | null
 
   @column()
-  declare role: 'client' | 'gardener'
+  declare role: 'client' | 'gardener' | 'nursery'
 
   @column({ serializeAs: null })
   declare password: string

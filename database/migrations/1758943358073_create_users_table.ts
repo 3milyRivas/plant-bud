@@ -21,7 +21,7 @@ export default class CreateUsersTable extends BaseSchema {
 
       table.string('profile_picture', 255).nullable()
 
-      table.enum('role', ['client', 'gardener']).notNullable().defaultTo('client')
+      table.enum('role', ['client', 'gardener', 'nursery']).notNullable().defaultTo('client')
 
       table.timestamp('created_at', { useTz: true }).defaultTo(this.now())
       table.timestamp('updated_at', { useTz: true }).defaultTo(this.now())
