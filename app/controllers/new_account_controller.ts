@@ -1,9 +1,13 @@
 import User from '#models/user'
-import { signupValidator } from '#validators/user'
-import type { HttpContext } from '@adonisjs/core/http'
 import GardenerProfile from '#models/gardener_profile'
+import NurseryProfile from '#models/nursery_profile'
+
+import { signupValidator } from '#validators/user'
+
+import type { HttpContext } from '@adonisjs/core/http'
 
 export default class NewAccountController {
+
   async createClient({ view }: HttpContext) {
     return view.render('pages/auth/signup_client')
   }
@@ -12,13 +16,22 @@ export default class NewAccountController {
     return view.render('pages/auth/signup_gardener')
   }
 
+  async createNursery({ view }: HttpContext) {
+    return view.render('pages/auth/signup_nursery')
+  }
+
   async store({ request, response, auth, session }: HttpContext) {
+
     try {
+
       const payload = await request.validateUsing(signupValidator)
 
-      const username = payload.username.toLowerCase().replace(/[^a-z0-9_]/g, '')
+      const username = payload.username
+        .toLowerCase()
+        .replace(/[^a-z0-9_]/g, '')
 
       const emailExists = await User.findBy('email', payload.email)
+
       const usernameExists = await User.findBy('username', username)
 
       const phoneExists = payload.phone
@@ -31,29 +44,53 @@ export default class NewAccountController {
 
       const errors: Record<string, string[]> = {}
 
-      if (emailExists) errors.email = ['Email already exists']
-      if (usernameExists) errors.username = ['Username already exists']
-      if (phoneExists) errors.phone = ['Phone already exists']
-      if (duiExists) errors.dui = ['DUI already exists']
+      if (emailExists) {
+        errors.email = ['Email already exists']
+      }
+
+      if (usernameExists) {
+        errors.username = ['Username already exists']
+      }
+
+      if (phoneExists) {
+        errors.phone = ['Phone already exists']
+      }
+
+      if (duiExists) {
+        errors.dui = ['DUI already exists']
+      }
 
       if (Object.keys(errors).length > 0) {
+
         session.flash('errors', errors)
+
         session.flash('old', request.all())
+
         return response.redirect().back()
       }
 
       const user = await User.create({
+
         username,
+
         first_name: payload.first_name,
+
         last_name: payload.last_name,
+
         email: payload.email,
+
         password: payload.password,
+
         role: payload.role,
+
         phone: payload.phone ?? null,
+
         dui: payload.dui ?? null,
+
       })
 
       if (payload.role === 'gardener') {
+
         await GardenerProfile.create({
           userId: user.id,
           availabilitySchedule: '',
@@ -61,10 +98,23 @@ export default class NewAccountController {
         })
       }
 
+      if (payload.role === 'nursery') {
+
+        await NurseryProfile.create({
+          userId: user.id,
+          nursery_name: payload.username,
+          owner_name: payload.first_name,
+        })
+      }
+
       await auth.use('web').login(user)
 
       return response.redirect().toRoute('home')
-    } catch {
+
+    } catch (error) {
+
+      console.log(error)
+
       session.flash('errors', {
         auth: ['Signup failed'],
       })

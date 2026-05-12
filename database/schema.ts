@@ -24,6 +24,23 @@ export class GardenerProfileSchema extends BaseModel {
   declare userId: number | null
 }
 
+export class NurseryProfileSchema extends BaseModel {
+  static $columns = ['createdAt', 'id', 'nurseryName', 'ownerName', 'updatedAt', 'userId'] as const
+  $columns = NurseryProfileSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare nurseryName: string
+  @column()
+  declare ownerName: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare userId: number | null
+}
+
 export class UserSchema extends BaseModel {
   static $columns = ['createdAt', 'dui', 'email', 'firstName', 'id', 'lastName', 'password', 'phone', 'profilePicture', 'role', 'updatedAt', 'username'] as const
   $columns = UserSchema.$columns

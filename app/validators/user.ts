@@ -2,6 +2,7 @@ import vine from '@vinejs/vine'
 
 export const signupValidator = vine.compile(
   vine.object({
+
     username: vine
       .string()
       .trim()
@@ -10,9 +11,17 @@ export const signupValidator = vine.compile(
       .maxLength(30)
       .regex(/^[a-z0-9_]+$/),
 
-    first_name: vine.string().trim().minLength(2).maxLength(50),
+    first_name: vine
+      .string()
+      .trim()
+      .minLength(2)
+      .maxLength(50),
 
-    last_name: vine.string().trim().minLength(2).maxLength(50),
+    last_name: vine
+      .string()
+      .trim()
+      .minLength(2)
+      .maxLength(50),
 
     email: vine.string().email(),
 
@@ -28,10 +37,18 @@ export const signupValidator = vine.compile(
       .optional()
       .nullable(),
 
-    password: vine.string().minLength(8).maxLength(32).confirmed({
-      confirmationField: 'passwordConfirmation',
-    }),
+    password: vine
+      .string()
+      .minLength(8)
+      .maxLength(32)
+      .confirmed({
+        confirmationField: 'passwordConfirmation',
+      }),
 
-    role: vine.enum(['client', 'gardener']),
+    role: vine.enum([
+      'client',
+      'gardener',
+      'nursery',
+    ]),
   })
 )
