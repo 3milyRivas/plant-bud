@@ -20,6 +20,7 @@ router.on('/homepage2').render('pages/client/homepage2')
 router.on('/community').render('pages/community')
 router.on('/favorites').render('pages/favorites')
 router.on('/notification').render('pages/notification')
+router.on('/requested').render('pages/requested')
 
 router.on('/profile').render('pages/client/profile').as('profile')
 router.on('/maintenance').render('pages/services/maintenance').as('maintenance')
