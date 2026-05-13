@@ -8,6 +8,7 @@ export type ScannedRoutes = {
     'profile': { paramsTuple?: []; params?: {} }
     'maintenance': { paramsTuple?: []; params?: {} }
     'request': { paramsTuple?: []; params?: {} }
+    'garden_designer.search_assets': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
     'session.store': { paramsTuple?: []; params?: {} }
     'session.destroy': { paramsTuple?: []; params?: {} }
@@ -37,6 +38,7 @@ export type ScannedRoutes = {
     'signup.nursery': { paramsTuple?: []; params?: {} }
   }
   POST: {
+    'garden_designer.search_assets': { paramsTuple?: []; params?: {} }
     'session.store': { paramsTuple?: []; params?: {} }
     'session.destroy': { paramsTuple?: []; params?: {} }
     'new_account.store': { paramsTuple?: []; params?: {} }

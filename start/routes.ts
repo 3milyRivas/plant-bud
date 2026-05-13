@@ -25,6 +25,9 @@ router.on('/care2').render('pages/client/Plants/careS')
 router.on('/ware').render('pages/client/Plants/ware')
 router.on('/care-ornamentals').render('pages/client/Plants/care-ornamentals')
 
+router.on('/designer').render('pages/garden/designer')
+router.post('/designer/search-assets', '#controllers/garden_designer_controller.searchAssets')
+
 /* clients views */
 /*router
   .group(() => {
@@ -66,3 +69,4 @@ router.get('/signup/client', [NewAccountController, 'createClient']).as('signup.
 router.get('/signup/gardener', [NewAccountController, 'createGardener']).as('signup.gardener')
 router.get('/signup/nursery', [NewAccountController, 'createNursery']).as('signup.nursery')
 router.post('/signup', [NewAccountController, 'store']).as('new_account.store')
+
