@@ -1,0 +1,804 @@
+@layout()
+@slot('title')
+<title>Care3</title>
+@endslot
+
+<div class="w-full bg-[#6B8C6C] overflow-hidden">
+
+  <header class="fixed top-0 left-0 w-full z-50 px-6 lg:px-10 pt-6">
+    <div class="max-w-7xl mx-auto">
+      <div
+        class="backdrop-blur-xl bg-white/15 border border-white/20 rounded-full px-5 lg:px-8 py-3 flex items-center justify-between shadow-[0_10px_35px_rgba(0,0,0,0.18)]">
+
+        <img src="resources/images/essential/logo.png" alt="logo"
+          class="w-12 h-12 hover:scale-105 transition duration-300 cursor-pointer">
+
+        <div class="hidden md:flex items-center gap-4">
+          <div class="bg-white/80 rounded-full px-5 py-2.5 w-[280px] lg:w-[340px] shadow-inner">
+
+            <input type="text" placeholder="Search plants..."
+              class="bg-transparent outline-none w-full text-[#113E14] placeholder:text-[#6B8C6C]/70 text-sm">
+          </div>
+
+          <button
+            class="w-11 h-11 rounded-full bg-[#113E14] flex items-center justify-center hover:bg-[#1B5420] hover:scale-105 transition duration-300 shadow-lg">
+
+            <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 21l-4.35-4.35m1.85-5.65a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z" />
+            </svg>
+          </button>
+        </div>
+
+
+        <div class="relative group cursor-pointer">
+
+          <img src="resources/images/plants/logo-perfil.png" alt="profile"
+            class="w-12 h-12 rounded-full border-2 border-white/40 hover:scale-105 transition duration-300">
+
+          <div
+            class="absolute inset-0 rounded-full bg-[#48AE4D]/20 blur-md opacity-0 group-hover:opacity-100 transition duration-300">
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+
+
+
+
+  <div class="relative w-full h-[620px] bg-cover bg-center bg-[url('/resources/images/care/bg_hor.jpg')]">
+
+
+    <div class="absolute inset-0 bg-black/45"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-[#1E3D19]/20 via-[#728B6F]/20 to-[#6B8C6C]">
+    </div>
+
+    <div class="relative z-10 flex flex-col items-center justify-center h-full text-center px-6 pt-24">
+      <h1 class="text-white text-5xl md:text-7xl font-bold leading-tight max-w-5xl">
+        Taking care of plants
+        is taking care of yourself
+      </h1>
+
+      <p class="text-white/80 mt-6 max-w-2xl text-lg leading-8">
+        Sustainable outdoor solutions designed
+        to inspire peaceful spaces and healthier living.
+      </p>
+
+
+      <div class="flex flex-wrap justify-center gap-5 mt-10">
+        <button
+          class="px-8 py-4 rounded-full bg-[#113E14] text-white font-medium hover:scale-105 hover:bg-[#1B5420] transition duration-300 shadow-[0_10px_30px_rgba(17,62,20,0.4)]">
+          Explore Plants
+        </button>
+
+        <button
+          class="px-8 py-4 rounded-full border border-white/30 bg-white/10 backdrop-blur-md text-white font-medium hover:bg-white/20 transition duration-300">
+          Learn More
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="relative z-20 px-6 bg-[#6B8C6C]">
+    <div class="max-w-7xl mx-auto">
+
+      <button
+        class="inline-flex items-center gap-3 bg-white/15 backdrop-blur-xl border border-white/20 rounded-full px-7 py-3 text-white font-medium hover:bg-white/20 hover:scale-105 transition duration-300">
+
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        Back
+      </button>
+    </div>
+  </div>
+
+
+
+
+
+
+  <section class="relative py-24 px-6 overflow-hidden bg-[#6B8C6C]">
+    <div class="absolute top-[-120px] left-[-120px] w-[420px] h-[420px] bg-[#48AE4D]/30 blur-[120px] rounded-full">
+    </div>
+
+    <div class="absolute bottom-[-150px] right-[-100px] w-[420px] h-[420px] bg-[#D3DCD3]/30 blur-[120px] rounded-full">
+    </div>
+    <div class="relative z-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+
+
+      <div class="relative group">
+        <div
+          class="absolute -inset-5 bg-[#48AE4D]/30 blur-3xl rounded-[3rem] opacity-70 group-hover:opacity-100 transition duration-500">
+        </div>
+
+        <div
+          class="relative overflow-hidden rounded-[2.8rem] border border-white/20 shadow-[0_25px_80px_rgba(0,0,0,0.25)]">
+          <img src="/resources/images/care/radish.jpg" alt="Succulent plants"
+            class="w-full h-[580px] object-cover group-hover:scale-105 transition duration-700">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+        </div>
+      </div>
+
+
+      <div
+        class="relative bg-white/10 border border-white/20 rounded-[3rem] p-10 lg:p-14 shadow-[0_20px_70px_rgba(0,0,0,0.18)]">
+        <div
+          class="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/10 border border-white/20 text-[#D3DCD3] text-sm font-medium tracking-wide mb-8">
+
+          <div class="w-2.5 h-2.5 rounded-full bg-[#48AE4D]"></div>
+          Learn about:
+        </div>
+
+
+        <h2 class="text-4xl md:text-5xl font-bold text-white leading-tight mb-8">
+          Essential Care for
+          Horticultural Plants
+        </h2>
+        <div class="text-[#D3DCD3] text-lg leading-[2rem] mb-10">
+
+          Vegetable plants are those grown primarily for food, such as vegetables, herbs, and some fruits.
+
+          <br><br>
+
+          Success in vegetable gardening begins with soil
+          preparation and continues with watering, disease control, and harvesting.
+
+        </div>
+
+
+        <div class="grid grid-cols-2 gap-5">
+          <div class="bg-white/10 border border-white/10 rounded-2xl p-5">
+            <div class="text-3xl mb-3">
+              <img src="resources/images/care/hand.png" alt="" class="w-10 h-10">
+            </div>
+            <div class="text-white font-semibold">
+              Low Maintenance
+            </div>
+
+            <div class="text-white/70 text-sm mt-1">
+              Easy to care for daily
+            </div>
+          </div>
+
+          <div class="bg-white/10 border border-white/10 rounded-2xl p-5">
+
+            <div class="text-3xl mb-3">
+              <img src="resources/images/care/11.png" alt="" class="w-10 h-10">
+            </div>
+
+            <div class="text-white font-semibold">
+              Bright Spaces
+            </div>
+
+            <div class="text-white/70 text-sm mt-1">
+              Thrives with sunlight
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+
+
+
+
+
+
+<section class="relative py-24 px-6 overflow-hidden bg-[#6B8C6C]">
+  <div class="absolute top-[-100px] left-[-80px] w-[320px] h-[320px] bg-[#48AE4D]/20 blur-[110px] rounded-full">
+  </div>
+
+  <div class="absolute bottom-[-120px] right-[-100px] w-[360px] h-[360px] bg-[#D3DCD3]/20 blur-[120px] rounded-full">
+  </div>
+
+  <div class="relative z-10 max-w-7xl mx-auto">
+    <div class="flex items-center justify-center mb-12">
+      <div class="h-[4px] w-20 bg-gradient-to-r from-transparent to-white/40"></div>
+
+      <div
+        class="mx-6 px-6 py-2 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white tracking-[0.2em] uppercase text-sm font-semibold">
+        Horticultural Plants
+      </div>
+
+      <div class="h-[4px] w-20 bg-gradient-to-l from-transparent to-white/40"></div>
+    </div>
+
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div
+        class="group relative overflow-hidden rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.20)] hover:-translate-y-2 transition-all duration-500">
+        <div
+          class="absolute -inset-2 bg-[#48AE4D]/20 blur-2xl opacity-0 group-hover:opacity-100 transition duration-500">
+        </div>
+
+        <img src="resources/images/care/carrots1.jpg" class="relative w-full h-[420px] object-cover group-hover:scale-110
+                    transition duration-700" alt="suc1">
+
+        <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent">
+        </div>
+
+
+        <div class="absolute bottom-0 left-0 p-6">
+
+          <div class="text-white text-2xl font-bold mb-1">
+            Carrot
+          </div>
+
+          <div class="text-white/80 text-sm">
+            A great source of calcium and folic acid
+          </div>
+        </div>
+      </div>
+
+
+      <div class="group relative overflow-hidden rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.20)] hover:-translate-y-2
+                transition-all duration-500">
+
+        <div
+          class="absolute -inset-2 bg-[#48AE4D]/20 blur-2xl opacity-0 group-hover:opacity-100 transition duration-500">
+        </div>
+
+        <img src="resources/images/care/white mustard.jpg" class="relative w-full h-[420px] object-cover group-hover:scale-110
+                    transition duration-700" alt="suc2">
+
+        <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent">
+        </div>
+
+        <div class="absolute bottom-0 left-0
+                    p-6">
+
+          <div class="text-white text-2xl
+                        font-bold mb-1">
+            White mustard
+          </div>
+
+          <div class="text-white/80 text-sm">
+            Golden colors and an amazing beauty
+          </div>
+        </div>
+      </div>
+
+
+      <div
+        class="group relative overflow-hidden rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.20)] hover:-translate-y-2 transition-all duration-500">
+
+        <div
+          class="absolute -inset-2 bg-[#48AE4D]/20 blur-2xl opacity-0 group-hover:opacity-100 transition duration-500">
+        </div>
+
+        <img src="resources/images/care/fennel.jpg"
+          class="relative w-full h-[420px] object-cover group-hover:scale-110 transition duration-700" alt="suc3">
+
+        <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent">
+        </div>
+
+        <div class="absolute bottom-0 left-0 p-6">
+
+          <div class="text-white text-2xl font-bold mb-1">
+            Fennel
+          </div>
+
+          <div class="text-white/80 text-sm">
+            Perfect for modern decoration
+          </div>
+        </div>
+      </div>
+
+
+      <div
+        class="group relative overflow-hidden rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.20)] hover:-translate-y-2 transition-all duration-500">
+
+        <div
+          class="absolute -inset-2 bg-[#48AE4D]/20 blur-2xl opacity-0 group-hover:opacity-100 transition duration-500">
+        </div>
+
+        <img src="resources/images/care/Allium_canadense.jpg"
+          class="relative w-full h-[420px] object-cover group-hover:scale-110 transition duration-700" alt="suc4">
+
+        <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent">
+        </div>
+
+        <div class="absolute bottom-0 left-0 p-6">
+
+          <div class="text-white text-2xl font-bold mb-1">
+            Allium canadense
+          </div>
+
+          <div class="text-white/80 text-sm">
+            Fresh and resilient
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex justify-center pt-16">
+      <div class="w-[300px] h-[4px] bg-gradient-to-r from-transparent via-white/40 to-transparent">
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+<section class="relative py-20 px-6 overflow-hidden">
+  <div class="absolute top-[-80px] left-[8%] w-[240px] h-[240px] bg-[#636863]/30 rounded-full blur-[90px]"></div>
+
+  <div class="absolute bottom-[-100px] right-[6%] w-[260px] h-[260px] bg-[#D3DCD3]/60 rounded-full blur-[100px]">
+  </div>
+
+  <div class="relative z-10 max-w-6xl mx-auto">
+
+    <div class="rounded-[2.5rem] overflow-hidden border border-white/20
+        bg-[#D3DCD3]/25 shadow-[0_18px_55px_rgba(0,0,0,0.16)]">
+
+      <div class="grid grid-cols-1 lg:grid-cols-5">
+
+        <div class="lg:col-span-3 p-8 lg:p-12 flex flex-col justify-center">
+          <div class="inline-flex items-center gap-3 w-fit px-4 py-2 rounded-full bg-white/10 border border-white/15
+                    text-[#113E14] text-[13px] tracking-[2px] font-semibold mb-6">
+
+            <div class="w-2.5 h-2.5 rounded-full bg-[#48AE4D]"></div>
+            HORTICULTURAL CARE
+          </div>
+
+
+          <h2 class="text-4xl lg:text-5xl font-abril text-[#113E14] leading-tight mb-6">
+            Proper Lighting
+          </h2>
+
+
+          <div class="text-[#f4f4f4] font-poppins text-[15px] leading-[1.9rem] max-w-xl">
+
+            Succulents thrive in bright spaces with plenty
+            of indirect sunlight. Placing them near sunny
+            windows helps maintain compact and healthy growth.
+
+            <br><br>
+
+            If natural light is limited, fluorescent or LED
+            grow lights can support development when positioned
+            6–12 inches above the plants for several hours daily.
+          </div>
+
+
+          <div class="flex flex-wrap gap-4 mt-8">
+
+
+            <div
+              class="flex items-center gap-4 bg-white/10 border border-white/10 rounded-2xl px-4 py-3 hover:bg-white/15 transition-all duration-300">
+              <div class="w-11 h-11 rounded-xl bg-[#48AE4D]/20 flex items-center justify-center">
+                <img src="/resources/images/care/11.png" alt="sun icon" class="w-6 h-6 object-contain">
+              </div>
+
+              <div>
+                <div class="text-white text-sm font-semibold">
+                  Natural Light
+                </div>
+
+                <div class="text-white/70 text-[12px]">
+                  Healthy daily growth
+                </div>
+              </div>
+            </div>
+
+
+            <div
+              class="flex items-center gap-4 bg-white/10 border border-white/10 rounded-2xl px-4 py-3 hover:bg-white/15 transition-all duration-300">
+
+              <div class="w-11 h-11 rounded-xl bg-[#48AE4D]/20 flex items-center justify-center">
+
+                <img src="/resources/images/care/ll.png" alt="light icon" class="w-6 h-6 object-contain">
+              </div>
+
+              <div>
+                <div class="text-white text-sm font-semibold">
+                  Artificial Light
+                </div>
+
+                <div class="text-white/70 text-[12px]">
+                  Perfect indoors
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+
+        <div class="lg:col-span-2 relative min-h-[380px]">
+
+          <img src="/resources/images/care/Curly _parsley.jpg" alt="Plant lighting"
+            class="absolute inset-0 w-full h-full object-cover">
+
+
+          <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-black/5 to-transparent"></div>
+          <div
+            class="absolute bottom-6 left-6 bg-white/15 backdrop-blur-md border border-white/20 rounded-2xl px-5 py-4 shadow-xl">
+            <div class="flex items-center gap-3">
+              <div class="w-11 h-11 rounded-xl bg-[#D3DCD3]/20 flex items-center justify-center">
+                <img src="/resources/images/care/leaff.png" alt="leaf icon" class="w-6 h-6">
+              </div>
+
+              <div>
+                <p class="text-white text-sm font-semibold">
+                  14–16 Hours
+                </p>
+
+                <p class="text-white/70 text-xs">
+                  Recommended light exposure
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<div class="w-full py-28 px-6 relative overflow-hidden">
+  <div class="absolute top-0 left-[-120px] w-[320px] h-[320px] bg-white/10 blur-[120px] rounded-full"></div>
+  <div class="absolute bottom-0 right-[-120px] w-[320px] h-[320px] bg-[#D9B95B]/20 blur-[120px] rounded-full"></div>
+
+  <div class="max-w-7xl mx-auto relative z-10">
+    <div class="text-center mb-20">
+      <div
+        class="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-[#D3DCD3]/10 backdrop-blur-xl border border-white/20 text-white text-sm tracking-[0.25em] uppercase shadow-lg">
+        Horticultural Care Guide
+      </div>
+
+      <h2 class="mt-8 text-5xl md:text-6xl subpixel-antialiased font-abril text-white leading-tight">
+        Essential Care Tips
+        <span class="text-[#113E14]">
+          for Horticultural
+        </span>
+      </h2>
+
+      <p class="mt-6 text-white/80 max-w-3xl mx-auto text-lg leading-relaxed">
+        Learn how to maintain healthy, vibrant,
+        and long-lasting succulent plants with proper care.
+      </p>
+    </div>
+
+
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10">
+
+
+      <div class="group relative">
+        <div
+          class="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-[2.5rem] blur-2xl opacity-40 group-hover:opacity-70 transition duration-500">
+        </div>
+
+        <div class="relative h-full bg-[#D3DCD3]/30 backdrop-blur-2xl border border-white/20 rounded-[2.5rem] overflow-hidden
+                shadow-[0_20px_70px_rgba(0,0,0,0.18)] hover:-translate-y-2 transition-all duration-500">
+
+
+          <div class="relative p-8 pb-6">
+            <div class="flex items-center justify-between mb-8">
+
+              <div
+                class="w-14 h-14 rounded-2xl bg-[#113E14] text-[#D3DCD3] flex items-center justify-center text-xl font-poppins font-bold shadow-lg">
+                01
+              </div>
+            </div>
+
+            <h3 class="text-3xl font-poppins font-bold text-shadow-2xs text-white leading-tight">
+              Proper Watering
+            </h3>
+          </div>
+
+
+          <div class="mx-8 h-[1px] bg-white/20"></div>
+          <div class="p-8">
+
+            <p class="text-white font-semibold leading-relaxed text-shadow-sm mb-6">
+              Watering is essential because plants need water
+              to transport nutrients and maintain their growth.
+            </p>
+
+            <p class="text-[#636863] leading-relaxed text-sm">
+              Sandy soils may need watering twice a week, while clay soils or those rich in organic matter retain
+              moisture better and require less watering • They also recommend checking the soil and watering when it is
+              dry two inches below the surface.
+          </div>
+        </div>
+      </div>
+
+
+      <div class="group relative">
+
+        <div
+          class="absolute inset-0 bg-gradient-to-br from-[#D9B95B]/20 to-transparent rounded-[2.5rem] blur-2xl opacity-40 group-hover:opacity-70 transition duration-500">
+        </div>
+
+        <div
+          class="relative h-full bg-white/15 backdrop-blur-2xl border border-white/20 rounded-[2.5rem] overflow-hidden shadow-[0_20px_70px_rgba(0,0,0,0.18)] hover:-translate-y-2 transition-all duration-500">
+
+          <div class="relative p-8 pb-6">
+            <div class="flex items-center justify-between mb-8">
+              <div
+                class="w-14 h-14 rounded-2xl bg-[#113E14] text-[#D3DCD3] flex items-center justify-center text-xl font-poppins font-bold shadow-lg">
+                02
+              </div>
+            </div>
+
+            <h3 class="text-3xl font-poppins font-bold text-shadow-2xs text-white leading-tight">
+              Soil and Nutrition
+            </h3>
+          </div>
+
+          <div class="mx-8 h-[1px] bg-white/20"></div>
+          <div class="p-8">
+            <p class="text-white font-semibold leading-relaxed text-shadow-sm mb-6">
+              It is important to properly prepare the soil and garden area before planting. It's recommend:
+            </p>
+
+            <p class="text-[#636863] leading-relaxed text-sm">
+              • Using compost
+              • Conducting soil tests
+              • Using raised beds if drainage is poor,
+              compost improves organic matter and helps the soil retain moisture.
+          </div>
+        </div>
+      </div>
+
+
+      <div class="group relative">
+
+        <div
+          class="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-[2.5rem] blur-2xl opacity-40 group-hover:opacity-70 transition duration-500">
+        </div>
+
+        <div
+          class="relative h-full bg-white/12 backdrop-blur-2xl border border-white/20 rounded-[2.5rem] overflow-hidden shadow-[0_20px_70px_rgba(0,0,0,0.18)] hover:-translate-y-2 transition-all duration-500">
+
+          <div class="relative p-8 pb-6">
+            <div class="flex items-center justify-between mb-8">
+              <div
+                class="w-14 h-14 rounded-2xl bg-[#113E14] text-[#D3DCD3] flex items-center justify-center text-xl font-poppins font-bold shadow-lg">
+                03
+              </div>
+            </div>
+
+            <h3 class="text-3xl font-poppins font-bold text-white  text-shadow-2xs leading-tight">
+              Fertilization
+            </h3>
+          </div>
+
+          <div class="mx-8 h-[1px] bg-white/20"></div>
+          <div class="p-8">
+            <p class="text-white font-semibold leading-relaxed text-shadow-sm mb-6">
+
+              The usage of mulch helps retain moisture and reduces water loss. It also protects the roots and helps
+              regulate soil temperature.
+
+            </p>
+
+            <p class="text-[#636863] leading-relaxed text-sm">
+
+              And when vegetable plants suffer from drought, they may:
+              • Produce small fruits
+              • Stop producing
+              • Become tough or bitterg
+              • Will wither
+
+            </p>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="group relative">
+        <div
+          class="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-[2.5rem] blur-2xl opacity-40 group-hover:opacity-70 transition duration-500">
+        </div>
+
+        <div
+          class="relative h-full bg-[#D3DCD3]/22 backdrop-blur-2xl border border-white/20 rounded-[2.5rem] overflow-hidden shadow-[0_20px_70px_rgba(0,0,0,0.18)] hover:-translate-y-2 transition-all duration-500">
+
+          <div class="relative p-8 pb-6">
+            <div class="flex items-center justify-between mb-8">
+
+              <div
+                class="w-14 h-14 rounded-2xl bg-[#113E14] text-[#D3DCD3] flex items-center justify-center text-xl font-poppins font-bold shadow-lg">
+                04
+              </div>
+
+            </div>
+
+            <h3 class="text-3xl font-black text-white leading-tight">
+              Harvesting and storage
+            </h3>
+          </div>
+
+          <div class="mx-8 h-[1px] bg-white/20"></div>
+          <div class="p-8">
+            <p class="text-white font-semibold leading-relaxed text-shadow-sm mb-6">
+              Harvesting is one of the most important process, so storagin well is an important part to enjoy of the
+              escence of this plants
+            </p>
+
+            <p class="text-[#636863]/100 leading-relaxed text-sm">
+              We recommend to:
+              • Harvesting
+              • Storage
+              • Preservation
+              • Seed saving
+            </p>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="group relative md:col-span-2 xl:col-span-2">
+        <div
+          class="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-[2.5rem] blur-2xl opacity-40 group-hover:opacity-70 transition duration-500">
+        </div>
+
+        <div
+          class="relative h-full bg-[#D3DCD3]/20 backdrop-blur-2xl border border-white/20 rounded-[2.5rem] overflow-hidden shadow-[0_20px_70px_rgba(0,0,0,0.18)] hover:-translate-y-2 transition-all duration-500">
+          <div class="relative p-8 pb-6">
+            <div class="flex items-center justify-between mb-8">
+              <div
+                class="w-14 h-14 rounded-2xl bg-[#113E14] text-[#D3DCD3] flex items-center justify-center text-xl font-poppins font-bold shadow-lg">
+                05
+              </div>
+            </div>
+
+            <h3 class="text-3xl font-black text-white leading-tight">
+              Pests and Diseases
+            </h3>
+          </div>
+
+          <div class="mx-8 h-[1px] bg-white/20"></div>
+
+          <div class="p-8">
+            <p class="text-white font-semibold leading-relaxed text-shadow-sm mb-6">
+
+              When caring for succulents, it’s important
+              to keep in mind that pests aren’t very common,
+              but they can still appear:
+
+              • mealybugs
+              • scale insects
+              • mites
+
+            </p>
+
+            <p class="text-[#636863] leading-relaxed text-sm">
+
+              To control them, they recommend:
+              • wiping away pests with cotton and alcohol
+              • maintaining good lighting
+              • avoiding overwatering
+              • constantly monitoring the plants
+
+              <br><br>
+
+              It is also important to know that excessive
+              humidity can cause mold and rot.
+
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+<hr class="mx-10 border-t-2 border-white/20 mb-24">
+
+<div class="max-w-7xl mx-auto px-6 pb-24">
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+
+
+    <div class="relative group">
+      <div class="absolute -top-5 -left-5 w-full h-full border-2 border-[#113e14] rounded-[2.5rem]">
+      </div>
+
+      <div class="relative overflow-hidden rounded-[2.5rem] shadow-[0_25px_70px_rgba(0,0,0,0.25)]">
+
+        <img src="/resources/images/care/succ-1.jpg" alt="Succulent care"
+          class="w-full h-[500px] object-cover group-hover:scale-105 transition duration-700">
+
+        <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent">
+        </div>
+      </div>
+    </div>
+
+
+    <div>
+
+      <div class="text-[#113e14] uppercase tracking-[0.3em] text-sm font-bold mb-5">
+        Succulent Plant Care
+      </div>
+
+
+      <h2 class="text-5xl md:text-6xl font-black text-white leading-tight mb-8">
+        General Tips for
+        <span class="text-[#113e14]">
+          Caring for Succulents
+        </span>
+      </h2>
+
+
+      <div class="space-y-5 text-white/85 text-lg leading-relaxed">
+        <p>
+          The most important steps for caring for your succulents are:
+        </p>
+
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+          <div class="flex items-center gap-3">
+            <div class="w-3 h-3 rounded-full bg-[#113e14]"></div>
+            <p>provide plenty of light</p>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <div class="w-3 h-3 rounded-full bg-[#113e14]"></div>
+            <p>use sandy, well-drained soil</p>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <div class="w-3 h-3 rounded-full bg-[#113e14]"></div>
+            <p>use pots with drainage holes</p>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <div class="w-3 h-3 rounded-full bg-[#113e14]"></div>
+            <p>let the soil dry out between waterings</p>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <div class="w-3 h-3 rounded-full bg-[#113e14]"></div>
+            <p>avoid excess moisture</p>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <div class="w-3 h-3 rounded-full bg-[#113e14]"></div>
+            <p>fertilize a few times a year</p>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <div class="w-3 h-3 rounded-full bg-[#113e14]"></div>
+            <p>check for pests and diseases</p>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <div class="w-3 h-3 rounded-full bg-[#113e14]"></div>
+            <p>avoid waterlogging</p>
+          </div>
+        </div>
+      </div>
+
+      <button class="mt-10 px-8 py-4 bg-[#113e14] hover:bg-[#48ae4d] text-white font-bold text-lg rounded-2xl
+                 shadow-[0_15px_35px_rgba(0,0,0,0.2) hover:-translate-y-1 transition-all duration-300">
+        get a plant
+      </button>
+    </div>
+  </div>
+</div>
+@end
