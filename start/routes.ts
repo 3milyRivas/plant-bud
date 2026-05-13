@@ -6,11 +6,6 @@ import NewAccountController from '#controllers/new_account_controller'
 /* general views */
 router.on('/').render('pages/welcome').as('home')
 router.on('/register').render('pages/register')
-router.on('/amaryllidaceae').render('pages/amaryllidaceae')
-router.on('/brassicaceae').render('pages/brassicaceae')
-router.on('/apiaceae').render('pages/apiaceae')
-router.on('/cucurbitaceae').render('pages/cucurbitaceae')
-router.on('/solanaceae').render('pages/solanaceae')
 router.on('/araceae').render('pages/araceae')
 
 router.on('/test').render('pages/newwelcome')
@@ -28,6 +23,7 @@ router.on('/request').render('pages/services/request').as('request')
 router.on('/care').render('pages/client/Plants/careo')
 router.on('/care2').render('pages/client/Plants/careS')
 router.on('/ware').render('pages/client/Plants/ware')
+router.on('/care-ornamentals').render('pages/client/Plants/care-ornamentals')
 
 /* clients views */
 /*router
