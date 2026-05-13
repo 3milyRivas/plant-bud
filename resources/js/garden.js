@@ -23,6 +23,52 @@ let history = []
 let redoStack = []
 let isRestoring = false
 
+const canvas = document.getElementById("canvas-container");
+const img = document.getElementById("baseImage");
+const fileInput = document.getElementById("upload");
+
+let hasBaseImage = false;
+
+fileInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (file) handleFile(file);
+});
+
+canvas.addEventListener("dragover", (e) => {
+    if (hasBaseImage) return;
+    e.preventDefault();
+    canvas.classList.add("ring-4", "ring-[#EDE7D6]");
+});
+
+canvas.addEventListener("dragleave", () => {
+    if (hasBaseImage) return;
+    canvas.classList.remove("ring-4", "ring-[#EDE7D6]");
+});
+
+canvas.addEventListener("drop", (e) => {
+    if (hasBaseImage) return;
+
+    e.preventDefault();
+    canvas.classList.remove("ring-4", "ring-[#EDE7D6]");
+
+    const file = e.dataTransfer.files[0];
+    if (file) handleFile(file);
+});
+
+function handleFile(file) {
+    if (!file.type.startsWith("image/")) return;
+
+    const url = URL.createObjectURL(file);
+
+    img.onload = () => {
+        placeholder.classList.add("hidden");
+        img.classList.remove("hidden");
+        hasBaseImage = true;
+    };
+
+    img.src = url;
+}
+
 function snapshot() {
   const els = [...container.querySelectorAll('.draggable')].map(el => ({
     src: el.src,
@@ -535,3 +581,4 @@ baseImage?.addEventListener('load', togglePlaceholder)
 togglePlaceholder()
 renderInventory()
 saveState()
+
