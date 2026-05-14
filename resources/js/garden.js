@@ -1,4 +1,4 @@
-const PEXELS_API_KEY = 'I4kSYjjgcK2NbtuJfZy7ysoEl7lIurakmNz2PNQRPBtQtjS9FVRS8woV'
+const PEXELS_API_KEY = 'I4kSYjjgcK2NbtuYz7ysoEl7lIurakmNz2PNQRPBtQtjS9FVRS8woV'
 
 const upload = document.getElementById('upload')
 const baseImage = document.getElementById('baseImage')
@@ -23,50 +23,95 @@ let history = []
 let redoStack = []
 let isRestoring = false
 
-const canvas = document.getElementById("canvas-container");
-const img = document.getElementById("baseImage");
-const fileInput = document.getElementById("upload");
+const canvas = document.getElementById("canvas-container")
+const img = document.getElementById("baseImage")
+const fileInput = document.getElementById("upload")
 
-let hasBaseImage = false;
+let hasBaseImage = false
 
 fileInput.addEventListener("change", (e) => {
-    const file = e.target.files[0];
-    if (file) handleFile(file);
-});
+    const file = e.target.files[0]
+    if (file) handleFile(file)
+})
 
 canvas.addEventListener("dragover", (e) => {
-    if (hasBaseImage) return;
-    e.preventDefault();
-    canvas.classList.add("ring-4", "ring-[#EDE7D6]");
-});
+    if (hasBaseImage) return
+    e.preventDefault()
+    canvas.classList.add("ring-4", "ring-[#EDE7D6]")
+})
 
 canvas.addEventListener("dragleave", () => {
-    if (hasBaseImage) return;
-    canvas.classList.remove("ring-4", "ring-[#EDE7D6]");
-});
+    if (hasBaseImage) return
+    canvas.classList.remove("ring-4", "ring-[#EDE7D6]")
+})
 
 canvas.addEventListener("drop", (e) => {
-    if (hasBaseImage) return;
+    if (hasBaseImage) return
 
-    e.preventDefault();
-    canvas.classList.remove("ring-4", "ring-[#EDE7D6]");
+    e.preventDefault()
+    canvas.classList.remove("ring-4", "ring-[#EDE7D6]")
 
-    const file = e.dataTransfer.files[0];
-    if (file) handleFile(file);
-});
+    const file = e.dataTransfer.files[0]
+    if (file) handleFile(file)
+})
 
 function handleFile(file) {
-    if (!file.type.startsWith("image/")) return;
+    if (!file.type.startsWith("image/")) return
 
-    const url = URL.createObjectURL(file);
+    const url = URL.createObjectURL(file)
 
     img.onload = () => {
-        placeholder.classList.add("hidden");
-        img.classList.remove("hidden");
-        hasBaseImage = true;
-    };
+        placeholder.classList.add("hidden")
+        img.classList.remove("hidden")
+        hasBaseImage = true
+        fitCanvasToImage()
+        syncCanvasBackground()
+    }
 
-    img.src = url;
+    img.src = url
+}
+
+function fitCanvasToImage() {
+    if (!baseImage?.naturalWidth) return
+
+    const maxW = 1100
+    const maxH = window.innerHeight * 0.75
+
+    const w = baseImage.naturalWidth
+    const h = baseImage.naturalHeight
+
+    const scale = Math.min(maxW / w, maxH / h, 1)
+
+    container.style.width = (w * scale) + "px"
+    container.style.height = (h * scale) + "px"
+}
+
+function syncCanvasBackground() {
+    if (!baseImage?.src) return
+
+    let bg = document.getElementById("image-bg")
+
+    if (!bg) {
+        bg = document.createElement("div")
+        bg.id = "image-bg"
+
+        bg.style.position = "absolute"
+        bg.style.inset = "0"
+        bg.style.backgroundSize = "cover"
+        bg.style.backgroundPosition = "center"
+        bg.style.transform = "scale(1.2)"
+        bg.style.filter = "blur(35px) brightness(0.6)"
+        bg.style.pointerEvents = "none"
+
+        bg.style.zIndex = "0"
+
+        container.style.position = "relative"
+        container.style.isolation = "isolate"
+
+        container.prepend(bg)
+    }
+
+    bg.style.backgroundImage = `url(${baseImage.src})`
 }
 
 function snapshot() {
@@ -152,7 +197,12 @@ function applyTransform(el) {
 
 function togglePlaceholder() {
   if (!placeholder) return
-  placeholder.classList.toggle('hidden', !!(baseImage.src && baseImage.naturalWidth))
+  const has = baseImage.src && baseImage.naturalWidth
+  placeholder.classList.toggle('hidden', !!has)
+  if (!has) {
+    container.style.width = "800px"
+    container.style.height = "560px"
+  }
 }
 
 upload?.addEventListener('change', e => {
@@ -161,7 +211,12 @@ upload?.addEventListener('change', e => {
 
   const reader = new FileReader()
   reader.onload = () => {
-    baseImage.onload = togglePlaceholder
+    baseImage.onload = () => {
+      togglePlaceholder()
+      hasBaseImage = true
+      fitCanvasToImage()
+      syncCanvasBackground()
+    }
     baseImage.src = reader.result
   }
   reader.readAsDataURL(file)
@@ -475,7 +530,7 @@ function bringFront() {
 
 function sendBack() {
   if (!selected) return
-  selected.style.zIndex = 1
+  selected.style.zIndex = 2
   saveState()
 }
 
@@ -581,4 +636,3 @@ baseImage?.addEventListener('load', togglePlaceholder)
 togglePlaceholder()
 renderInventory()
 saveState()
-
