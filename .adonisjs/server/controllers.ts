@@ -7,6 +7,6 @@ export const controllers = {
   GardenDesigners: () => import('#controllers/garden_designers_controller'),
   Generals: () => import('#controllers/generals_controller'),
   NewAccount: () => import('#controllers/new_account_controller'),
-  Plants: () => import('#controllers/plants_controller'),
   Session: () => import('#controllers/session_controller'),
+  Plants: () => import('#controllers/plants_controller'),
 }
