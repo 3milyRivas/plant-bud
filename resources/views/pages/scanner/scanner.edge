@@ -1,0 +1,136 @@
+@layout()
+@slot('title')
+<title>Plant Scanner</title>
+@endslot
+
+<div class="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#1E3D19] via-[#728B6F] to-[#6B8C6C]">
+    <img src="/resources/images/welcome/header3.png"
+        class="absolute inset-0 w-full h-full object-cover pointer-events-none select-none">
+    <div class="absolute inset-0 bg-black/45"></div>
+    <div class="absolute inset-0 bg-gradient-to-br from-[#1E3D19]/70 via-[#728B6F]/55 to-[#6B8C6C]/70"></div>
+
+    <header class="w-full z-50 px-6 lg:px-10 pt-6">
+        <div
+            class="max-w-7xl mx-auto bg-white/10 backdrop-blur-xl border border-white/10 rounded-full px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <img src="/resources/images/essential/logo.png" class="w-14">
+                <div>
+                    <h1 class="text-2xl font-black text-white">Plant <span class="text-[#EDE7D6]">Bud</span></h1>
+                    <p class="text-xs font-bold tracking-[0.25em] uppercase text-white/60">Plant Scanner</p>
+                </div>
+            </div>
+
+            <div class="flex gap-3">
+                <a href="/"
+                    class="bg-white/10 text-white font-bold px-5 py-3 rounded-full border border-white/10">Exit</a>
+                <label for="plantUpload"
+                    class="cursor-pointer bg-white/10 text-white font-bold px-5 py-3 rounded-full border border-white/10">Upload</label>
+                <input id="plantUpload" type="file" accept="image/*" class="hidden">
+                <button id="scanBtn"
+                    class="bg-[#EDE7D6] text-[#1E3D19] font-black px-6 py-3 rounded-full">Analyze</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="relative z-10 pt-10 pb-10 px-6 lg:px-10">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 xl:grid-cols-[360px_1fr] gap-8 min-h-[calc(100vh-11rem)]">
+
+            <aside class="relative">
+                <div class="absolute -inset-2 bg-white/10 blur-2xl rounded-[2.5rem]"></div>
+                <div class="relative h-full bg-white/10 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-6">
+
+                    <h2 class="text-white text-xl font-black">Scan Panel</h2>
+                    <div class="w-14 h-1 bg-[#EDE7D6] rounded-full mt-3 mb-6"></div>
+
+                    <div id="previewBox"
+                        class="relative w-full min-h-[240px] bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center overflow-hidden">
+                        <p id="dropText" class="absolute text-white/60 text-sm">Drag & drop image or upload</p>
+                        <img id="previewImage" class="hidden max-w-full max-h-[420px] object-contain">
+                    </div>
+
+                    <div class="mt-6 space-y-4">
+                        <div class="p-4 bg-white/5 border border-white/10 rounded-2xl">
+                            <p class="text-white/60 text-sm">Status</p>
+                            <p id="statusText" class="text-white font-bold">Waiting</p>
+                        </div>
+
+                        <div class="p-4 bg-white/5 border border-white/10 rounded-2xl">
+                            <p class="text-white/60 text-sm">Confidence</p>
+                            <p id="confidenceText" class="text-[#EDE7D6] font-bold">-</p>
+                        </div>
+
+                        <div class="p-4 bg-white/5 border border-white/10 rounded-2xl">
+                            <p class="text-white/60 text-sm">Reliability</p>
+                            <p id="reliabilityText" class="text-white font-black">-</p>
+                        </div>
+                    </div>
+
+                </div>
+            </aside>
+
+            <section class="relative">
+                <div class="absolute -inset-2 bg-white/10 blur-2xl rounded-[3rem]"></div>
+
+                <div
+                    class="relative h-full bg-white/10 backdrop-blur-2xl border border-white/10 rounded-[3rem] p-6 lg:p-10">
+
+                    <div class="mb-6">
+                        <h2 class="text-3xl font-black text-white">Plant Intelligence</h2>
+                        <p class="text-white/70 font-semibold mt-2">AI identification + botanical insights</p>
+                    </div>
+
+                    <div id="loadingState" class="hidden text-center py-16">
+                        <div
+                            class="w-14 h-14 mx-auto border-4 border-white/20 border-t-[#EDE7D6] rounded-full animate-spin">
+                        </div>
+                        <p class="text-white/70 mt-4">Analyzing plant...</p>
+                    </div>
+
+                    <div id="emptyState" class="text-center py-20 text-white/60">
+                        <p>No scan yet</p>
+                        <p class="text-sm mt-2">Upload a plant image to begin</p>
+                    </div>
+
+                    <div id="resultsBox" class="hidden space-y-6">
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
+                                <p class="text-white/60 text-sm">Species</p>
+                                <p id="species" class="text-[#EDE7D6] text-2xl font-black mt-2">-</p>
+                            </div>
+
+                            <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
+                                <p class="text-white/60 text-sm">Health</p>
+                                <p id="health" class="text-white text-2xl font-black mt-2">-</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
+                            <p class="text-white/60 text-sm mb-3">AI Matches</p>
+                            <div id="matches" class="grid grid-cols-2 md:grid-cols-3 gap-4"></div>
+                        </div>
+
+                        <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
+                            <p class="text-white/60 text-sm mb-3">Causes</p>
+                            <ul id="causes" class="text-white/80 list-disc ml-5 space-y-1"></ul>
+                        </div>
+
+                        <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
+                            <p class="text-[#EDE7D6] font-semibold mb-3">Plant Education</p>
+                            <div id="education" class="text-white/80 space-y-3 text-sm"></div>
+                        </div>
+
+                        <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
+                            <p class="text-[#EDE7D6] font-semibold mb-3">Care Guide</p>
+                            <ul id="tips" class="text-[#EDE7D6] list-disc ml-5 space-y-1"></ul>
+                        </div>
+
+                    </div>
+
+                </div>
+            </section>
+
+        </div>
+    </main>
+</div>
+@end
