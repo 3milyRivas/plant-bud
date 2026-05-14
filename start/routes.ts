@@ -7,6 +7,7 @@ import NewAccountController from '#controllers/new_account_controller'
 router.on('/').render('pages/welcome').as('home')
 router.on('/register').render('pages/register')
 router.on('/araceae').render('pages/araceae')
+router.on('/amaryllidaceae').render('pages/amaryllidaceae')
 
 router.on('/test').render('pages/newwelcome')
 
