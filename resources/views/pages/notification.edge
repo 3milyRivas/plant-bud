@@ -8,99 +8,94 @@
     <title>Notifications</title>
 </head>
 
-<body class="bg-[#89A589] min-h-screen flex flex-col">
-    <div class="mt-12 left-0 w-full z-50 px-10">
-    <div class="backdrop-blur-xl bg-white/20 border border-white/30
+<body class="bg-[#6C8E6B] min-h-screen flex flex-col">
+    <div class="sticky top-0 mt-12 left-0 w-full z-50 px-10">
+        <div class="backdrop-blur-xl bg-white/20 border border-white/30
               rounded-full px-8 py-4 flex items-center justify-between shadow-lg">
 
 
-      <div class="w-10 h-10 bg-[url('resources/images/essential/logo.png')] bg-contain bg-no-repeat"></div>
+            <div class="w-10 h-10 bg-[url('resources/images/essential/logo.png')] bg-contain bg-no-repeat"></div>
 
-      <div class="flex items-center gap-6">
+            <div class="flex items-center gap-6">
 
-        <div class="bg-white/70 rounded-full px-6 py-2 w-[280px]">
-          <input type="text" placeholder="Search plants" class="bg-transparent outline-none w-full
+                <div class="bg-white/70 rounded-full px-6 py-2 w-[280px]">
+                    <input type="text" placeholder="Search plants" class="bg-transparent outline-none w-full
                       text-[#113E14] placeholder:text-[#6B8C6C]/70 text-sm">
-        </div>
+                </div>
 
 
-        <button class="w-10 h-10 rounded-full bg-[#113E14]
+                <button class="w-10 h-10 rounded-full bg-[#113E14]
                      flex items-center justify-center hover:bg-[#1b5420]
                      transition duration-300 shadow-md">
-          <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M21 21l-4.35-4.35m1.85-5.65a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z" />
-          </svg>
-        </button>
+                    <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-4.35-4.35m1.85-5.65a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z" />
+                    </svg>
+                </button>
 
 
-        <div class="flex items-center space-x-2 ml-4">
-          <div class="w-8 h-8 bg-[url('resources/img/img3.png')] bg-contain bg-no-repeat"></div>
-          <span class="text-[#113E14] font-bold text-lg">Notifications</span>
-          <div class="w-8 h-8 bg-[url('resources/img/img3.png')] -scale-x-100 bg-contain bg-no-repeat"></div>
-        </div>
+                <div class="flex items-center space-x-2 ml-4">
+                    <div class="w-8 h-8 bg-[url('resources/img/img3.png')] bg-contain bg-no-repeat"></div>
+                    <span class="text-[#113E14] font-bold text-lg">Notifications</span>
+                    <div class="w-8 h-8 bg-[url('resources/img/img3.png')] -scale-x-100 bg-contain bg-no-repeat"></div>
+                </div>
 
 
-        <button class="w-8 h-8 bg-[url('resources/img/home2.png')] bg-contain bg-no-repeat rounded-lg transition"></button>
+                <button onclick="window.location.href='/community'"
+                    class="w-8 h-8 bg-[url('resources/img/home2.png')] bg-contain bg-no-repeat rounded-lg transition"></button>
 
 
-         <button
-          class="flex items-center space-x-2 bg-white rounded-xl px-4 py-2 shadow-md hover:bg-white/70 transition active:bg-green-900 active:text-white active:shadow-lg active:translate-y-1 focus:outline-none">
-          <div class="w-5 h-5 bg-[url('resources/img/campana2.png')] bg-contain bg-no-repeat"></div>
-          <span class="font-semibold text-sm">Notifications</span>
-        </button>
+                <button
+                    class="flex items-center space-x-2 bg-white rounded-xl px-4 py-2 shadow-md hover:bg-white/70 transition active:bg-green-900 active:text-white active:shadow-lg active:translate-y-1 focus:outline-none">
+                    <div class="w-5 h-5 bg-[url('resources/img/campana2.png')] bg-contain bg-no-repeat"></div>
+                    <span class="font-semibold text-sm">Notifications</span>
+                </button>
 
 
-        <button class="w-8 h-8 bg-[url('resources/img/fav.png')] bg-contain bg-no-repeat rounded-lg transition"></button>
-      </div>
+                <button onclick="window.location.href='/favorites'"
+                    class="w-8 h-8 bg-[url('resources/img/fav.png')] bg-contain bg-no-repeat rounded-lg transition"></button>
+            </div>
 
 
-      <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 bg-[url('resources/img/phot.jpg')] bg-cover bg-center rounded-full"></div>
-        <div class="flex flex-col">
-          <span class="text-black/60 text-sm font-semibold">María Antonieta de las Nieves</span>
-          <a href="#" class="text-blue-600 hover:underline text-xs">Switch</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  <div class="mx-14">
-    <div class="relative bg-[url('resources/images/plant-budd.png')] bg-cover bg-center h-[60vh] w-full rounded-xl shadow-lg mt-8">
-
-      <div class="absolute inset-0 flex flex-col justify-center items-start px-12 space-y-4">
-        <h2 class="text-4xl font-bold text-white drop-shadow-lg">
-          Discover ornamental plants.
-        </h2>
-        <p class="text-lg text-white max-w-xl">
-          Explore elegant tropical species, connect with gardeners and create beautiful green spaces.
-        </p>
-
-
-        <button
-          class="bg-[#113E14] text-white font-semibold px-8 py-3 rounded-full shadow-md hover:bg-[#1b5420] transition">
-          Care
-        </button>
-      </div>
-    </div>
-  </div>
-
-        <!-- el coso de perfil -->
-        <div class="flex items-center space-x-4">
-            <div class="w-12 h-12 bg-[url('resources/img/phot.jpg')] bg-cover bg-center rounded-full"></div>
-            <div class="flex flex-col">
-                <span class="text-black/60 text-xl font-semibold">María Antonieta de las Nieves</span>
-                <a href="#" class="text-blue-600 hover:underline text-sm">Switch</a>
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-[url('resources/img/phot.jpg')] bg-cover bg-center rounded-full"></div>
+                <div class="flex flex-col">
+                    <span class="text-black/60 text-sm font-semibold">María Antonieta de las Nieves</span>
+                    <a href="#" class="text-blue-600 hover:underline text-xs">Switch</a>
+                </div>
             </div>
         </div>
     </div>
+
+
+    <div class="mx-14">
+        <div
+            class="relative bg-[url('resources/images/plant-budd.png')] bg-cover bg-center h-[60vh] w-full rounded-xl shadow-lg mt-8">
+
+            <div class="absolute inset-0 flex flex-col justify-center items-start px-12 space-y-4">
+                <h2
+                    class="text-4xl font-bold bg-gradient-to-r from-white to-[#113E14] bg-clip-text text-transparent drop-shadow-lg">
+                    Discover the community.
+                </h2>
+                <p class="text-2xl text-[#113E14] font-semibold max-w-xl">
+                    Explore elegant publicstions, connect with share ideas.
+                </p>
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+
 
     <div class="flex bg-[#6C8E6B]/80 px-6 py-10 space-x-6">
 
         <div class="flex flex-col mx-auto space-y-8 py-8">
             <!-- la wea de Activity -->
-            <div class="bg-white/70 rounded-xl shadow-md p-6 w-[900px]">
+            <div class="rounded-3xl backdrop-blur-xl bg-white/20 border border-white/30 shadow-md p-6 w-[900px]">
 
                 <!-- Header -->
                 <div class="flex items-center justify-between mb-4">
@@ -172,12 +167,13 @@
 
 
             <!-- el coso de Suggestions -->
-            <div class="bg-white/70 rounded-xl shadow-md p-6 w-full w-[900px]">
+            <div class="backdrop-blur-xl bg-white/20 border border-white/30 rounded-xl shadow-md p-6 w-full w-[900px]">
                 <h2 class="text-xl font-bold mb-4">Suggestions for you</h2>
                 <div class="space-y-4">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 bg-[url('resources/img/person6.jpg')] bg-cover bg-center rounded-full">
+                            <div
+                                class="w-10 h-10 bg-[url('resources/img/person6.jpg')] bg-cover bg-center rounded-full">
                             </div>
                             <span class="font-semibold">Carla Méndez</span>
                         </div>
@@ -186,7 +182,8 @@
 
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 bg-[url('resources/img/person4.jpg')] bg-cover bg-center rounded-full">
+                            <div
+                                class="w-10 h-10 bg-[url('resources/img/person4.jpg')] bg-cover bg-center rounded-full">
                             </div>
                             <span class="font-semibold">Tatiana Zaldaña</span>
                         </div>
@@ -195,7 +192,8 @@
 
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 bg-[url('resources/img/person5.jpg')] bg-cover bg-center rounded-full">
+                            <div
+                                class="w-10 h-10 bg-[url('resources/img/person5.jpg')] bg-cover bg-center rounded-full">
                             </div>
                             <span class="font-semibold">Dalia Rodriguez</span>
                         </div>
