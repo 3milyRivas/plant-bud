@@ -2,6 +2,7 @@ import { middleware } from '#start/kernel'
 import { controllers } from '#generated/controllers'
 import router from '@adonisjs/core/services/router'
 import NewAccountController from '#controllers/new_account_controller'
+import PlantsController from '#controllers/plants_controller'
 
 /* general views */
 router.on('/').render('pages/welcome').as('home')
@@ -25,7 +26,8 @@ router.on('/care1').render('pages/client/Plants/care1')
 router.on('/care2').render('pages/client/Plants/care2')
 router.on('/designer').render('pages/garden/designer')
 router.post('/designer/search-assets', '#controllers/garden_designer_controller.searchAssets')
-
+router.on('/scanner').render('pages/scanner/scanner')
+router.post('/plants/scan', [PlantsController, 'scan'])
 /* clients views */
 /*router
   .group(() => {
