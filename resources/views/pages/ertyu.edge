@@ -1,0 +1,27 @@
+<script>
+    function showCategory(categoryId) {
+
+        document.querySelectorAll('.category-section')
+            .forEach(section => {
+                section.classList.add('hidden');
+            });
+
+        document.getElementById(categoryId)
+            .classList.remove('hidden');
+
+        document.querySelectorAll('.category-btn')
+            .forEach(button => {
+                button.classList.remove(
+                    'bg-[#113e14]',
+                    'text-white',
+                    'shadow-md'
+                );
+            });
+
+        event.target.classList.add(
+            'bg-[#113e14]',
+            'text-white',
+            'shadow-md'
+        );
+    }
+</script>

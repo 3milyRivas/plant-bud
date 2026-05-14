@@ -1,4 +1,5 @@
 import Alpine from 'alpinejs'
+import './categories'
 
 Alpine.data('alert', function () {
   return {
@@ -18,6 +19,8 @@ Alpine.data('alert', function () {
 })
 
 Alpine.start()
+
+
 
 
 
