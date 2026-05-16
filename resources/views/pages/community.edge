@@ -1,14 +1,12 @@
-<!doctype html>
-<html lang="en">
+@layout()
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <title>Community</title>
-</head>
+@slot('title')
+<title>Ornamentals</title>
+@endslot
+@vite(['resources/js/categories.js'])
 
-<body class="bg-[#6C8E6B] min-h-screen flex flex-col">
+
+<div class="bg-[#6C8E6B] min-h-screen flex flex-col">
   <div class="sticky top-0 mt-12 left-0 w-full z-50 px-10">
     <div class="backdrop-blur-xl bg-white/20 border border-white/30
               rounded-full px-8 py-4 flex items-center justify-between shadow-lg">
@@ -143,36 +141,36 @@
         <div class="flex justify-between">
           <button
             class="flex items-center space-x-2 px-3 py-2 rounded-lg active:shadow-lg active:translate-y-1 focus:outline-none">
-            <div class="w-6 h-6 bg-[url('resources/img/imagen.png')] bg-contain bg-no-repeat"></div>
+            <div class="w-6 h-6 bg-[url('/resources/img/imagen.png')] bg-contain bg-no-repeat"></div>
             <span class="text-sm font-medium">Images</span>
           </button>
 
           <button
             class="flex items-center space-x-2 px-3 py-2 rounded-lg active:shadow-lg active:translate-y-1 focus:outline-none">
-            <div class="w-6 h-6 bg-[url('resources/img/video.png')] bg-contain bg-no-repeat"></div>
+            <div class="w-6 h-6 bg-[url('/resources/img/video.png')] bg-contain bg-no-repeat"></div>
             <span class="text-sm font-medium">Video</span>
           </button>
 
           <button
             class="flex items-center space-x-2 px-3 py-2 rounded-lg active:shadow-lg active:translate-y-1 focus:outline-none">
-            <div class="w-6 h-6 bg-[url('resources/img/pol.png')] bg-contain bg-no-repeat"></div>
+            <div class="w-6 h-6 bg-[url('/resources/img/pol.png')] bg-contain bg-no-repeat"></div>
             <span class="text-sm font-medium">Poll</span>
           </button>
 
           <button
             class="flex items-center space-x-2 px-3 py-2 text-black/46 rounded-lg active:shadow-lg active:translate-y-1 focus:outline-none">
-            <div class="w-6 h-6 bg-[url('resources/img/send.png')] bg-contain bg-no-repeat"></div>
+            <div class="w-6 h-6 bg-[url('/resources/img/send.png')] bg-contain bg-no-repeat"></div>
             <span class="text-sm font-medium">Publish</span>
           </button>
         </div>
       </div>
 
       <div class="flex items-center justify-between">
-        <div class="w-full h-0.5 bg-[url('resources/img/line.png')] bg-cover bg-center"></div>
+        <div class="w-full h-0.5 bg-[url('/resources/img/line.png')] bg-cover bg-center"></div>
         <div class="flex items-center space-x-2 ml-2">
           <span class="text-sm font-bold text-black/30">Sort by</span>
           <span class="text-sm font-semibold text-black">Recent</span>
-          <div class="w-8 h-8 bg-[url('resources/img/row.png')] bg-contain bg-no-repeat"></div>
+          <div class="w-8 h-8 bg-[url('/resources/img/row.png')] bg-contain bg-no-repeat"></div>
         </div>
       </div>
 
@@ -182,7 +180,7 @@
           class="max-w-full h-400 px-20 mx-auto backdrop-blur-xl bg-white/20 border border-white/30 rounded-3xl shadow-lg p-4 space-y-4">
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-3">
-              <div class="w-12 h-12 bg-[url('resources/img/aleja.jpg')] bg-cover bg-center rounded-full"></div>
+              <div class="w-12 h-12 bg-[url('/resources/img/aleja.jpg')] bg-cover bg-center rounded-full"></div>
               <div>
                 <p class="font-semibold text-sm">Aleja.</p>
                 <p class="text-xs text-gray-500">12 minutes ago</p>
@@ -205,32 +203,32 @@
           </p>
 
 
-          <div class="rounded-xl w-full h-96 bg-[url('resources/img/flo.jpg')] bg-cover bg-center"></div>
+          <div class="rounded-xl w-full h-96 bg-[url('/resources/img/flo.jpg')] bg-cover bg-center"></div>
 
 
 
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-6">
               <button class="flex items-center space-x-2 group">
-                <div class="w-8 h-8 bg-[url('resources/img/heart.png')] bg-cover bg-center"></div>
+                <div class="w-8 h-8 bg-[url('/resources/img/heart.png')] bg-cover bg-center"></div>
                 <span class="text-sm font-semibold text-black/30">320k</span>
               </button>
               <button class="flex items-center space-x-2">
-                <div class="w-5 h-5 bg-[url('resources/img/com.png')] bg-cover bg-center"></div>
+                <div class="w-5 h-5 bg-[url('/resources/img/com.png')] bg-cover bg-center"></div>
                 <span class="text-sm font-semibold text-black/30">120</span>
               </button>
               <button class="flex items-center space-x-2">
-                <div class="w-5 h-5 bg-[url('resources/img/favo.png')] bg-cover bg-center"></div>
+                <div class="w-5 h-5 bg-[url('/resources/img/favo.png')] bg-cover bg-center"></div>
                 <span class="text-sm font-semibold text-black/30">95</span>
               </button>
             </div>
             <button>
-              <div class="w-5 h-5 bg-[url('resources/img/avion.png')] bg-cover bg-center"></div>
+              <div class="w-5 h-5 bg-[url('/resources/img/avion.png')] bg-cover bg-center"></div>
             </button>
           </div>
 
           <div class="flex items-center space-x-3">
-            <div class="w-12 h-12 bg-[url('resources/img/phot.jpg')] bg-cover bg-center rounded-full"></div>
+            <div class="w-12 h-12 bg-[url('/resources/img/phot.jpg')] bg-cover bg-center rounded-full"></div>
             <input type="text" placeholder="Write your comment..."
               class="flex-1 px-4 py-2 rounded-full bg-gray-100 outline-none text-sm" />
           </div>
@@ -240,7 +238,7 @@
           class="max-w-full h-400 px-20 mx-auto backdrop-blur-xl bg-white/20 border border-white/30 rounded-3xl shadow-lg p-4 space-y-4">
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-3">
-              <div class="w-12 h-12 bg-[url('resources/img2/person.jpg')] bg-cover bg-center rounded-full"></div>
+              <div class="w-12 h-12 bg-[url('/resources/img2/person.jpg')] bg-cover bg-center rounded-full"></div>
               <div>
                 <p class="font-semibold text-sm">Angel.</p>
                 <p class="text-xs text-gray-500">13 minutes ago</p>
@@ -263,18 +261,18 @@
           </p>
 
 
-          <div class="rounded-xl w-full h-96 bg-[url('resources/img/flower1.jpg')] bg-cover bg-center"></div>
+          <div class="rounded-xl w-full h-96 bg-[url('/resources/img/flower1.jpg')] bg-cover bg-center"></div>
 
 
 
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-6">
               <button class="flex items-center space-x-2 group">
-                <div class="w-8 h-8 bg-[url('resources/img/heart.png')] bg-cover bg-center"></div>
+                <div class="w-8 h-8 bg-[url('/resources/img/heart.png')] bg-cover bg-center"></div>
                 <span class="text-sm font-semibold text-black/30">123k</span>
               </button>
               <button class="flex items-center space-x-2">
-                <div class="w-5 h-5 bg-[url('resources/img/com.png')] bg-cover bg-center"></div>
+                <div class="w-5 h-5 bg-[url('/resources/img/com.png')] bg-cover bg-center"></div>
                 <span class="text-sm font-semibold text-black/30">79</span>
               </button>
               <button class="flex items-center space-x-2">
@@ -283,12 +281,12 @@
               </button>
             </div>
             <button>
-              <div class="w-5 h-5 bg-[url('resources/img/avion.png')] bg-cover bg-center"></div>
+              <div class="w-5 h-5 bg-[url('/resources/img/avion.png')] bg-cover bg-center"></div>
             </button>
           </div>
 
           <div class="flex items-center space-x-3">
-            <div class="w-12 h-12 bg-[url('resources/img/phot.jpg')] bg-cover bg-center rounded-full"></div>
+            <div class="w-12 h-12 bg-[url('/resources/img/phot.jpg')] bg-cover bg-center rounded-full"></div>
             <input type="text" placeholder="Write your comment..."
               class="flex-1 px-4 py-2 rounded-full bg-gray-100 outline-none text-sm" />
           </div>
@@ -298,7 +296,7 @@
           class="max-w-full h-400 px-20 mx-auto backdrop-blur-xl bg-white/20 border border-white/30 rounded-3xl shadow-lg p-4 space-y-4">
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-3">
-              <div class="w-12 h-12 bg-[url('resources/img2/person1.jpg')] bg-cover bg-center rounded-full"></div>
+              <div class="w-12 h-12 bg-[url('/resources/img2/person1.jpg')] bg-cover bg-center rounded-full"></div>
               <div>
                 <p class="font-semibold text-sm">Evelyn.</p>
                 <p class="text-xs text-gray-500">13 minutes ago</p>
@@ -321,32 +319,32 @@
           </p>
 
 
-          <div class="rounded-xl w-full h-96 bg-[url('resources/img/flower2.jpg')] bg-cover bg-center"></div>
+          <div class="rounded-xl w-full h-96 bg-[url('/resources/img/flower2.jpg')] bg-cover bg-center"></div>
 
 
 
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-6">
               <button class="flex items-center space-x-2 group">
-                <div class="w-8 h-8 bg-[url('resources/img/heart.png')] bg-cover bg-center"></div>
+                <div class="w-8 h-8 bg-[url('/resources/img/heart.png')] bg-cover bg-center"></div>
                 <span class="text-sm font-semibold text-black/30">984k</span>
               </button>
               <button class="flex items-center space-x-2">
-                <div class="w-5 h-5 bg-[url('resources/img/com.png')] bg-cover bg-center"></div>
+                <div class="w-5 h-5 bg-[url('/resources/img/com.png')] bg-cover bg-center"></div>
                 <span class="text-sm font-semibold text-black/30">345</span>
               </button>
               <button class="flex items-center space-x-2">
-                <div class="w-5 h-5 bg-[url('resources/img/favo.png')] bg-cover bg-center"></div>
+                <div class="w-5 h-5 bg-[url('/resources/img/favo.png')] bg-cover bg-center"></div>
                 <span class="text-sm font-semibold text-black/30">203</span>
               </button>
             </div>
             <button>
-              <div class="w-5 h-5 bg-[url('resources/img/avion.png')] bg-cover bg-center"></div>
+              <div class="w-5 h-5 bg-[url('/resources/img/avion.png')] bg-cover bg-center"></div>
             </button>
           </div>
 
           <div class="flex items-center space-x-3">
-            <div class="w-12 h-12 bg-[url('resources/img/phot.jpg')] bg-cover bg-center rounded-full"></div>
+            <div class="w-12 h-12 bg-[url('/resources/img/phot.jpg')] bg-cover bg-center rounded-full"></div>
             <input type="text" placeholder="Write your comment..."
               class="flex-1 px-4 py-2 rounded-full bg-gray-100 outline-none text-sm" />
           </div>
@@ -356,7 +354,7 @@
           class="max-w-full h-400 px-20 mx-auto backdrop-blur-xl bg-white/20 border border-white/30 rounded-3xl shadow-lg p-4 space-y-4">
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-3">
-              <div class="w-12 h-12 bg-[url('resources/img2/person2.jpg')] bg-cover bg-center rounded-full"></div>
+              <div class="w-12 h-12 bg-[url('/resources/img2/person2.jpg')] bg-cover bg-center rounded-full"></div>
               <div>
                 <p class="font-semibold text-sm">Anne.</p>
                 <p class="text-xs text-gray-500">13 minutes ago</p>
@@ -379,32 +377,32 @@
           </p>
 
 
-          <div class="rounded-xl w-full h-96 bg-[url('resources/img/flower3.jpg')] bg-cover bg-center"></div>
+          <div class="rounded-xl w-full h-96 bg-[url('/resources/img/flower3.jpg')] bg-cover bg-center"></div>
 
 
 
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-6">
               <button class="flex items-center space-x-2 group">
-                <div class="w-8 h-8 bg-[url('resources/img/heart.png')] bg-cover bg-center"></div>
+                <div class="w-8 h-8 bg-[url('/resources/img/heart.png')] bg-cover bg-center"></div>
                 <span class="text-sm font-semibold text-black/30">320k</span>
               </button>
               <button class="flex items-center space-x-2">
-                <div class="w-5 h-5 bg-[url('resources/img/com.png')] bg-cover bg-center"></div>
+                <div class="w-5 h-5 bg-[url('/resources/img/com.png')] bg-cover bg-center"></div>
                 <span class="text-sm font-semibold text-black/30">120</span>
               </button>
               <button class="flex items-center space-x-2">
-                <div class="w-5 h-5 bg-[url('resources/img/favo.png')] bg-cover bg-center"></div>
+                <div class="w-5 h-5 bg-[url('/resources/img/favo.png')] bg-cover bg-center"></div>
                 <span class="text-sm font-semibold text-black/30">95</span>
               </button>
             </div>
             <button>
-              <div class="w-5 h-5 bg-[url('resources/img/avion.png')] bg-cover bg-center"></div>
+              <div class="w-5 h-5 bg-[url('/resources/img/avion.png')] bg-cover bg-center"></div>
             </button>
           </div>
 
           <div class="flex items-center space-x-3">
-            <div class="w-12 h-12 bg-[url('resources/img/phot.jpg')] bg-cover bg-center rounded-full"></div>
+            <div class="w-12 h-12 bg-[url('/resources/img/phot.jpg')] bg-cover bg-center rounded-full"></div>
             <input type="text" placeholder="Write your comment..."
               class="flex-1 px-4 py-2 rounded-full bg-gray-100 outline-none text-sm" />
           </div>
@@ -432,7 +430,7 @@
           <div class="flex items-center gap-2">
 
 
-            <div class="bg-[url('resources/img2/person2.jpg')] w-10 h-10 rounded-full bg-cover bg-center">
+            <div class="bg-[url('/resources/img2/person2.jpg')] w-10 h-10 rounded-full bg-cover bg-center">
             </div>
 
 
@@ -460,7 +458,7 @@
 
           <div class="flex items-center gap-2">
 
-            <div class="bg-[url('resources/img/person3.jpg')] w-10 h-10 rounded-full bg-cover bg-center">
+            <div class="bg-[url('/resources/img/person3.jpg')] w-10 h-10 rounded-full bg-cover bg-center">
             </div>
 
             <div class="leading-tight">
@@ -489,7 +487,7 @@
 
           <div class="flex items-center gap-2">
 
-            <div class="bg-[url('resources/img/person5.jpg')] w-10 h-10 rounded-full bg-cover bg-center">
+            <div class="bg-[url('/resources/img/person5.jpg')] w-10 h-10 rounded-full bg-cover bg-center">
             </div>
 
             <div class="leading-tight">
@@ -505,7 +503,7 @@
             </div>
           </div>
 
-          <div class="bg-[url('resources/img/flower6.jpg')] w-10 h-10 rounded-lg bg-cover bg-center"></div>
+          <div class="bg-[url('/resources/img/flower6.jpg')] w-10 h-10 rounded-lg bg-cover bg-center"></div>
         </div>
 
 
@@ -513,7 +511,7 @@
 
           <div class="flex items-center gap-2">
 
-            <div class="bg-[url('resources/img/person7.jpg')] w-10 h-10 rounded-full bg-cover bg-center">
+            <div class="bg-[url('/resources/img/person7.jpg')] w-10 h-10 rounded-full bg-cover bg-center">
             </div>
 
             <div class="leading-tight">
@@ -529,7 +527,7 @@
             </div>
           </div>
 
-          <div class="bg-[url('resources/img/flower7.jpg')] w-10 h-10 rounded-lg bg-cover bg-center"></div>
+          <div class="bg-[url('/resources/img/flower7.jpg')] w-10 h-10 rounded-lg bg-cover bg-center"></div>
         </div>
         <!--final de los la wea de activity-->
       </div>
@@ -552,7 +550,7 @@
           <div class="flex items-center gap-3">
 
 
-            <div class="bg-[url('resources/img/person7.jpg')] w-11 h-11 rounded-full bg-cover bg-center">
+            <div class="bg-[url('/resources/img/person7.jpg')] w-11 h-11 rounded-full bg-cover bg-center">
             </div>
 
 
@@ -577,7 +575,7 @@
 
           <div class="flex items-center gap-3">
 
-            <div class="bg-[url('resources/img/person3.jpg')] w-11 h-11 rounded-full bg-cover bg-center">
+            <div class="bg-[url('/resources/img/person3.jpg')] w-11 h-11 rounded-full bg-cover bg-center">
             </div>
 
             <div class="leading-tight">
@@ -601,7 +599,7 @@
 
           <div class="flex items-center gap-3">
 
-            <div class="bg-[url('resources/img/person4.jpg')] w-11 h-11 rounded-full bg-cover bg-center">
+            <div class="bg-[url('/resources/img/person4.jpg')] w-11 h-11 rounded-full bg-cover bg-center">
             </div>
 
             <div class="leading-tight">
@@ -625,7 +623,7 @@
 
           <div class="flex items-center gap-3">
 
-            <div class="bg-[url('resources/img/person5.jpg')] w-11 h-11 rounded-full bg-cover bg-center">
+            <div class="bg-[url('/resources/img/person5.jpg')] w-11 h-11 rounded-full bg-cover bg-center">
             </div>
 
             <div class="leading-tight">
@@ -647,8 +645,6 @@
       </div>
     </div>
   </div>
+</div>
 
-
-</body>
-
-</html>
+@end
