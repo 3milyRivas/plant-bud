@@ -1,9 +1,10 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
-from rembg import remove, new_session
-from PIL import Image, ImageOps
 import base64
 import io
+
+from flask import Flask, jsonify, request
+from flask_cors import CORS
+from PIL import Image
+from rembg import new_session, remove
 
 app = Flask(__name__)
 CORS(app)
@@ -22,7 +23,7 @@ def auto_crop_alpha(img):
 def center_on_canvas(img, size=1024):
     canvas = Image.new("RGBA", (size, size), (0, 0, 0, 0))
 
-    img.thumbnail((size * 0.8, size * 0.8))
+    img.thumbnail((int(size * 0.8), int(size * 0.8)))
 
     x = (size - img.width) // 2
     y = (size - img.height) // 2
@@ -66,4 +67,4 @@ def process():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, threaded=True)
+    app.run(host="127.0.0.1", port=5000, debug=False, threaded=True, use_reloader=False)

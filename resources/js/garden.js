@@ -1,5 +1,3 @@
-const PEXELS_API_KEY = 'I4kSYjjgcK2NbtuYz7ysoEl7lIurakmNz2PNQRPBtQtjS9FVRS8woV'
-
 const upload = document.getElementById('upload')
 const baseImage = document.getElementById('baseImage')
 const container = document.getElementById('canvas-container')
@@ -260,23 +258,29 @@ async function searchPexels() {
   searchResults.innerHTML = `<div class="col-span-full text-center text-white/60">Searching...</div>`
   openSearchModal()
 
-  const res = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=15`, {
-    headers: { Authorization: PEXELS_API_KEY }
-  })
+  try {
+    const res = await fetch(
+      `/designer/search-assets?query=${encodeURIComponent(query)}&per_page=15`
+    )
 
-  const data = await res.json()
-  const photos = filterBadResults(data.photos || [])
+    if (!res.ok) throw new Error('Asset search failed')
 
-  searchResults.innerHTML = photos.map(p => {
-    const url = p.src.large2x || p.src.original
-    const preview = p.src.medium
+    const data = await res.json()
+    const photos = filterBadResults(data.photos || [])
 
-    return `
-      <button onclick="selectSearchResult('${url}')" class="rounded-2xl overflow-hidden bg-white/10 hover:scale-105 transition">
-        <img src="${preview}" class="w-full h-44 object-cover pointer-events-none">
-      </button>
-    `
-  }).join('')
+    searchResults.innerHTML = photos.map(p => {
+      const url = p.src.large2x || p.src.original
+      const preview = p.src.medium
+
+      return `
+        <button onclick="selectSearchResult('${url}')" class="rounded-2xl overflow-hidden bg-white/10 hover:scale-105 transition">
+          <img src="${preview}" class="w-full h-44 object-cover pointer-events-none">
+        </button>
+      `
+    }).join('')
+  } catch {
+    searchResults.innerHTML = `<div class="col-span-full text-center text-white/60">Search failed</div>`
+  }
 }
 
 async function selectSearchResult(url) {
@@ -291,29 +295,23 @@ async function removeBackground(url) {
   loadingText.classList.remove('hidden')
 
   try {
-    const r = await fetch(url)
-    const blob = await r.blob()
-
-    const dataUrl = await new Promise(res => {
-      const fr = new FileReader()
-      fr.onload = () => res(fr.result)
-      fr.readAsDataURL(blob)
-    })
-
-    const resp = await fetch('http://127.0.0.1:5000/remove-background', {
+    const resp = await fetch('/designer/remove-background', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ image: dataUrl })
+      body: JSON.stringify({ imageUrl: url })
     })
 
     const data = await resp.json()
-    if (!data.image) return
+
+    if (!resp.ok || !data.image) {
+      throw new Error(data.error || data.detail || 'Garden designer backend error')
+    }
 
     addElement(data.image)
     saveToInventory(data.image)
 
-  } catch {
-    alert('backend error')
+  } catch (error) {
+    alert(error.message || 'Garden designer backend error')
   } finally {
     loadingText.classList.add('hidden')
   }

@@ -2,7 +2,7 @@ import { BaseModel, column, beforeSave } from '@adonisjs/lucid/orm'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import hash from '@adonisjs/core/services/hash'
 
-export default class User extends withAuthFinder(() => hash, {
+export default class User extends withAuthFinder(hash, {
   uids: ['email'],
   passwordColumnName: 'password',
 })(BaseModel) {
@@ -36,9 +36,7 @@ export default class User extends withAuthFinder(() => hash, {
   @beforeSave()
   static normalizeUsername(user: User) {
     if (user.username) {
-      user.username = user.username
-        .toLowerCase()
-        .replace(/[^a-z0-9_]/g, '')
+      user.username = user.username.toLowerCase().replace(/[^a-z0-9_]/g, '')
     }
   }
 }

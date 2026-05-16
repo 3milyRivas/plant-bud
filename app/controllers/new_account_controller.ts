@@ -7,7 +7,6 @@ import { signupValidator } from '#validators/user'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class NewAccountController {
-
   async createClient({ view }: HttpContext) {
     return view.render('pages/auth/signup_client')
   }
@@ -21,26 +20,18 @@ export default class NewAccountController {
   }
 
   async store({ request, response, auth, session }: HttpContext) {
-
     try {
-
       const payload = await request.validateUsing(signupValidator)
 
-      const username = payload.username
-        .toLowerCase()
-        .replace(/[^a-z0-9_]/g, '')
+      const username = payload.username.toLowerCase().replace(/[^a-z0-9_]/g, '')
 
       const emailExists = await User.findBy('email', payload.email)
 
       const usernameExists = await User.findBy('username', username)
 
-      const phoneExists = payload.phone
-        ? await User.findBy('phone', payload.phone)
-        : null
+      const phoneExists = payload.phone ? await User.findBy('phone', payload.phone) : null
 
-      const duiExists = payload.dui
-        ? await User.findBy('dui', payload.dui)
-        : null
+      const duiExists = payload.dui ? await User.findBy('dui', payload.dui) : null
 
       const errors: Record<string, string[]> = {}
 
@@ -61,7 +52,6 @@ export default class NewAccountController {
       }
 
       if (Object.keys(errors).length > 0) {
-
         session.flash('errors', errors)
 
         session.flash('old', request.all())
@@ -70,7 +60,6 @@ export default class NewAccountController {
       }
 
       const user = await User.create({
-
         username,
 
         first_name: payload.first_name,
@@ -86,11 +75,9 @@ export default class NewAccountController {
         phone: payload.phone ?? null,
 
         dui: payload.dui ?? null,
-
       })
 
       if (payload.role === 'gardener') {
-
         await GardenerProfile.create({
           userId: user.id,
           availabilitySchedule: '',
@@ -99,7 +86,6 @@ export default class NewAccountController {
       }
 
       if (payload.role === 'nursery') {
-
         await NurseryProfile.create({
           userId: user.id,
           nursery_name: payload.username,
@@ -110,9 +96,7 @@ export default class NewAccountController {
       await auth.use('web').login(user)
 
       return response.redirect().toRoute('home')
-
     } catch (error) {
-
       console.log(error)
 
       session.flash('errors', {

@@ -16,6 +16,10 @@
     animation: fall linear infinite;
 }
 
+.leaf:nth-child(n + 7) {
+    display: none;
+}
+
 .leaf:nth-child(1) {
     left: 10%;
     animation-duration: 12s;
@@ -71,6 +75,12 @@
 
     100% {
         transform: translate3d(-10px, 110vh, 0) rotate(360deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .leaf {
+        animation: none;
     }
 }
 

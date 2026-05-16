@@ -1,8 +1,9 @@
 import { middleware } from '#start/kernel'
 import { controllers } from '#generated/controllers'
 import router from '@adonisjs/core/services/router'
-import NewAccountController from '#controllers/new_account_controller'
-import PlantsController from '#controllers/plants_controller'
+const GardenDesignerController = () => import('#controllers/garden_designers_controller')
+const NewAccountController = () => import('#controllers/new_account_controller')
+const PlantsController = () => import('#controllers/plants_controller')
 
 /* general views */
 router.on('/').render('pages/welcome').as('home')
@@ -26,9 +27,14 @@ router.on('/care3').render('pages/client/Plants/care3')
 router.on('/care1').render('pages/client/Plants/care1')
 router.on('/care2').render('pages/client/Plants/care2')
 router.on('/designer').render('pages/garden/designer')
-router.post('/designer/search-assets', '#controllers/garden_designer_controller.searchAssets')
+router
+  .get('/designer/search-assets', [GardenDesignerController, 'searchAssets'])
+  .as('garden_designer.search_assets')
+router
+  .post('/designer/remove-background', [GardenDesignerController, 'removeBackground'])
+  .as('garden_designer.remove_background')
 router.on('/scanner').render('pages/scanner/scanner')
-router.post('/plants/scan', [PlantsController, 'scan'])
+router.post('/plants/scan', [PlantsController, 'scan']).as('plants.scan')
 /* clients views */
 /*router
   .group(() => {
@@ -54,15 +60,15 @@ router
 
 router
   .group(() => {
-    router.get('login', [controllers.Session, 'create'])
-    router.post('login', [controllers.Session, 'store'])
+    router.get('login', [controllers.Session, 'create']).as('session.create')
+    router.post('login', [controllers.Session, 'store']).as('session.store')
   })
   .use(middleware.guest())
 
 /* logout */
 router
   .group(() => {
-    router.post('logout', [controllers.Session, 'destroy'])
+    router.post('logout', [controllers.Session, 'destroy']).as('session.destroy')
   })
   .use(middleware.auth())
 
@@ -70,4 +76,3 @@ router.get('/signup/client', [NewAccountController, 'createClient']).as('signup.
 router.get('/signup/gardener', [NewAccountController, 'createGardener']).as('signup.gardener')
 router.get('/signup/nursery', [NewAccountController, 'createNursery']).as('signup.nursery')
 router.post('/signup', [NewAccountController, 'store']).as('new_account.store')
-

@@ -1,13 +1,12 @@
 import User from '#models/user'
 import type { HttpContext } from '@adonisjs/core/http'
-import hash from '@adonisjs/core/services/hash'
 
 export default class SessionController {
   async create({ view }: HttpContext) {
     return view.render('pages/auth/login')
   }
 
-  async store({ request, response, session }: HttpContext) {
+  async store({ request, response, session, auth }: HttpContext) {
     const email = request.input('email')?.toLowerCase().trim()
     const password = request.input('password')
 
@@ -18,33 +17,21 @@ export default class SessionController {
       return response.redirect().back()
     }
 
-    const user = await User.findBy('email', email)
+    try {
+      const user = await User.verifyCredentials(email, password)
+      await auth.use('web').login(user)
 
-    if (!user) {
+      return response.redirect().toRoute('home')
+    } catch {
       session.flash('errors', {
         auth: ['Invalid credentials'],
       })
       return response.redirect().back()
     }
-
-    const ok = await hash.verify(user.password, password)
-
-    if (!ok) {
-      session.flash('errors', {
-        auth: ['Invalid credentials'],
-      })
-      return response.redirect().back()
-    }
-
-    session.put('user_id', user.id)
-    session.put('user_role', user.role)
-
-    return response.redirect().toRoute('home')
   }
 
-  async destroy({ session, response }: HttpContext) {
-    session.forget('user_id')
-    session.forget('user_role')
+  async destroy({ auth, response }: HttpContext) {
+    await auth.use('web').logout()
 
     return response.redirect().toRoute('session.create')
   }

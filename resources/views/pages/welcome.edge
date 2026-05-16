@@ -2,13 +2,14 @@
 @slot('title')
 <title>Plant Bud</title>
 @endslot
+@vite(['resources/js/tips.js'])
 
 <div class="relative z-10">
     <header class="fixed top-0 left-0 w-full z-50 px-6 lg:px-10 py-6">
         <div
             class="max-w-7xl mx-auto bg-white/10 backdrop-blur-xl border border-white/10 rounded-full px-6 py-4 flex items-center justify-between shadow-[0_10px_40px_rgba(0,0,0,0.15)]">
             <div class="flex items-center gap-4">
-                <img src="resources/images/essential/logo.png" class="w-14 hover:rotate-6 transition duration-500"
+                <img decoding="async" src="resources/images/essential/logo.png" class="w-14 hover:rotate-6 transition duration-500"
                     alt="">
                 <h1 class="text-2xl font-black text-white tracking-wide">Plant<span class="text-[#EDE7D6]"> Bud</span>
                 </h1>
@@ -58,7 +59,7 @@
     </header>
 
     <section class="relative min-h-screen flex items-center overflow-hidden pt-40 pb-24 px-6">
-        <img src="resources/images/welcome/header3.png" class="absolute inset-0 w-full h-full object-cover" alt="">
+        <img decoding="async" src="resources/images/welcome/header3.png" class="absolute inset-0 w-full h-full object-cover" alt="">
         <div class="absolute inset-0 bg-black/45"></div>
         <div class="absolute inset-0 bg-gradient-to-b from-[#1E3D19]/30 via-[#728B6F]/30 to-[#6B8C6C]"></div>
         <div class="relative z-20 max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center">
@@ -91,7 +92,7 @@
             </div>
             <div class="relative flex justify-center">
                 <div class="absolute w-[450px] h-[450px] bg-[#EDE7D6]/15 rounded-full blur-3xl animate-pulse"></div>
-                <img src="resources/images/essential/logo.png"
+                <img decoding="async" src="resources/images/essential/logo.png"
                     class="relative w-[320px] md:w-[420px] animate-float drop-shadow-[0_25px_60px_rgba(0,0,0,0.45)]"
                     alt="">
             </div>
@@ -126,7 +127,7 @@
                             <div class="flex justify-center">
                                 <div
                                     class="w-44 h-44 rounded-[2.5rem] bg-[#D5DCD4] shadow-2xl flex items-center justify-center rotate-3 group-hover:rotate-6 transition duration-500">
-                                    <img src="resources/images/welcome/first-icon.png" class="w-36 drop-shadow-lg"
+                                    <img loading="lazy" decoding="async" src="resources/images/welcome/first-icon.png" class="w-36 drop-shadow-lg"
                                         alt="">
                                 </div>
                             </div>
@@ -169,7 +170,7 @@
                             class="relative h-full bg-[#D5DCD4]/95 backdrop-blur-xl rounded-[2rem] p-6 shadow-2xl border border-white/40 text-center flex flex-col items-center justify-center hover:-translate-y-3 hover:scale-[1.02] transition duration-500">
                             <div
                                 class="w-20 h-20 rounded-3xl bg-white shadow-lg flex items-center justify-center mb-5 group-hover:rotate-6 transition duration-500">
-                                <img src="resources/images/welcome/{{ benefit.image }}" class="w-12" alt="">
+                                <img loading="lazy" decoding="async" src="resources/images/welcome/{{ benefit.image }}" class="w-12" alt="">
                             </div>
                             <p class="text-lg font-black text-[#1E3D19] leading-snug">{{ benefit.title }}<span
                                     class="block text-[#728B6F] font-bold mt-1">{{ benefit.subtitle }}</span></p>
@@ -185,7 +186,7 @@
                 <div class="flex-1 h-px bg-gradient-to-r from-transparent via-white/20 to-white/60"></div>
                 <div
                     class="w-20 h-20 rounded-full bg-white/10 backdrop-blur-xl border border-white/10 flex items-center justify-center shadow-xl">
-                    <img src="resources/images/essential/icono.png" class="w-20" alt="">
+                    <img loading="lazy" decoding="async" src="resources/images/essential/icono.png" class="w-20" alt="">
                 </div>
                 <div class="flex-1 h-px bg-gradient-to-r from-white/60 via-white/20 to-transparent"></div>
             </div>
@@ -211,7 +212,7 @@
                                 class="relative bg-white/10 backdrop-blur-md border border-white/10 p-8 rounded-[2rem] p-8 md:p-10 text-center shadow-2xl hover:-translate-y-2 transition duration-500">
                                 <div
                                     class="w-20 h-20 rounded-3xl bg-[#EDE7D6]/10 shadow-lg flex items-center justify-center mx-auto mb-5 group-hover:scale-110 group-hover:rotate-6 transition duration-500">
-                                    <img src="resources/images/welcome/{{ value.image }}" class="w-12" alt="">
+                                    <img loading="lazy" decoding="async" src="resources/images/welcome/{{ value.image }}" class="w-12" alt="">
                                 </div>
                                 <p class="text-white text-2xl font-black tracking-wide">{{ value.name }}</p>
                             </div>
@@ -221,7 +222,7 @@
                     <div class="hidden xl:flex absolute inset-0 items-center justify-center pointer-events-none">
                         <div
                             class="w-44 h-44 rounded-full bg-white/10 backdrop-blur-2xl border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.35)] flex items-center justify-center animate-float">
-                            <img src="resources/images/essential/logo.png" class="w-24" alt="">
+                            <img loading="lazy" decoding="async" src="resources/images/essential/logo.png" class="w-24" alt="">
                         </div>
                     </div>
                 </div>
@@ -259,7 +260,7 @@
                                     <div
                                         class="absolute inset-0 rounded-[1.75rem] bg-gradient-to-br from-white to-[#F8F6EF]">
                                     </div>
-                                    <img src="resources/images/welcome/{{ card.image }}"
+                                    <img loading="lazy" decoding="async" src="resources/images/welcome/{{ card.image }}"
                                         class="relative z-10 w-11 drop-shadow-sm" alt="">
                                 </div>
                                 <h3 class="text-3xl md:text-4xl font-black text-[#1E3D19] tracking-tight">

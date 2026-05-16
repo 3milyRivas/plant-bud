@@ -39,6 +39,12 @@ const bodyParserConfig = defineConfig({
    */
   json: {
     /**
+     * Allows the garden designer to send base64 image data to the
+     * background-removal endpoint without bypassing the main app.
+     */
+    limit: '20mb',
+
+    /**
      * Convert empty strings to null values.
      * Helps maintain consistent data types in your application.
      */

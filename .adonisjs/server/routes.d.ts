@@ -9,6 +9,7 @@ export type ScannedRoutes = {
     'maintenance': { paramsTuple?: []; params?: {} }
     'request': { paramsTuple?: []; params?: {} }
     'garden_designer.search_assets': { paramsTuple?: []; params?: {} }
+    'garden_designer.remove_background': { paramsTuple?: []; params?: {} }
     'plants.scan': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
     'session.store': { paramsTuple?: []; params?: {} }
@@ -23,6 +24,7 @@ export type ScannedRoutes = {
     'profile': { paramsTuple?: []; params?: {} }
     'maintenance': { paramsTuple?: []; params?: {} }
     'request': { paramsTuple?: []; params?: {} }
+    'garden_designer.search_assets': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
     'signup.client': { paramsTuple?: []; params?: {} }
     'signup.gardener': { paramsTuple?: []; params?: {} }
@@ -33,13 +35,14 @@ export type ScannedRoutes = {
     'profile': { paramsTuple?: []; params?: {} }
     'maintenance': { paramsTuple?: []; params?: {} }
     'request': { paramsTuple?: []; params?: {} }
+    'garden_designer.search_assets': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
     'signup.client': { paramsTuple?: []; params?: {} }
     'signup.gardener': { paramsTuple?: []; params?: {} }
     'signup.nursery': { paramsTuple?: []; params?: {} }
   }
   POST: {
-    'garden_designer.search_assets': { paramsTuple?: []; params?: {} }
+    'garden_designer.remove_background': { paramsTuple?: []; params?: {} }
     'plants.scan': { paramsTuple?: []; params?: {} }
     'session.store': { paramsTuple?: []; params?: {} }
     'session.destroy': { paramsTuple?: []; params?: {} }
