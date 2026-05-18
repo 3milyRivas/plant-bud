@@ -11,8 +11,6 @@ router.on('/register').render('pages/register')
 router.on('/araceae').render('pages/araceae')
 router.on('/amaryllidaceae').render('pages/amaryllidaceae')
 
-router.on('/test').render('pages/newwelcome')
-
 router.on('/homepage2').render('pages/client/homepage2')
 
 router.on('/community').render('pages/community')
