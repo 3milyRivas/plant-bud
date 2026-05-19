@@ -74,3 +74,5 @@ router.get('/signup/client', [NewAccountController, 'createClient']).as('signup.
 router.get('/signup/gardener', [NewAccountController, 'createGardener']).as('signup.gardener')
 router.get('/signup/nursery', [NewAccountController, 'createNursery']).as('signup.nursery')
 router.post('/signup', [NewAccountController, 'store']).as('new_account.store')
+
+
