@@ -1,11 +1,9 @@
 @layout()
 
 @slot('title')
-<title>Ornamentals</title>
+    <title>Ornamentals</title>
 @endslot
 @vite(['resources/js/categories.js'])
-
-
 
 
 
@@ -139,7 +137,7 @@
 
 
 <div class="flex justify-center pt-12 pb-20">
-    <div class="flex gap-20 max-w-[1500px] w-full px-10">
+    <div class="flex justify-center gap-20 max-w-[1500px] w-full px-10">
 
         <div
             class="sticky top-[25px] shrink-0 w-[105px] h-[400px] rounded-[50px] bg-[#D3DCD3] backdrop-blur-xl border border-white/30 shadow-[#48AE4D] flex flex-col items-center justify-around">
@@ -162,1295 +160,25 @@
             </a>
         </div>
 
-
-
-        <div id="araceae" class="category-section grid grid-rows-6 gap-12">
-
-            <div class="flex gap-12">
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/araceae/adventure.png"
-                                alt="Adventure plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Adventure
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Anthurium andraeanum
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
+            @each(family in ornamentalPlants)
+                <div id={family} class="category-section grid grid-cols-3 gap-12">
+                    @each(plant in family)
+                        @component('components/plants/plant-card', { 
+                            imageSrc: plant.image,
+                            imageAlt: plant.imageAlt,
+                            title: plant.name,
+                            scientificName: plant.scientificName
+                        })
+                        @end
+                    @endeach
                 </div>
+            @end
+            
 
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
 
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/araceae/dieff.png"
-                                alt="Dieffenbachia seguine plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
 
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Dieffenbachia seguine
-                        </h3>
 
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Dieffenbachia seguine 'Sparkle'
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-
-
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/araceae/filo.png"
-                                alt="Philodendron bipinnatifidum plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Filodendro Paraguayo
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Philodendron bipinnatifidum
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-
-
-            <div class="flex gap-12">
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/araceae/variegated.png"
-                                alt="Variegated Snake plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Variegated Snake
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Sansevieria trifasciata var.laurentii
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/araceae/zebra.png"
-                                alt="Zebra plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Zebra Plant
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Goeppertia zebrina
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/araceae/swiss.png"
-                                alt="Swiss Cheese plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Swiss Cheese
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Monstera deliciosa
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-
-
-            <div class="flex gap-12">
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/araceae/heartleaf.png"
-                                alt="Heartleaf Philodendron plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Heartleaf Philodendron
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Philodendron hederaceum
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/araceae/peace.png"
-                                alt="Peace Lily plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Peace Lily
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Spathiphyllum wallisii
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/araceae/calla.png"
-                                alt="Calla Lily plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Calla Lily
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Zantedeschia aethiopica
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-
-
-            <div class="flex gap-12">
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/araceae/red.png"
-                                alt="Red Aglaonema plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Red Aglaonema
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Aglaonema 'Siam Aurora'
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/araceae/dumb.png"
-                                alt="Dumb Cane Camille plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Dumb Cane Camille
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Dieffenbachia seguine 'Camille'
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/araceae/evergreen.png"
-                                alt="Chinese Evergreen plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Chinese Evergreen
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Aglaonema commutatum
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-
-
-            <div class="flex gap-12">
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/araceae/photos.png"
-                                alt="Pothos 'Njoy' plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Pothos 'Njoy'
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Epipremnum aureum 'Njoy'
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/araceae/golden.png"
-                                alt="Golden pothos plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Golden pothos
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Epipremnum aureum
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-
-
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/araceae/alocasia.png"
-                                alt="Alocasia Macrorrhizos plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Alocasia Macrorrhizos
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Alocasia macrorrhizos 'Stingray'
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-
-
-            <div class="flex gap-12">
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/araceae/taro.png"
-                                alt="Taro plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Taro
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Colocasia esculenta
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-
-
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/araceae/zanzibar.png"
-                                alt="Zanzibar Gem plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Zanzibar Gem
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Zamioculcas zamiifolia
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/araceae/flamingo.png"
-                                alt="Flamingo Lily plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Flamingo Lily
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Anthurium andraeanum
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-
-
-
-
-        <div id="apocynaceae" class="category-section hidden grid grid-rows-6 gap-12">
-
-
-            <div class="flex gap-12">
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/apocynaceae/olander.png"
-                                alt="Olander plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Olander
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Nerium oleander
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/apocynaceae/provence.png"
-                                alt="Oleander “Provence” plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Oleander “Provence”
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Nerium oleander 'Provence'
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-
-
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/apocynaceae/common.png"
-                                alt="Common Periwinkle plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Common Periwinkle
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Tulipa gesneriana
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-
-
-            <div class="flex gap-12">
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/apocynaceae/nosegay.png"
-                                alt="Nosegay Tree plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Nosegay Tree
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Plumeria alba
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/apocynaceae/trumpet.png"
-                                alt="Golden Trumpet plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Golden Trumpet
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Allamanda cathartica
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async"
-                                src="resources/images/plants/apocynaceae/madagascar.png" alt="Swiss Cheese plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Madagascar Periwinkle
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Catharanthus roseus
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-
-
-            <div class="flex gap-12">
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/apocynaceae/purple.png"
-                                alt="Purple Allamanda plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Purple Allamanda
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Allamanda blanchetii
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/apocynaceae/cascabela.png"
-                                alt="Cascabela Ovata plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Cascabela Ovata
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Cascabela ovata
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/apocynaceae/redd.png"
-                                alt="Red Frangipani plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Red Frangipani
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Plumeria rubra
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-
-
-            <div class="flex gap-12">
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/apocynaceae/loroco.png"
-                                alt="loroco Vine plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            loroco Vine
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Fernaldia pandurata
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/apocynaceae/wood.png"
-                                alt="Serpentine Wood plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Serpentine Wood
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Rauvolfia serpentina
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/apocynaceae/star.png"
-                                alt="Star Jasmineplant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Star Jasmine
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Trachelospermum jasminoides
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-
-
-            <div class="flex gap-12">
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/apocynaceae/vall.png"
-                                alt="Smooth Vallesia plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Smooth Vallesia
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Vallesia glabra
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/apocynaceae/xxx.png"
-                                alt="Waxflower plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Waxflower
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Chamelaucium
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-
-
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/apocynaceae/natal.png"
-                                alt="Natal Plum plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Natal Plum
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Carissa macrocarpa
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-
-
-            <div class="flex gap-12">
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/apocynaceae/blue-star.png"
-                                alt="Eastern Bluestar plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Eastern Bluestar
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Amsonia tabernaemontana
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-
-
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/apocynaceae/rock.png"
-                                alt="Rocktrumpet plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Rocktrumpet
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Mandevilla × amabilis 'Alice du Pont'
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async"
-                                src="resources/images/plants/apocynaceae/frangipani.png" alt="Red Frangipani plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Red Frangipani
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Plumeria rubra 'Hawaiian Opal Pink'
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
+        
 
 
 
@@ -2141,15 +869,15 @@
 
                     <div class="relative p-5">
                         <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/rutaceae/curry.png"
-                                alt="Curry Leaf Tree plant"
+                            <img loading="lazy" decoding="async" src="resources/images/plants/rubiaceae/great.png"
+                                alt="Great Morinda plant"
                                 class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
                         </div>
                     </div>
 
                     <div class="flex flex-col px-6 pb-6">
                         <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Curry Leaf Treeee
+                            Great Morinda
                         </h3>
 
                         <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
@@ -2158,7 +886,7 @@
                                 Scientific Name
                             </p>
                             <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Murraya koenigii
+                                Morinda citrifolia
                             </p>
                         </div>
 
@@ -2175,7 +903,7 @@
 
                     <div class="relative p-5">
                         <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/rutaceae/rue.png"
+                            <img loading="lazy" decoding="async" src="resources/images/plants/rubiaceae/fire.png"
                                 alt="Rue plant"
                                 class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
                         </div>
@@ -2183,7 +911,7 @@
 
                     <div class="flex flex-col px-6 pb-6">
                         <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Rue
+                            Firebush
                         </h3>
 
                         <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
@@ -2192,7 +920,7 @@
                                 Scientific Name
                             </p>
                             <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Ruta graveolens
+                                Hamelia patens
                             </p>
                         </div>
 
@@ -2210,15 +938,15 @@
 
                     <div class="relative p-5">
                         <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/rutaceae/gas.png"
-                                alt="Gas plant 'Albiflorus'"
+                            <img loading="lazy" decoding="async" src="resources/images/plants/rubiaceae/robu.png"
+                                alt="Robusta Coffee Plant"
                                 class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
                         </div>
                     </div>
 
                     <div class="flex flex-col px-6 pb-6">
                         <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Gas plant 'Albiflorus'
+                            Robusta Coffee
                         </h3>
 
                         <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
@@ -2227,113 +955,7 @@
                                 Scientific Name
                             </p>
                             <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Dictamnus albus 'Albiflorus'
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-
-
-            <div class="flex gap-12">
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/rutaceae/gass.png"
-                                alt="Gas plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Gas Plant
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Dictamnus albus
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/rutaceae/kum.png"
-                                alt="Kumquat plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Kumquat
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Citrus japonica
-                            </p>
-                        </div>
-
-                        <button type="button"
-                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
-                            Acquire
-                        </button>
-                    </div>
-                </div>
-
-                <div
-                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
-
-                    <div class="relative p-5">
-                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/rutaceae/white.png"
-                                alt="White Sapote plant"
-                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col px-6 pb-6">
-                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            White Sapote
-                        </h3>
-
-                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
-                        <div class="mt-5">
-                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
-                                Scientific Name
-                            </p>
-                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Casimiroa edulis
+                                Coffea canephora
                             </p>
                         </div>
 
@@ -2354,15 +976,15 @@
 
                     <div class="relative p-5">
                         <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/rutaceae/sich.png"
-                                alt="Sichuan Pepper plant"
+                            <img loading="lazy" decoding="async" src="resources/images/plants/rubiaceae/pan.png"
+                                alt="Panama Rose plant"
                                 class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
                         </div>
                     </div>
 
                     <div class="flex flex-col px-6 pb-6">
                         <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Sichuan Pepper
+                           Panama Rose
                         </h3>
 
                         <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
@@ -2371,7 +993,7 @@
                                 Scientific Name
                             </p>
                             <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Zanthoxylum piperitum
+                                Rondeletia odorata
                             </p>
                         </div>
 
@@ -2388,15 +1010,121 @@
 
                     <div class="relative p-5">
                         <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/rutaceae/cas.png"
-                                alt="Murraya paniculata plant"
+                            <img loading="lazy" decoding="async" src="resources/images/plants/rubiaceae/coff.png"
+                                alt="Arabian Coffee plant"
                                 class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
                         </div>
                     </div>
 
                     <div class="flex flex-col px-6 pb-6">
                         <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Murraya paniculata
+                            Arabian Coffee
+                        </h3>
+
+                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
+                        <div class="mt-5">
+                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
+                                Scientific Name
+                            </p>
+                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
+                               Coffea arabica
+                            </p>
+                        </div>
+
+                        <button type="button"
+                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
+                            Acquire
+                        </button>
+                    </div>
+                </div>
+
+                <div
+                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
+                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
+
+                    <div class="relative p-5">
+                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
+                            <img loading="lazy" decoding="async" src="resources/images/plants/rubiaceae/indigo.png"
+                                alt="White Indigo Berry plant"
+                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col px-6 pb-6">
+                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
+                           White Indigo Berry
+                        </h3>
+
+                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
+                        <div class="mt-5">
+                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
+                                Scientific Name
+                            </p>
+                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
+                                Randia aculeata
+                            </p>
+                        </div>
+
+                        <button type="button"
+                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
+                            Acquire
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="flex gap-12">
+                <div
+                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
+                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
+
+                    <div class="relative p-5">
+                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
+                            <img loading="lazy" decoding="async" src="resources/images/plants/rubiaceae/wild.png"
+                                alt="Wild Coffee plant"
+                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col px-6 pb-6">
+                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
+                            Wild Coffee
+                        </h3>
+
+                        <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
+                        <div class="mt-5">
+                            <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
+                                Scientific Name
+                            </p>
+                            <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
+                                Psychotria nervosa
+                            </p>
+                        </div>
+
+                        <button type="button"
+                            class="mt-auto rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
+                            Acquire
+                        </button>
+                    </div>
+                </div>
+
+                <div
+                    class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
+                    <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
+
+                    <div class="relative p-5">
+                        <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
+                            <img loading="lazy" decoding="async" src="resources/images/plants/rubiaceae/co.png"
+                                alt="Common Buttonbush plant"
+                                class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col px-6 pb-6">
+                        <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
+                            Common Buttonbush
                         </h3>
 
                         <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
@@ -2422,15 +1150,15 @@
 
                     <div class="relative p-5">
                         <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/rutaceae/bal.png"
-                                alt="Balsam Torchwood plant"
+                            <img loading="lazy" decoding="async" src="resources/images/plants/rubiaceae/west.png"
+                                alt="West Indian Milkberry plant"
                                 class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
                         </div>
                     </div>
 
                     <div class="flex flex-col px-6 pb-6">
                         <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Balsam Torchwood
+                            West Indian Milkberry
                         </h3>
 
                         <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
@@ -2439,7 +1167,7 @@
                                 Scientific Name
                             </p>
                             <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Amyris balsamifera
+                                Chiococca alba
                             </p>
                         </div>
 
@@ -2460,15 +1188,15 @@
 
                     <div class="relative p-5">
                         <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/rutaceae/mex.png"
-                                alt="Mexican Orange plant"
+                            <img loading="lazy" decoding="async" src="resources/images/plants/rubiaceae/sea.png"
+                                alt="Sea randa plant"
                                 class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
                         </div>
                     </div>
 
                     <div class="flex flex-col px-6 pb-6">
                         <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Mexican Orange
+                            Sea randa
                         </h3>
 
                         <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
@@ -2477,7 +1205,7 @@
                                 Scientific Name
                             </p>
                             <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Choisya ternata
+                                Guettarda speciosa
                             </p>
                         </div>
 
@@ -2494,15 +1222,15 @@
 
                     <div class="relative p-5">
                         <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/rutaceae/com.png"
-                                alt="Common Rue plant"
+                            <img loading="lazy" decoding="async" src="resources/images/plants/rubiaceae/gal.png"
+                                alt="Redgal plant"
                                 class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
                         </div>
                     </div>
 
                     <div class="flex flex-col px-6 pb-6">
                         <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Common Rue
+                            Redgal
                         </h3>
 
                         <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
@@ -2511,7 +1239,7 @@
                                 Scientific Name
                             </p>
                             <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Ruta graveolens 'Jackman's Blue'
+                                Morinda royoc
                             </p>
                         </div>
 
@@ -2528,15 +1256,15 @@
 
                     <div class="relative p-5">
                         <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async" src="resources/images/plants/rutaceae/lime.png"
-                                alt="Lime Prickly Ash plant"
+                            <img loading="lazy" decoding="async" src="resources/images/plants/rubiaceae/vine.png"
+                                alt="Firecracker Vine Ash plant"
                                 class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
                         </div>
                     </div>
 
                     <div class="flex flex-col px-6 pb-6">
                         <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Lime Prickly Ash
+                            Firecracker Vine
                         </h3>
 
                         <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
@@ -2545,7 +1273,7 @@
                                 Scientific Name
                             </p>
                             <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                                Zanthoxylum fagara
+                               Manettia cordifolia
                             </p>
                         </div>
 
@@ -2567,14 +1295,14 @@
                     <div class="relative p-5">
                         <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
                             <img loading="lazy" decoding="async" src="resources/images/plants/rutaceae/ash.png"
-                                alt="Common Prickly Ash plant"
+                                alt="Ashy Sabicea plant"
                                 class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
                         </div>
                     </div>
 
                     <div class="flex flex-col px-6 pb-6">
                         <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                            Common Prickly Ash
+                            Ashy Sabicea
                         </h3>
 
                         <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>

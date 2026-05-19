@@ -1,6 +1,7 @@
 import { middleware } from '#start/kernel'
 import { controllers } from '#generated/controllers'
 import router from '@adonisjs/core/services/router'
+import ornamentalPlants from '#data/ornamentalPlants'
 const GardenDesignerController = () => import('#controllers/garden_designers_controller')
 const NewAccountController = () => import('#controllers/new_account_controller')
 const PlantsController = () => import('#controllers/plants_controller')
@@ -8,7 +9,7 @@ const PlantsController = () => import('#controllers/plants_controller')
 /* general views */
 router.on('/').render('pages/welcome').as('home')
 router.on('/register').render('pages/register')
-router.on('/araceae').render('pages/araceae')
+router.on('/araceae').render('pages/araceae', { ornamentalPlants })
 router.on('/amaryllidaceae').render('pages/amaryllidaceae')
 
 router.on('/homepage2').render('pages/client/homepage2')
