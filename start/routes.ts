@@ -2,6 +2,7 @@ import { middleware } from '#start/kernel'
 import { controllers } from '#generated/controllers'
 import router from '@adonisjs/core/services/router'
 import ornamentalPlants from '#data/ornamentalPlants'
+import nurseries from '#data/nurseries'
 const GardenDesignerController = () => import('#controllers/garden_designers_controller')
 const NewAccountController = () => import('#controllers/new_account_controller')
 const PlantsController = () => import('#controllers/plants_controller')
@@ -25,6 +26,7 @@ router.on('/request').render('pages/services/request').as('request')
 router.on('/care3').render('pages/client/Plants/care3')
 router.on('/care1').render('pages/client/Plants/care1')
 router.on('/care2').render('pages/client/Plants/care2')
+router.on('/catalog').render('pages/client/Plants/nurcata')
 router.on('/designer').render('pages/garden/designer')
 router
   .get('/designer/search-assets', [GardenDesignerController, 'searchAssets'])
@@ -42,7 +44,7 @@ router.post('/plants/scan', [PlantsController, 'scan']).as('plants.scan')
   })
   .use([middleware.auth(), middleware.role(['client'])])*/
 router.on('/homepage').render('pages/client/homepage')
-router.on('/nurseries').render('pages/client/nurseries')
+router.on('/nurseries').render('pages/client/nurseries', { nurseries })
 /* gardeners views */
 router
   .group(() => {
@@ -75,5 +77,3 @@ router.get('/signup/client', [NewAccountController, 'createClient']).as('signup.
 router.get('/signup/gardener', [NewAccountController, 'createGardener']).as('signup.gardener')
 router.get('/signup/nursery', [NewAccountController, 'createNursery']).as('signup.nursery')
 router.post('/signup', [NewAccountController, 'store']).as('new_account.store')
-
-
