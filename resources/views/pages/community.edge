@@ -1,17 +1,17 @@
 @layout()
 
 @slot('title')
-<title>Ornamentals</title>
+<title>Home</title>
 @endslot
 @vite(['resources/js/categories.js'])
 
 
 <div class="bg-[#6C8E6B] min-h-screen flex flex-col">
-  <div class="sticky top-0 mt-12 left-0 w-full z-50 px-10">
+  <div class="fixed top-0 left-0 w-full z-50 px-6 lg:px-10 py-6">
     <div class="backdrop-blur-xl bg-white/20 border border-white/30
               rounded-full px-8 py-4 flex items-center justify-between shadow-lg">
 
-      <div class="w-10 h-10 bg-[url('resources/images/essential/logo.png')] bg-contain bg-no-repeat"></div>
+      <div class="w-10 h-10 bg-[url('/resources/images/essential/logo.png')] bg-contain bg-no-repeat"></div>
 
       <div class="flex items-center gap-6">
         <div class="bg-white/70 rounded-full px-6 py-2 w-[280px]">
@@ -30,24 +30,24 @@
       </div>
 
       <div class="flex items-center space-x-2 ml-4">
-        <div class="w-8 h-8 bg-[url('resources/img/img3.png')] bg-contain bg-no-repeat"></div>
+        <div class="w-8 h-8 bg-[url('/resources/img/img3.png')] bg-contain bg-no-repeat"></div>
         <span class="text-[#113E14] font-bold text-lg">Community</span>
-        <div class="w-8 h-8 bg-[url('resources/img/img3.png')] -scale-x-100 bg-contain bg-no-repeat"></div>
+        <div class="w-8 h-8 bg-[url('/resources/img/img3.png')] -scale-x-100 bg-contain bg-no-repeat"></div>
       </div>
 
       <button
         class="flex items-center space-x-2 bg-white rounded-xl px-4 py-2 shadow-md hover:bg-white/70 transition active:bg-green-900 active:text-white active:shadow-lg active:translate-y-1 focus:outline-none">
-        <div class="w-5 h-5 bg-[url('resources/img/img4.png')] bg-contain bg-no-repeat"></div>
+        <div class="w-5 h-5 bg-[url('/resources/img/img4.png')] bg-contain bg-no-repeat"></div>
         <span class="font-semibold text-sm">Home</span>
       </button>
 
       <button onclick="window.location.href='/notification'"
-        class="w-8 h-8 bg-[url('resources/img/campana.png')] bg-contain bg-no-repeat rounded-lg transition"></button>
+        class="w-8 h-8 bg-[url('/resources/img/campana.png')] bg-contain bg-no-repeat rounded-lg transition"></button>
       <button onclick="window.location.href='/favorites'"
-        class="w-8 h-8 bg-[url('resources/img/fav.png')] bg-contain bg-no-repeat rounded-lg transition"></button>
-      
+        class="w-8 h-8 bg-[url('/resources/img/fav.png')] bg-contain bg-no-repeat rounded-lg transition"></button>
+
       <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 bg-[url('resources/img/phot.jpg')] bg-cover bg-center rounded-full"></div>
+        <div class="w-10 h-10 bg-[url('/resources/img/phot.jpg')] bg-cover bg-center rounded-full"></div>
         <div class="flex flex-col">
           <span class="text-black/60 text-sm font-semibold">María Antonieta de las Nieves</span>
           <a href="#" class="text-blue-600 hover:underline text-xs">Switch</a>
@@ -59,9 +59,9 @@
 
 
 
-  <div class="mx-14">
+  <div class="mx-14 pt-26">
     <div
-      class="relative bg-[url('resources/images/plant-budd.png')] bg-cover bg-center h-[60vh] w-full rounded-xl shadow-lg mt-8">
+      class="relative bg-[url('/resources/images/plant-budd.png')] bg-cover bg-center h-[60vh] w-full rounded-xl shadow-lg mt-8">
 
       <div class="absolute inset-0 flex flex-col justify-center items-start px-12 space-y-4">
         <h2
@@ -82,11 +82,11 @@
     <!--esta wea es la izquierda (el coso de perfil y woods)-->
     <div class="w-64 space-y-6">
       <div
-        class="rounded-3xl overflow-hidden shadow-md relative backdrop-blur-xl bg-white/20 border border-white/30 px-3 pt-3">
-        <div class="rounded-xl h-40 bg-[url('resources/img/flo.jpg')] bg-cover bg-center"></div>
+        class=" sticky top-40 rounded-3xl overflow-hidden shadow-md relative backdrop-blur-xl bg-white/20 border border-white/30 px-3 pt-3">
+        <div class="rounded-xl h-40 bg-[url('/resources/img/flo.jpg')] bg-cover bg-center"></div>
         <div class="absolute left-1/2 top-20 transform -translate-x-1/2">
           <div
-            class="w-24 h-24 bg-[url('resources/img/phot.jpg')] bg-cover bg-center rounded-full border-4 border-white shadow-md">
+            class="w-24 h-24 bg-[url('/resources/img/phot.jpg')] bg-cover bg-center rounded-full border-4 border-white shadow-md">
           </div>
         </div>
 
@@ -123,7 +123,7 @@
     <div class="flex-1 space-y-6">
       <div class="backdrop-blur-xl bg-white/20 border border-white/30 rounded-3xl p-4 shadow-md space-y-4">
         <div class="flex items-center space-x-6">
-          <div class="w-12 h-12 bg-[url('resources/img/phot.jpg')] bg-cover bg-center rounded-full"></div>
+          <div class="w-12 h-12 bg-[url('/resources/img/phot.jpg')] bg-cover bg-center rounded-full"></div>
 
 
           <div class="flex bg-[#FBFBFB] items-center grow rounded-lg px-4 py-2 shadow-sm">
@@ -177,7 +177,7 @@
       <!-- Publicaciones -->
       <div class="space-y-4">
         <div
-          class="max-w-full h-400 px-20 mx-auto backdrop-blur-xl bg-white/20 border border-white/30 rounded-3xl shadow-lg p-4 space-y-4">
+          class="max-w-full px-20 backdrop-blur-xl bg-white/20 border border-white/30 rounded-3xl shadow-lg p-4 space-y-4">
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-3">
               <div class="w-12 h-12 bg-[url('/resources/img/aleja.jpg')] bg-cover bg-center rounded-full"></div>
@@ -203,7 +203,7 @@
           </p>
 
 
-          <div class="rounded-xl w-full h-96 bg-[url('/resources/img/flo.jpg')] bg-cover bg-center"></div>
+          <div class="rounded-xl w-full h-96 bg-[url('/resources/img/flo.jpg')] bg-container bg-center"></div>
 
 
 
@@ -235,7 +235,7 @@
         </div>
 
         <div
-          class="max-w-full h-400 px-20 mx-auto backdrop-blur-xl bg-white/20 border border-white/30 rounded-3xl shadow-lg p-4 space-y-4">
+          class="max-w-full px-20 backdrop-blur-xl bg-white/20 border border-white/30 rounded-3xl shadow-lg p-4 space-y-4">
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-3">
               <div class="w-12 h-12 bg-[url('/resources/img2/person.jpg')] bg-cover bg-center rounded-full"></div>
@@ -293,7 +293,7 @@
         </div>
 
         <div
-          class="max-w-full h-400 px-20 mx-auto backdrop-blur-xl bg-white/20 border border-white/30 rounded-3xl shadow-lg p-4 space-y-4">
+          class="max-w-full px-20 backdrop-blur-xl bg-white/20 border border-white/30 rounded-3xl shadow-lg p-4 space-y-4">
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-3">
               <div class="w-12 h-12 bg-[url('/resources/img2/person1.jpg')] bg-cover bg-center rounded-full"></div>
@@ -351,7 +351,7 @@
         </div>
 
         <div
-          class="max-w-full h-400 px-20 mx-auto backdrop-blur-xl bg-white/20 border border-white/30 rounded-3xl shadow-lg p-4 space-y-4">
+          class="max-w-full px-20 backdrop-blur-xl bg-white/20 border border-white/30 rounded-3xl shadow-lg p-4 space-y-4">
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-3">
               <div class="w-12 h-12 bg-[url('/resources/img2/person2.jpg')] bg-cover bg-center rounded-full"></div>
@@ -413,8 +413,8 @@
     </div>
 
     <!-- Columna derecha-->
-    <div class="w-64 space-y-6">
-      <div class="m-3 space-y-3 pb-3 backdrop-blur-xl bg-white/20 border border-white/30 rounded-3xl p-3 max-w-[300px]">
+    <aside class="sticky top-28 self-start max-h-[calc(100vh-8rem)] overflow-y-auto space-y-4 [&::-webkit-scrollbar]:hidden [scrollbar-width:none] [-ms-overflow-style:none]">
+      <div class="m-3 space-y-4 pb-3 backdrop-blur-xl bg-white/20 border border-white/30 rounded-3xl p-3 max-w-[300px]">
         <!--Activity-->
 
         <div class="flex items-center justify-between">
@@ -475,7 +475,7 @@
           </div>
 
 
-          <div class="w-10 h-10 rounded-lg bg-cover bg-center bg-[url('resources/img/flower3.jpg')]"></div>
+          <div class="w-10 h-10 rounded-lg bg-cover bg-center bg-[url('/resources/img/flower3.jpg')]"></div>
         </div>
 
         <h3 class="text-xs font-bold text-black pt-1">
@@ -643,7 +643,7 @@
         </div>
 
       </div>
-    </div>
+    </aside>
   </div>
 </div>
 

@@ -1,20 +1,17 @@
-<!doctype html>
-<html lang="en">
+@layout()
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <title>Notifications</title>
-</head>
+@slot('title')
+<title>Notifications</title>
+@endslot
+@vite(['resources/js/categories.js'])
 
-<body class="bg-[#6C8E6B] min-h-screen flex flex-col">
-    <div class="sticky top-0 mt-12 left-0 w-full z-50 px-10">
+<div class="bg-[#6C8E6B] min-h-screen flex flex-col">
+    <div class="fixed top-0 left-0 w-full z-50 px-6 lg:px-10 py-6">
         <div class="backdrop-blur-xl bg-white/20 border border-white/30
               rounded-full px-8 py-4 flex items-center justify-between shadow-lg">
 
 
-            <div class="w-10 h-10 bg-[url('resources/images/essential/logo.png')] bg-contain bg-no-repeat"></div>
+            <div class="w-10 h-10 bg-[url('/resources/images/essential/logo.png')] bg-contain bg-no-repeat"></div>
 
             <div class="flex items-center gap-6">
 
@@ -35,30 +32,30 @@
 
 
                 <div class="flex items-center space-x-2 ml-4">
-                    <div class="w-8 h-8 bg-[url('resources/img/img3.png')] bg-contain bg-no-repeat"></div>
+                    <div class="w-8 h-8 bg-[url('/resources/img/img3.png')] bg-contain bg-no-repeat"></div>
                     <span class="text-[#113E14] font-bold text-lg">Notifications</span>
-                    <div class="w-8 h-8 bg-[url('resources/img/img3.png')] -scale-x-100 bg-contain bg-no-repeat"></div>
+                    <div class="w-8 h-8 bg-[url('/resources/img/img3.png')] -scale-x-100 bg-contain bg-no-repeat"></div>
                 </div>
 
 
                 <button onclick="window.location.href='/community'"
-                    class="w-8 h-8 bg-[url('resources/img/home2.png')] bg-contain bg-no-repeat rounded-lg transition"></button>
+                    class="w-8 h-8 bg-[url('/resources/img/home2.png')] bg-contain bg-no-repeat rounded-lg transition"></button>
 
 
                 <button
                     class="flex items-center space-x-2 bg-white rounded-xl px-4 py-2 shadow-md hover:bg-white/70 transition active:bg-green-900 active:text-white active:shadow-lg active:translate-y-1 focus:outline-none">
-                    <div class="w-5 h-5 bg-[url('resources/img/campana2.png')] bg-contain bg-no-repeat"></div>
+                    <div class="w-5 h-5 bg-[url('/resources/img/campana2.png')] bg-contain bg-no-repeat"></div>
                     <span class="font-semibold text-sm">Notifications</span>
                 </button>
 
 
                 <button onclick="window.location.href='/favorites'"
-                    class="w-8 h-8 bg-[url('resources/img/fav.png')] bg-contain bg-no-repeat rounded-lg transition"></button>
+                    class="w-8 h-8 bg-[url('/resources/img/fav.png')] bg-contain bg-no-repeat rounded-lg transition"></button>
             </div>
 
 
             <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 bg-[url('resources/img/phot.jpg')] bg-cover bg-center rounded-full"></div>
+                <div class="w-10 h-10 bg-[url('/resources/img/phot.jpg')] bg-cover bg-center rounded-full"></div>
                 <div class="flex flex-col">
                     <span class="text-black/60 text-sm font-semibold">María Antonieta de las Nieves</span>
                     <a href="#" class="text-blue-600 hover:underline text-xs">Switch</a>
@@ -68,9 +65,9 @@
     </div>
 
 
-    <div class="mx-14">
+    <div class="mx-14 pt-26">
         <div
-            class="relative bg-[url('resources/images/plant-budd.png')] bg-cover bg-center h-[60vh] w-full rounded-xl shadow-lg mt-8">
+            class="relative bg-[url('/resources/images/plant-budd.png')] bg-cover bg-center h-[60vh] w-full rounded-xl shadow-lg mt-8">
 
             <div class="absolute inset-0 flex flex-col justify-center items-start px-12 space-y-4">
                 <h2
@@ -102,10 +99,10 @@
                     <h2 class="text-xl font-bold">Activity</h2>
 
                     <div class="flex items-center space-x-2">
-                        <div class="w-[600px] h-[1px] bg-[url('resources/img/line.png')] bg-cover bg-center"></div>
+                        <div class="w-[600px] h-[1px] bg-[url('/resources/img/line.png')] bg-cover bg-center"></div>
                         <span class="text-white text-sm font-semibold">Sort by</span>
                         <span class="text-black text-sm font-semibold">Recent</span>
-                        <div class="w-4 h-4 bg-[url('resources/img/row.png')] bg-contain bg-no-repeat"></div>
+                        <div class="w-4 h-4 bg-[url('/resources/img/row.png')] bg-contain bg-no-repeat"></div>
                     </div>
                 </div>
 
@@ -117,7 +114,7 @@
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-4">
                             <div class="w-12 h-12 rounded-full bg-cover bg-center"
-                                style="background-image:url('resources/img/phot.jpg')"></div>
+                                style="background-image:url('/resources/img/phot.jpg')"></div>
                             <div>
                                 <span class="font-semibold">Deraa</span>
                                 <span class="text-gray-600"> empezó a seguirte</span>
@@ -131,7 +128,7 @@
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-4">
                             <div class="w-12 h-12 rounded-full bg-cover bg-center"
-                                style="background-image:url('resources/img/person2.jpg')"></div>
+                                style="background-image:url('/resources/img/person2.jpg')"></div>
                             <div>
                                 <span class="font-semibold">Ju4nit0</span>
                                 <span class="text-gray-600"> le dio like a tu foto</span>
@@ -140,7 +137,7 @@
 
 
                         <div class="w-12 h-12 rounded-md bg-cover bg-center"
-                            style="background-image:url('resources/img/flower3.jpg')"></div>
+                            style="background-image:url('/resources/img/flower3.jpg')"></div>
                     </div>
 
                 </div>
@@ -151,7 +148,7 @@
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-4">
                             <div class="w-12 h-12 rounded-full bg-cover bg-center"
-                                style="background-image:url('resources/img/person4.jpg')"></div>
+                                style="background-image:url('/resources/img/person4.jpg')"></div>
                             <div>
                                 <span class="font-semibold">Marquez</span>
                                 <span class="text-gray-600"> le dio like a tu foto</span>
@@ -159,7 +156,7 @@
                         </div>
 
                         <div class="w-12 h-12 rounded-md bg-cover bg-center"
-                            style="background-image:url('resources/img/flower5.jpg')"></div>
+                            style="background-image:url('/resources/img/flower5.jpg')"></div>
                     </div>
                 </div>
 
@@ -173,7 +170,7 @@
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-3">
                             <div
-                                class="w-10 h-10 bg-[url('resources/img/person6.jpg')] bg-cover bg-center rounded-full">
+                                class="w-10 h-10 bg-[url('/resources/img/person6.jpg')] bg-cover bg-center rounded-full">
                             </div>
                             <span class="font-semibold">Carla Méndez</span>
                         </div>
@@ -183,7 +180,7 @@
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-3">
                             <div
-                                class="w-10 h-10 bg-[url('resources/img/person4.jpg')] bg-cover bg-center rounded-full">
+                                class="w-10 h-10 bg-[url('/resources/img/person4.jpg')] bg-cover bg-center rounded-full">
                             </div>
                             <span class="font-semibold">Tatiana Zaldaña</span>
                         </div>
@@ -193,7 +190,7 @@
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-3">
                             <div
-                                class="w-10 h-10 bg-[url('resources/img/person5.jpg')] bg-cover bg-center rounded-full">
+                                class="w-10 h-10 bg-[url('/resources/img/person5.jpg')] bg-cover bg-center rounded-full">
                             </div>
                             <span class="font-semibold">Dalia Rodriguez</span>
                         </div>
@@ -208,6 +205,6 @@
 
 
 
-</body>
+</div>
 
-</html>
+@end

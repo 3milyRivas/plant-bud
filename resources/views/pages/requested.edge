@@ -1,12 +1,12 @@
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <title>Notification</title>
-</head>
+@layout()
 
-<body class="bg-[#6B8C6C] min-h-screen flex flex-col">
+@slot('title')
+<title>Notifications</title>
+@endslot
+@vite(['resources/js/categories.js'])
+
+<div class="bg-[#6B8C6C] min-h-screen flex flex-col">
 
   <div class="sticky top-0 mt-12 left-0 w-full z-50 px-10">
     <div class="backdrop-blur-xl bg-white/20 border border-white/30
@@ -385,6 +385,5 @@
 
 
 
-</body>
-
-</html>
+</div>
+@end
