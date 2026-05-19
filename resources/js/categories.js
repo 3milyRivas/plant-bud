@@ -46,3 +46,16 @@ window.showCategory = function(event, categoryId) {
         "text-[#2D2B2B]"
     );
 };
+
+document.addEventListener("DOMContentLoaded", () => {
+    const firstButton = document.querySelector(".category-btn");
+
+    if (firstButton) {
+        const firstCategoryId = firstButton.getAttribute("onclick")
+            ?.match(/'([^']+)'/)?.[1];
+
+        if (firstCategoryId) {
+            firstButton.click(); // simulate click
+        }
+    }
+});

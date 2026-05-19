@@ -1,7 +1,7 @@
 @layout()
 
 @slot('title')
-    <title>Ornamentals</title>
+<title>Ornamentals</title>
 @endslot
 @vite(['resources/js/categories.js'])
 
@@ -9,9 +9,10 @@
 
 <div class="relative overflow-x-hidden">
 
-    <div class="pt-10 left-0 w-full z-50 px-10"> 
+    <div class="pt-10 left-0 w-full z-50 px-10">
         <div>
-            <img decoding="async" src="resources/images/welcome/header3.png" class="absolute inset-0 w-full h-full object-cover" alt="">
+            <img decoding="async" src="resources/images/welcome/header3.png"
+                class="absolute inset-0 w-full h-full object-cover" alt="">
             <div class="absolute inset-0 bg-black/45"></div>
             <div class="absolute inset-0 bg-gradient-to-b from-[#1E3D19]/10 via-[#728B6F]/10 to-[#6B8C6C]"></div>
         </div>
@@ -129,13 +130,6 @@
 
 
 
-
-
-
-
-
-
-
 <div class="flex justify-center pt-12 pb-20">
     <div class="flex justify-center gap-20 max-w-[1500px] w-full px-10">
 
@@ -160,25 +154,26 @@
             </a>
         </div>
 
-            @each(family in ornamentalPlants)
-                <div id={family} class="category-section grid grid-cols-3 gap-12">
-                    @each(plant in family)
-                        @component('components/plants/plant-card', { 
-                            imageSrc: plant.image,
-                            imageAlt: plant.imageAlt,
-                            title: plant.name,
-                            scientificName: plant.scientificName
-                        })
-                        @end
-                    @endeach
-                </div>
-            @end
-            
+      @each((plants, familyName, index) in ornamentalPlants)
+        <div id="{{ familyName }}" 
+                class="category-section grid grid-cols-3 gap-12 {{ index != 0 ? 'hidden' : '' }}">
+            @each(plant in plants)
+                @component('components/plants/plant-card', { 
+                    imageSrc: plant.image,
+                    imageAlt: plant.imageAlt,
+                    title: plant.name,
+                    scientificName: plant.scientificName
+                })
+                @end
+            @endeach
+        </div>
+    @end
 
 
 
 
-        
+
+
 
 
 
@@ -684,7 +679,7 @@
                                 Scientific Name
                             </p>
                             <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                               Ruta chalepensis
+                                Ruta chalepensis
                             </p>
                         </div>
 
@@ -719,7 +714,7 @@
                                 Scientific Name
                             </p>
                             <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                               Skimmia japonica
+                                Skimmia japonica
                             </p>
                         </div>
 
@@ -809,8 +804,8 @@
 
                     <div class="relative p-5">
                         <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async"
-                                src="resources/images/plants/rutaceae/bo.png" alt="Boenninghausenia Albiflora plant"
+                            <img loading="lazy" decoding="async" src="resources/images/plants/rutaceae/bo.png"
+                                alt="Boenninghausenia Albiflora plant"
                                 class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
                         </div>
                     </div>
@@ -984,7 +979,7 @@
 
                     <div class="flex flex-col px-6 pb-6">
                         <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                           Panama Rose
+                            Panama Rose
                         </h3>
 
                         <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
@@ -1027,7 +1022,7 @@
                                 Scientific Name
                             </p>
                             <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                               Coffea arabica
+                                Coffea arabica
                             </p>
                         </div>
 
@@ -1052,7 +1047,7 @@
 
                     <div class="flex flex-col px-6 pb-6">
                         <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
-                           White Indigo Berry
+                            White Indigo Berry
                         </h3>
 
                         <div class="mt-2 h-[3px] w-14 rounded-full bg-[#48ae4d]/70"></div>
@@ -1273,7 +1268,7 @@
                                 Scientific Name
                             </p>
                             <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                               Manettia cordifolia
+                                Manettia cordifolia
                             </p>
                         </div>
 
@@ -1345,7 +1340,7 @@
                                 Scientific Name
                             </p>
                             <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                               Ruta chalepensis
+                                Ruta chalepensis
                             </p>
                         </div>
 
@@ -1380,7 +1375,7 @@
                                 Scientific Name
                             </p>
                             <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
-                               Skimmia japonica
+                                Skimmia japonica
                             </p>
                         </div>
 
@@ -1470,8 +1465,8 @@
 
                     <div class="relative p-5">
                         <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-                            <img loading="lazy" decoding="async"
-                                src="resources/images/plants/rutaceae/bo.png" alt="Boenninghausenia Albiflora plant"
+                            <img loading="lazy" decoding="async" src="resources/images/plants/rutaceae/bo.png"
+                                alt="Boenninghausenia Albiflora plant"
                                 class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
                         </div>
                     </div>
