@@ -4,7 +4,47 @@
 @endslot
 @vite(['resources/js/requested.js'])
 
-<div class="bg-[#6B8C6C] min-h-screen flex flex-col">
+
+
+<div class="flex bg-[#636863]/20 mx-12 py-8 rounded-[35px] mt-10">
+  <div class="w-full backdrop-blur-xl bg-[#d3dcd3]/20 border border-[#d3dcd3]/40 rounded-[35px] shadow-xl p-8">
+
+    <!-- TITLE -->
+    <div class="mb-10">
+      <h1 class="text-center font-bold text-5xl font-poppins bg-gradient-to-r from-[#113e14] to-[#48ae4d] bg-clip-text text-transparent">
+        Request your service
+      </h1>
+      <p class="text-center text-[#636863] mt-4 text-lg">
+        Connect with professionals and request personalized assistance.
+      </p>
+    </div>
+
+    <!-- MAIN GRID -->
+    <div class="grid grid-cols-12 gap-8">
+
+      <!-- LEFT SIDE -->
+      <div class="col-span-8 flex flex-col gap-6">
+
+        <!-- PROFILE CARD -->
+        <div class="bg-white/30 border border-[#d3dcd3]/40 rounded-[30px] p-6 backdrop-blur-xl shadow-lg">
+          <div class="flex gap-6 items-center">
+            <div class="w-[220px] h-[220px] bg-[url('/resources/img/person4.jpg')] bg-cover bg-center rounded-[30px] shadow-xl shrink-0"></div>
+            <div class="flex flex-col justify-center flex-1">
+              <div class="flex items-center gap-4">
+                <div class="w-[65px] h-[65px] bg-[url('/resources/img/img3.png')] bg-contain bg-no-repeat bg-center rounded-2xl bg-[#d3dcd3]/30"></div>
+                <div>
+                  <h2 class="text-4xl font-bold text-[#113e14]">
+                    Laura Valentina Díaz Morales
+                  </h2>
+                  <div class="flex items-center gap-3 mt-4">
+                    <span class="bg-[#113e14] text-white px-4 py-2 rounded-full text-sm font-semibold">
+                      Garden Restoration
+                    </span>
+                    <div class="w-2 h-2 rounded-full bg-[#636863]"></div>
+                    <span class="text-[#636863] text-sm">
+                      5 years of experience
+                    </span>
+                  </div>
 
   <div class="relative overflow-x-hidden">
 
@@ -259,7 +299,7 @@
 
 
         <div class="flex justify-end mt-8">
-          <button class="bg-[#113e14] text-white font-semibold px-10 py-4 rounded-full shadow-lg hover:bg-[#48ae4">Send
+          <button class="bg-[#113e14] text-white font-semibold px-10 py-4 rounded-full shadow-lg hover:bg-[#48ae4d]">Send
             form</button>
 
         </div>
