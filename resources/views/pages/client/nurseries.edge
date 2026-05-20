@@ -33,7 +33,7 @@
     </div>
   </header>
 
-  <div class="relative w-full h-[620px] bg-cover bg-center bg-[url('/resources/images/nurseries/viv0.jpg')]">
+  <div class="relative w-full h-[620px] bg-cover bg-center bg-[url('nurseries/viv0.jpg')]">
 
     <div class="absolute inset-0 bg-black/20"></div>
     <div class="absolute inset-0 bg-gradient-to-b from-[#1E3D19]/30 to-[#6B8C6C]"></div>
@@ -73,7 +73,6 @@
   <!-- La lista coronel :vs -->
   <section class="py-20 px-6">
     <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
-
       @each(nursery in nurseries.sponsoredNurseries)
         @!component('components/nursery-card', { nursery })
       @endeach
@@ -92,11 +91,10 @@
   <!--lista de ofertas-->
   <div class="relative z-10 max-w-7xl mx-auto">
     <div class="pt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-      <!-- ✅ FILA 2 -->
       <div
         class="group relative overflow-hidden rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.20)] hover:-translate-y-2 transition-all duration-500">
         <div class="absolute -inset-2 bg-[#48AE4D]/20 blur-2xl opacity-0 group-hover:opacity-100 transition"></div>
-        <img src="resources/images/nurseries/sale1.jpg"
+        <img src="nurseries/sale1.jpg"
           class="w-full h-[420px] object-cover group-hover:scale-110 transition duration-700">
         <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
         <div class="absolute bottom-0 left-0 p-6">
