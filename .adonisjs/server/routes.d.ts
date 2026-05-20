@@ -5,26 +5,33 @@ type ParamValue = string | number | bigint | boolean
 export type ScannedRoutes = {
   ALL: {
     'home': { paramsTuple?: []; params?: {} }
-    'profile': { paramsTuple?: []; params?: {} }
     'maintenance': { paramsTuple?: []; params?: {} }
     'request': { paramsTuple?: []; params?: {} }
     'garden_designer.search_assets': { paramsTuple?: []; params?: {} }
     'garden_designer.remove_background': { paramsTuple?: []; params?: {} }
     'plants.scan': { paramsTuple?: []; params?: {} }
+    'homepage': { paramsTuple?: []; params?: {} }
+    'profile': { paramsTuple?: []; params?: {} }
+    'profile.settings': { paramsTuple?: []; params?: {} }
+    'profile.media': { paramsTuple: [ParamValue,ParamValue]; params: {'kind': ParamValue,'fileName': ParamValue} }
+    'profile.update': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
     'session.store': { paramsTuple?: []; params?: {} }
-    'session.destroy': { paramsTuple?: []; params?: {} }
     'signup.client': { paramsTuple?: []; params?: {} }
     'signup.gardener': { paramsTuple?: []; params?: {} }
     'signup.nursery': { paramsTuple?: []; params?: {} }
     'new_account.store': { paramsTuple?: []; params?: {} }
+    'session.destroy': { paramsTuple?: []; params?: {} }
   }
   GET: {
     'home': { paramsTuple?: []; params?: {} }
-    'profile': { paramsTuple?: []; params?: {} }
     'maintenance': { paramsTuple?: []; params?: {} }
     'request': { paramsTuple?: []; params?: {} }
     'garden_designer.search_assets': { paramsTuple?: []; params?: {} }
+    'homepage': { paramsTuple?: []; params?: {} }
+    'profile': { paramsTuple?: []; params?: {} }
+    'profile.settings': { paramsTuple?: []; params?: {} }
+    'profile.media': { paramsTuple: [ParamValue,ParamValue]; params: {'kind': ParamValue,'fileName': ParamValue} }
     'session.create': { paramsTuple?: []; params?: {} }
     'signup.client': { paramsTuple?: []; params?: {} }
     'signup.gardener': { paramsTuple?: []; params?: {} }
@@ -32,10 +39,13 @@ export type ScannedRoutes = {
   }
   HEAD: {
     'home': { paramsTuple?: []; params?: {} }
-    'profile': { paramsTuple?: []; params?: {} }
     'maintenance': { paramsTuple?: []; params?: {} }
     'request': { paramsTuple?: []; params?: {} }
     'garden_designer.search_assets': { paramsTuple?: []; params?: {} }
+    'homepage': { paramsTuple?: []; params?: {} }
+    'profile': { paramsTuple?: []; params?: {} }
+    'profile.settings': { paramsTuple?: []; params?: {} }
+    'profile.media': { paramsTuple: [ParamValue,ParamValue]; params: {'kind': ParamValue,'fileName': ParamValue} }
     'session.create': { paramsTuple?: []; params?: {} }
     'signup.client': { paramsTuple?: []; params?: {} }
     'signup.gardener': { paramsTuple?: []; params?: {} }
@@ -44,9 +54,10 @@ export type ScannedRoutes = {
   POST: {
     'garden_designer.remove_background': { paramsTuple?: []; params?: {} }
     'plants.scan': { paramsTuple?: []; params?: {} }
+    'profile.update': { paramsTuple?: []; params?: {} }
     'session.store': { paramsTuple?: []; params?: {} }
-    'session.destroy': { paramsTuple?: []; params?: {} }
     'new_account.store': { paramsTuple?: []; params?: {} }
+    'session.destroy': { paramsTuple?: []; params?: {} }
   }
 }
 declare module '@adonisjs/core/types/http' {

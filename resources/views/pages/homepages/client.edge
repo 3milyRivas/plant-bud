@@ -1,0 +1,171 @@
+@layout()
+@slot('title')
+<title>Home</title>
+@endslot
+@vite(['resources/js/tips.js'])
+
+<div class="relative z-10 min-h-dvh overflow-hidden text-[#1E3D19]">
+  @!component('components/homepage-navbar', {
+    avatarUrl: homepageProfile.avatarUrl,
+    avatarInitial: homepageProfile.avatarInitial,
+    displayName: homepageProfile.displayName,
+    roleLabel: 'Client'
+  })
+
+  <main class="relative z-10 mx-auto max-w-7xl px-5 pb-24 pt-8 lg:px-10">
+    <section class="grid gap-14 py-12 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:py-16">
+      <div class="homepage-soft-pop text-white">
+        <div class="mb-8 flex items-center gap-3">
+          <span class="h-px w-12 bg-white/55"></span>
+          <span class="text-sm font-semibold uppercase tracking-[0.3em] text-white/72">Green living</span>
+        </div>
+
+        <h1 class="font-abril text-5xl leading-[1.02] text-white drop-shadow-lg lg:text-7xl">
+          Your garden, reimagined with nature and technology.
+        </h1>
+
+        <p class="mt-7 max-w-xl text-lg font-medium leading-loose text-white/78">
+          Start with the three tools that matter most: scan plants, design spaces, and learn with the community.
+        </p>
+
+        <div class="mt-10 flex flex-wrap gap-4">
+          <a href="#tools" class="rounded-full bg-[#EDE7D6] px-8 py-4 text-sm font-black text-[#1E3D19] shadow-xl transition hover:-translate-y-1 hover:scale-[1.03]">
+            Open tools
+          </a>
+          <a href="/araceae" class="rounded-full border border-white/30 bg-white/12 px-8 py-4 text-sm font-black text-white shadow-lg backdrop-blur-xl transition hover:-translate-y-1 hover:bg-white/20">
+            Explore plants
+          </a>
+        </div>
+      </div>
+
+      <div class="relative homepage-soft-pop" style="animation-delay: 90ms">
+        <img src="/resources/images/homepagee/escaneo-333.jpg" alt="" class="homepage-hero-media h-[620px] w-full rounded-[42px] object-cover shadow-2xl">
+
+        <a href="/scanner" class="homepage-lively-card absolute -bottom-8 left-6 right-6 rounded-[30px] border border-white/40 bg-white/75 p-6 shadow-2xl backdrop-blur-2xl sm:left-10 sm:right-auto sm:w-[350px]">
+          <div class="flex items-center gap-4">
+            <span class="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-[#48AE4D]/20">
+              <img src="/resources/images/homepagee/scanner.png" alt="" class="homepage-lively-icon h-11 w-11 object-contain">
+            </span>
+            <span>
+              <span class="block text-lg font-black">Smart scanning</span>
+              <span class="mt-1 block text-sm font-semibold leading-5 text-[#636863]">Identify species and care needs in seconds.</span>
+            </span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <section class="homepage-soft-pop rounded-[30px] border border-white/35 bg-[#EDE7D6]/88 p-5 shadow-xl backdrop-blur-2xl">
+      <div class="flex flex-col gap-3 text-[#1E3D19] sm:flex-row sm:items-center">
+        <span class="inline-flex w-fit rounded-full bg-[#1E3D19] px-4 py-2 text-xs font-black uppercase tracking-[0.2em] text-[#EDE7D6]">
+          Tip
+        </span>
+        <p id="plant-tip" class="text-base font-black leading-7 text-[#315F28]">
+          Loading tip...
+        </p>
+      </div>
+    </section>
+
+    <section id="tools" class="scroll-mt-28 pt-16">
+      <div class="mx-auto mb-10 max-w-3xl text-center text-white">
+        <p class="text-sm font-black uppercase tracking-[0.24em] text-[#EDE7D6]">Main tools</p>
+        <h2 class="mt-3 font-abril text-5xl leading-tight md:text-6xl">Everything starts here</h2>
+      </div>
+
+      <div class="grid gap-8 lg:grid-cols-3">
+        <a href="/scanner" class="homepage-lively-card rounded-[34px] border border-white/40 bg-white/68 p-8 shadow-xl backdrop-blur-2xl">
+          <img src="/resources/images/homepagee/scanner.png" alt="" class="homepage-lively-icon h-16 w-16 object-contain">
+          <p class="mt-8 text-sm font-black uppercase tracking-[0.18em] text-[#6B8C6C]">Scanner</p>
+          <h3 class="mt-3 text-3xl font-black">Know what your plant needs</h3>
+          <p class="mt-4 leading-relaxed text-[#636863]">Identify plants, symptoms, and care direction before guessing.</p>
+        </a>
+
+        <a href="/designer" class="homepage-lively-card rounded-[34px] border border-white/40 bg-white/68 p-8 shadow-xl backdrop-blur-2xl">
+          <img src="/resources/images/homepagee/tulip.png" alt="" class="homepage-lively-icon h-16 w-16 object-contain">
+          <p class="mt-8 text-sm font-black uppercase tracking-[0.18em] text-[#6B8C6C]">Designer</p>
+          <h3 class="mt-3 text-3xl font-black">Plan a greener space</h3>
+          <p class="mt-4 leading-relaxed text-[#636863]">Arrange ideas for patios, balconies, rooms, and garden corners.</p>
+        </a>
+
+        <a href="/community" class="homepage-lively-card rounded-[34px] border border-white/40 bg-white/68 p-8 shadow-xl backdrop-blur-2xl">
+          <img src="/resources/images/homepagee/comunity.png" alt="" class="homepage-lively-icon h-16 w-16 object-contain">
+          <p class="mt-8 text-sm font-black uppercase tracking-[0.18em] text-[#6B8C6C]">Community</p>
+          <h3 class="mt-3 text-3xl font-black">Share and discover growth</h3>
+          <p class="mt-4 leading-relaxed text-[#636863]">Find inspiration, post updates, and learn from real gardens.</p>
+        </a>
+      </div>
+    </section>
+
+    <section class="pt-24">
+      <div class="mb-10 flex flex-col gap-4 text-white sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p class="text-sm font-black uppercase tracking-[0.24em] text-[#EDE7D6]">Explore</p>
+          <h2 class="mt-3 font-abril text-5xl leading-tight md:text-6xl">Plant paths</h2>
+        </div>
+        <a href="/nurseries" class="inline-flex rounded-full bg-white/14 px-6 py-3 text-sm font-black text-white backdrop-blur-xl transition hover:-translate-y-0.5 hover:bg-white/22">
+          Find nurseries
+        </a>
+      </div>
+
+      <div class="grid gap-8 lg:grid-cols-3">
+        <a href="/araceae" class="homepage-lively-card group relative h-[460px] overflow-hidden rounded-[36px] shadow-2xl">
+          <img src="/resources/images/homepagee/plant-1.png" alt="" class="h-full w-full object-cover transition duration-700 group-hover:scale-110">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+          <div class="absolute bottom-8 left-8 text-white">
+            <h3 class="font-abril text-4xl">Ornamentals</h3>
+            <p class="mt-3 max-w-xs text-white/80">Flowers and decorative plants for everyday spaces.</p>
+          </div>
+        </a>
+
+        <a href="/care2" class="homepage-lively-card group relative h-[460px] overflow-hidden rounded-[36px] shadow-2xl">
+          <img src="/resources/images/homepagee/succulents.png" alt="" class="h-full w-full object-cover transition duration-700 group-hover:scale-110">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+          <div class="absolute bottom-8 left-8 text-white">
+            <h3 class="font-abril text-4xl">Succulents</h3>
+            <p class="mt-3 max-w-xs text-white/80">Durable, sculptural plants with calmer routines.</p>
+          </div>
+        </a>
+
+        <a href="/care3" class="homepage-lively-card group relative h-[460px] overflow-hidden rounded-[36px] shadow-2xl">
+          <img src="/resources/images/homepagee/horticultural.png" alt="" class="h-full w-full object-cover transition duration-700 group-hover:scale-110">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+          <div class="absolute bottom-8 left-8 text-white">
+            <h3 class="font-abril text-4xl">Horticultural</h3>
+            <p class="mt-3 max-w-xs text-white/80">Vegetables, herbs, and productive garden projects.</p>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <section class="pt-24">
+      <div class="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-stretch">
+        <div class="overflow-hidden rounded-[42px] bg-[#113E14] shadow-2xl">
+          <div class="grid h-full lg:grid-cols-2">
+            <div class="p-8 text-white sm:p-12">
+              <span class="inline-flex rounded-full bg-white/10 px-5 py-2 text-sm font-black">Care flow</span>
+              <h2 class="mt-7 font-abril text-5xl leading-tight">From scan to action.</h2>
+              <p class="mt-6 text-lg font-medium leading-relaxed text-[#D3DCD3]">
+                Use the scanner, plan with the designer, then save ideas or ask the community what worked.
+              </p>
+            </div>
+            <img src="/resources/images/homepagee/plant-6.png" alt="" class="h-full min-h-80 w-full object-cover">
+          </div>
+        </div>
+
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-1">
+          <a href="/maintenance" class="homepage-lively-card rounded-[30px] border border-white/40 bg-white/65 p-7 shadow-xl backdrop-blur-2xl">
+            <img src="/resources/images/homepagee/hand.png" alt="" class="homepage-lively-icon h-14 w-14">
+            <h3 class="mt-5 text-2xl font-black">Need a gardener?</h3>
+            <p class="mt-3 leading-relaxed text-[#636863]">Find help when a plant or space needs extra hands.</p>
+          </a>
+          <a href="/community" class="homepage-lively-card rounded-[30px] border border-white/40 bg-white/65 p-7 shadow-xl backdrop-blur-2xl">
+            <img src="/resources/images/homepagee/heartt.png" alt="" class="homepage-lively-icon h-14 w-14">
+            <h3 class="mt-5 text-2xl font-black">Community stories</h3>
+            <p class="mt-3 leading-relaxed text-[#636863]">See gardens, harvests, collections, and plant recoveries.</p>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+@end

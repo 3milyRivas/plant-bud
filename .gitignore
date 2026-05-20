@@ -4,6 +4,8 @@ node_modules
 build
 tmp/*
 !tmp/.gitkeep
+storage/*.log
+storage/profile_uploads
 
 # Secrets
 .env
@@ -13,6 +15,7 @@ tmp/*
 
 # Frontend assets compiled code
 public/assets
+public/uploads
 
 # Build tools specific
 npm-debug.log

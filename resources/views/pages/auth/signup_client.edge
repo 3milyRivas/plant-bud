@@ -3,7 +3,7 @@
 <title>Sign Up - Client</title>
 @endslot
 
-<div class="relative z-10 min-h-screen overflow-hidden">
+<div class="relative z-10 min-h-screen overflow-hidden" data-auth-page>
     <div class="absolute inset-0 pointer-events-none">
         <div class="absolute top-20 left-1/2 -translate-x-1/2 w-[34rem] h-[34rem] bg-[#EDE7D6]/10 rounded-full blur-3xl"></div>
         <div class="absolute bottom-0 right-0 w-[28rem] h-[28rem] bg-[#1E3D19]/10 rounded-full blur-3xl"></div>
@@ -84,38 +84,27 @@
                                     value: flashMessages.get('old')?.username,
                                     maxlength: 30,
                                     minlength: 3,
+                                    'data-required-message': 'Username is required',
+                                    'data-username-input': true,
                                     class: 'w-full h-12 px-4 rounded-2xl bg-white/90 text-[#1E3D19] placeholder:text-[#728B6F] font-semibold border border-transparent focus:outline-none focus:ring-2 focus:ring-[#EDE7D6] shadow-lg'
                                 })
                                 @!field.error({ class: 'text-red-200 font-bold text-xs mt-2' })
                                 @end
                             </div>
 
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-
-                                <div>
-                                    @field.root({ name: 'first_name' })
-                                    @!field.label({ text: 'First Name', class: 'block text-[#EDE7D6] font-bold text-sm mb-2 tracking-wide' })
-                                    @!input.control({
-                                        placeholder: 'First name',
-                                        value: flashMessages.get('old')?.first_name,
-                                        class: 'w-full h-12 px-4 rounded-2xl bg-white/90 text-[#1E3D19] placeholder:text-[#728B6F] font-semibold border border-transparent focus:outline-none focus:ring-2 focus:ring-[#EDE7D6] shadow-lg'
-                                    })
-                                    @!field.error({ class: 'text-red-200 font-bold text-xs mt-2' })
-                                    @end
-                                </div>
-
-                                <div>
-                                    @field.root({ name: 'last_name' })
-                                    @!field.label({ text: 'Last Name', class: 'block text-[#EDE7D6] font-bold text-sm mb-2 tracking-wide' })
-                                    @!input.control({
-                                        placeholder: 'Last name',
-                                        value: flashMessages.get('old')?.last_name,
-                                        class: 'w-full h-12 px-4 rounded-2xl bg-white/90 text-[#1E3D19] placeholder:text-[#728B6F] font-semibold border border-transparent focus:outline-none focus:ring-2 focus:ring-[#EDE7D6] shadow-lg'
-                                    })
-                                    @!field.error({ class: 'text-red-200 font-bold text-xs mt-2' })
-                                    @end
-                                </div>
-
+                            <div>
+                                @field.root({ name: 'display_name' })
+                                @!field.label({ text: 'Display Name', class: 'block text-[#EDE7D6] font-bold text-sm mb-2 tracking-wide' })
+                                @!input.control({
+                                    placeholder: 'Name shown in your profile',
+                                    value: flashMessages.get('old')?.display_name,
+                                    maxlength: 100,
+                                    minlength: 2,
+                                    'data-required-message': 'Display name is required',
+                                    class: 'w-full h-12 px-4 rounded-2xl bg-white/90 text-[#1E3D19] placeholder:text-[#728B6F] font-semibold border border-transparent focus:outline-none focus:ring-2 focus:ring-[#EDE7D6] shadow-lg'
+                                })
+                                @!field.error({ class: 'text-red-200 font-bold text-xs mt-2' })
+                                @end
                             </div>
 
                             <div>
@@ -125,6 +114,7 @@
                                     type: 'email',
                                     placeholder: 'Type your email address',
                                     value: flashMessages.get('old')?.email,
+                                    'data-required-message': 'Email is required',
                                     class: 'w-full h-12 px-4 rounded-2xl bg-white/90 text-[#1E3D19] placeholder:text-[#728B6F] font-semibold border border-transparent focus:outline-none focus:ring-2 focus:ring-[#EDE7D6] shadow-lg'
                                 })
                                 @!field.error({ class: 'text-red-200 font-bold text-xs mt-2' })
@@ -134,12 +124,16 @@
                             <div>
                                 @field.root({ name: 'password' })
                                 @!field.label({ text: 'Password', class: 'block text-[#EDE7D6] font-bold text-sm mb-2 tracking-wide' })
-                                @!input.control({
-                                    type: 'password',
-                                    id: 'password',
-                                    placeholder: 'Create a password',
-                                    class: 'w-full h-12 pl-4 pr-12 rounded-2xl bg-white/90 text-[#1E3D19] placeholder:text-[#728B6F] font-semibold border border-transparent focus:outline-none focus:ring-2 focus:ring-[#EDE7D6] shadow-lg'
-                                })
+                                <div class="relative">
+                                    @!input.control({
+                                        type: 'password',
+                                        id: 'password',
+                                        placeholder: 'Create a password',
+                                        'data-required-message': 'Password is required',
+                                        class: 'w-full h-12 pl-4 pr-12 rounded-2xl bg-white/90 text-[#1E3D19] placeholder:text-[#728B6F] font-semibold border border-transparent focus:outline-none focus:ring-2 focus:ring-[#EDE7D6] shadow-lg'
+                                    })
+                                    <button type="button" data-password-toggle="password" class="absolute inset-y-0 right-0 px-4 flex items-center text-[#728B6F] hover:text-[#1E3D19] transition"></button>
+                                </div>
                                 @!field.error({ class: 'text-red-200 font-bold text-xs mt-2' })
                                 @end
                             </div>
@@ -147,12 +141,17 @@
                             <div>
                                 @field.root({ name: 'passwordConfirmation' })
                                 @!field.label({ text: 'Confirm Password', class: 'block text-[#EDE7D6] font-bold text-sm mb-2 tracking-wide' })
-                                @!input.control({
-                                    type: 'password',
-                                    id: 'passwordConfirmation',
-                                    placeholder: 'Repeat your password',
-                                    class: 'w-full h-12 pl-4 pr-12 rounded-2xl bg-white/90 text-[#1E3D19] placeholder:text-[#728B6F] font-semibold border border-transparent focus:outline-none focus:ring-2 focus:ring-[#EDE7D6] shadow-lg'
-                                })
+                                <div class="relative">
+                                    @!input.control({
+                                        type: 'password',
+                                        id: 'passwordConfirmation',
+                                        placeholder: 'Repeat your password',
+                                        'data-required-message': 'Password confirmation is required',
+                                        'data-confirm-with': 'password',
+                                        class: 'w-full h-12 pl-4 pr-12 rounded-2xl bg-white/90 text-[#1E3D19] placeholder:text-[#728B6F] font-semibold border border-transparent focus:outline-none focus:ring-2 focus:ring-[#EDE7D6] shadow-lg'
+                                    })
+                                    <button type="button" data-password-toggle="passwordConfirmation" class="absolute inset-y-0 right-0 px-4 flex items-center text-[#728B6F] hover:text-[#1E3D19] transition"></button>
+                                </div>
                                 @!field.error({ class: 'text-red-200 font-bold text-xs mt-2' })
                                 @end
                             </div>
@@ -174,12 +173,4 @@
         </div>
     </div>
 </div>
-
-<script>
-const username = document.getElementById('username')
-
-username.addEventListener('input', (e) => {
-    e.target.value = e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, '')
-})
-</script>
 @end
