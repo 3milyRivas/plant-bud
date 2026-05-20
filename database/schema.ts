@@ -8,14 +8,7 @@ import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
 export class GardenerProfileSchema extends BaseModel {
-  static $columns = [
-    'availabilitySchedule',
-    'createdAt',
-    'id',
-    'servicesOffered',
-    'updatedAt',
-    'userId',
-  ] as const
+  static $columns = ['availabilitySchedule', 'createdAt', 'id', 'servicesOffered', 'updatedAt', 'userId'] as const
   $columns = GardenerProfileSchema.$columns
   @column()
   declare availabilitySchedule: string | null
@@ -49,20 +42,7 @@ export class NurseryProfileSchema extends BaseModel {
 }
 
 export class UserSchema extends BaseModel {
-  static $columns = [
-    'createdAt',
-    'dui',
-    'email',
-    'firstName',
-    'id',
-    'lastName',
-    'password',
-    'phone',
-    'profilePicture',
-    'role',
-    'updatedAt',
-    'username',
-  ] as const
+  static $columns = ['createdAt', 'dui', 'email', 'firstName', 'id', 'lastName', 'password', 'phone', 'profilePicture', 'role', 'updatedAt', 'username'] as const
   $columns = UserSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime | null
