@@ -1,7 +1,13 @@
 import { middleware } from '#start/kernel'
 import { controllers } from '#generated/controllers'
 import router from '@adonisjs/core/services/router'
+<<<<<<< Updated upstream
 import ornamentalPlants from '#data/ornamental_plants'
+=======
+import ornamentalPlants from '#data/ornamentalPlants'
+import horticulturalPlants from '#data/horticulturalPlants'
+import succulentPlants from '#data/succulentPlants'
+>>>>>>> Stashed changes
 const GardenDesignerController = () => import('#controllers/garden_designers_controller')
 const HomepagesController = () => import('#controllers/homepages_controller')
 const NewAccountController = () => import('#controllers/new_account_controller')
@@ -12,7 +18,8 @@ const ProfilesController = () => import('#controllers/profiles_controller')
 router.on('/').render('pages/welcome').as('home')
 router.on('/register').render('pages/register')
 router.on('/araceae').render('pages/araceae', { ornamentalPlants })
-router.on('/amaryllidaceae').render('pages/amaryllidaceae')
+router.on('/amaryllidaceae').render('pages/amaryllidaceae', { horticulturalPlants })
+router.on('/cactaceae').render('pages/cactaceae', { succulentPlants })
 
 router.on('/community').render('pages/community')
 router.on('/favorites').render('pages/favorites')

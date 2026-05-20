@@ -8,6 +8,9 @@ export interface PlantMetadata {
 export interface PlantFamilies {
   araceae: PlantMetadata[]
   apocynaceae: PlantMetadata[]
+  rutaceae: PlantMetadata[]
+  rubiaceae: PlantMetadata[]
+  zamiaceae: PlantMetadata[]
 }
 
 const ornamentalPlants: PlantFamilies = {
@@ -232,6 +235,341 @@ const ornamentalPlants: PlantFamilies = {
       scientificName: "Plumeria rubra 'Hawaiian Opal Pink'",
     },
   ],
-}
+
+  rutaceae: [
+  {
+    image: 'plants/rutaceae/curry.png',
+    alt: 'Curry Leaf Tree plant',
+    name: 'Curry Leaf Tree',
+    scientificName: 'Murraya koenigii',
+  },
+  {
+    image: 'plants/rutaceae/rue.png',
+    alt: 'Rue plant',
+    name: 'Rue',
+    scientificName: 'Ruta graveolens',
+  },
+  {
+    image: 'plants/rutaceae/gas.png',
+    alt: "Gas plant 'Albiflorus' plant",
+    name: "Gas plant 'Albiflorus'",
+    scientificName: "Dictamnus albus 'Albiflorus'",
+  },
+  {
+    image: 'plants/rutaceae/gass.png',
+    alt: 'Gas plant',
+    name: 'Gas Plant',
+    scientificName: 'Dictamnus albus',
+  },
+  {
+    image: 'plants/rutaceae/kum.png',
+    alt: 'Kumquat plant',
+    name: 'Kumquat',
+    scientificName: 'Citrus japonica',
+  },
+  {
+    image: 'plants/rutaceae/white.png',
+    alt: 'White Sapote plant',
+    name: 'White Sapote',
+    scientificName: 'Casimiroa edulis',
+  },
+  {
+    image: 'plants/rutaceae/sich.png',
+    alt: 'Sichuan Pepper plant',
+    name: 'Sichuan Pepper',
+    scientificName: 'Zanthoxylum piperitum',
+  },
+  {
+    image: 'plants/rutaceae/cas.png',
+    alt: 'Murraya paniculata plant',
+    name: 'Murraya paniculata',
+    scientificName: 'Murraya paniculata',
+  },
+  {
+    image: 'plants/rutaceae/bal.png',
+    alt: 'Balsam Torchwood plant',
+    name: 'Balsam Torchwood',
+    scientificName: 'Amyris balsamifera',
+  },
+  {
+    image: 'plants/rutaceae/mex.png',
+    alt: 'Mexican Orange plant',
+    name: 'Mexican Orange',
+    scientificName: 'Choisya ternata',
+  },
+  {
+    image: 'plants/rutaceae/com.png',
+    alt: 'Common Rue plant',
+    name: 'Common Rue',
+    scientificName: "Ruta graveolens 'Jackman's Blue'",
+  },
+  {
+    image: 'plants/rutaceae/lime.png',
+    alt: 'Lime Prickly Ash plant',
+    name: 'Lime Prickly Ash',
+    scientificName: 'Zanthoxylum fagara',
+  },
+  {
+    image: 'plants/rutaceae/ash.png',
+    alt: 'Common Prickly Ash plant',
+    name: 'Common Prickly Ash',
+    scientificName: 'Zanthoxylum americanum',
+  },
+  {
+    image: 'plants/rutaceae/frin.png',
+    alt: 'Fringed Rue plant',
+    name: 'Fringed Rue',
+    scientificName: 'Ruta chalepensis',
+  },
+  {
+    image: 'plants/rutaceae/jap.png',
+    alt: 'Japanese Skimmia plant',
+    name: 'Japanese Skimmia',
+    scientificName: 'Skimmia japonica',
+  },
+  {
+    image: 'plants/rutaceae/argentine.png',
+    alt: 'Argentine Prickly Ash plant',
+    name: 'Argentine Prickly Ash',
+    scientificName: 'Zanthoxylum coco',
+  },
+  {
+    image: 'plants/rutaceae/w.png',
+    alt: 'Wharangi plant',
+    name: 'Wharangi',
+    scientificName: 'Melicope ternata',
+  },
+  {
+    image: 'plants/rutaceae/bo.png',
+    alt: 'Boenninghausenia Albiflora plant',
+    name: 'Boenninghausenia Albiflora',
+    scientificName: 'Boenninghausenia albiflora',
+  },
+],
+
+  rubiaceae: [
+    {
+      image: 'plants/rubiaceae/great.png',
+      alt: 'Great Morinda plant',
+      name: 'Great Morinda',
+      scientificName: 'Morinda citrifolia',
+    },
+    {
+      image: 'plants/rubiaceae/fire.png',
+      alt: 'Rue plant',
+      name: 'Firebush',
+      scientificName: 'Hamelia patens',
+    },
+    {
+      image: 'plants/rubiaceae/robu.png',
+      alt: 'Robusta Coffee Plant',
+      name: 'Robusta Coffee',
+      scientificName: 'Coffea canephora',
+    },
+    {
+      image: 'plants/rubiaceae/pan.png',
+      alt: 'Panama Rose plant',
+      name: 'Panama Rose',
+      scientificName: 'Rondeletia odorata',
+    },
+    {
+      image: 'plants/rubiaceae/coff.png',
+      alt: 'Arabian Coffee plant',
+      name: 'Arabian Coffee',
+      scientificName: 'Coffea arabica',
+    },
+    {
+      image: 'plants/rubiaceae/indigo.png',
+      alt: 'White Indigo Berry plant',
+      name: 'White Indigo Berry',
+      scientificName: 'Randia aculeata',
+    },
+    {
+      image: 'plants/rubiaceae/wild.png',
+      alt: 'Wild Coffee plant',
+      name: 'Wild Coffee',
+      scientificName: 'Psychotria nervosa',
+    },
+    {
+      image: 'plants/rubiaceae/co.png',
+      alt: 'Common Buttonbush plant',
+      name: 'Common Buttonbush',
+      scientificName: 'Murraya paniculata',
+    },
+    {
+      image: 'plants/rubiaceae/west.png',
+      alt: 'West Indian Milkberry plant',
+      name: 'West Indian Milkberry',
+      scientificName: 'Chiococca alba',
+    },
+    {
+      image: 'plants/rubiaceae/sea.png',
+      alt: 'Sea randa plant',
+      name: 'Sea randa',
+      scientificName: 'Guettarda speciosa',
+    },
+    {
+      image: 'plants/rubiaceae/gal.png',
+      alt: 'Redgal plant',
+      name: 'Redgal',
+      scientificName: 'Morinda royoc',
+    },
+    {
+      image: 'plants/rubiaceae/vine.png',
+      alt: 'Firecracker Vine Ash plant',
+      name: 'Firecracker Vine',
+      scientificName: 'Manettia cordifolia',
+    },
+    {
+      image: 'plants/rutaceae/ash.png',
+      alt: 'Ashy Sabicea plant',
+      name: 'Ashy Sabicea',
+      scientificName: 'Zanthoxylum americanum',
+    },
+    {
+      image: 'plants/rutaceae/frin.png',
+      alt: 'Fringed rue plant',
+      name: 'Fringed Rue',
+      scientificName: 'Ruta chalepensis',
+    },
+    {
+      image: 'plants/rutaceae/jap.png',
+      alt: 'Japanese Skimmia plant',
+      name: 'Japanese Skimmia',
+      scientificName: 'Skimmia japonica',
+    },
+    {
+      image: 'plants/rutaceae/argentine.png',
+      alt: 'Argentine Prickly Ash plant',
+      name: 'Argentine Prickly Ash',
+      scientificName: 'Zanthoxylum coco',
+    },
+    {
+      image: 'plants/rutaceae/w.png',
+      alt: 'Wharangi plant',
+      name: 'Wharangi',
+      scientificName: 'Melicope ternata',
+    },
+    {
+      image: 'plants/rutaceae/bo.png',
+      alt: 'Boenninghausenia Albiflora plant',
+      name: 'Boenninghausenia Albiflora',
+      scientificName: 'Boenninghausenia albiflora',
+    },
+  ],
+
+  zamiaceae: [
+  {
+    image: 'plants/zamiaceae/dioon.png',
+    alt: 'Chestnut Dioon plant',
+    name: 'Chestnut Dioon',
+    scientificName: 'Dioon mejiae',
+  },
+  {
+    image: 'plants/zamiaceae/pp.png',
+    alt: 'Macrozamia Palm plant',
+    name: 'Macrozamia Palm',
+    scientificName: 'Macrozamia communis',
+  },
+  {
+    image: 'plants/zamiaceae/cera.png',
+    alt: 'Ceratozamia Mexicana plant',
+    name: 'Ceratozamia Mexicana',
+    scientificName: 'Ceratozamia mexicana',
+  },
+  {
+    image: 'plants/zamiaceae/leafr.png',
+    alt: 'Picta Leaf Zamia plant',
+    name: 'Picta Leaf Zamia',
+    scientificName: 'Zamia picta',
+  },
+  {
+    image: 'plants/zamiaceae/cy.png',
+    alt: 'Cardboard Cycad plant',
+    name: 'Cardboard Cycad',
+    scientificName: 'Zamia furfuracea',
+  },
+  {
+    image: 'plants/zamiaceae/zami.png',
+    alt: 'Zamia Loddigesii plant',
+    name: 'Zamia Loddigesii',
+    scientificName: 'Zamia loddigesii',
+  },
+  {
+    image: 'plants/zamiaceae/lebo.png',
+    alt: 'Lebombo Cycad plant',
+    name: 'Lebombo Cycad',
+    scientificName: 'Encephalartos lebomboensis',
+  },
+  {
+    image: 'plants/zamiaceae/za.png',
+    alt: 'Dressler Zamia plant',
+    name: 'Dressler Zamia',
+    scientificName: 'Zamia dressleri',
+  },
+  {
+    image: 'plants/zamiaceae/head.png',
+    alt: "Hottentot's Head plant",
+    name: "Hottentot's Head",
+    scientificName: 'Stangeria eriopus',
+  },
+  {
+    image: 'plants/zamiaceae/flo.png',
+    alt: 'Florida Arrowroot plant',
+    name: 'Florida Arrowroot',
+    scientificName: 'Zamia integrifolia',
+  },
+  {
+    image: 'plants/zamiaceae/fri.png',
+    alt: 'Encephalartos Friderici-Guilielmi plant',
+    name: 'Encephalartos Friderici-Guilielmi',
+    scientificName: 'Encephalartos friderici-guilielmi',
+  },
+  {
+    image: 'plants/zamiaceae/burr.png',
+    alt: 'Burrawang plant',
+    name: 'Burrawang',
+    scientificName: 'Macrozamia spiralis',
+  },
+  {
+    image: 'plants/zamiaceae/salva.png',
+    alt: 'Salvadoran Zamia plant',
+    name: 'Salvadoran Zamia',
+    scientificName: 'Zamia acuminata',
+  },
+  {
+    image: 'plants/zamiaceae/car.png',
+    alt: 'Cardboard Cycad plant',
+    name: 'Cardboard Cycad',
+    scientificName: 'Zamia furfuracea',
+  },
+  {
+    image: 'plants/zamiaceae/vir.png',
+    alt: "Virgin's Palm plant",
+    name: "Virgin's Palm",
+    scientificName: 'Dioon edule',
+  },
+  {
+    image: 'plants/zamiaceae/ku.png',
+    alt: 'Ceratozamia Kuesteriana plant',
+    name: 'Ceratozamia Kuesteriana',
+    scientificName: 'Ceratozamia kuesteriana',
+  },
+  {
+    image: 'plants/zamiaceae/q.png',
+    alt: 'Queensland Cycad plant',
+    name: 'Queensland Cycad',
+    scientificName: 'Lepidozamia hopei',
+  },
+  {
+    image: 'plants/zamiaceae/fer.png',
+    alt: 'Byfield Fern plant',
+    name: 'Byfield Fern',
+    scientificName: 'Bowenia serrulata',
+  },
+],
+
+ }
+
 
 export default ornamentalPlants
