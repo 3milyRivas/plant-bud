@@ -88,7 +88,7 @@ export class FollowSchema extends BaseModel {
 }
 
 export class GardenerProfileSchema extends BaseModel {
-  static $columns = ['availabilitySchedule', 'bio', 'createdAt', 'experienceYears', 'headline', 'hourlyRate', 'id', 'isAvailable', 'portfolioUrl', 'publicPhone', 'ratingAverage', 'ratingCount', 'serviceArea', 'servicesOffered', 'updatedAt', 'userId'] as const
+  static $columns = ['availabilitySchedule', 'bio', 'createdAt', 'experienceYears', 'headline', 'hourlyRate', 'id', 'isAvailable', 'paymentMethods', 'portfolioUrl', 'publicPhone', 'ratingAverage', 'ratingCount', 'serviceArea', 'servicesOffered', 'updatedAt', 'userId'] as const
   $columns = GardenerProfileSchema.$columns
   @column()
   declare availabilitySchedule: string | null
@@ -106,6 +106,8 @@ export class GardenerProfileSchema extends BaseModel {
   declare id: number
   @column()
   declare isAvailable: boolean
+  @column()
+  declare paymentMethods: string | null
   @column()
   declare portfolioUrl: string | null
   @column()
@@ -175,7 +177,7 @@ export class NurseryProductSchema extends BaseModel {
 }
 
 export class NurseryProfileSchema extends BaseModel {
-  static $columns = ['address', 'bannerUrl', 'city', 'createdAt', 'description', 'id', 'isActive', 'logoUrl', 'nurseryName', 'nurserySlug', 'openingHours', 'ownerName', 'publicEmail', 'publicPhone', 'ratingAverage', 'ratingCount', 'updatedAt', 'userId'] as const
+  static $columns = ['address', 'bannerUrl', 'city', 'createdAt', 'description', 'id', 'isActive', 'logoUrl', 'nurseryName', 'nurserySlug', 'openingHours', 'ownerName', 'paymentMethods', 'publicEmail', 'publicPhone', 'ratingAverage', 'ratingCount', 'servicesOffered', 'updatedAt', 'userId'] as const
   $columns = NurseryProfileSchema.$columns
   @column()
   declare address: string | null
@@ -202,6 +204,8 @@ export class NurseryProfileSchema extends BaseModel {
   @column()
   declare ownerName: string
   @column()
+  declare paymentMethods: string | null
+  @column()
   declare publicEmail: string | null
   @column()
   declare publicPhone: string | null
@@ -209,6 +213,8 @@ export class NurseryProfileSchema extends BaseModel {
   declare ratingAverage: number
   @column()
   declare ratingCount: number
+  @column()
+  declare servicesOffered: string | null
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
   @column()
@@ -247,6 +253,29 @@ export class PostReactionSchema extends BaseModel {
   declare updatedAt: DateTime | null
   @column()
   declare userId: number
+}
+
+export class ProfileReviewSchema extends BaseModel {
+  static $columns = ['comment', 'createdAt', 'gardenerProfileId', 'id', 'nurseryProfileId', 'rating', 'reviewerName', 'reviewerUserId', 'updatedAt'] as const
+  $columns = ProfileReviewSchema.$columns
+  @column()
+  declare comment: string | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column()
+  declare gardenerProfileId: number | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare nurseryProfileId: number | null
+  @column()
+  declare rating: number
+  @column()
+  declare reviewerName: string | null
+  @column()
+  declare reviewerUserId: number | null
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
 }
 
 export class ServiceRequestSchema extends BaseModel {

@@ -116,11 +116,18 @@ function initProfilePage() {
     input.addEventListener('change', () => {
       const file = input.files?.[0]
       const targetId = input.getAttribute('data-preview-target')
+      const fallbackId = input.getAttribute('data-preview-fallback')
       const preview = targetId ? page.querySelector(`#${CSS.escape(targetId)}`) : null
+      const fallback = fallbackId ? page.querySelector(`#${CSS.escape(fallbackId)}`) : null
 
       if (!file || !preview) return
 
-      preview.src = URL.createObjectURL(file)
+      if (preview.dataset.previewUrl) URL.revokeObjectURL(preview.dataset.previewUrl)
+
+      preview.dataset.previewUrl = URL.createObjectURL(file)
+      preview.src = preview.dataset.previewUrl
+      preview.classList.remove('hidden')
+      fallback?.classList.add('hidden')
     })
   })
 
@@ -130,7 +137,9 @@ function initProfilePage() {
 function initAvatarCropper(page) {
   const input = page.querySelector('[data-avatar-input]')
   const previewTargetId = input?.getAttribute('data-preview-target')
+  const fallbackTargetId = input?.getAttribute('data-preview-fallback')
   const preview = previewTargetId ? page.querySelector(`#${CSS.escape(previewTargetId)}`) : null
+  const fallback = fallbackTargetId ? page.querySelector(`#${CSS.escape(fallbackTargetId)}`) : null
   const cropper = page.querySelector('[data-avatar-cropper]')
   const frame = page.querySelector('[data-avatar-crop-frame]')
   const image = page.querySelector('[data-avatar-crop-image]')
@@ -228,6 +237,8 @@ function initAvatarCropper(page) {
 
     state.previewUrl = URL.createObjectURL(blob)
     preview.src = state.previewUrl
+    preview.classList.remove('hidden')
+    fallback?.classList.add('hidden')
 
     if (typeof DataTransfer !== 'undefined') {
       const transfer = new DataTransfer()

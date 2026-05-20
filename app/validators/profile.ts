@@ -12,5 +12,17 @@ export const profileValidator = vine.compile(
     instagram_handle: nullableText(120),
     tiktok_handle: nullableText(120),
     facebook_handle: nullableText(120),
+    headline: nullableText(100),
+    service_area: nullableText(120),
+    availability_schedule: nullableText(500),
+    services_offered: nullableText(1200),
+    payment_methods: nullableText(600),
+    public_phone: nullableText(20),
+    public_email: vine.string().trim().email().maxLength(254).optional().nullable(),
+    address: nullableText(255),
+    city: nullableText(120),
+    opening_hours: nullableText(255),
+    is_available: nullableText(5),
+    is_active: nullableText(5),
   })
 )

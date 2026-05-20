@@ -5,6 +5,7 @@ build
 tmp/*
 !tmp/.gitkeep
 storage/*.log
+storage/profile_uploads
 
 # Secrets
 .env
