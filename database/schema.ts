@@ -88,7 +88,7 @@ export class FollowSchema extends BaseModel {
 }
 
 export class GardenerProfileSchema extends BaseModel {
-  static $columns = ['availabilitySchedule', 'bio', 'createdAt', 'experienceYears', 'headline', 'hourlyRate', 'id', 'isAvailable', 'paymentMethods', 'portfolioUrl', 'publicPhone', 'ratingAverage', 'ratingCount', 'serviceArea', 'servicesOffered', 'updatedAt', 'userId'] as const
+  static $columns = ['availabilitySchedule', 'bio', 'createdAt', 'experienceYears', 'headline', 'hourlyRate', 'id', 'isAvailable', 'paymentMethods', 'portfolioUrl', 'publicPhone', 'ratingAverage', 'ratingCount', 'serviceArea', 'servicesOffered', 'test', 'updatedAt', 'userId'] as const
   $columns = GardenerProfileSchema.$columns
   @column()
   declare availabilitySchedule: string | null
@@ -120,6 +120,8 @@ export class GardenerProfileSchema extends BaseModel {
   declare serviceArea: string | null
   @column()
   declare servicesOffered: string | null
+  @column()
+  declare test: string | null
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
   @column()
