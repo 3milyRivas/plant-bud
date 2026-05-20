@@ -5,6 +5,10 @@
 
 @source "../views";
 
+[x-cloak] {
+  display: none !important;
+}
+
 input[type='password']::-ms-reveal,
 input[type='password']::-ms-clear {
   display: none;
@@ -63,4 +67,56 @@ input[type='password']::-webkit-credentials-auto-fill-button {
 
 .animate-expand {
   animation: expand 1.2s ease forwards;
+}
+
+@keyframes softPop {
+  0% {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes gentleTilt {
+  0%,
+  100% {
+    transform: rotate(-1deg) translateY(0);
+  }
+
+  50% {
+    transform: rotate(1deg) translateY(-10px);
+  }
+}
+
+.homepage-soft-pop {
+  animation: softPop 0.75s ease both;
+}
+
+.homepage-hero-media {
+  animation: gentleTilt 8s ease-in-out infinite;
+}
+
+.homepage-lively-card {
+  transition:
+    transform 320ms ease,
+    box-shadow 320ms ease,
+    background-color 320ms ease,
+    border-color 320ms ease;
+}
+
+.homepage-lively-card:hover {
+  transform: translateY(-8px) scale(1.015);
+  box-shadow: 0 26px 70px rgb(17 62 20 / 0.22);
+}
+
+.homepage-lively-card:hover .homepage-lively-icon {
+  transform: translateY(-5px) rotate(-4deg) scale(1.08);
+}
+
+.homepage-lively-icon {
+  transition: transform 320ms ease;
 }

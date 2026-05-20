@@ -4,8 +4,10 @@
 @endslot
 
 @let(displayName = accountProfile?.displayName || user.fullName || user.username)
-@let(avatarUrl = accountProfile?.avatarUrl || user.profilePicture || '/resources/images/profile/lady.png')
-@let(bannerUrl = accountProfile?.bannerUrl || '/resources/images/profile/profile-header.png')
+@let(publicDisplayName = roleProfileKind === 'nursery' && roleProfile?.nurseryName ? roleProfile.nurseryName : displayName)
+@let(profileBio = roleProfileKind === 'gardener' && roleProfile?.bio ? roleProfile.bio : (roleProfileKind === 'nursery' && roleProfile?.description ? roleProfile.description : accountProfile?.bio))
+@let(avatarUrl = accountProfile?.avatarUrl || user.profilePicture)
+@let(bannerUrl = accountProfile?.bannerUrl)
 @let(memberSince = user.createdAt ? user.createdAt.toFormat('LLL yyyy') : 'Recently')
 
 <div class="relative z-10 min-h-dvh overflow-hidden bg-[#6B8C6C] text-[#1E3D19]">
@@ -45,7 +47,11 @@
 
     <section class="isolate overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/10 shadow-[0_30px_90px_rgba(0,0,0,0.22)] backdrop-blur-3xl">
       <div class="relative h-52 overflow-hidden sm:h-64 lg:h-72">
-        <img src="{{ bannerUrl }}" alt="" class="absolute inset-0 block h-full max-h-full w-full object-cover">
+        @if(bannerUrl)
+          <img src="{{ bannerUrl }}" alt="" class="absolute inset-0 block h-full max-h-full w-full object-cover">
+        @else
+          <div class="absolute inset-0 bg-gradient-to-br from-[#1E3D19] via-[#315F28] to-[#728B6F]"></div>
+        @endif
         <div class="absolute inset-0 bg-gradient-to-t from-[#1E3D19] via-[#1E3D19]/15 to-transparent"></div>
       </div>
 
@@ -53,19 +59,25 @@
         <div class="grid gap-6 lg:grid-cols-[180px_1fr_auto] lg:items-center">
           <div class="relative h-32 w-32 sm:h-40 sm:w-40">
             <div class="absolute -inset-1 rounded-full bg-[#EDE7D6] shadow-[0_18px_55px_rgba(0,0,0,0.28)]"></div>
-            <img src="{{ avatarUrl }}" alt="" class="relative h-full w-full rounded-full border-4 border-white object-cover">
+            @if(avatarUrl)
+              <img src="{{ avatarUrl }}" alt="" class="relative h-full w-full rounded-full border-4 border-white object-cover">
+            @else
+              <div class="relative flex h-full w-full items-center justify-center rounded-full border-4 border-white bg-[#1E3D19] text-5xl font-black text-[#EDE7D6] shadow-inner sm:text-6xl">
+                {{ avatarInitial }}
+              </div>
+            @endif
           </div>
 
           <div>
             <div class="flex flex-wrap items-center gap-3">
-              <h1 class="text-4xl font-black leading-tight text-white lg:text-5xl">{{ displayName }}</h1>
+              <h1 class="text-4xl font-black leading-tight text-white lg:text-5xl">{{ publicDisplayName }}</h1>
               <span class="rounded-full bg-[#EDE7D6] px-3 py-1.5 text-xs font-black uppercase tracking-[0.16em] text-[#1E3D19]">
                 {{ user.role }}
               </span>
             </div>
             <p class="mt-2 text-base font-bold text-[#EDE7D6]">{{ '@' + user.username }}</p>
             <p class="mt-4 max-w-2xl text-sm font-semibold leading-7 text-white/82">
-              {{ accountProfile?.bio || 'This profile is ready. Add a description from settings to tell the community what you grow, care for, or sell.' }}
+              {{ profileBio || 'This profile is ready. Add a description from settings to tell the community what you grow, care for, or sell.' }}
             </p>
           </div>
 
@@ -102,6 +114,142 @@
         </div>
       </div>
     </section>
+
+    @if(roleProfileKind === 'gardener' || roleProfileKind === 'nursery')
+      <section class="mt-6 grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
+        <article class="rounded-[2rem] border border-white/10 bg-white/12 p-6 text-white shadow-xl backdrop-blur-2xl">
+          <div class="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <p class="text-sm font-black uppercase tracking-[0.18em] text-[#EDE7D6]">
+                {{ roleProfileKind === 'gardener' ? 'Gardener profile' : 'Nursery profile' }}
+              </p>
+              <h2 class="mt-2 text-3xl font-black">
+                {{ roleProfileKind === 'gardener' ? (roleProfile?.headline || 'Gardening professional') : (roleProfile?.nurseryName || publicDisplayName) }}
+              </h2>
+            </div>
+
+            <span class="w-fit rounded-full bg-[#EDE7D6] px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-[#1E3D19]">
+              @if(roleProfileKind === 'gardener')
+                {{ roleProfile?.isAvailable ? 'Available' : 'Paused' }}
+              @else
+                {{ roleProfile?.isActive ? 'Open profile' : 'Paused profile' }}
+              @endif
+            </span>
+          </div>
+
+          <div class="mt-6 grid gap-4 sm:grid-cols-3">
+            <div class="rounded-2xl bg-white/10 p-4">
+              <p class="text-xs font-black uppercase tracking-[0.14em] text-[#EDE7D6]">Rating</p>
+              <p class="mt-2 text-3xl font-black">{{ profileRating.averageText }}</p>
+              <div class="mt-1 flex gap-1 text-lg text-[#EDE7D6]">
+                @each(star in ratingStars)
+                  <span class="{{ profileRating.average >= star ? 'opacity-100' : 'opacity-35' }}">&#9733;</span>
+                @end
+              </div>
+              <p class="mt-1 text-xs font-bold text-white/65">{{ profileRating.count }} reviews</p>
+            </div>
+
+            <div class="rounded-2xl bg-white/10 p-4 sm:col-span-2">
+              <p class="text-xs font-black uppercase tracking-[0.14em] text-[#EDE7D6]">
+                {{ roleProfileKind === 'gardener' ? 'Service area' : 'Location' }}
+              </p>
+              <p class="mt-2 text-lg font-black">
+                @if(roleProfileKind === 'gardener')
+                  {{ roleProfile?.serviceArea || accountProfile?.location || 'Pending' }}
+                @else
+                  {{ roleProfile?.address || roleProfile?.city || accountProfile?.location || 'Pending' }}
+                @endif
+              </p>
+              <p class="mt-2 text-sm font-semibold leading-6 text-white/65">
+                {{ roleProfileKind === 'gardener' ? 'Public zone where clients can request work.' : 'Public customer-facing address or city.' }}
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <article class="rounded-[2rem] bg-[#EDE7D6]/95 p-6 text-[#1E3D19] shadow-[0_24px_70px_rgba(0,0,0,0.18)]">
+          <div class="grid gap-5 md:grid-cols-2">
+            <div>
+              <p class="text-sm font-black uppercase tracking-[0.18em] text-[#728B6F]">Services</p>
+              <div class="mt-4 flex flex-wrap gap-2">
+                @each(service in profileServices)
+                  <span class="rounded-full bg-white px-4 py-2 text-sm font-black text-[#315F28] shadow-sm">{{ service }}</span>
+                @else
+                  <p class="rounded-2xl border border-dashed border-[#728B6F]/40 bg-white/50 px-4 py-4 text-sm font-bold text-[#5D7459]">
+                    Services are ready to be added from settings.
+                  </p>
+                @end
+              </div>
+            </div>
+
+            <div>
+              <p class="text-sm font-black uppercase tracking-[0.18em] text-[#728B6F]">Payment methods</p>
+              <div class="mt-4 flex flex-wrap gap-2">
+                @each(method in paymentMethods)
+                  <span class="rounded-full bg-[#315F28] px-4 py-2 text-sm font-black text-white">{{ method }}</span>
+                @else
+                  <p class="rounded-2xl border border-dashed border-[#728B6F]/40 bg-white/50 px-4 py-4 text-sm font-bold text-[#5D7459]">
+                    Payment options are pending.
+                  </p>
+                @end
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 grid gap-4 md:grid-cols-2">
+            <div class="rounded-2xl bg-white/60 p-4">
+              <p class="text-xs font-black uppercase tracking-[0.14em] text-[#728B6F]">
+                {{ roleProfileKind === 'gardener' ? 'Schedule' : 'Opening hours' }}
+              </p>
+              <p class="mt-2 whitespace-pre-line text-sm font-bold leading-6 text-[#315F28]">
+                {{ roleProfileKind === 'gardener' ? (roleProfile?.availabilitySchedule || 'Pending') : (roleProfile?.openingHours || 'Pending') }}
+              </p>
+            </div>
+            <div class="rounded-2xl bg-white/60 p-4">
+              <p class="text-xs font-black uppercase tracking-[0.14em] text-[#728B6F]">Contact</p>
+              <p class="mt-2 text-sm font-bold leading-6 text-[#315F28]">
+                {{ roleProfile?.publicPhone || user.phone || 'Pending phone' }}
+              </p>
+              @if(roleProfileKind === 'nursery')
+                <p class="mt-1 break-words text-sm font-bold leading-6 text-[#315F28]">
+                  {{ roleProfile?.publicEmail || user.email }}
+                </p>
+              @endif
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="mt-6 rounded-[2rem] border border-white/10 bg-white/12 p-6 text-white shadow-xl backdrop-blur-2xl">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p class="text-sm font-black uppercase tracking-[0.18em] text-[#EDE7D6]">Reviews</p>
+            <h2 class="mt-2 text-2xl font-black">Community trust</h2>
+          </div>
+          <span class="rounded-full bg-white/10 px-4 py-2 text-sm font-black text-[#EDE7D6]">
+            {{ profileRating.averageText }} / 5
+          </span>
+        </div>
+
+        <div class="mt-5 grid gap-4 md:grid-cols-3">
+          @each(review in profileReviews)
+            <article class="rounded-2xl bg-white/10 p-4">
+              <div class="flex items-center justify-between gap-3">
+                <p class="font-black">{{ review.reviewerName || 'Plant Bud user' }}</p>
+                <span class="rounded-full bg-[#EDE7D6] px-3 py-1 text-xs font-black text-[#1E3D19]">{{ review.rating }}/5</span>
+              </div>
+              <p class="mt-3 line-clamp-4 text-sm font-semibold leading-6 text-white/75">
+                {{ review.comment || 'No written comment yet.' }}
+              </p>
+            </article>
+          @else
+            <div class="rounded-2xl border border-dashed border-white/20 p-5 text-sm font-semibold leading-6 text-white/75 md:col-span-3">
+              Reviews will appear here once clients rate this profile.
+            </div>
+          @end
+        </div>
+      </section>
+    @endif
 
     <section class="mt-6 grid gap-6 lg:grid-cols-[0.75fr_1.25fr]">
       <aside class="space-y-6">

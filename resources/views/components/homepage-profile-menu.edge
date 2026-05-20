@@ -1,0 +1,34 @@
+<div class="relative" x-data="{ profileOpen: false }" @keydown.escape.window="profileOpen = false" @click.outside="profileOpen = false">
+  <button type="button" class="flex items-center gap-3 rounded-2xl border border-white/45 bg-white/65 px-2.5 py-2 text-left shadow-lg backdrop-blur-2xl transition hover:-translate-y-0.5 hover:bg-white/80" @click="profileOpen = !profileOpen" aria-haspopup="true" :aria-expanded="profileOpen.toString()">
+    @if(avatarUrl)
+      <img src="{{ avatarUrl }}" alt="" class="h-11 w-11 rounded-xl border-2 border-white object-cover shadow-md">
+    @else
+      <span class="flex h-11 w-11 items-center justify-center rounded-xl border-2 border-white bg-[#1E3D19] text-base font-black text-[#EDE7D6] shadow-md">
+        {{ avatarInitial }}
+      </span>
+    @endif
+
+    <span class="hidden min-w-0 sm:block">
+      <span class="block max-w-36 truncate text-sm font-black text-[#1E3D19]">{{ displayName }}</span>
+      <span class="block text-xs font-bold uppercase tracking-[0.14em] text-[#6B8C6C]">{{ roleLabel }}</span>
+    </span>
+
+    <svg class="hidden h-4 w-4 text-[#1E3D19] sm:block" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6" />
+    </svg>
+  </button>
+
+  <div x-cloak x-show="profileOpen" x-transition class="absolute right-0 top-[calc(100%+0.75rem)] z-50 w-56 overflow-hidden rounded-2xl border border-white/45 bg-[#F7F4E8]/95 p-2 text-[#1E3D19] shadow-2xl backdrop-blur-2xl">
+    <a href="/profile" class="block rounded-xl px-4 py-3 text-sm font-black transition hover:bg-white/70">
+      View profile
+    </a>
+    <a href="/profile/settings" class="block rounded-xl px-4 py-3 text-sm font-black transition hover:bg-white/70">
+      Settings
+    </a>
+    @form({ route: 'session.destroy', method: 'POST' })
+      <button type="submit" class="w-full rounded-xl px-4 py-3 text-left text-sm font-black text-red-700 transition hover:bg-red-100">
+        Log out
+      </button>
+    @end
+  </div>
+</div>

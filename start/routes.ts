@@ -50,6 +50,7 @@ router
     router.get('/homepage', [HomepagesController, 'index']).as('homepage')
     router.get('/profile', [ProfilesController, 'show']).as('profile')
     router.get('/profile/settings', [ProfilesController, 'settings']).as('profile.settings')
+    router.get('/profile/media/:kind/:fileName', [ProfilesController, 'media']).as('profile.media')
     router.post('/profile', [ProfilesController, 'update']).as('profile.update')
   })
   .use(middleware.auth())

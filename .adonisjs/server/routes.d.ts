@@ -13,6 +13,7 @@ export type ScannedRoutes = {
     'homepage': { paramsTuple?: []; params?: {} }
     'profile': { paramsTuple?: []; params?: {} }
     'profile.settings': { paramsTuple?: []; params?: {} }
+    'profile.media': { paramsTuple: [ParamValue,ParamValue]; params: {'kind': ParamValue,'fileName': ParamValue} }
     'profile.update': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
     'session.store': { paramsTuple?: []; params?: {} }
@@ -30,6 +31,7 @@ export type ScannedRoutes = {
     'homepage': { paramsTuple?: []; params?: {} }
     'profile': { paramsTuple?: []; params?: {} }
     'profile.settings': { paramsTuple?: []; params?: {} }
+    'profile.media': { paramsTuple: [ParamValue,ParamValue]; params: {'kind': ParamValue,'fileName': ParamValue} }
     'session.create': { paramsTuple?: []; params?: {} }
     'signup.client': { paramsTuple?: []; params?: {} }
     'signup.gardener': { paramsTuple?: []; params?: {} }
@@ -43,6 +45,7 @@ export type ScannedRoutes = {
     'homepage': { paramsTuple?: []; params?: {} }
     'profile': { paramsTuple?: []; params?: {} }
     'profile.settings': { paramsTuple?: []; params?: {} }
+    'profile.media': { paramsTuple: [ParamValue,ParamValue]; params: {'kind': ParamValue,'fileName': ParamValue} }
     'session.create': { paramsTuple?: []; params?: {} }
     'signup.client': { paramsTuple?: []; params?: {} }
     'signup.gardener': { paramsTuple?: []; params?: {} }

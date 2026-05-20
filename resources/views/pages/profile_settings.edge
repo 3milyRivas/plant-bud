@@ -6,12 +6,22 @@
 @let(old = flashMessages.get('old') || {})
 @let(errors = flashMessages.get('errors') || {})
 @let(displayName = accountProfile?.displayName || user.fullName || user.username)
-@let(avatarUrl = accountProfile?.avatarUrl || user.profilePicture || '/resources/images/profile/lady.png')
-@let(bannerUrl = accountProfile?.bannerUrl || '/resources/images/profile/profile-header.png')
+@let(avatarUrl = accountProfile?.avatarUrl || user.profilePicture)
+@let(bannerUrl = accountProfile?.bannerUrl)
 @let(phoneValue = old.phone ?? user.phone ?? '')
 @let(instagramHandle = old.instagram_handle ?? socialHandles.instagram ?? '')
 @let(tiktokHandle = old.tiktok_handle ?? socialHandles.tiktok ?? '')
 @let(facebookHandle = old.facebook_handle ?? socialHandles.facebook ?? '')
+@let(publicPhoneValue = old.public_phone ?? roleProfile?.publicPhone ?? user.phone ?? '')
+@let(publicEmailValue = old.public_email ?? roleProfile?.publicEmail ?? user.email ?? '')
+@let(servicesValue = old.services_offered ?? profileServicesText ?? '')
+@let(paymentMethodsValue = old.payment_methods ?? paymentMethodsText ?? '')
+@let(headlineValue = old.headline ?? roleProfile?.headline ?? '')
+@let(serviceAreaValue = old.service_area ?? roleProfile?.serviceArea ?? accountProfile?.location ?? '')
+@let(availabilityValue = old.availability_schedule ?? roleProfile?.availabilitySchedule ?? '')
+@let(openingHoursValue = old.opening_hours ?? roleProfile?.openingHours ?? '')
+@let(addressValue = old.address ?? roleProfile?.address ?? '')
+@let(cityValue = old.city ?? roleProfile?.city ?? accountProfile?.location ?? '')
 
 <div class="relative z-10 min-h-dvh overflow-hidden bg-[#6B8C6C] text-[#1E3D19]" data-profile-page>
   <div class="fixed inset-0 pointer-events-none">
@@ -51,23 +61,29 @@
       <section class="space-y-6">
         <div class="overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/12 shadow-[0_30px_90px_rgba(0,0,0,0.22)] backdrop-blur-3xl">
           <div class="relative h-56 overflow-hidden">
-            <img id="banner-preview" src="{{ bannerUrl }}" alt="" class="absolute inset-0 block h-full max-h-full w-full object-cover">
+            <div id="banner-fallback" class="{{ bannerUrl ? 'hidden' : 'absolute inset-0' }}">
+              <div class="absolute inset-0 bg-gradient-to-br from-[#1E3D19] via-[#315F28] to-[#728B6F]"></div>
+            </div>
+            <img id="banner-preview" src="{{ bannerUrl || '' }}" alt="" class="{{ bannerUrl ? 'absolute inset-0 block h-full max-h-full w-full object-cover' : 'hidden absolute inset-0 h-full max-h-full w-full object-cover' }}">
             <div class="absolute inset-0 bg-gradient-to-t from-[#1E3D19]/80 via-[#1E3D19]/10 to-transparent"></div>
             <label for="banner" class="absolute right-4 top-4 cursor-pointer rounded-full bg-[#EDE7D6] px-4 py-2 text-sm font-black text-[#1E3D19] shadow-lg transition hover:scale-[1.02]">
               Change banner
             </label>
-            <input id="banner" name="banner" type="file" accept="image/jpeg,image/png,image/webp" class="sr-only" data-profile-file-input data-preview-target="banner-preview">
+            <input id="banner" name="banner" type="file" accept="image/jpeg,image/png,image/webp" class="sr-only" data-profile-file-input data-preview-target="banner-preview" data-preview-fallback="banner-fallback">
           </div>
 
           <div class="px-6 pb-6 pt-6">
             <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div class="relative h-28 w-28 sm:h-32 sm:w-32">
                 <div class="absolute -inset-1 rounded-full bg-[#EDE7D6] shadow-xl"></div>
-                <img id="avatar-preview" src="{{ avatarUrl }}" alt="" class="relative h-full w-full rounded-full border-4 border-white object-cover">
+                <img id="avatar-preview" src="{{ avatarUrl || '' }}" alt="" class="{{ avatarUrl ? 'relative h-full w-full rounded-full border-4 border-white object-cover' : 'hidden relative h-full w-full rounded-full border-4 border-white object-cover' }}">
+                <div id="avatar-fallback" class="{{ avatarUrl ? 'hidden' : 'relative flex h-full w-full items-center justify-center rounded-full border-4 border-white bg-[#1E3D19] text-4xl font-black text-[#EDE7D6] shadow-inner sm:text-5xl' }}">
+                  {{ avatarInitial }}
+                </div>
                 <label for="avatar" class="absolute bottom-1 right-1 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-[#1E3D19] text-lg font-black text-white shadow-lg transition hover:bg-[#315F28]" title="Change photo">
                   +
                 </label>
-                <input id="avatar" name="avatar" type="file" accept="image/jpeg,image/png,image/webp" class="sr-only" data-avatar-input data-preview-target="avatar-preview">
+                <input id="avatar" name="avatar" type="file" accept="image/jpeg,image/png,image/webp" class="sr-only" data-avatar-input data-preview-target="avatar-preview" data-preview-fallback="avatar-fallback">
               </div>
 
               <span class="rounded-full bg-[#EDE7D6] px-3 py-2 text-xs font-black uppercase tracking-[0.14em] text-[#1E3D19]">
@@ -149,6 +165,162 @@
             @endif
           </label>
         </div>
+
+        @if(roleProfileKind === 'gardener')
+          <div class="rounded-[2.5rem] bg-[#EDE7D6]/95 p-6 shadow-[0_24px_70px_rgba(0,0,0,0.18)]">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p class="text-sm font-black uppercase tracking-[0.18em] text-[#728B6F]">Gardener services</p>
+                <h2 class="mt-2 text-3xl font-black text-[#1E3D19]">Public offer</h2>
+              </div>
+              <span class="rounded-full bg-white px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-[#315F28]">
+                Linked to profile
+              </span>
+            </div>
+
+            <div class="mt-7 grid gap-5 md:grid-cols-2">
+              <label class="block">
+                <span class="text-sm font-black text-[#315F28]">Headline</span>
+                <input name="headline" value="{{ headlineValue }}" maxlength="100" placeholder="Garden care specialist" class="mt-2 h-12 w-full rounded-2xl border border-[#C7D8BF] bg-white/70 px-4 text-sm font-bold text-[#1E3D19] outline-none transition focus:border-[#6B8C6C] focus:bg-white">
+                @if(errors.headline)
+                  <span class="mt-2 block text-xs font-bold text-red-700">{{ errors.headline[0] }}</span>
+                @endif
+              </label>
+
+              <label class="block">
+                <span class="text-sm font-black text-[#315F28]">Availability status</span>
+                <select name="is_available" class="mt-2 h-12 w-full rounded-2xl border border-[#C7D8BF] bg-white/70 px-4 text-sm font-bold text-[#1E3D19] outline-none transition focus:border-[#6B8C6C] focus:bg-white">
+                  <option value="1" {{ (old.is_available ?? (roleProfile?.isAvailable ? '1' : '0')) === '1' ? 'selected' : '' }}>Available</option>
+                  <option value="0" {{ (old.is_available ?? (roleProfile?.isAvailable ? '1' : '0')) === '0' ? 'selected' : '' }}>Paused</option>
+                </select>
+              </label>
+
+              <label class="block">
+                <span class="text-sm font-black text-[#315F28]">Service area</span>
+                <input name="service_area" value="{{ serviceAreaValue }}" maxlength="120" placeholder="San Salvador and nearby zones" class="mt-2 h-12 w-full rounded-2xl border border-[#C7D8BF] bg-white/70 px-4 text-sm font-bold text-[#1E3D19] outline-none transition focus:border-[#6B8C6C] focus:bg-white">
+                @if(errors.service_area)
+                  <span class="mt-2 block text-xs font-bold text-red-700">{{ errors.service_area[0] }}</span>
+                @endif
+              </label>
+
+              <label class="block">
+                <span class="text-sm font-black text-[#315F28]">Public phone</span>
+                <input name="public_phone" value="{{ publicPhoneValue }}" maxlength="20" inputmode="numeric" placeholder="0000-0000" class="mt-2 h-12 w-full rounded-2xl border border-[#C7D8BF] bg-white/70 px-4 text-sm font-bold text-[#1E3D19] outline-none transition focus:border-[#6B8C6C] focus:bg-white" data-phone-input>
+                @if(errors.public_phone)
+                  <span class="mt-2 block text-xs font-bold text-red-700">{{ errors.public_phone[0] }}</span>
+                @endif
+              </label>
+            </div>
+
+            <label class="mt-5 block">
+              <span class="text-sm font-black text-[#315F28]">Services</span>
+              <textarea name="services_offered" maxlength="1200" rows="4" placeholder="Maintenance&#10;Pruning&#10;Garden design" class="mt-2 w-full resize-none rounded-2xl border border-[#C7D8BF] bg-white/70 px-4 py-3 text-sm font-bold leading-6 text-[#1E3D19] outline-none transition focus:border-[#6B8C6C] focus:bg-white">{{ servicesValue }}</textarea>
+              @if(errors.services_offered)
+                <span class="mt-2 block text-xs font-bold text-red-700">{{ errors.services_offered[0] }}</span>
+              @endif
+            </label>
+
+            <div class="mt-5 grid gap-5 md:grid-cols-2">
+              <label class="block">
+                <span class="text-sm font-black text-[#315F28]">Schedule</span>
+                <textarea name="availability_schedule" maxlength="500" rows="4" placeholder="Monday to Friday, 8:00 AM - 5:00 PM" class="mt-2 w-full resize-none rounded-2xl border border-[#C7D8BF] bg-white/70 px-4 py-3 text-sm font-bold leading-6 text-[#1E3D19] outline-none transition focus:border-[#6B8C6C] focus:bg-white">{{ availabilityValue }}</textarea>
+                @if(errors.availability_schedule)
+                  <span class="mt-2 block text-xs font-bold text-red-700">{{ errors.availability_schedule[0] }}</span>
+                @endif
+              </label>
+
+              <label class="block">
+                <span class="text-sm font-black text-[#315F28]">Payment methods</span>
+                <textarea name="payment_methods" maxlength="600" rows="4" placeholder="Cash&#10;Bank transfer&#10;Card" class="mt-2 w-full resize-none rounded-2xl border border-[#C7D8BF] bg-white/70 px-4 py-3 text-sm font-bold leading-6 text-[#1E3D19] outline-none transition focus:border-[#6B8C6C] focus:bg-white">{{ paymentMethodsValue }}</textarea>
+                @if(errors.payment_methods)
+                  <span class="mt-2 block text-xs font-bold text-red-700">{{ errors.payment_methods[0] }}</span>
+                @endif
+              </label>
+            </div>
+          </div>
+        @endif
+
+        @if(roleProfileKind === 'nursery')
+          <div class="rounded-[2.5rem] bg-[#EDE7D6]/95 p-6 shadow-[0_24px_70px_rgba(0,0,0,0.18)]">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p class="text-sm font-black uppercase tracking-[0.18em] text-[#728B6F]">Nursery storefront</p>
+                <h2 class="mt-2 text-3xl font-black text-[#1E3D19]">Public details</h2>
+              </div>
+              <span class="rounded-full bg-white px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-[#315F28]">
+                {{ roleProfile?.nurseryName || displayName }}
+              </span>
+            </div>
+
+            <div class="mt-7 grid gap-5 md:grid-cols-2">
+              <label class="block">
+                <span class="text-sm font-black text-[#315F28]">Profile status</span>
+                <select name="is_active" class="mt-2 h-12 w-full rounded-2xl border border-[#C7D8BF] bg-white/70 px-4 text-sm font-bold text-[#1E3D19] outline-none transition focus:border-[#6B8C6C] focus:bg-white">
+                  <option value="1" {{ (old.is_active ?? (roleProfile?.isActive ? '1' : '0')) === '1' ? 'selected' : '' }}>Active</option>
+                  <option value="0" {{ (old.is_active ?? (roleProfile?.isActive ? '1' : '0')) === '0' ? 'selected' : '' }}>Paused</option>
+                </select>
+              </label>
+
+              <label class="block">
+                <span class="text-sm font-black text-[#315F28]">Public phone</span>
+                <input name="public_phone" value="{{ publicPhoneValue }}" maxlength="20" inputmode="numeric" placeholder="0000-0000" class="mt-2 h-12 w-full rounded-2xl border border-[#C7D8BF] bg-white/70 px-4 text-sm font-bold text-[#1E3D19] outline-none transition focus:border-[#6B8C6C] focus:bg-white" data-phone-input>
+                @if(errors.public_phone)
+                  <span class="mt-2 block text-xs font-bold text-red-700">{{ errors.public_phone[0] }}</span>
+                @endif
+              </label>
+
+              <label class="block">
+                <span class="text-sm font-black text-[#315F28]">Public email</span>
+                <input name="public_email" value="{{ publicEmailValue }}" maxlength="254" type="email" placeholder="hello@nursery.com" class="mt-2 h-12 w-full rounded-2xl border border-[#C7D8BF] bg-white/70 px-4 text-sm font-bold text-[#1E3D19] outline-none transition focus:border-[#6B8C6C] focus:bg-white">
+                @if(errors.public_email)
+                  <span class="mt-2 block text-xs font-bold text-red-700">{{ errors.public_email[0] }}</span>
+                @endif
+              </label>
+
+              <label class="block">
+                <span class="text-sm font-black text-[#315F28]">City</span>
+                <input name="city" value="{{ cityValue }}" maxlength="120" placeholder="Santa Tecla" class="mt-2 h-12 w-full rounded-2xl border border-[#C7D8BF] bg-white/70 px-4 text-sm font-bold text-[#1E3D19] outline-none transition focus:border-[#6B8C6C] focus:bg-white">
+                @if(errors.city)
+                  <span class="mt-2 block text-xs font-bold text-red-700">{{ errors.city[0] }}</span>
+                @endif
+              </label>
+            </div>
+
+            <label class="mt-5 block">
+              <span class="text-sm font-black text-[#315F28]">Address</span>
+              <input name="address" value="{{ addressValue }}" maxlength="255" placeholder="Street, local reference, or pickup point" class="mt-2 h-12 w-full rounded-2xl border border-[#C7D8BF] bg-white/70 px-4 text-sm font-bold text-[#1E3D19] outline-none transition focus:border-[#6B8C6C] focus:bg-white">
+              @if(errors.address)
+                <span class="mt-2 block text-xs font-bold text-red-700">{{ errors.address[0] }}</span>
+              @endif
+            </label>
+
+            <div class="mt-5 grid gap-5 md:grid-cols-2">
+              <label class="block">
+                <span class="text-sm font-black text-[#315F28]">Products and services</span>
+                <textarea name="services_offered" maxlength="1200" rows="4" placeholder="Indoor plants&#10;Succulents&#10;Soil mixes&#10;Plant delivery" class="mt-2 w-full resize-none rounded-2xl border border-[#C7D8BF] bg-white/70 px-4 py-3 text-sm font-bold leading-6 text-[#1E3D19] outline-none transition focus:border-[#6B8C6C] focus:bg-white">{{ servicesValue }}</textarea>
+                @if(errors.services_offered)
+                  <span class="mt-2 block text-xs font-bold text-red-700">{{ errors.services_offered[0] }}</span>
+                @endif
+              </label>
+
+              <label class="block">
+                <span class="text-sm font-black text-[#315F28]">Opening hours</span>
+                <textarea name="opening_hours" maxlength="255" rows="4" placeholder="Monday to Saturday, 9:00 AM - 6:00 PM" class="mt-2 w-full resize-none rounded-2xl border border-[#C7D8BF] bg-white/70 px-4 py-3 text-sm font-bold leading-6 text-[#1E3D19] outline-none transition focus:border-[#6B8C6C] focus:bg-white">{{ openingHoursValue }}</textarea>
+                @if(errors.opening_hours)
+                  <span class="mt-2 block text-xs font-bold text-red-700">{{ errors.opening_hours[0] }}</span>
+                @endif
+              </label>
+            </div>
+
+            <label class="mt-5 block">
+              <span class="text-sm font-black text-[#315F28]">Payment methods</span>
+              <textarea name="payment_methods" maxlength="600" rows="4" placeholder="Cash&#10;Card&#10;Bank transfer" class="mt-2 w-full resize-none rounded-2xl border border-[#C7D8BF] bg-white/70 px-4 py-3 text-sm font-bold leading-6 text-[#1E3D19] outline-none transition focus:border-[#6B8C6C] focus:bg-white">{{ paymentMethodsValue }}</textarea>
+              @if(errors.payment_methods)
+                <span class="mt-2 block text-xs font-bold text-red-700">{{ errors.payment_methods[0] }}</span>
+              @endif
+            </label>
+          </div>
+        @endif
 
         <div class="rounded-[2.5rem] border border-white/10 bg-white/12 p-6 text-white shadow-xl backdrop-blur-2xl">
           <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
