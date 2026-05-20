@@ -4,7 +4,9 @@
 @endslot
 
 @!component('components/header', {
-title: "Discover the best plant nurseries"
+title: "Discover the best plant nurseries",
+text: "Explore beautiful places full of life and nature near you.",
+imageBg:'bg-[url(/nurseries/viv0.jpg)]'
 })
 
 <div class="flex flex justify-center pt-20 pb-10 text-white">
@@ -30,67 +32,17 @@ title: "Discover the best plant nurseries"
   </div>
 </section>
 
-<div class="flex items-center justify-center pt-3">
-  <div class="h-[4px] w-20 bg-gradient-to-r from-transparent to-white/40"></div>
-  <div
-    class="mx-6 px-6 py-2 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white tracking-[0.2em] uppercase text-sm font-semibold">
-    Big Sales %
-  </div>
-  <div class="h-[4px] w-20 bg-gradient-to-l from-transparent to-white/40"></div>
-</div>
-<!--lista de ofertas-->
-<div class="relative z-10 max-w-7xl mx-auto">
-  <div class="pt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-    <div
-      class="group relative overflow-hidden rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.20)] hover:-translate-y-2 transition-all duration-500">
-      <div class="absolute -inset-2 bg-[#48AE4D]/20 blur-2xl opacity-0 group-hover:opacity-100 transition"></div>
-      <img src="/nurseries/sale1.jpg"
-        class="w-full h-[420px] object-cover group-hover:scale-110 transition duration-700">
-      <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-      <div class="absolute bottom-0 left-0 p-6">
-        <div class="text-white text-2xl font-bold">Izote 50%</div>
-        <div class="text-white/80 text-sm font-bold">Terra Flora Garden</div>
-      </div>
-    </div>
-    <div
-      class="group relative overflow-hidden rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.20)] hover:-translate-y-2 transition-all duration-500">
-      <div class="absolute -inset-2 bg-[#48AE4D]/20 blur-2xl opacity-0 group-hover:opacity-100 transition"></div>
-      <img src="/nurseries/sale2.jpg"
-        class="w-full h-[420px] object-cover group-hover:scale-110 transition duration-700">
-      <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-      <div class="absolute bottom-0 left-0 p-6">
-        <div class="text-white text-2xl font-bold">Crown of thorns 60%</div>
-        <div class="text-white/80 text-sm font-bold">Verde viva botánica</div>
-      </div>
-    </div>
-    <div
-      class="group relative overflow-hidden rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.20)] hover:-translate-y-2 transition-all duration-500">
-      <div class="absolute -inset-2 bg-[#48AE4D]/20 blur-2xl opacity-0 group-hover:opacity-100 transition"></div>
-      <img src="/nurseries/sale3.jpg"
-        class="w-full h-[420px] object-cover group-hover:scale-110 transition duration-700">
-      <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-      <div class="absolute bottom-0 left-0 p-6">
-        <div class="text-white text-2xl font-bold">Hot Chili peper 30%</div>
-        <div class="text-white/80 text-sm font-bold">El Bambú Nursery</div>
-      </div>
-    </div>
-    <div
-      class="group relative overflow-hidden rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.20)] hover:-translate-y-2 transition-all duration-500">
-      <div class="absolute -inset-2 bg-[#48AE4D]/20 blur-2xl opacity-0 group-hover:opacity-100 transition"></div>
-      <img src="/nurseries/sale4.jpg"
-        class="w-full h-[420px] object-cover group-hover:scale-110 transition duration-700">
-      <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-      <div class="absolute bottom-0 left-0 p-6">
-        <div class="text-white text-2xl font-bold">Dumb cane camille 60%</div>
-        <div class="text-white/80 text-sm font-bold">Green Heaven Nursery</div>
-      </div>
-    </div>
-  </div>
-  <!-- Linea divisora :v-->
-  <div class="flex justify-center pt-16">
-    <div class="w-[300px] h-[4px] bg-gradient-to-r from-transparent via-white/40 to-transparent">
-    </div>
-  </div>
+@!component('components/img-card', {
+  title1: "Big Sales %",
+  text1: "Izote 50%",
+  text2: "Terra Flora Garden",
+  text3: "Crown of thorns 60%",
+  text4: "Verde viva botánica",
+  text5: "Hot Chili peper 30%",
+  text6: "El Bambú Nursery",
+  text7: "Dumb cane camille 60%",
+  text8: "Green Heaven Nursery"
+})
 
   <!--lista de viveros 2-->
   <section class="py-20 px-6">

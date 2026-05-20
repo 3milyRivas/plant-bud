@@ -22,7 +22,7 @@
   </div>
 </header>
 
-<div class="relative w-full h-[620px] bg-cover bg-center bg-[url('/nurseries/viv0.jpg')]">
+<div class="relative w-full h-[620px] bg-cover bg-center {{ imageBg }}">
 
   <div class="absolute inset-0 bg-black/20"></div>
   <div class="absolute inset-0 bg-gradient-to-b from-[#1E3D19]/30 to-[#6B8C6C]"></div>
@@ -32,7 +32,7 @@
       {{title}}
     </h1>
     <p class="text-white/80 mt-6 max-w-xl">
-      Explore beautiful places full of life and nature near you.
+      {{text}}
     </p>
     <div class="flex flex-wrap justify-center gap-5 mt-10">
       <button
