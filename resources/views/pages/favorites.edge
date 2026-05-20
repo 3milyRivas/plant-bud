@@ -6,16 +6,16 @@
 @vite(['resources/js/categories.js'])
 
 <div class="bg-[#6C8E6B] min-h-screen flex flex-col">
-  <div class="fixed top-0 left-0 w-full z-50 px-6 lg:px-10 py-6">
+  <div class="fixed top-0 left-0 w-full z-50 px-4 lg:px-8 py-4">
     <div class="backdrop-blur-xl bg-white/20 border border-white/30
-              rounded-full px-8 py-4 flex items-center justify-between shadow-lg">
+              rounded-full px-5 py-3 flex items-center gap-5 shadow-lg max-w-[1240px] mx-auto">
 
 
-      <div class="w-10 h-10 bg-[url('/resources/images/essential/logo.png')] bg-contain bg-no-repeat"></div>
+      <div class="w-11 h-11 flex-none bg-[url('/resources/images/essential/logo.png')] bg-contain bg-no-repeat bg-center"></div>
 
-      <div class="flex items-center gap-6">
+      <div class="flex flex-1 items-center justify-center gap-4 min-w-0">
 
-        <div class="bg-white/70 rounded-full px-6 py-2 w-[280px]">
+        <div class="bg-white/70 rounded-full px-6 py-2 w-[260px] flex-none">
           <input type="text" placeholder="Search plants" class="bg-transparent outline-none w-full
                       text-[#113E14] placeholder:text-[#6B8C6C]/70 text-sm">
         </div>
@@ -31,7 +31,7 @@
         </button>
 
 
-        <div class="flex items-center space-x-2 ml-4">
+        <div class="flex items-center space-x-2 px-2">
           <div class="w-8 h-8 bg-[url('/resources/img/img3.png')] bg-contain bg-no-repeat"></div>
           <span class="text-[#113E14] font-bold text-lg">Favorites</span>
           <div class="w-8 h-8 bg-[url('/resources/img/img3.png')] -scale-x-100 bg-contain bg-no-repeat"></div>
@@ -53,10 +53,10 @@
       </div>
 
 
-      <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 bg-[url('/resources/img/phot.jpg')] bg-cover bg-center rounded-full"></div>
-        <div class="flex flex-col">
-          <span class="text-black/60 text-sm font-semibold">María Antonieta de las Nieves</span>
+      <div class="flex flex-none items-center space-x-3 max-w-[260px]">
+        <div class="w-10 h-10 flex-none bg-[url('/resources/img/phot.jpg')] bg-cover bg-center rounded-full"></div>
+        <div class="flex min-w-0 flex-col">
+          <span class="truncate text-black/60 text-sm font-semibold">María Antonieta de las Nieves</span>
           <a href="#" class="text-blue-600 hover:underline text-xs">Switch</a>
         </div>
       </div>
@@ -64,9 +64,9 @@
   </div>
 
 
-  <div class="mx-14 py-26">
+  <div class="mx-14 pt-24 pb-6">
     <div
-      class="relative bg-[url('/resources/images/plant-budd.png')] bg-cover bg-center h-[60vh] w-full rounded-xl shadow-lg mt-8">
+      class="relative bg-[url('/resources/images/plant-budd.png')] bg-cover bg-center h-[46vh] w-full rounded-xl shadow-lg mt-4">
 
       <div class="absolute inset-0 flex flex-col justify-center items-start px-12 space-y-4">
         <h2
@@ -83,12 +83,12 @@
     </div>
   </div>
 
-  <div class="flex bg-[#6C8E6B]/80 px-6 py-10 space-x-6">
+  <div class="flex bg-[#6C8E6B]/80 px-6 pt-2 pb-10 space-x-6">
 
     <!--Aquí va el cooso este de la caja de publicaciones, la inche linea de sort by y los otros cosos-->
-    <div class="flex-1 space-y-6">
+    <div class="flex-1 space-y-4" data-favorites-feed>
 
-      <div class="flex items-center justify-between w-[700px] mx-auto p-6 space-y-6">
+      <div class="flex items-center justify-between w-[700px] mx-auto px-6 py-2">
         <div class="w-full h-[2px] bg-[url('/resources/img/line.png')] bg-cover bg-center"></div>
         <div class="flex items-center space-x-2 ml-2">
           <span class="text-sm font-bold text-black/30">Sort by</span>
@@ -380,7 +380,7 @@
         </div>
 
         <div class="flex items-center space-x-3">
-          <div class="w-12 h-12 bg-[url('resources/img/phot.jpg')] bg-cover bg-center rounded-full"></div>
+          <div class="w-12 h-12 bg-[url('/resources/img/phot.jpg')] bg-cover bg-center rounded-full"></div>
           <input type="text" placeholder="Write your comment..."
             class="flex-1 px-4 py-2 rounded-full bg-gray-100 outline-none text-sm" />
         </div>
