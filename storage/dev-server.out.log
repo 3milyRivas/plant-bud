@@ -1,0 +1,948 @@
+c[ info ] starting server in hmr mode...
+[ info ] loading hooks...
+[ info ] generating indexes...
+[ info ] codegen: created 3 file(s)
+[ info ] starting HTTP server...
+╭──────────────────────────────────────────────────╮
+│                                                  │
+│    Server address: http://localhost:64870        │
+│    Mode: hmr                                     │
+│    Ready in: 1.5 s                               │
+│    Press h to show help                          │
+│                                                  │
+╰──────────────────────────────────────────────────╯
+[22:23:11.503] [32mINFO[39m (1000): [36mstarted HTTP server on localhost:64870[39m
+[ info ] watching file system for changes...
+invalidated app/controllers/new_account_controller.ts
+[2m10:33:50 p. m.[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mresources/js/app.js[22m
+invalidated app/validators/user.ts
+invalidated app/controllers/new_account_controller.ts
+[22:36:17.288] [33mWARN[39m (1000): [36mInvalid or expired CSRF token[39m
+    [35mrequest_id[39m: "f2a27061-da3a-437b-ad69-a170aec9c5d0"
+    [35mx-request-id[39m: "f2a27061-da3a-437b-ad69-a170aec9c5d0"
+[90m"sqlite" [39mUser (1.56 ms) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `username` = ? [32mLIMIT[0m ?[90m [ 'nursery_qa_garden_plant_163710', 1 ][39m
+[90m"sqlite" [39mUser (329 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [32mLIMIT[0m ?[90m [ 'qa.nursery.163710@example.com', 1 ][39m
+[90m"sqlite" [39mNurseryProfile (390 μs) [32mSELECT[0m * [32mFROM[0m `nursery_profiles` [32mWHERE[0m `nursery_slug` = ? [32mLIMIT[0m ?[90m [ 'qa-garden-plant-163710', 1 ][39m
+[90m"sqlite" [39mUser (831 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `phone` = ? [32mLIMIT[0m ?[90m [ '7123-4567', 1 ][39m
+[90m"sqlite" [39mUser (569 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `dui` = ? [32mLIMIT[0m ?[90m [ '16371011-1', 1 ][39m
+[90m"sqlite" [39mUser (1.86 ms) [32mINSERT[0m [32mINTO[0m `users` (`created_at`, `dui`, `email`, `first_name`, `last_name`, `password`, `phone`, `role`, `updated_at`, `username`) [32mVALUES[0m (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[90m [
+  '2026-05-19 22:37:10',
+  '16371011-1',
+  'qa.nursery.163710@example.com',
+  'QA',
+  'Owner',
+  '$scrypt$n=16384,r=8,p=1$pygOEzz7RN/lCguI/H+X9Q$FrLtmCseHr5I1ORU5A+91yFOVv8nTamXMTYIYKVOTM7rqKz9MEQA2MnaRT4JY1AI8nxs0pNNwLuf8XDuKOvxWw',
+  '7123-4567',
+  'nursery',
+  '2026-05-19 22:37:10',
+  'nursery_qa_garden_plant_163710'
+][39m
+SqliteError: insert into `users` (`created_at`, `dui`, `email`, `first_name`, `last_name`, `password`, `phone`, `role`, `updated_at`, `username`) values ('2026-05-19 22:37:10', '16371011-1', 'qa.nursery.163710@example.com', 'QA', 'Owner', '$scrypt$n=16384,r=8,p=1$pygOEzz7RN/lCguI/H+X9Q$FrLtmCseHr5I1ORU5A+91yFOVv8nTamXMTYIYKVOTM7rqKz9MEQA2MnaRT4JY1AI8nxs0pNNwLuf8XDuKOvxWw', '7123-4567', 'nursery', '2026-05-19 22:37:10', 'nursery_qa_garden_plant_163710') - CHECK constraint failed: role
+    at Client_BetterSQLite3._query (C:\Users\R5 4600G\Documents\GitHub\plant-bud\node_modules\knex\lib\dialects\better-sqlite3\index.js:57:38)
+    at executeQuery (C:\Users\R5 4600G\Documents\GitHub\plant-bud\node_modules\knex\lib\execution\internal\query-executioner.js:37:17)
+    at Client_BetterSQLite3.query (C:\Users\R5 4600G\Documents\GitHub\plant-bud\node_modules\knex\lib\client.js:157:12)
+    at C:\Users\R5 4600G\Documents\GitHub\plant-bud\node_modules\knex\lib\execution\transaction.js:380:24
+    at new Promise (<anonymous>)
+    at trxClient.query (C:\Users\R5 4600G\Documents\GitHub\plant-bud\node_modules\knex\lib\execution\transaction.js:375:12)
+    at Runner.query (C:\Users\R5 4600G\Documents\GitHub\plant-bud\node_modules\knex\lib\execution\runner.js:141:36)
+    at ensureConnectionCallback (C:\Users\R5 4600G\Documents\GitHub\plant-bud\node_modules\knex\lib\execution\internal\ensure-connection-callback.js:13:17)
+    at Runner.ensureConnection (C:\Users\R5 4600G\Documents\GitHub\plant-bud\node_modules\knex\lib\execution\runner.js:318:20)
+    at async Runner.run (C:\Users\R5 4600G\Documents\GitHub\plant-bud\node_modules\knex\lib\execution\runner.js:30:19) {
+  code: 'SQLITE_CONSTRAINT_CHECK'
+}
+[90m"sqlite" [39mUser (369 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `username` = ? [32mLIMIT[0m ?[90m [ 'nursery_qa_garden_plant_163721', 1 ][39m
+[90m"sqlite" [39mUser (839 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [32mLIMIT[0m ?[90m [ 'qa.nursery.163721@example.com', 1 ][39m
+[90m"sqlite" [39mNurseryProfile (544 μs) [32mSELECT[0m * [32mFROM[0m `nursery_profiles` [32mWHERE[0m `nursery_slug` = ? [32mLIMIT[0m ?[90m [ 'qa-garden-plant-163721', 1 ][39m
+[90m"sqlite" [39mUser (410 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `phone` = ? [32mLIMIT[0m ?[90m [ '7123-4567', 1 ][39m
+[90m"sqlite" [39mUser (397 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `dui` = ? [32mLIMIT[0m ?[90m [ '16372111-1', 1 ][39m
+[90m"sqlite" [39mUser (1.2 ms) [32mINSERT[0m [32mINTO[0m `users` (`created_at`, `dui`, `email`, `first_name`, `last_name`, `password`, `phone`, `role`, `updated_at`, `username`) [32mVALUES[0m (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[90m [
+  '2026-05-19 22:37:21',
+  '16372111-1',
+  'qa.nursery.163721@example.com',
+  'QA',
+  'Owner',
+  '$scrypt$n=16384,r=8,p=1$LzfziTDc8uDgir9pXrg6mw$v/dYZvPAfKpChZ+GJbHx7k4ho/EvykyGnNK+WXGCKosiQWkvW3LhGbypQ9nviGIPXDER/70Ex2W9at8Ow3ereg',
+  '7123-4567',
+  'nursery',
+  '2026-05-19 22:37:21',
+  'nursery_qa_garden_plant_163721'
+][39m
+SqliteError: insert into `users` (`created_at`, `dui`, `email`, `first_name`, `last_name`, `password`, `phone`, `role`, `updated_at`, `username`) values ('2026-05-19 22:37:21', '16372111-1', 'qa.nursery.163721@example.com', 'QA', 'Owner', '$scrypt$n=16384,r=8,p=1$LzfziTDc8uDgir9pXrg6mw$v/dYZvPAfKpChZ+GJbHx7k4ho/EvykyGnNK+WXGCKosiQWkvW3LhGbypQ9nviGIPXDER/70Ex2W9at8Ow3ereg', '7123-4567', 'nursery', '2026-05-19 22:37:21', 'nursery_qa_garden_plant_163721') - CHECK constraint failed: role
+    at Client_BetterSQLite3._query (C:\Users\R5 4600G\Documents\GitHub\plant-bud\node_modules\knex\lib\dialects\better-sqlite3\index.js:57:38)
+    at executeQuery (C:\Users\R5 4600G\Documents\GitHub\plant-bud\node_modules\knex\lib\execution\internal\query-executioner.js:37:17)
+    at Client_BetterSQLite3.query (C:\Users\R5 4600G\Documents\GitHub\plant-bud\node_modules\knex\lib\client.js:157:12)
+    at C:\Users\R5 4600G\Documents\GitHub\plant-bud\node_modules\knex\lib\execution\transaction.js:380:24
+    at new Promise (<anonymous>)
+    at trxClient.query (C:\Users\R5 4600G\Documents\GitHub\plant-bud\node_modules\knex\lib\execution\transaction.js:375:12)
+    at Runner.query (C:\Users\R5 4600G\Documents\GitHub\plant-bud\node_modules\knex\lib\execution\runner.js:141:36)
+    at ensureConnectionCallback (C:\Users\R5 4600G\Documents\GitHub\plant-bud\node_modules\knex\lib\execution\internal\ensure-connection-callback.js:13:17)
+    at Runner.ensureConnection (C:\Users\R5 4600G\Documents\GitHub\plant-bud\node_modules\knex\lib\execution\runner.js:318:20)
+    at async Runner.run (C:\Users\R5 4600G\Documents\GitHub\plant-bud\node_modules\knex\lib\execution\runner.js:30:19) {
+  code: 'SQLITE_CONSTRAINT_CHECK'
+}
+invalidated app/controllers/new_account_controller.ts
+[90m"sqlite" [39mUser (791 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `username` = ? [32mLIMIT[0m ?[90m [ 'nursery_qa_garden_plant_164138', 1 ][39m
+[90m"sqlite" [39mUser (407 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [32mLIMIT[0m ?[90m [ 'qa.nursery.164138@example.com', 1 ][39m
+[90m"sqlite" [39mNurseryProfile (575 μs) [32mSELECT[0m * [32mFROM[0m `nursery_profiles` [32mWHERE[0m `nursery_slug` = ? [32mLIMIT[0m ?[90m [ 'qa-garden-plant-164138', 1 ][39m
+[90m"sqlite" [39mUser (1.09 ms) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m [32mREPLACE[0m([32mREPLACE[0m(lower(username), [31m'.'[0m, [31m''[0m), [31m'_'[0m, [31m''[0m) = ? [32mLIMIT[0m ?[90m [ 'qagardenplant164138', 1 ][39m
+[90m"sqlite" [39mUser (346 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `phone` = ? [32mLIMIT[0m ?[90m [ '7123-4567', 1 ][39m
+[90m"sqlite" [39mUser (300 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `dui` = ? [32mLIMIT[0m ?[90m [ '16413811-1', 1 ][39m
+[90m"sqlite" [39mUser (3.22 ms) [32mINSERT[0m [32mINTO[0m `users` (`created_at`, `dui`, `email`, `first_name`, `last_name`, `password`, `phone`, `role`, `updated_at`, `username`) [32mVALUES[0m (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[90m [
+  '2026-05-19 22:41:38',
+  '16413811-1',
+  'qa.nursery.164138@example.com',
+  'QA',
+  'Owner',
+  '$scrypt$n=16384,r=8,p=1$PDnzmG6jiyBZcpK5ZTZuqQ$DL2r/yAibpZgadp0qd2c2qQky423GwWsMpG0w/mxMnwuNmTmXt5MHeq88FudcsRRMx0lUL66w8LKBNDUsR6JOg',
+  '7123-4567',
+  'nursery',
+  '2026-05-19 22:41:38',
+  'nursery_qa_garden_plant_164138'
+][39m
+[90m"sqlite" [39mAccountProfile (361 μs) [32mINSERT[0m [32mINTO[0m `account_profiles` (`created_at`, `display_name`, `updated_at`, `user_id`) [32mVALUES[0m (?, ?, ?, ?)[90m [
+  '2026-05-19 22:41:38',
+  'QA Garden & Plant 164138',
+  '2026-05-19 22:41:38',
+  4
+][39m
+[90m"sqlite" [39mNurseryProfile (585 μs) [32mINSERT[0m [32mINTO[0m `nursery_profiles` (`created_at`, `is_active`, `nursery_name`, `nursery_slug`, `owner_name`, `public_email`, `public_phone`, `updated_at`, `user_id`) [32mVALUES[0m (?, ?, ?, ?, ?, ?, ?, ?, ?)[90m [
+  '2026-05-19 22:41:38',
+  true,
+  'QA Garden & Plant 164138',
+  'qa-garden-plant-164138',
+  'QA Owner',
+  'qa.nursery.164138@example.com',
+  '7123-4567',
+  '2026-05-19 22:41:38',
+  4
+][39m
+[90m"sqlite" [39mUser (373 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [32mLIMIT[0m ?[90m [ 'qa.gardener.missing.164251@example.com', 1 ][39m
+[90m"sqlite" [39mUser (442 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `username` = ? [32mLIMIT[0m ?[90m [ 'qa_gardener_164251', 1 ][39m
+[90m"sqlite" [39mNurseryProfile (419 μs) [32mSELECT[0m * [32mFROM[0m `nursery_profiles` [32mWHERE[0m [32mREPLACE[0m(lower(nursery_slug), [31m'-'[0m, [31m''[0m) = ? [32mLIMIT[0m ?[90m [ 'qagardener164251', 1 ][39m
+[90m"sqlite" [39mUser (553 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `username` = ? [32mLIMIT[0m ?[90m [ 'nursery_qa_missing_nursery_164', 1 ][39m
+[90m"sqlite" [39mUser (407 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [32mLIMIT[0m ?[90m [ 'qa.nursery.missing.164251@example.com', 1 ][39m
+[90m"sqlite" [39mNurseryProfile (497 μs) [32mSELECT[0m * [32mFROM[0m `nursery_profiles` [32mWHERE[0m `nursery_slug` = ? [32mLIMIT[0m ?[90m [ 'qa-missing-nursery-164251', 1 ][39m
+[90m"sqlite" [39mUser (598 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m [32mREPLACE[0m([32mREPLACE[0m(lower(username), [31m'.'[0m, [31m''[0m), [31m'_'[0m, [31m''[0m) = ? [32mLIMIT[0m ?[90m [ 'qamissingnursery164251', 1 ][39m
+[90m"sqlite" [39mUser (646 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [32mLIMIT[0m ?[90m [ 'qa.client.164251@example.com', 1 ][39m
+[90m"sqlite" [39mUser (1.1 ms) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `username` = ? [32mLIMIT[0m ?[90m [ 'qa_client_164251', 1 ][39m
+[90m"sqlite" [39mNurseryProfile (1.42 ms) [32mSELECT[0m * [32mFROM[0m `nursery_profiles` [32mWHERE[0m [32mREPLACE[0m(lower(nursery_slug), [31m'-'[0m, [31m''[0m) = ? [32mLIMIT[0m ?[90m [ 'qaclient164251', 1 ][39m
+[90m"sqlite" [39mUser (3.75 ms) [32mINSERT[0m [32mINTO[0m `users` (`created_at`, `dui`, `email`, `first_name`, `last_name`, `password`, `phone`, `role`, `updated_at`, `username`) [32mVALUES[0m (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[90m [
+  '2026-05-19 22:42:52',
+  null,
+  'qa.client.164251@example.com',
+  'QA',
+  'Client',
+  '$scrypt$n=16384,r=8,p=1$qxpPC2CoDzHFlTAp4p/H+w$ePw1OHN8BtiwsT//MbixWZ57fUlcWnj1bdhlgrgmKEd1n0i6OhLcv81TdpMJs/ZGJpGNPbFPpyufSfQQmpLTlA',
+  null,
+  'client',
+  '2026-05-19 22:42:52',
+  'qa_client_164251'
+][39m
+[90m"sqlite" [39mAccountProfile (439 μs) [32mINSERT[0m [32mINTO[0m `account_profiles` (`created_at`, `display_name`, `updated_at`, `user_id`) [32mVALUES[0m (?, ?, ?, ?)[90m [ '2026-05-19 22:42:52', 'QA Client', '2026-05-19 22:42:52', 5 ][39m
+[90m"sqlite" [39mUser (306 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `username` = ? [32mLIMIT[0m ?[90m [ 'nursery_qa_client_164251', 1 ][39m
+[90m"sqlite" [39mUser (276 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [32mLIMIT[0m ?[90m [ 'qa.nursery.conflict.164251@example.com', 1 ][39m
+[90m"sqlite" [39mNurseryProfile (323 μs) [32mSELECT[0m * [32mFROM[0m `nursery_profiles` [32mWHERE[0m `nursery_slug` = ? [32mLIMIT[0m ?[90m [ 'qa-client-164251', 1 ][39m
+[90m"sqlite" [39mUser (576 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m [32mREPLACE[0m([32mREPLACE[0m(lower(username), [31m'.'[0m, [31m''[0m), [31m'_'[0m, [31m''[0m) = ? [32mLIMIT[0m ?[90m [ 'qaclient164251', 1 ][39m
+[90m"sqlite" [39mUser (638 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `phone` = ? [32mLIMIT[0m ?[90m [ '7576-1333', 1 ][39m
+[90m"sqlite" [39mUser (497 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `dui` = ? [32mLIMIT[0m ?[90m [ '49550555-1', 1 ][39m
+[90m"sqlite" [39mUser (293 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [32mLIMIT[0m ?[90m [ 'qa.gardener.missing.164335@example.com', 1 ][39m
+[90m"sqlite" [39mUser (336 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `username` = ? [32mLIMIT[0m ?[90m [ 'qa_gardener_164335', 1 ][39m
+[90m"sqlite" [39mNurseryProfile (286 μs) [32mSELECT[0m * [32mFROM[0m `nursery_profiles` [32mWHERE[0m [32mREPLACE[0m(lower(nursery_slug), [31m'-'[0m, [31m''[0m) = ? [32mLIMIT[0m ?[90m [ 'qagardener164335', 1 ][39m
+[90m"sqlite" [39mUser (296 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `username` = ? [32mLIMIT[0m ?[90m [ 'nursery_qa_missing_nursery_164', 1 ][39m
+[90m"sqlite" [39mUser (280 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [32mLIMIT[0m ?[90m [ 'qa.nursery.missing.164335@example.com', 1 ][39m
+[90m"sqlite" [39mNurseryProfile (401 μs) [32mSELECT[0m * [32mFROM[0m `nursery_profiles` [32mWHERE[0m `nursery_slug` = ? [32mLIMIT[0m ?[90m [ 'qa-missing-nursery-164335', 1 ][39m
+[90m"sqlite" [39mUser (374 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m [32mREPLACE[0m([32mREPLACE[0m(lower(username), [31m'.'[0m, [31m''[0m), [31m'_'[0m, [31m''[0m) = ? [32mLIMIT[0m ?[90m [ 'qamissingnursery164335', 1 ][39m
+[90m"sqlite" [39mUser (292 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [32mLIMIT[0m ?[90m [ 'qa.client.164335@example.com', 1 ][39m
+[90m"sqlite" [39mUser (297 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `username` = ? [32mLIMIT[0m ?[90m [ 'qa_client_164335', 1 ][39m
+[90m"sqlite" [39mNurseryProfile (286 μs) [32mSELECT[0m * [32mFROM[0m `nursery_profiles` [32mWHERE[0m [32mREPLACE[0m(lower(nursery_slug), [31m'-'[0m, [31m''[0m) = ? [32mLIMIT[0m ?[90m [ 'qaclient164335', 1 ][39m
+[90m"sqlite" [39mUser (1.78 ms) [32mINSERT[0m [32mINTO[0m `users` (`created_at`, `dui`, `email`, `first_name`, `last_name`, `password`, `phone`, `role`, `updated_at`, `username`) [32mVALUES[0m (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[90m [
+  '2026-05-19 22:43:36',
+  null,
+  'qa.client.164335@example.com',
+  'QA',
+  'Client',
+  '$scrypt$n=16384,r=8,p=1$FhT6MziPpmJ3PAanFRWU5A$B9/mcoBIMH0HieH07pl4i2YuIM2U0oQ1Rw13cHOwcizs4FIDpsDNaN0CYFutCSTP3VtMPsZgzTBJZHFp7jLQ0Q',
+  null,
+  'client',
+  '2026-05-19 22:43:36',
+  'qa_client_164335'
+][39m
+[90m"sqlite" [39mAccountProfile (351 μs) [32mINSERT[0m [32mINTO[0m `account_profiles` (`created_at`, `display_name`, `updated_at`, `user_id`) [32mVALUES[0m (?, ?, ?, ?)[90m [ '2026-05-19 22:43:36', 'QA Client', '2026-05-19 22:43:36', 6 ][39m
+[90m"sqlite" [39mUser (524 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 6, 1 ][39m
+[90m"sqlite" [39mUser (390 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `username` = ? [32mLIMIT[0m ?[90m [ 'nursery_qa_client_164335', 1 ][39m
+[90m"sqlite" [39mUser (280 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [32mLIMIT[0m ?[90m [ 'qa.nursery.conflict.164335@example.com', 1 ][39m
+[90m"sqlite" [39mNurseryProfile (268 μs) [32mSELECT[0m * [32mFROM[0m `nursery_profiles` [32mWHERE[0m `nursery_slug` = ? [32mLIMIT[0m ?[90m [ 'qa-client-164335', 1 ][39m
+[90m"sqlite" [39mUser (350 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m [32mREPLACE[0m([32mREPLACE[0m(lower(username), [31m'.'[0m, [31m''[0m), [31m'_'[0m, [31m''[0m) = ? [32mLIMIT[0m ?[90m [ 'qaclient164335', 1 ][39m
+[90m"sqlite" [39mUser (324 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `phone` = ? [32mLIMIT[0m ?[90m [ '7567-5928', 1 ][39m
+[90m"sqlite" [39mUser (325 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `dui` = ? [32mLIMIT[0m ?[90m [ '82587583-1', 1 ][39m
+[2m10:45:18 p. m.[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/resources/css/app.css?direct[22m
+cupdate start/routes.ts
+╭──────────────────────────────────────────────────╮
+│                                                  │
+│    Server address: http://localhost:64870        │
+│    Mode: hmr                                     │
+│    Ready in: 2.57 s                              │
+│    Press h to show help                          │
+│                                                  │
+╰──────────────────────────────────────────────────╯
+[22:45:28.940] [32mINFO[39m (16168): [36mstarted HTTP server on localhost:64870[39m
+cupdate app/data/ornamental_plants.ts
+╭──────────────────────────────────────────────────╮
+│                                                  │
+│    Server address: http://localhost:64870        │
+│    Mode: hmr                                     │
+│    Ready in: 2.09 s                              │
+│    Press h to show help                          │
+│                                                  │
+╰──────────────────────────────────────────────────╯
+[22:45:36.099] [32mINFO[39m (10896): [36mstarted HTTP server on localhost:64870[39m
+[ info ] created .adonisjs/server/controllers.ts (6.22 ms)
+invalidated app/controllers/new_account_controller.ts
+cupdate start/routes.ts
+╭──────────────────────────────────────────────────╮
+│                                                  │
+│    Server address: http://localhost:64870        │
+│    Mode: hmr                                     │
+│    Ready in: 2.48 s                              │
+│    Press h to show help                          │
+│                                                  │
+╰──────────────────────────────────────────────────╯
+[22:55:42.102] [32mINFO[39m (29304): [36mstarted HTTP server on localhost:64870[39m
+[90m"sqlite" [39mUser (1.15 ms) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [32mLIMIT[0m ?[90m [ 'qa.client.165845@example.com', 1 ][39m
+[90m"sqlite" [39mUser (319 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `username` = ? [32mLIMIT[0m ?[90m [ 'qa_client_165845', 1 ][39m
+[90m"sqlite" [39mNurseryProfile (534 μs) [32mSELECT[0m * [32mFROM[0m `nursery_profiles` [32mWHERE[0m [32mREPLACE[0m(lower(nursery_slug), [31m'-'[0m, [31m''[0m) = ? [32mLIMIT[0m ?[90m [ 'qaclient165845', 1 ][39m
+[90m"sqlite" [39mUser (1.7 ms) [32mINSERT[0m [32mINTO[0m `users` (`created_at`, `dui`, `email`, `first_name`, `last_name`, `password`, `phone`, `role`, `updated_at`, `username`) [32mVALUES[0m (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[90m [
+  '2026-05-19 22:58:45',
+  null,
+  'qa.client.165845@example.com',
+  'QA',
+  'Client',
+  '$scrypt$n=16384,r=8,p=1$t9sA1Mok2e2vCBf9JR9AVg$FDh9G1HL/PIPeI6ndpGP56pY3vjFZ0jyweWeHnSBG0ycgbdnB7OV3u9iXsMXmy7ECDded3+pHeN55h5VtCdCLQ',
+  null,
+  'client',
+  '2026-05-19 22:58:45',
+  'qa_client_165845'
+][39m
+[90m"sqlite" [39mAccountProfile (329 μs) [32mINSERT[0m [32mINTO[0m `account_profiles` (`created_at`, `display_name`, `updated_at`, `user_id`) [32mVALUES[0m (?, ?, ?, ?)[90m [ '2026-05-19 22:58:45', 'QA Client', '2026-05-19 22:58:45', 8 ][39m
+[90m"sqlite" [39mUser (369 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mAccountProfile (437 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mUser (715 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [32mLIMIT[0m ?[90m [ 'qa.gardener.165847@example.com', 1 ][39m
+[90m"sqlite" [39mUser (345 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `username` = ? [32mLIMIT[0m ?[90m [ 'qa_gardener_165847', 1 ][39m
+[90m"sqlite" [39mNurseryProfile (678 μs) [32mSELECT[0m * [32mFROM[0m `nursery_profiles` [32mWHERE[0m [32mREPLACE[0m(lower(nursery_slug), [31m'-'[0m, [31m''[0m) = ? [32mLIMIT[0m ?[90m [ 'qagardener165847', 1 ][39m
+[90m"sqlite" [39mUser (483 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `phone` = ? [32mLIMIT[0m ?[90m [ '7165-', 1 ][39m
+[90m"sqlite" [39mUser (347 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `dui` = ? [32mLIMIT[0m ?[90m [ '16584711-2', 1 ][39m
+[90m"sqlite" [39mUser (339 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `username` = ? [32mLIMIT[0m ?[90m [ 'nursery_qa_nursery_165848', 1 ][39m
+[90m"sqlite" [39mUser (348 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [32mLIMIT[0m ?[90m [ 'qa.nursery.165848@example.com', 1 ][39m
+[90m"sqlite" [39mNurseryProfile (373 μs) [32mSELECT[0m * [32mFROM[0m `nursery_profiles` [32mWHERE[0m `nursery_slug` = ? [32mLIMIT[0m ?[90m [ 'qa-nursery-165848', 1 ][39m
+[90m"sqlite" [39mUser (289 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m [32mREPLACE[0m([32mREPLACE[0m(lower(username), [31m'.'[0m, [31m''[0m), [31m'_'[0m, [31m''[0m) = ? [32mLIMIT[0m ?[90m [ 'qanursery165848', 1 ][39m
+[90m"sqlite" [39mUser (254 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `phone` = ? [32mLIMIT[0m ?[90m [ '7165-', 1 ][39m
+[90m"sqlite" [39mUser (253 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `dui` = ? [32mLIMIT[0m ?[90m [ '16584822-3', 1 ][39m
+[90m"sqlite" [39mUser (287 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [32mLIMIT[0m ?[90m [ 'qa.gardener.165907@example.com', 1 ][39m
+[90m"sqlite" [39mUser (280 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `username` = ? [32mLIMIT[0m ?[90m [ 'qa_gardener_165907', 1 ][39m
+[90m"sqlite" [39mNurseryProfile (384 μs) [32mSELECT[0m * [32mFROM[0m `nursery_profiles` [32mWHERE[0m [32mREPLACE[0m(lower(nursery_slug), [31m'-'[0m, [31m''[0m) = ? [32mLIMIT[0m ?[90m [ 'qagardener165907', 1 ][39m
+[90m"sqlite" [39mUser (416 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `phone` = ? [32mLIMIT[0m ?[90m [ '7518-2813', 1 ][39m
+[90m"sqlite" [39mUser (300 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `dui` = ? [32mLIMIT[0m ?[90m [ '55014591-4', 1 ][39m
+[90m"sqlite" [39mUser (2.13 ms) [32mINSERT[0m [32mINTO[0m `users` (`created_at`, `dui`, `email`, `first_name`, `last_name`, `password`, `phone`, `role`, `updated_at`, `username`) [32mVALUES[0m (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[90m [
+  '2026-05-19 22:59:07',
+  '55014591-4',
+  'qa.gardener.165907@example.com',
+  'QA',
+  'Gardener',
+  '$scrypt$n=16384,r=8,p=1$YmufZ1y2K5ZUdagBDwjYlQ$96mogT6p3LbNILP+23zMq7oJfBPEq72w1I3mXH68rwW0JhaMAXJTYHckYYSWmNITimNhL0kID/EmmW6WZmkoqw',
+  '7518-2813',
+  'gardener',
+  '2026-05-19 22:59:07',
+  'qa_gardener_165907'
+][39m
+[90m"sqlite" [39mAccountProfile (244 μs) [32mINSERT[0m [32mINTO[0m `account_profiles` (`created_at`, `display_name`, `updated_at`, `user_id`) [32mVALUES[0m (?, ?, ?, ?)[90m [ '2026-05-19 22:59:07', 'QA Gardener', '2026-05-19 22:59:07', 9 ][39m
+[90m"sqlite" [39mGardenerProfile (332 μs) [32mINSERT[0m [32mINTO[0m `gardener_profiles` (`availability_schedule`, `created_at`, `headline`, `is_available`, `services_offered`, `updated_at`, `user_id`) [32mVALUES[0m (?, ?, ?, ?, ?, ?, ?)[90m [
+  '',
+  '2026-05-19 22:59:07',
+  'Gardening professional',
+  true,
+  '',
+  '2026-05-19 22:59:07',
+  9
+][39m
+[90m"sqlite" [39mUser (628 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 9, 1 ][39m
+[90m"sqlite" [39mAccountProfile (371 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 9, 1 ][39m
+[90m"sqlite" [39mGardenerProfile (512 μs) [32mSELECT[0m * [32mFROM[0m `gardener_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 9, 1 ][39m
+[90m"sqlite" [39mUser (358 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `username` = ? [32mLIMIT[0m ?[90m [ 'nursery_qa_nursery_165908', 1 ][39m
+[90m"sqlite" [39mUser (271 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [32mLIMIT[0m ?[90m [ 'qa.nursery.165908@example.com', 1 ][39m
+[90m"sqlite" [39mNurseryProfile (262 μs) [32mSELECT[0m * [32mFROM[0m `nursery_profiles` [32mWHERE[0m `nursery_slug` = ? [32mLIMIT[0m ?[90m [ 'qa-nursery-165908', 1 ][39m
+[90m"sqlite" [39mUser (368 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m [32mREPLACE[0m([32mREPLACE[0m(lower(username), [31m'.'[0m, [31m''[0m), [31m'_'[0m, [31m''[0m) = ? [32mLIMIT[0m ?[90m [ 'qanursery165908', 1 ][39m
+[90m"sqlite" [39mUser (259 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `phone` = ? [32mLIMIT[0m ?[90m [ '7153-8089', 1 ][39m
+[90m"sqlite" [39mUser (245 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `dui` = ? [32mLIMIT[0m ?[90m [ '88904762-8', 1 ][39m
+[90m"sqlite" [39mUser (3.51 ms) [32mINSERT[0m [32mINTO[0m `users` (`created_at`, `dui`, `email`, `first_name`, `last_name`, `password`, `phone`, `role`, `updated_at`, `username`) [32mVALUES[0m (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[90m [
+  '2026-05-19 22:59:09',
+  '88904762-8',
+  'qa.nursery.165908@example.com',
+  'QA',
+  'Owner',
+  '$scrypt$n=16384,r=8,p=1$4NtUjEauguuoU/u2wq1qIA$OP3GdH8/kX8Ej0VzqNzuDGXkBVN6gtUqKAHLgW3ko62+cFKm8EXOPc7kMSpom1pQ1c8djGPOeImJ3isfEWTIfQ',
+  '7153-8089',
+  'nursery',
+  '2026-05-19 22:59:09',
+  'nursery_qa_nursery_165908'
+][39m
+[90m"sqlite" [39mAccountProfile (478 μs) [32mINSERT[0m [32mINTO[0m `account_profiles` (`created_at`, `display_name`, `updated_at`, `user_id`) [32mVALUES[0m (?, ?, ?, ?)[90m [
+  '2026-05-19 22:59:09',
+  'QA Nursery 165908',
+  '2026-05-19 22:59:09',
+  10
+][39m
+[90m"sqlite" [39mNurseryProfile (510 μs) [32mINSERT[0m [32mINTO[0m `nursery_profiles` (`created_at`, `is_active`, `nursery_name`, `nursery_slug`, `owner_name`, `public_email`, `public_phone`, `updated_at`, `user_id`) [32mVALUES[0m (?, ?, ?, ?, ?, ?, ?, ?, ?)[90m [
+  '2026-05-19 22:59:09',
+  true,
+  'QA Nursery 165908',
+  'qa-nursery-165908',
+  'QA Owner',
+  'qa.nursery.165908@example.com',
+  '7153-8089',
+  '2026-05-19 22:59:09',
+  10
+][39m
+[90m"sqlite" [39mUser (594 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 10, 1 ][39m
+[90m"sqlite" [39mAccountProfile (351 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 10, 1 ][39m
+[90m"sqlite" [39mNurseryProfile (322 μs) [32mSELECT[0m * [32mFROM[0m `nursery_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 10, 1 ][39m
+[90m"sqlite" [39mUser (363 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [1m[36mOR[0m `username` = ? [32mLIMIT[0m ?[90m [ 'qa.client.165845@example.com', 'qa.client.165845@example.com', 1 ][39m
+[90m"sqlite" [39mUser (284 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mAccountProfile (304 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mUser (458 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [1m[36mOR[0m `username` = ? [32mLIMIT[0m ?[90m [
+  'qa.gardener.165907@example.com',
+  'qa.gardener.165907@example.com',
+  1
+][39m
+[90m"sqlite" [39mUser (461 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 9, 1 ][39m
+[90m"sqlite" [39mAccountProfile (312 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 9, 1 ][39m
+[90m"sqlite" [39mGardenerProfile (328 μs) [32mSELECT[0m * [32mFROM[0m `gardener_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 9, 1 ][39m
+[90m"sqlite" [39mUser (538 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [1m[36mOR[0m `username` = ? [32mLIMIT[0m ?[90m [ 'qa.nursery.165908@example.com', 'qa.nursery.165908@example.com', 1 ][39m
+[90m"sqlite" [39mUser (296 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 10, 1 ][39m
+[90m"sqlite" [39mAccountProfile (312 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 10, 1 ][39m
+[90m"sqlite" [39mNurseryProfile (399 μs) [32mSELECT[0m * [32mFROM[0m `nursery_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 10, 1 ][39m
+[90m"sqlite" [39mUser (339 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [1m[36mOR[0m `username` = ? [32mLIMIT[0m ?[90m [ 'qa.client.165845@example.com', 'qa.client.165845@example.com', 1 ][39m
+[90m"sqlite" [39mUser (294 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mAccountProfile (338 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mUser (340 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mUser (288 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mAccountProfile (403 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mUser (304 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mUser (315 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mAccountProfile (414 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[2m11:12:19 p. m.[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/resources/css/app.css?direct, /resources/css/app.css[22m
+cupdate start/routes.ts
+╭──────────────────────────────────────────────────╮
+│                                                  │
+│    Server address: http://localhost:64870        │
+│    Mode: hmr                                     │
+│    Ready in: 1.5 s                               │
+│    Press h to show help                          │
+│                                                  │
+╰──────────────────────────────────────────────────╯
+[23:13:16.744] [32mINFO[39m (29052): [36mstarted HTTP server on localhost:64870[39m
+[23:13:17.371] [31mERROR[39m (29052): [36mCannot find "resources/css/leaves.css" chunk in the manifest file[39m
+    [35mrequest_id[39m: "a5eef922-149e-497a-9fa4-3e596dc66bb2"
+    [35mx-request-id[39m: "a5eef922-149e-497a-9fa4-3e596dc66bb2"
+    err: {
+      "type": "EdgeError",
+      "message": "Cannot find \"resources/css/leaves.css\" chunk in the manifest file",
+      "stack":
+          Error: Cannot find "resources/css/leaves.css" chunk in the manifest file
+              at anonymous (C:\Users\R5 4600G\Documents\GitHub\plant-bud\resources\views\components\layout.edge:9:0)
+              at Template.reThrow (file:///C:/Users/R5%204600G/Documents/GitHub/plant-bud/node_modules/edge.js/build/js-stringify-CYn9RGAA.js:469:9)
+              at eval (eval at #wrapToFunction (file:///C:/Users/R5%204600G/Documents/GitHub/plant-bud/node_modules/edge.js/build/index.js:733:26), <anonymous>:128:10)
+              at async eval (eval at #wrapToFunction (file:///C:/Users/R5%204600G/Documents/GitHub/plant-bud/node_modules/edge.js/build/index.js:733:26), <anonymous>:7:8)
+              at async ShieldMiddleware.handle (file:///C:/Users/R5%204600G/Documents/GitHub/plant-bud/node_modules/@adonisjs/shield/build/src/shield_middleware.js:17:3)
+              at async SessionMiddleware.handle (file:///C:/Users/R5%204600G/Documents/GitHub/plant-bud/node_modules/@adonisjs/session/build/src/session_middleware.js:110:20)
+              at async file:///C:/Users/R5%204600G/Documents/GitHub/plant-bud/node_modules/@adonisjs/static/build/chunk-DUKWVYYP.js:85:11
+      "line": 9,
+      "col": 0,
+      "filename": "C:\\Users\\R5 4600G\\Documents\\GitHub\\plant-bud\\resources\\views\\components\\layout.edge",
+      "code": "E_RUNTIME_EXCEPTION",
+      "status": 500
+    }
+cupdate start/routes.ts
+╭──────────────────────────────────────────────────╮
+│                                                  │
+│    Server address: http://localhost:64870        │
+│    Mode: hmr                                     │
+│    Ready in: 1.39 s                              │
+│    Press h to show help                          │
+│                                                  │
+╰──────────────────────────────────────────────────╯
+[23:13:28.809] [32mINFO[39m (12752): [36mstarted HTTP server on localhost:64870[39m
+[ info ] created .adonisjs/server/controllers.ts (9.48 ms)
+cupdate start/routes.ts
+╭──────────────────────────────────────────────────╮
+│                                                  │
+│    Server address: http://localhost:64870        │
+│    Mode: hmr                                     │
+│    Ready in: 1.43 s                              │
+│    Press h to show help                          │
+│                                                  │
+╰──────────────────────────────────────────────────╯
+[23:28:49.915] [32mINFO[39m (23888): [36mstarted HTTP server on localhost:64870[39m
+[90m"sqlite" [39mUser (1.62 ms) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [1m[36mOR[0m `username` = ? [32mLIMIT[0m ?[90m [ 'qa.client.165845@example.com', 'qa.client.165845@example.com', 1 ][39m
+[90m"sqlite" [39mUser (548 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mAccountProfile (447 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mUser (488 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mAccountProfile (404 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mAccountLink (500 μs) [32mSELECT[0m * [32mFROM[0m `account_links` [32mWHERE[0m `user_id` = ? [32mORDER[0m [32mBY[0m `sort_order` [1m[36mASC[0m[90m [ 8 ][39m
+[90m"sqlite" [39m(504 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `community_posts` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39m(434 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `following_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39m(501 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `follower_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39m(484 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 8, 'like', 1 ][39m
+[90m"sqlite" [39m(411 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 8, 'favorite', 1 ][39m
+[90m"sqlite" [39m(363 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_comments` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mUser (413 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mAccountProfile (342 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mAccountProfile (5.07 ms) [32mUPDATE[0m `account_profiles` [32mSET[0m `display_name` = ?, `bio` = ?, `location` = ?, `website_url` = ?, `updated_at` = ? [32mWHERE[0m `id` = ?[90m [
+  'QA Client Profile',
+  'Testing profile editor from Codex.',
+  'San Salvador',
+  'https://example.com',
+  '2026-05-19 23:31:43',
+  8
+][39m
+[90m"sqlite" [39m(1.32 ms) [32mDELETE[0m [32mFROM[0m `account_links` [32mWHERE[0m `user_id` = ?[90m [ 8 ][39m
+[90m"sqlite" [39mAccountLink (2.33 ms) [32mINSERT[0m [32mINTO[0m `account_links` (`created_at`, `label`, `sort_order`, `updated_at`, `url`, `user_id`) [32mVALUES[0m (?, ?, ?, ?, ?, ?)[90m [
+  '2026-05-19 23:31:43',
+  'Instagram',
+  1,
+  '2026-05-19 23:31:43',
+  'https://instagram.com/plantbud',
+  8
+][39m
+[90m"sqlite" [39mAccountLink (137 μs) [32mINSERT[0m [32mINTO[0m `account_links` (`created_at`, `label`, `sort_order`, `updated_at`, `url`, `user_id`) [32mVALUES[0m (?, ?, ?, ?, ?, ?)[90m [
+  '2026-05-19 23:31:43',
+  'TikTok',
+  2,
+  '2026-05-19 23:31:43',
+  'https://tiktok.com/@plantbud',
+  8
+][39m
+[90m"sqlite" [39mAccountLink (201 μs) [32mINSERT[0m [32mINTO[0m `account_links` (`created_at`, `label`, `sort_order`, `updated_at`, `url`, `user_id`) [32mVALUES[0m (?, ?, ?, ?, ?, ?)[90m [
+  '2026-05-19 23:31:43',
+  'Store',
+  3,
+  '2026-05-19 23:31:43',
+  'https://example.com/store',
+  8
+][39m
+[90m"sqlite" [39mUser (337 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mAccountProfile (508 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mAccountLink (362 μs) [32mSELECT[0m * [32mFROM[0m `account_links` [32mWHERE[0m `user_id` = ? [32mORDER[0m [32mBY[0m `sort_order` [1m[36mASC[0m[90m [ 8 ][39m
+[90m"sqlite" [39m(301 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `community_posts` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39m(246 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `following_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39m(253 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `follower_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39m(444 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 8, 'like', 1 ][39m
+[90m"sqlite" [39m(250 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 8, 'favorite', 1 ][39m
+[90m"sqlite" [39m(222 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_comments` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mUser (279 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mAccountProfile (288 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mAccountLink (302 μs) [32mSELECT[0m * [32mFROM[0m `account_links` [32mWHERE[0m `user_id` = ? [32mORDER[0m [32mBY[0m `sort_order` [1m[36mASC[0m[90m [ 8 ][39m
+[90m"sqlite" [39m(280 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `community_posts` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39m(260 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `following_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39m(254 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `follower_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39m(296 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 8, 'like', 1 ][39m
+[90m"sqlite" [39m(516 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 8, 'favorite', 1 ][39m
+[90m"sqlite" [39m(302 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_comments` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mUser (354 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [1m[36mOR[0m `username` = ? [32mLIMIT[0m ?[90m [ 'qa.client.165845@example.com', 'qa.client.165845@example.com', 1 ][39m
+[23:32:06.340] [33mWARN[39m (23888): [36mInvalid or expired CSRF token[39m
+    [35mrequest_id[39m: "d3f0d886-1a0d-4834-89d3-492c038563a7"
+    [35mx-request-id[39m: "d3f0d886-1a0d-4834-89d3-492c038563a7"
+[90m"sqlite" [39mUser (518 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [1m[36mOR[0m `username` = ? [32mLIMIT[0m ?[90m [ 'qa.client.165845@example.com', 'qa.client.165845@example.com', 1 ][39m
+[23:32:26.281] [33mWARN[39m (23888): [36mInvalid or expired CSRF token[39m
+    [35mrequest_id[39m: "6e49b8c1-ddf7-42c7-bbb6-a5bf169e2cad"
+    [35mx-request-id[39m: "6e49b8c1-ddf7-42c7-bbb6-a5bf169e2cad"
+[90m"sqlite" [39mUser (491 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [1m[36mOR[0m `username` = ? [32mLIMIT[0m ?[90m [ 'qa.client.165845@example.com', 'qa.client.165845@example.com', 1 ][39m
+[90m"sqlite" [39mUser (326 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mAccountProfile (380 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mUser (308 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mAccountProfile (288 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mAccountLink (318 μs) [32mSELECT[0m * [32mFROM[0m `account_links` [32mWHERE[0m `user_id` = ? [32mORDER[0m [32mBY[0m `sort_order` [1m[36mASC[0m[90m [ 8 ][39m
+[90m"sqlite" [39m(331 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `community_posts` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39m(296 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `following_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39m(249 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `follower_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39m(360 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 8, 'like', 1 ][39m
+[90m"sqlite" [39m(367 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 8, 'favorite', 1 ][39m
+[90m"sqlite" [39m(459 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_comments` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mUser (375 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mAccountProfile (326 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mUser (7.92 ms) [32mUPDATE[0m `users` [32mSET[0m `profile_picture` = ?, `updated_at` = ? [32mWHERE[0m `id` = ?[90m [
+  '/uploads/profiles/8/avatar-1779233569547-38dafc0e-f3eb-40ee-9866-d14bfd15e6c9.png',
+  '2026-05-19 23:32:49',
+  8
+][39m
+[90m"sqlite" [39mAccountProfile (7.95 ms) [32mUPDATE[0m `account_profiles` [32mSET[0m `display_name` = ?, `avatar_url` = ?, `bio` = ?, `updated_at` = ? [32mWHERE[0m `id` = ?[90m [
+  'QA Client Upload',
+  '/uploads/profiles/8/avatar-1779233569547-38dafc0e-f3eb-40ee-9866-d14bfd15e6c9.png',
+  'Upload check profile bio.',
+  '2026-05-19 23:32:49',
+  8
+][39m
+[90m"sqlite" [39m(7.08 ms) [32mDELETE[0m [32mFROM[0m `account_links` [32mWHERE[0m `user_id` = ?[90m [ 8 ][39m
+[90m"sqlite" [39mAccountLink (1.92 ms) [32mINSERT[0m [32mINTO[0m `account_links` (`created_at`, `label`, `sort_order`, `updated_at`, `url`, `user_id`) [32mVALUES[0m (?, ?, ?, ?, ?, ?)[90m [
+  '2026-05-19 23:32:49',
+  'Instagram',
+  1,
+  '2026-05-19 23:32:49',
+  'https://instagram.com/plantbud',
+  8
+][39m
+[90m"sqlite" [39mUser (299 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mAccountProfile (506 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mAccountLink (390 μs) [32mSELECT[0m * [32mFROM[0m `account_links` [32mWHERE[0m `user_id` = ? [32mORDER[0m [32mBY[0m `sort_order` [1m[36mASC[0m[90m [ 8 ][39m
+[90m"sqlite" [39m(389 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `community_posts` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39m(264 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `following_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39m(229 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `follower_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39m(248 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 8, 'like', 1 ][39m
+[90m"sqlite" [39m(242 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 8, 'favorite', 1 ][39m
+[90m"sqlite" [39m(691 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_comments` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mUser (394 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [1m[36mOR[0m `username` = ? [32mLIMIT[0m ?[90m [ 'qa.client.165845@example.com', 'qa.client.165845@example.com', 1 ][39m
+[90m"sqlite" [39mUser (395 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mAccountProfile (707 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mUser (613 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mAccountProfile (376 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mAccountLink (283 μs) [32mSELECT[0m * [32mFROM[0m `account_links` [32mWHERE[0m `user_id` = ? [32mORDER[0m [32mBY[0m `sort_order` [1m[36mASC[0m[90m [ 8 ][39m
+[90m"sqlite" [39m(333 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `community_posts` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39m(239 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `following_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39m(228 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `follower_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39m(688 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 8, 'like', 1 ][39m
+[90m"sqlite" [39m(656 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 8, 'favorite', 1 ][39m
+[90m"sqlite" [39m(572 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_comments` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+invalidated app/controllers/profiles_controller.ts
+cupdate start/routes.ts
+╭──────────────────────────────────────────────────╮
+│                                                  │
+│    Server address: http://localhost:64870        │
+│    Mode: hmr                                     │
+│    Ready in: 2.43 s                              │
+│    Press h to show help                          │
+│                                                  │
+╰──────────────────────────────────────────────────╯
+[23:39:38.869] [32mINFO[39m (14672): [36mstarted HTTP server on localhost:64870[39m
+[90m"sqlite" [39mUser (1.22 ms) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [1m[36mOR[0m `username` = ? [32mLIMIT[0m ?[90m [ 'qa.client.165845@example.com', 'qa.client.165845@example.com', 1 ][39m
+[90m"sqlite" [39mUser (366 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mAccountProfile (425 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mUser (382 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mAccountProfile (367 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mAccountLink (392 μs) [32mSELECT[0m * [32mFROM[0m `account_links` [32mWHERE[0m `user_id` = ? [32mORDER[0m [32mBY[0m `sort_order` [1m[36mASC[0m[90m [ 8 ][39m
+[90m"sqlite" [39mCommunityPost (376 μs) [32mSELECT[0m * [32mFROM[0m `community_posts` [32mWHERE[0m `user_id` = ? [32mORDER[0m [32mBY[0m `created_at` [1m[36mDESC[0m [32mLIMIT[0m ?[90m [ 8, 9 ][39m
+[90m"sqlite" [39m(399 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `community_posts` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39m(401 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `following_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39m(333 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `follower_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39m(471 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 8, 'like', 1 ][39m
+[90m"sqlite" [39m(294 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 8, 'favorite', 1 ][39m
+[90m"sqlite" [39m(280 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_comments` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mUser (440 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mAccountProfile (429 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mAccountLink (428 μs) [32mSELECT[0m * [32mFROM[0m `account_links` [32mWHERE[0m `user_id` = ? [32mORDER[0m [32mBY[0m `sort_order` [1m[36mASC[0m[90m [ 8 ][39m
+[90m"sqlite" [39m(401 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `community_posts` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39m(438 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `following_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39m(343 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `follower_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39m(374 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 8, 'like', 1 ][39m
+[90m"sqlite" [39m(485 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 8, 'favorite', 1 ][39m
+[90m"sqlite" [39m(404 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_comments` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mUser (341 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mAccountProfile (319 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mAccountProfile (6.24 ms) [32mUPDATE[0m `account_profiles` [32mSET[0m `display_name` = ?, `bio` = ?, `updated_at` = ? [32mWHERE[0m `id` = ?[90m [
+  'QA Client Public View',
+  'A clean profile preview separated from settings.',
+  '2026-05-19 23:42:35',
+  8
+][39m
+[90m"sqlite" [39m(7.97 ms) [32mDELETE[0m [32mFROM[0m `account_links` [32mWHERE[0m `user_id` = ?[90m [ 8 ][39m
+[90m"sqlite" [39mAccountLink (2.7 ms) [32mINSERT[0m [32mINTO[0m `account_links` (`created_at`, `label`, `sort_order`, `updated_at`, `url`, `user_id`) [32mVALUES[0m (?, ?, ?, ?, ?, ?)[90m [
+  '2026-05-19 23:42:35',
+  'Instagram',
+  1,
+  '2026-05-19 23:42:35',
+  'https://instagram.com/plantbud',
+  8
+][39m
+[90m"sqlite" [39mAccountLink (234 μs) [32mINSERT[0m [32mINTO[0m `account_links` (`created_at`, `label`, `sort_order`, `updated_at`, `url`, `user_id`) [32mVALUES[0m (?, ?, ?, ?, ?, ?)[90m [
+  '2026-05-19 23:42:35',
+  'TikTok',
+  2,
+  '2026-05-19 23:42:35',
+  'https://tiktok.com/@plantbud',
+  8
+][39m
+[90m"sqlite" [39mAccountLink (236 μs) [32mINSERT[0m [32mINTO[0m `account_links` (`created_at`, `label`, `sort_order`, `updated_at`, `url`, `user_id`) [32mVALUES[0m (?, ?, ?, ?, ?, ?)[90m [
+  '2026-05-19 23:42:35',
+  'Store',
+  3,
+  '2026-05-19 23:42:35',
+  'https://example.com/store',
+  8
+][39m
+[90m"sqlite" [39mUser (367 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mAccountProfile (439 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mAccountLink (475 μs) [32mSELECT[0m * [32mFROM[0m `account_links` [32mWHERE[0m `user_id` = ? [32mORDER[0m [32mBY[0m `sort_order` [1m[36mASC[0m[90m [ 8 ][39m
+[90m"sqlite" [39mCommunityPost (480 μs) [32mSELECT[0m * [32mFROM[0m `community_posts` [32mWHERE[0m `user_id` = ? [32mORDER[0m [32mBY[0m `created_at` [1m[36mDESC[0m [32mLIMIT[0m ?[90m [ 8, 9 ][39m
+[90m"sqlite" [39m(606 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `community_posts` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39m(434 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `following_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39m(477 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `follower_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39m(505 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 8, 'like', 1 ][39m
+[90m"sqlite" [39m(448 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 8, 'favorite', 1 ][39m
+[90m"sqlite" [39m(372 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_comments` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mUser (452 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mAccountProfile (420 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39mAccountLink (590 μs) [32mSELECT[0m * [32mFROM[0m `account_links` [32mWHERE[0m `user_id` = ? [32mORDER[0m [32mBY[0m `sort_order` [1m[36mASC[0m[90m [ 8 ][39m
+[90m"sqlite" [39mCommunityPost (440 μs) [32mSELECT[0m * [32mFROM[0m `community_posts` [32mWHERE[0m `user_id` = ? [32mORDER[0m [32mBY[0m `created_at` [1m[36mDESC[0m [32mLIMIT[0m ?[90m [ 8, 9 ][39m
+[90m"sqlite" [39m(413 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `community_posts` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39m(657 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `following_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39m(368 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `follower_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+[90m"sqlite" [39m(378 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 8, 'like', 1 ][39m
+[90m"sqlite" [39m(464 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 8, 'favorite', 1 ][39m
+[90m"sqlite" [39m(352 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_comments` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 8, 1 ][39m
+invalidated app/validators/profile.ts
+invalidated app/controllers/profiles_controller.ts
+[2m12:02:56 a. m.[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/resources/css/app.css?direct[22m
+[2m12:04:00 a. m.[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mresources/js/app.js[22m
+invalidated app/controllers/profiles_controller.ts
+invalidated app/controllers/profiles_controller.ts
+[90m"sqlite" [39mUser (581 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [32mLIMIT[0m ?[90m [ 'qa.profile.220253@example.com', 1 ][39m
+[90m"sqlite" [39mUser (487 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `username` = ? [32mLIMIT[0m ?[90m [ 'qa_profile_220253', 1 ][39m
+[90m"sqlite" [39mNurseryProfile (814 μs) [32mSELECT[0m * [32mFROM[0m `nursery_profiles` [32mWHERE[0m [32mREPLACE[0m(lower(nursery_slug), [31m'-'[0m, [31m''[0m) = ? [32mLIMIT[0m ?[90m [ 'qaprofile220253', 1 ][39m
+[90m"sqlite" [39mUser (2.18 ms) [32mINSERT[0m [32mINTO[0m `users` (`created_at`, `dui`, `email`, `first_name`, `last_name`, `password`, `phone`, `role`, `updated_at`, `username`) [32mVALUES[0m (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[90m [
+  '2026-05-20 00:06:18',
+  null,
+  'qa.profile.220253@example.com',
+  'Profile',
+  'Tester',
+  '$scrypt$n=16384,r=8,p=1$R+/y/S9Z67MTJvfJVo5nQg$nHaShyF4Wv273HYklmoTitqVbDoAlftp1zmltPLdAVkLhACwN3s/dAJu0hjF+LOk8JHGeN3QlnDZMeyDm7nykQ',
+  null,
+  'client',
+  '2026-05-20 00:06:18',
+  'qa_profile_220253'
+][39m
+[90m"sqlite" [39mAccountProfile (341 μs) [32mINSERT[0m [32mINTO[0m `account_profiles` (`created_at`, `display_name`, `updated_at`, `user_id`) [32mVALUES[0m (?, ?, ?, ?)[90m [ '2026-05-20 00:06:18', 'Profile Tester', '2026-05-20 00:06:18', 12 ][39m
+[90m"sqlite" [39mUser (296 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mAccountProfile (333 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mUser (526 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mAccountProfile (382 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mAccountLink (388 μs) [32mSELECT[0m * [32mFROM[0m `account_links` [32mWHERE[0m `user_id` = ? [32mORDER[0m [32mBY[0m `sort_order` [1m[36mASC[0m[90m [ 12 ][39m
+[90m"sqlite" [39m(642 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `community_posts` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(341 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `following_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(267 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `follower_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(255 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 12, 'like', 1 ][39m
+[90m"sqlite" [39m(241 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 12, 'favorite', 1 ][39m
+[90m"sqlite" [39m(227 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_comments` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mUser (309 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mAccountProfile (311 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(377 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `phone` = ? [1m[36mAND[0m [1m[36mNOT[0m `id` = ? [32mLIMIT[0m ?[90m [ '7054-2756', 12, 1 ][39m
+[90m"sqlite" [39mUser (7.7 ms) [32mUPDATE[0m `users` [32mSET[0m `phone` = ?, `updated_at` = ? [32mWHERE[0m `id` = ?[90m [ '7054-2756', '2026-05-20 00:06:18', 12 ][39m
+[90m"sqlite" [39mAccountProfile (6.12 ms) [32mUPDATE[0m `account_profiles` [32mSET[0m `display_name` = ?, `bio` = ?, `location` = ?, `updated_at` = ? [32mWHERE[0m `id` = ?[90m [
+  'Profile QA',
+  'Plants, design, and community testing.',
+  'San Salvador',
+  '2026-05-20 00:06:18',
+  12
+][39m
+[90m"sqlite" [39m(484 μs) [32mDELETE[0m [32mFROM[0m `account_links` [32mWHERE[0m `user_id` = ?[90m [ 12 ][39m
+[90m"sqlite" [39mAccountLink (2.93 ms) [32mINSERT[0m [32mINTO[0m `account_links` (`created_at`, `label`, `sort_order`, `updated_at`, `url`, `user_id`) [32mVALUES[0m (?, ?, ?, ?, ?, ?)[90m [
+  '2026-05-20 00:06:18',
+  'Instagram',
+  1,
+  '2026-05-20 00:06:18',
+  'https://www.instagram.com/plantbud.sv',
+  12
+][39m
+[90m"sqlite" [39mAccountLink (198 μs) [32mINSERT[0m [32mINTO[0m `account_links` (`created_at`, `label`, `sort_order`, `updated_at`, `url`, `user_id`) [32mVALUES[0m (?, ?, ?, ?, ?, ?)[90m [
+  '2026-05-20 00:06:18',
+  'TikTok',
+  2,
+  '2026-05-20 00:06:18',
+  'https://www.tiktok.com/@plantbud',
+  12
+][39m
+[90m"sqlite" [39mAccountLink (200 μs) [32mINSERT[0m [32mINTO[0m `account_links` (`created_at`, `label`, `sort_order`, `updated_at`, `url`, `user_id`) [32mVALUES[0m (?, ?, ?, ?, ?, ?)[90m [
+  '2026-05-20 00:06:18',
+  'Facebook',
+  3,
+  '2026-05-20 00:06:18',
+  'https://www.facebook.com/plantbud.sv',
+  12
+][39m
+[90m"sqlite" [39mUser (580 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mAccountProfile (601 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mAccountLink (592 μs) [32mSELECT[0m * [32mFROM[0m `account_links` [32mWHERE[0m `user_id` = ? [32mORDER[0m [32mBY[0m `sort_order` [1m[36mASC[0m[90m [ 12 ][39m
+[90m"sqlite" [39mCommunityPost (362 μs) [32mSELECT[0m * [32mFROM[0m `community_posts` [32mWHERE[0m `user_id` = ? [32mORDER[0m [32mBY[0m `created_at` [1m[36mDESC[0m [32mLIMIT[0m ?[90m [ 12, 9 ][39m
+[90m"sqlite" [39m(377 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `community_posts` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(565 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `following_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(422 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `follower_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(523 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 12, 'like', 1 ][39m
+[90m"sqlite" [39m(512 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 12, 'favorite', 1 ][39m
+[90m"sqlite" [39m(350 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_comments` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mUser (341 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mAccountProfile (299 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mAccountLink (271 μs) [32mSELECT[0m * [32mFROM[0m `account_links` [32mWHERE[0m `user_id` = ? [32mORDER[0m [32mBY[0m `sort_order` [1m[36mASC[0m[90m [ 12 ][39m
+[90m"sqlite" [39mCommunityPost (345 μs) [32mSELECT[0m * [32mFROM[0m `community_posts` [32mWHERE[0m `user_id` = ? [32mORDER[0m [32mBY[0m `created_at` [1m[36mDESC[0m [32mLIMIT[0m ?[90m [ 12, 9 ][39m
+[90m"sqlite" [39m(277 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `community_posts` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(229 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `following_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(305 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `follower_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(625 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 12, 'like', 1 ][39m
+[90m"sqlite" [39m(532 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 12, 'favorite', 1 ][39m
+[90m"sqlite" [39m(347 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_comments` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mUser (414 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mAccountProfile (295 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mAccountLink (299 μs) [32mSELECT[0m * [32mFROM[0m `account_links` [32mWHERE[0m `user_id` = ? [32mORDER[0m [32mBY[0m `sort_order` [1m[36mASC[0m[90m [ 12 ][39m
+[90m"sqlite" [39m(401 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `community_posts` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(261 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `following_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(219 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `follower_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(240 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 12, 'like', 1 ][39m
+[90m"sqlite" [39m(233 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 12, 'favorite', 1 ][39m
+[90m"sqlite" [39m(223 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_comments` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mUser (352 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [1m[36mOR[0m `username` = ? [32mLIMIT[0m ?[90m [ 'qa.profile.220253@example.com', 'qa.profile.220253@example.com', 1 ][39m
+invalidated app/controllers/profiles_controller.ts
+[90m"sqlite" [39mUser (343 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [1m[36mOR[0m `username` = ? [32mLIMIT[0m ?[90m [ 'qa.profile.220253@example.com', 'qa.profile.220253@example.com', 1 ][39m
+[90m"sqlite" [39mUser (288 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mAccountProfile (505 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mUser (291 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mAccountProfile (325 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mAccountLink (418 μs) [32mSELECT[0m * [32mFROM[0m `account_links` [32mWHERE[0m `user_id` = ? [32mORDER[0m [32mBY[0m `sort_order` [1m[36mASC[0m[90m [ 12 ][39m
+[90m"sqlite" [39m(305 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `community_posts` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(321 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `following_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(303 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `follower_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(237 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 12, 'like', 1 ][39m
+[90m"sqlite" [39m(579 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 12, 'favorite', 1 ][39m
+[90m"sqlite" [39m(1.01 ms) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_comments` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mUser (655 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mAccountProfile (440 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(478 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `phone` = ? [1m[36mAND[0m [1m[36mNOT[0m `id` = ? [32mLIMIT[0m ?[90m [ '7403-3843', 12, 1 ][39m
+[90m"sqlite" [39mUser (6.32 ms) [32mUPDATE[0m `users` [32mSET[0m `phone` = ?, `updated_at` = ? [32mWHERE[0m `id` = ?[90m [ '7403-3843', '2026-05-20 00:09:03', 12 ][39m
+[90m"sqlite" [39m(7.79 ms) [32mDELETE[0m [32mFROM[0m `account_links` [32mWHERE[0m `user_id` = ?[90m [ 12 ][39m
+[90m"sqlite" [39mAccountLink (6.8 ms) [32mINSERT[0m [32mINTO[0m `account_links` (`created_at`, `label`, `sort_order`, `updated_at`, `url`, `user_id`) [32mVALUES[0m (?, ?, ?, ?, ?, ?)[90m [
+  '2026-05-20 00:09:03',
+  'Instagram',
+  1,
+  '2026-05-20 00:09:03',
+  'https://www.instagram.com/plantbud.sv',
+  12
+][39m
+[90m"sqlite" [39mAccountLink (420 μs) [32mINSERT[0m [32mINTO[0m `account_links` (`created_at`, `label`, `sort_order`, `updated_at`, `url`, `user_id`) [32mVALUES[0m (?, ?, ?, ?, ?, ?)[90m [
+  '2026-05-20 00:09:03',
+  'TikTok',
+  2,
+  '2026-05-20 00:09:03',
+  'https://www.tiktok.com/@plantbud',
+  12
+][39m
+[90m"sqlite" [39mAccountLink (351 μs) [32mINSERT[0m [32mINTO[0m `account_links` (`created_at`, `label`, `sort_order`, `updated_at`, `url`, `user_id`) [32mVALUES[0m (?, ?, ?, ?, ?, ?)[90m [
+  '2026-05-20 00:09:03',
+  'Facebook',
+  3,
+  '2026-05-20 00:09:03',
+  'https://www.facebook.com/plantbud.sv',
+  12
+][39m
+[90m"sqlite" [39mUser (558 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mAccountProfile (596 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mAccountLink (307 μs) [32mSELECT[0m * [32mFROM[0m `account_links` [32mWHERE[0m `user_id` = ? [32mORDER[0m [32mBY[0m `sort_order` [1m[36mASC[0m[90m [ 12 ][39m
+[90m"sqlite" [39mCommunityPost (293 μs) [32mSELECT[0m * [32mFROM[0m `community_posts` [32mWHERE[0m `user_id` = ? [32mORDER[0m [32mBY[0m `created_at` [1m[36mDESC[0m [32mLIMIT[0m ?[90m [ 12, 9 ][39m
+[90m"sqlite" [39m(252 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `community_posts` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(267 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `following_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(221 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `follower_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(270 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 12, 'like', 1 ][39m
+[90m"sqlite" [39m(335 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 12, 'favorite', 1 ][39m
+[90m"sqlite" [39m(320 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_comments` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mUser (417 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mAccountProfile (332 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mAccountLink (319 μs) [32mSELECT[0m * [32mFROM[0m `account_links` [32mWHERE[0m `user_id` = ? [32mORDER[0m [32mBY[0m `sort_order` [1m[36mASC[0m[90m [ 12 ][39m
+[90m"sqlite" [39mCommunityPost (364 μs) [32mSELECT[0m * [32mFROM[0m `community_posts` [32mWHERE[0m `user_id` = ? [32mORDER[0m [32mBY[0m `created_at` [1m[36mDESC[0m [32mLIMIT[0m ?[90m [ 12, 9 ][39m
+[90m"sqlite" [39m(262 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `community_posts` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(224 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `following_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(220 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `follower_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(239 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 12, 'like', 1 ][39m
+[90m"sqlite" [39m(375 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 12, 'favorite', 1 ][39m
+[90m"sqlite" [39m(288 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_comments` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+invalidated app/controllers/profiles_controller.ts
+invalidated app/controllers/profiles_controller.ts
+invalidated app/controllers/profiles_controller.ts
+[90m"sqlite" [39mUser (439 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [1m[36mOR[0m `username` = ? [32mLIMIT[0m ?[90m [ 'qa.profile.220253@example.com', 'qa.profile.220253@example.com', 1 ][39m
+[90m"sqlite" [39mUser (624 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [1m[36mOR[0m `username` = ? [32mLIMIT[0m ?[90m [ 'qa.profile.220253@example.com', 'qa.profile.220253@example.com', 1 ][39m
+[90m"sqlite" [39mUser (329 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [1m[36mOR[0m `username` = ? [32mLIMIT[0m ?[90m [ 'qa.profile.220253@example.com', 'qa.profile.220253@example.com', 1 ][39m
+[90m"sqlite" [39mUser (441 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mAccountProfile (363 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mAccountLink (429 μs) [32mSELECT[0m * [32mFROM[0m `account_links` [32mWHERE[0m `user_id` = ? [32mORDER[0m [32mBY[0m `sort_order` [1m[36mASC[0m[90m [ 12 ][39m
+[90m"sqlite" [39m(375 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `community_posts` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(286 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `following_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(296 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `follower_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(239 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 12, 'like', 1 ][39m
+[90m"sqlite" [39m(251 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 12, 'favorite', 1 ][39m
+[90m"sqlite" [39m(439 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_comments` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mUser (283 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mAccountProfile (362 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(1.06 ms) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `phone` = ? [1m[36mAND[0m [1m[36mNOT[0m `id` = ? [32mLIMIT[0m ?[90m [ '7403-3843', 12, 1 ][39m
+[90m"sqlite" [39mUser (289 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mUser (339 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [1m[36mOR[0m `username` = ? [32mLIMIT[0m ?[90m [ 'qa.profile.220253@example.com', 'qa.profile.220253@example.com', 1 ][39m
+[90m"sqlite" [39mUser (389 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mAccountProfile (396 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mAccountLink (416 μs) [32mSELECT[0m * [32mFROM[0m `account_links` [32mWHERE[0m `user_id` = ? [32mORDER[0m [32mBY[0m `sort_order` [1m[36mASC[0m[90m [ 12 ][39m
+[90m"sqlite" [39m(307 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `community_posts` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(325 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `following_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(382 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `follower_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(267 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 12, 'like', 1 ][39m
+[90m"sqlite" [39m(432 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 12, 'favorite', 1 ][39m
+[90m"sqlite" [39m(360 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_comments` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mUser (556 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [1m[36mOR[0m `username` = ? [32mLIMIT[0m ?[90m [ 'qa.profile.220253@example.com', 'qa.profile.220253@example.com', 1 ][39m
+[90m"sqlite" [39mUser (465 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mAccountProfile (459 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mAccountLink (288 μs) [32mSELECT[0m * [32mFROM[0m `account_links` [32mWHERE[0m `user_id` = ? [32mORDER[0m [32mBY[0m `sort_order` [1m[36mASC[0m[90m [ 12 ][39m
+[90m"sqlite" [39m(510 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `community_posts` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(334 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `following_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(443 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `follower_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(307 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 12, 'like', 1 ][39m
+[90m"sqlite" [39m(272 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 12, 'favorite', 1 ][39m
+[90m"sqlite" [39m(245 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_comments` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mUser (306 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mAccountProfile (292 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(288 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `phone` = ? [1m[36mAND[0m [1m[36mNOT[0m `id` = ? [32mLIMIT[0m ?[90m [ '7403-3843', 12, 1 ][39m
+[90m"sqlite" [39mUser (389 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mUser (328 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [1m[36mOR[0m `username` = ? [32mLIMIT[0m ?[90m [ 'qa.profile.220253@example.com', 'qa.profile.220253@example.com', 1 ][39m
+[90m"sqlite" [39mUser (456 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mAccountProfile (362 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mAccountLink (439 μs) [32mSELECT[0m * [32mFROM[0m `account_links` [32mWHERE[0m `user_id` = ? [32mORDER[0m [32mBY[0m `sort_order` [1m[36mASC[0m[90m [ 12 ][39m
+[90m"sqlite" [39m(395 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `community_posts` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(340 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `following_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(453 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `follower_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(345 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 12, 'like', 1 ][39m
+[90m"sqlite" [39m(757 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 12, 'favorite', 1 ][39m
+[90m"sqlite" [39m(280 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_comments` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mUser (289 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mAccountProfile (294 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(296 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `phone` = ? [1m[36mAND[0m [1m[36mNOT[0m `id` = ? [32mLIMIT[0m ?[90m [ '7403-3843', 12, 1 ][39m
+[90m"sqlite" [39mUser (360 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mAccountProfile (347 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mAccountLink (395 μs) [32mSELECT[0m * [32mFROM[0m `account_links` [32mWHERE[0m `user_id` = ? [32mORDER[0m [32mBY[0m `sort_order` [1m[36mASC[0m[90m [ 12 ][39m
+[90m"sqlite" [39m(337 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `community_posts` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(274 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `following_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(268 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `follower_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(271 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 12, 'like', 1 ][39m
+[90m"sqlite" [39m(343 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 12, 'favorite', 1 ][39m
+[90m"sqlite" [39m(228 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_comments` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mUser (318 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [1m[36mOR[0m `username` = ? [32mLIMIT[0m ?[90m [ 'qa.profile.220253@example.com', 'qa.profile.220253@example.com', 1 ][39m
+[90m"sqlite" [39mUser (368 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mAccountProfile (311 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mUser (286 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mAccountProfile (292 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mAccountLink (363 μs) [32mSELECT[0m * [32mFROM[0m `account_links` [32mWHERE[0m `user_id` = ? [32mORDER[0m [32mBY[0m `sort_order` [1m[36mASC[0m[90m [ 12 ][39m
+[90m"sqlite" [39mCommunityPost (283 μs) [32mSELECT[0m * [32mFROM[0m `community_posts` [32mWHERE[0m `user_id` = ? [32mORDER[0m [32mBY[0m `created_at` [1m[36mDESC[0m [32mLIMIT[0m ?[90m [ 12, 9 ][39m
+[90m"sqlite" [39m(244 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `community_posts` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(218 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `following_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(216 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `follower_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(227 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 12, 'like', 1 ][39m
+[90m"sqlite" [39m(224 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 12, 'favorite', 1 ][39m
+[90m"sqlite" [39m(205 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_comments` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mUser (353 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mAccountProfile (292 μs) [32mSELECT[0m * [32mFROM[0m `account_profiles` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39mAccountLink (332 μs) [32mSELECT[0m * [32mFROM[0m `account_links` [32mWHERE[0m `user_id` = ? [32mORDER[0m [32mBY[0m `sort_order` [1m[36mASC[0m[90m [ 12 ][39m
+[90m"sqlite" [39m(254 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `community_posts` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(229 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `following_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(284 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `follows` [32mWHERE[0m `follower_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+[90m"sqlite" [39m(281 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 12, 'like', 1 ][39m
+[90m"sqlite" [39m(238 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_reactions` [32mWHERE[0m `user_id` = ? [1m[36mAND[0m `type` = ? [32mLIMIT[0m ?[90m [ 12, 'favorite', 1 ][39m
+[90m"sqlite" [39m(232 μs) [32mSELECT[0m [1m[36mCOUNT[0m(*) [1m[36mAS[0m `total` [32mFROM[0m `post_comments` [32mWHERE[0m `user_id` = ? [32mLIMIT[0m ?[90m [ 12, 1 ][39m
+invalidated app/validators/user.ts
+invalidated app/controllers/new_account_controller.ts
+[90m"sqlite" [39mUser (726 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [32mLIMIT[0m ?[90m [ 'display_client_779045@example.com', 1 ][39m
+[90m"sqlite" [39mUser (880 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `username` = ? [32mLIMIT[0m ?[90m [ 'display_client_779045', 1 ][39m
+[90m"sqlite" [39mNurseryProfile (383 μs) [32mSELECT[0m * [32mFROM[0m `nursery_profiles` [32mWHERE[0m [32mREPLACE[0m(lower(nursery_slug), [31m'-'[0m, [31m''[0m) = ? [32mLIMIT[0m ?[90m [ 'displayclient779045', 1 ][39m
+[90m"sqlite" [39mUser (2.22 ms) [32mINSERT[0m [32mINTO[0m `users` (`created_at`, `dui`, `email`, `first_name`, `last_name`, `password`, `phone`, `role`, `updated_at`, `username`) [32mVALUES[0m (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[90m [
+  '2026-05-20 00:26:19',
+  null,
+  'display_client_779045@example.com',
+  'Plant Dreamer QA',
+  '',
+  '$scrypt$n=16384,r=8,p=1$oKvo+DNojN+mgX7ut8k9KQ$61sDnlfhnB/rH7fuy6WdoEkaCo9UQGjTHeUWG1Fj/EXRP8BUe4TQVGV2lNO01n+AAhC1yauFkiOK02hNThX6LQ',
+  null,
+  'client',
+  '2026-05-20 00:26:19',
+  'display_client_779045'
+][39m
+[90m"sqlite" [39mAccountProfile (379 μs) [32mINSERT[0m [32mINTO[0m `account_profiles` (`created_at`, `display_name`, `updated_at`, `user_id`) [32mVALUES[0m (?, ?, ?, ?)[90m [
+  '2026-05-20 00:26:19',
+  'Plant Dreamer QA',
+  '2026-05-20 00:26:19',
+  13
+][39m
+[90m"sqlite" [39mUser (353 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `email` = ? [32mLIMIT[0m ?[90m [ 'display_gardener_779045@example.com', 1 ][39m
+[90m"sqlite" [39mUser (416 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `username` = ? [32mLIMIT[0m ?[90m [ 'display_gardener_779045', 1 ][39m
+[90m"sqlite" [39mNurseryProfile (455 μs) [32mSELECT[0m * [32mFROM[0m `nursery_profiles` [32mWHERE[0m [32mREPLACE[0m(lower(nursery_slug), [31m'-'[0m, [31m''[0m) = ? [32mLIMIT[0m ?[90m [ 'displaygardener779045', 1 ][39m
+[90m"sqlite" [39mUser (309 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `phone` = ? [32mLIMIT[0m ?[90m [ '7779-0451', 1 ][39m
+[90m"sqlite" [39mUser (404 μs) [32mSELECT[0m * [32mFROM[0m `users` [32mWHERE[0m `dui` = ? [32mLIMIT[0m ?[90m [ '11779045-1', 1 ][39m
+[90m"sqlite" [39mUser (4.12 ms) [32mINSERT[0m [32mINTO[0m `users` (`created_at`, `dui`, `email`, `first_name`, `last_name`, `password`, `phone`, `role`, `updated_at`, `username`) [32mVALUES[0m (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[90m [
+  '2026-05-20 00:26:19',
+  '11779045-1',
+  'display_gardener_779045@example.com',
+  'Garden Wizard QA',
+  '',
+  '$scrypt$n=16384,r=8,p=1$7B7P7QkTnMoV+4l7MO1pdg$o+Z5vTTJ1kgco/VJVnRrUG3n10Vu3BRdhFxMv50eIZAb2yO+7/Jx3IiXpfG5Ehko0k79qZe7f6gZBsEUQqXftw',
+  '7779-0451',
+  'gardener',
+  '2026-05-20 00:26:19',
+  'display_gardener_779045'
+][39m
+[90m"sqlite" [39mAccountProfile (416 μs) [32mINSERT[0m [32mINTO[0m `account_profiles` (`created_at`, `display_name`, `updated_at`, `user_id`) [32mVALUES[0m (?, ?, ?, ?)[90m [
+  '2026-05-20 00:26:19',
+  'Garden Wizard QA',
+  '2026-05-20 00:26:19',
+  14
+][39m
+[90m"sqlite" [39mGardenerProfile (728 μs) [32mINSERT[0m [32mINTO[0m `gardener_profiles` (`availability_schedule`, `created_at`, `headline`, `is_available`, `services_offered`, `updated_at`, `user_id`) [32mVALUES[0m (?, ?, ?, ?, ?, ?, ?)[90m [
+  '',
+  '2026-05-20 00:26:19',
+  'Gardening professional',
+  true,
+  '',
+  '2026-05-20 00:26:19',
+  14
+][39m
+[ info ] created .adonisjs/server/controllers.ts (7.1 ms)
+[2m1:28:13 a. m.[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/resources/css/app.css?direct[22m
+[2m1:28:13 a. m.[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/resources/css/app.css?direct[22m
+[2m1:28:13 a. m.[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/resources/css/app.css?direct[22m
+[2m1:28:13 a. m.[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/resources/css/app.css?direct[22m
+[2m1:28:13 a. m.[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/resources/css/app.css?direct[22m
+[2m1:28:13 a. m.[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/resources/css/app.css?direct[22m
+[2m1:28:13 a. m.[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/resources/css/app.css?direct[22m
+[2m1:28:13 a. m.[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/resources/css/app.css?direct[22m
+[2m1:28:13 a. m.[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/resources/css/app.css?direct[22m
+[2m1:28:13 a. m.[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/resources/css/app.css?direct[22m
+[2m1:28:13 a. m.[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/resources/css/app.css?direct[22m
+[2m1:28:13 a. m.[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/resources/css/app.css?direct[22m
+[2m1:28:13 a. m.[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/resources/css/app.css?direct[22m
+[2m1:28:13 a. m.[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/resources/css/app.css?direct[22m
+[2m1:28:13 a. m.[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/resources/css/app.css?direct[22m
+[2m1:28:13 a. m.[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/resources/css/app.css?direct[22m
+[2m1:28:13 a. m.[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/resources/css/app.css?direct[22m
+[2m1:28:13 a. m.[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/resources/css/app.css?direct[22m
+[2m1:28:13 a. m.[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/resources/css/app.css?direct[22m
+[ info ] created .adonisjs/server/controllers.ts (246 ms)
+[2m1:28:13 a. m.[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/resources/css/app.css?direct[22m
+[2m1:28:13 a. m.[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/resources/css/app.css?direct[22m
+[2m1:28:13 a. m.[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/resources/css/app.css?direct[22m
+[2m1:28:13 a. m.[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/resources/css/app.css?direct[22m
+[2m1:28:13 a. m.[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/resources/css/app.css?direct[22m
+[2m1:28:13 a. m.[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/resources/css/app.css?direct[22m
+[2m1:28:13 a. m.[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/resources/css/app.css?direct[22m
+[2m1:28:13 a. m.[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/resources/css/app.css?direct[22m
+[2m1:28:13 a. m.[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/resources/css/app.css?direct[22m
+[2m1:28:13 a. m.[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mresources/js/app.js[22m
+[2m1:28:13 a. m.[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/resources/css/app.css?direct[22m
+invalidated app/controllers/new_account_controller.ts
+invalidated app/middleware/guest_middleware.ts
+invalidated app/validators/user.ts
+[2m1:28:17 a. m.[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mresources/images/nurseries/viv0.jpg[22m
+cupdate start/routes.ts
+[01:28:25.179] [32mINFO[39m (26328): [36mstarted HTTP server on localhost:64870[39m
+╭──────────────────────────────────────────────────╮
+│                                                  │
+│    Server address: http://localhost:64870        │
+│    Mode: hmr                                     │
+│    Ready in: 3.18 s                              │
+│    Press h to show help                          │
+│                                                  │
+╰──────────────────────────────────────────────────╯
