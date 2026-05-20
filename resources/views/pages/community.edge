@@ -7,14 +7,14 @@
 
 
 <div class="bg-[#6C8E6B] min-h-screen flex flex-col">
-  <div class="fixed top-0 left-0 w-full z-50 px-6 lg:px-10 py-6">
+  <div class="fixed top-0 left-0 w-full z-50 px-4 lg:px-8 py-4">
     <div class="backdrop-blur-xl bg-white/20 border border-white/30
-              rounded-full px-8 py-4 flex items-center justify-between shadow-lg">
+              rounded-full px-5 py-3 flex items-center gap-5 shadow-lg max-w-[1240px] mx-auto">
 
-      <div class="w-10 h-10 bg-[url('/resources/images/essential/logo.png')] bg-contain bg-no-repeat"></div>
+      <div class="w-11 h-11 flex-none bg-[url('/resources/images/essential/logo.png')] bg-contain bg-no-repeat bg-center"></div>
 
-      <div class="flex items-center gap-6">
-        <div class="bg-white/70 rounded-full px-6 py-2 w-[280px]">
+      <div class="flex flex-none items-center gap-4">
+        <div class="bg-white/70 rounded-full px-6 py-2 w-[260px]">
           <input type="text" placeholder="Search plants" class="bg-transparent outline-none w-full
                       text-[#113E14] placeholder:text-[#6B8C6C]/70 text-sm">
         </div>
@@ -29,27 +29,27 @@
         </button>
       </div>
 
-      <div class="flex items-center space-x-2 ml-4">
+      <div class="flex flex-1 items-center justify-center space-x-2">
         <div class="w-8 h-8 bg-[url('/resources/img/img3.png')] bg-contain bg-no-repeat"></div>
         <span class="text-[#113E14] font-bold text-lg">Community</span>
         <div class="w-8 h-8 bg-[url('/resources/img/img3.png')] -scale-x-100 bg-contain bg-no-repeat"></div>
       </div>
 
       <button
-        class="flex items-center space-x-2 bg-white rounded-xl px-4 py-2 shadow-md hover:bg-white/70 transition active:bg-green-900 active:text-white active:shadow-lg active:translate-y-1 focus:outline-none">
+        class="flex flex-none items-center space-x-2 bg-white rounded-xl px-4 py-2 shadow-md hover:bg-white/70 transition active:bg-green-900 active:text-white active:shadow-lg active:translate-y-1 focus:outline-none">
         <div class="w-5 h-5 bg-[url('/resources/img/img4.png')] bg-contain bg-no-repeat"></div>
         <span class="font-semibold text-sm">Home</span>
       </button>
 
       <button onclick="window.location.href='/notification'"
-        class="w-8 h-8 bg-[url('/resources/img/campana.png')] bg-contain bg-no-repeat rounded-lg transition"></button>
+        class="w-8 h-8 flex-none bg-[url('/resources/img/campana.png')] bg-contain bg-no-repeat rounded-lg transition"></button>
       <button onclick="window.location.href='/favorites'"
-        class="w-8 h-8 bg-[url('/resources/img/fav.png')] bg-contain bg-no-repeat rounded-lg transition"></button>
+        class="w-8 h-8 flex-none bg-[url('/resources/img/fav.png')] bg-contain bg-no-repeat rounded-lg transition"></button>
 
-      <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 bg-[url('/resources/img/phot.jpg')] bg-cover bg-center rounded-full"></div>
-        <div class="flex flex-col">
-          <span class="text-black/60 text-sm font-semibold">María Antonieta de las Nieves</span>
+      <div class="flex flex-none items-center space-x-3 max-w-[260px]">
+        <div class="w-10 h-10 flex-none bg-[url('/resources/img/phot.jpg')] bg-cover bg-center rounded-full"></div>
+        <div class="flex min-w-0 flex-col">
+          <span class="truncate text-black/60 text-sm font-semibold">María Antonieta de las Nieves</span>
           <a href="#" class="text-blue-600 hover:underline text-xs">Switch</a>
         </div>
       </div>
@@ -276,7 +276,7 @@
                 <span class="text-sm font-semibold text-black/30">79</span>
               </button>
               <button class="flex items-center space-x-2">
-                <div class="w-5 h-5 bg-[url('resources/img/favo.png')] bg-cover bg-center"></div>
+                <div class="w-5 h-5 bg-[url('/resources/img/favorites2.png')] bg-cover bg-center"></div>
                 <span class="text-sm font-semibold text-black/30">67</span>
               </button>
             </div>
