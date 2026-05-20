@@ -423,9 +423,435 @@ function formatNumberMask(value, maxDigits, splitAt) {
     : numbers
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+function initCommunityPage() {
+  const page = document.querySelector('[data-community-page]')
+
+  if (!page) return
+
+  page.querySelectorAll('[data-community-post-form]').forEach(bindCommunityPostForm)
+  page.querySelectorAll('[data-community-file-trigger]').forEach(bindCommunityFileTrigger)
+  page.querySelectorAll('[data-community-image-input]').forEach(bindCommunityImageInput)
+  page.querySelectorAll('[data-community-poll-trigger]').forEach(bindCommunityPollTrigger)
+  page.querySelectorAll('[data-reaction-form]').forEach(bindCommunityReactionForm)
+  page.querySelectorAll('[data-comment-form]').forEach(bindCommunityCommentForm)
+  page.querySelectorAll('[data-comment-focus]').forEach(bindCommunityCommentFocus)
+  page.querySelectorAll('[data-poll-form]').forEach(bindCommunityPollForm)
+  page.querySelectorAll('[data-follow-form]').forEach(bindCommunityFollowForm)
+  page.querySelectorAll('[data-share-post]').forEach(bindCommunityShareButton)
+}
+
+function bindCommunityPostForm(form) {
+  if (form.dataset.communityAjaxReady === 'true') return
+
+  form.dataset.communityAjaxReady = 'true'
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault()
+    clearCommunityFormError(form)
+
+    try {
+      const formData = createCommunityFormData(form)
+
+      setCommunityFormBusy(form, true)
+      const payload = await submitCommunityForm(form, formData)
+
+      if (payload?.ok) {
+        prependCommunityPost(form, payload)
+        resetCommunityComposer(form)
+      }
+    } catch (error) {
+      if (error.payload?.errors) {
+        showCommunityFormError(form, error.payload)
+      } else {
+        form.submit()
+      }
+    } finally {
+      setCommunityFormBusy(form, false)
+    }
+  })
+}
+
+function bindCommunityFileTrigger(button) {
+  if (button.dataset.communityTriggerReady === 'true') return
+
+  button.dataset.communityTriggerReady = 'true'
+  button.addEventListener('click', () => {
+    const form = button.closest('[data-community-post-form]')
+    const details = form?.querySelector('[data-community-options]')
+    const input = form?.querySelector('[data-community-image-input]')
+
+    if (details) details.open = true
+    input?.click()
+  })
+}
+
+function bindCommunityImageInput(input) {
+  if (input.dataset.communityImageReady === 'true') return
+
+  input.dataset.communityImageReady = 'true'
+  input.addEventListener('change', () => {
+    const form = input.closest('[data-community-post-form]')
+    const fileName = form?.querySelector('[data-community-file-name]')
+    const file = input.files?.[0]
+
+    if (!fileName) return
+
+    fileName.textContent = file?.name || ''
+    fileName.classList.toggle('hidden', !file)
+  })
+}
+
+function bindCommunityPollTrigger(button) {
+  if (button.dataset.communityTriggerReady === 'true') return
+
+  button.dataset.communityTriggerReady = 'true'
+  button.addEventListener('click', () => {
+    const form = button.closest('[data-community-post-form]')
+    const details = form?.querySelector('[data-community-options]')
+    const input = form?.querySelector('[data-community-poll-input]')
+
+    if (details) details.open = true
+    input?.focus()
+  })
+}
+
+function bindCommunityReactionForm(form) {
+  if (form.dataset.communityAjaxReady === 'true') return
+
+  form.dataset.communityAjaxReady = 'true'
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault()
+
+    try {
+      const formData = createCommunityFormData(form)
+
+      setCommunityFormBusy(form, true)
+      const payload = await submitCommunityForm(form, formData)
+
+      if (payload?.ok) updateCommunityReaction(form, payload)
+    } catch {
+      form.submit()
+    } finally {
+      setCommunityFormBusy(form, false)
+    }
+  })
+}
+
+function bindCommunityCommentForm(form) {
+  if (form.dataset.communityAjaxReady === 'true') return
+
+  form.dataset.communityAjaxReady = 'true'
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault()
+
+    const input = form.querySelector('[name="body"]')
+
+    if (!input?.value.trim()) return
+
+    try {
+      const formData = createCommunityFormData(form)
+
+      setCommunityFormBusy(form, true)
+      const payload = await submitCommunityForm(form, formData)
+
+      if (payload?.ok) {
+        appendCommunityComment(form, payload)
+        input.value = ''
+      }
+    } catch {
+      form.submit()
+    } finally {
+      setCommunityFormBusy(form, false)
+    }
+  })
+}
+
+function bindCommunityPollForm(form) {
+  if (form.dataset.communityAjaxReady === 'true') return
+
+  form.dataset.communityAjaxReady = 'true'
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault()
+
+    try {
+      const formData = createCommunityFormData(form)
+
+      setCommunityFormBusy(form, true)
+      const payload = await submitCommunityForm(form, formData)
+
+      if (payload?.ok) updateCommunityPoll(form, payload)
+    } catch {
+      form.submit()
+    } finally {
+      setCommunityFormBusy(form, false)
+    }
+  })
+}
+
+function bindCommunityFollowForm(form) {
+  if (form.dataset.communityAjaxReady === 'true') return
+
+  form.dataset.communityAjaxReady = 'true'
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault()
+
+    try {
+      const formData = createCommunityFormData(form)
+
+      setCommunityFormBusy(form, true)
+      const payload = await submitCommunityForm(form, formData)
+
+      if (payload?.ok) updateCommunityFollow(form, payload)
+    } catch {
+      form.submit()
+    } finally {
+      setCommunityFormBusy(form, false)
+    }
+  })
+}
+
+function createCommunityFormData(form) {
+  const formData = new FormData(form)
+
+  formData.set('_ajax', '1')
+
+  return formData
+}
+
+async function submitCommunityForm(form, formData) {
+  const response = await fetch(form.action, {
+    method: form.method || 'POST',
+    body: formData,
+    credentials: 'same-origin',
+    headers: {
+      Accept: 'application/json',
+      'X-Requested-With': 'XMLHttpRequest',
+    },
+  })
+  const isJson = response.headers.get('content-type')?.includes('application/json')
+  const payload = isJson ? await response.json().catch(() => null) : null
+
+  if (!response.ok || !payload) {
+    const error = new Error('Community request failed')
+    error.payload = payload
+    throw error
+  }
+
+  return payload
+}
+
+function setCommunityFormBusy(form, isBusy) {
+  form.classList.toggle('opacity-70', isBusy)
+  form.querySelectorAll('button, input, textarea, select').forEach((control) => {
+    control.disabled = isBusy
+  })
+}
+
+function prependCommunityPost(form, payload) {
+  const page = form.closest('[data-community-page]')
+  const feed = page?.querySelector('[data-community-feed]')
+
+  if (!feed || !payload.html) return
+
+  feed.insertAdjacentHTML('afterbegin', payload.html)
+
+  const post = feed.querySelector('[data-community-post]')
+
+  if (!post) return
+
+  post.querySelectorAll('[data-reaction-form]').forEach(bindCommunityReactionForm)
+  post.querySelectorAll('[data-comment-form]').forEach(bindCommunityCommentForm)
+  post.querySelectorAll('[data-poll-form]').forEach(bindCommunityPollForm)
+  post.querySelectorAll('[data-comment-focus]').forEach(bindCommunityCommentFocus)
+  post.querySelectorAll('[data-share-post]').forEach(bindCommunityShareButton)
+}
+
+function resetCommunityComposer(form) {
+  form.reset()
+  form.querySelectorAll('details').forEach((details) => {
+    details.open = false
+  })
+  form.querySelectorAll('[data-community-file-name]').forEach((fileName) => {
+    fileName.textContent = ''
+    fileName.classList.add('hidden')
+  })
+}
+
+function showCommunityFormError(form, payload) {
+  const errorTarget = form.querySelector('[data-community-form-error]')
+  const errors = payload.errors || {}
+  const firstMessage = Object.values(errors)
+    .flat()
+    .find(Boolean)
+
+  if (!errorTarget || !firstMessage) return
+
+  errorTarget.textContent = firstMessage
+  errorTarget.classList.remove('hidden')
+}
+
+function clearCommunityFormError(form) {
+  const errorTarget = form.querySelector('[data-community-form-error]')
+
+  if (!errorTarget) return
+
+  errorTarget.textContent = ''
+  errorTarget.classList.add('hidden')
+}
+
+function updateCommunityReaction(form, payload) {
+  const post = form.closest('[data-community-post]')
+  const type = payload.type || form.getAttribute('data-reaction-type')
+  const countKey = type === 'favorite' ? 'favorites' : 'likes'
+  const count = post?.querySelector(`[data-reaction-count="${type}"]`)
+  const icon = post?.querySelector(`[data-reaction-icon="${type}"]`)
+
+  if (count && payload.counts?.[countKey] !== undefined) {
+    count.textContent = payload.counts[countKey]
+    count.classList.toggle('text-[#113E14]', payload.active)
+    count.classList.toggle('text-black/30', !payload.active)
+  }
+
+  if (type === 'like') {
+    icon?.classList.toggle('scale-110', payload.active)
+  }
+
+  if (type === 'favorite') {
+    if (icon) {
+      icon.style.backgroundImage = `url('${payload.active ? '/resources/img/favorites2.png' : '/resources/img/favo.png'}')`
+    }
+
+    if (!payload.active && document.querySelector('[data-favorites-page]') && post) {
+      post.classList.add('opacity-0', 'scale-[0.98]')
+      setTimeout(() => {
+        post.remove()
+        decrementSavedTotal()
+      }, 180)
+    }
+  }
+}
+
+function appendCommunityComment(form, payload) {
+  const post = form.closest('[data-community-post]')
+  const list = post?.querySelector('[data-comments-list]')
+  const count = post?.querySelector('[data-comment-count]')
+  const comment = payload.comment
+
+  if (!list || !comment) return
+
+  const item = document.createElement('div')
+  const link = document.createElement('a')
+  const body = document.createElement('p')
+
+  item.className = 'rounded-2xl bg-white/45 px-4 py-2'
+  link.className = 'text-xs font-bold text-[#113E14]'
+  link.href = `/users/${encodeURIComponent(comment.author.username)}`
+  link.textContent = `@${comment.author.username}`
+  body.className = 'text-sm font-semibold leading-6 text-black/70'
+  body.textContent = comment.body
+
+  item.append(link, body)
+  list.append(item)
+
+  if (count && payload.count !== undefined) {
+    count.textContent = payload.count
+  }
+}
+
+function bindCommunityCommentFocus(button) {
+  if (button.dataset.communityCommentFocusReady === 'true') return
+
+  button.dataset.communityCommentFocusReady = 'true'
+  button.addEventListener('click', () => {
+    button.closest('[data-community-post]')?.querySelector('[data-comment-input]')?.focus()
+  })
+}
+
+function bindCommunityShareButton(button) {
+  if (button.dataset.communityShareReady === 'true') return
+
+  button.dataset.communityShareReady = 'true'
+  button.addEventListener('click', async () => {
+    const target = button.getAttribute('data-share-post') || window.location.pathname
+    const url = new URL(target, window.location.origin).toString()
+
+    try {
+      await navigator.clipboard.writeText(url)
+      button.classList.add('scale-110', 'bg-white/35')
+      button.setAttribute('title', 'Copied')
+      setTimeout(() => {
+        button.classList.remove('scale-110', 'bg-white/35')
+        button.removeAttribute('title')
+      }, 1100)
+    } catch {
+      window.location.hash = target.split('#')[1] || ''
+    }
+  })
+}
+
+function updateCommunityPoll(form, payload) {
+  const poll = payload.poll
+  const pollBox = form.closest('[data-poll]')
+
+  if (!poll || !pollBox) return
+
+  poll.options.forEach((option) => {
+    const percent = pollBox.querySelector(`[data-poll-percent="${option.id}"]`)
+    const bar = pollBox.querySelector(`[data-poll-bar="${option.id}"]`)
+    const button = percent?.closest('button')
+
+    if (percent) percent.textContent = `${option.percent}%`
+    if (bar) {
+      bar.style.width = `${option.percent}%`
+      bar.classList.toggle('bg-[#113E14]', option.selected)
+      bar.classList.toggle('bg-[#6C8E6B]', !option.selected)
+    }
+    if (button) {
+      button.classList.toggle('bg-[#113E14]/10', option.selected)
+      button.classList.toggle('bg-white/70', !option.selected)
+    }
+  })
+
+  const votes = pollBox.querySelector('[data-poll-votes]')
+
+  if (votes) votes.textContent = poll.totalVotes
+}
+
+function updateCommunityFollow(form, payload) {
+  const label = form.querySelector('[data-follow-label]')
+  const button = form.querySelector('button')
+  const lowerCaseLabel = label?.textContent === label?.textContent?.toLowerCase()
+  const nextText = payload.following ? 'Following' : 'Follow'
+
+  if (label) label.textContent = lowerCaseLabel ? nextText.toLowerCase() : nextText
+
+  if (button?.className.includes('rounded-full')) {
+    button.classList.toggle('bg-white/15', payload.following)
+    button.classList.toggle('text-white', payload.following)
+    button.classList.toggle('bg-[#EDE7D6]', !payload.following)
+    button.classList.toggle('text-[#1E3D19]', !payload.following)
+  }
+
+  document.querySelectorAll('[data-followers-count]').forEach((count) => {
+    if (payload.followers !== undefined) count.textContent = payload.followers
+  })
+}
+
+function decrementSavedTotal() {
+  document.querySelectorAll('[data-saved-total]').forEach((count) => {
+    count.textContent = Math.max(0, Number(count.textContent || 0) - 1)
+  })
+}
+
+function initApp() {
   initAuthForms()
   initProfilePage()
-})
+  initCommunityPage()
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp)
+} else {
+  initApp()
+}
 
 Alpine.start()

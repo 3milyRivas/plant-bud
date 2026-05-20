@@ -222,15 +222,19 @@ export default class ProfilesController {
   }
 
   async media({ auth, params, response }: HttpContext) {
-    const user = auth.user!
+    const ownerId = params.userId ? Number(params.userId) : auth.user!.id
     const kind = params.kind as ProfileImageKind
     const fileName = params.fileName as string
 
-    if (!this.isValidProfileMediaRequest(kind, fileName)) {
+    if (
+      !Number.isInteger(ownerId) ||
+      ownerId <= 0 ||
+      !this.isValidProfileMediaRequest(kind, fileName)
+    ) {
       return response.notFound('Image not found')
     }
 
-    const directory = this.profileImageDirectory(user.id)
+    const directory = this.profileImageDirectory(ownerId)
     const filePath = path.resolve(directory, fileName)
 
     if (!filePath.startsWith(`${directory}${path.sep}`)) {
@@ -568,7 +572,9 @@ export default class ProfilesController {
       overwrite: true,
     })
 
-    return file.fileName ? `/profile/media/${options.kind}/${file.fileName}` : null
+    return file.fileName
+      ? `/profile/media/${options.userId}/${options.kind}/${file.fileName}`
+      : null
   }
 
   private profileImageDirectory(userId: number) {
@@ -637,7 +643,7 @@ export default class ProfilesController {
     await fs.mkdir(secureDirectory, { recursive: true })
     await fs.rename(legacyPath, securePath)
 
-    return `/profile/media/${kind}/${secureName}`
+    return `/profile/media/${userId}/${kind}/${secureName}`
   }
 
   private isValidProfileMediaRequest(kind: string, fileName?: string) {

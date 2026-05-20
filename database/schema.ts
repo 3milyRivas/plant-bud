@@ -240,6 +240,70 @@ export class PostCommentSchema extends BaseModel {
   declare userId: number
 }
 
+export class PostHashtagSchema extends BaseModel {
+  static $columns = ['communityPostId', 'createdAt', 'id', 'tag', 'updatedAt'] as const
+  $columns = PostHashtagSchema.$columns
+  @column()
+  declare communityPostId: number
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare tag: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class PostPollOptionSchema extends BaseModel {
+  static $columns = ['createdAt', 'id', 'label', 'postPollId', 'sortOrder', 'updatedAt'] as const
+  $columns = PostPollOptionSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare label: string
+  @column()
+  declare postPollId: number
+  @column()
+  declare sortOrder: number
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class PostPollVoteSchema extends BaseModel {
+  static $columns = ['createdAt', 'id', 'postPollId', 'postPollOptionId', 'updatedAt', 'userId'] as const
+  $columns = PostPollVoteSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare postPollId: number
+  @column()
+  declare postPollOptionId: number
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare userId: number
+}
+
+export class PostPollSchema extends BaseModel {
+  static $columns = ['communityPostId', 'createdAt', 'id', 'question', 'updatedAt'] as const
+  $columns = PostPollSchema.$columns
+  @column()
+  declare communityPostId: number
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare question: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
 export class PostReactionSchema extends BaseModel {
   static $columns = ['communityPostId', 'createdAt', 'id', 'type', 'updatedAt', 'userId'] as const
   $columns = PostReactionSchema.$columns

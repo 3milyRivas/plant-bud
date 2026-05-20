@@ -1,9 +1,11 @@
-import { BaseModel, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
+import { BaseModel, belongsTo, column, hasMany, hasOne } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 import User from '#models/user'
 import PostComment from '#models/post_comment'
+import PostHashtag from '#models/post_hashtag'
+import PostPoll from '#models/post_poll'
 import PostReaction from '#models/post_reaction'
-import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
+import type { BelongsTo, HasMany, HasOne } from '@adonisjs/lucid/types/relations'
 
 export default class CommunityPost extends BaseModel {
   @column({ isPrimary: true })
@@ -38,4 +40,10 @@ export default class CommunityPost extends BaseModel {
 
   @hasMany(() => PostReaction)
   declare reactions: HasMany<typeof PostReaction>
+
+  @hasMany(() => PostHashtag)
+  declare hashtags: HasMany<typeof PostHashtag>
+
+  @hasOne(() => PostPoll)
+  declare poll: HasOne<typeof PostPoll>
 }
