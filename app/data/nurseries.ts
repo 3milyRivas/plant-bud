@@ -14,7 +14,7 @@ const sponsoredNurseries: Nursery[] = [
   {
     id: 1,
     name: "El Bambú Nursery",
-    image: "nurseries/viver1.jpg",
+    image: 'nurseries/viver1.jpg',
     rating: 4,
     description: "Fruit trees and large palms in a family-owned space.",
     location: "Santa Tecla",
