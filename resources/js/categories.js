@@ -47,7 +47,7 @@ window.showCategory = function(event, categoryId) {
     );
 };
 
-document.addEventListener("DOMContentLoaded", () => {
+function initializeCategoriesPage() {
     const firstButton = document.querySelector(".category-btn");
 
     if (firstButton) {
@@ -60,7 +60,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     setupFavoriteButtons();
-});
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initializeCategoriesPage);
+} else {
+    initializeCategoriesPage();
+}
 
 function setupFavoriteButtons() {
     const favoriteIcon = "favorites2.png";
@@ -228,7 +234,7 @@ function buildFavoritePostHtml(post) {
 }
 
 function renderSavedCommunityFavorites(favoriteIcon) {
-    const postsContainer = document.querySelector(".flex-1.space-y-6");
+    const postsContainer = getFavoritesPostsContainer();
 
     if (!postsContainer) {
         return;
@@ -257,6 +263,12 @@ function renderSavedCommunityFavorites(favoriteIcon) {
 
         postsContainer.insertBefore(favoritePost, postsContainer.children[1] ?? null);
     });
+}
+
+function getFavoritesPostsContainer() {
+    return document.querySelector("[data-favorites-feed]") ||
+        document.querySelector(".flex-1.space-y-4") ||
+        document.querySelector(".flex-1.space-y-6");
 }
 
 function findRenderedFavoritePost(postId) {
@@ -300,7 +312,7 @@ function setFavoriteIcon(icon, isFavorite, favoriteIcon) {
 }
 
 function showEmptyFavoritesMessage() {
-    const postsContainer = document.querySelector(".flex-1.space-y-6");
+    const postsContainer = getFavoritesPostsContainer();
 
     if (!postsContainer || postsContainer.querySelector("[data-favorite-post-id]")) {
         return;
