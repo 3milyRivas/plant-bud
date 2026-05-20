@@ -7,22 +7,115 @@
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
-export class GardenerProfileSchema extends BaseModel {
-  static $columns = [
-    'availabilitySchedule',
-    'createdAt',
-    'id',
-    'servicesOffered',
-    'updatedAt',
-    'userId',
-  ] as const
-  $columns = GardenerProfileSchema.$columns
-  @column()
-  declare availabilitySchedule: string | null
+export class AccountLinkSchema extends BaseModel {
+  static $columns = ['createdAt', 'id', 'label', 'sortOrder', 'updatedAt', 'url', 'userId'] as const
+  $columns = AccountLinkSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime | null
   @column({ isPrimary: true })
   declare id: number
+  @column()
+  declare label: string
+  @column()
+  declare sortOrder: number
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare url: string
+  @column()
+  declare userId: number
+}
+
+export class AccountProfileSchema extends BaseModel {
+  static $columns = ['avatarUrl', 'bannerUrl', 'bio', 'createdAt', 'displayName', 'id', 'location', 'updatedAt', 'userId', 'websiteUrl'] as const
+  $columns = AccountProfileSchema.$columns
+  @column()
+  declare avatarUrl: string | null
+  @column()
+  declare bannerUrl: string | null
+  @column()
+  declare bio: string | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column()
+  declare displayName: string
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare location: string | null
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare userId: number
+  @column()
+  declare websiteUrl: string | null
+}
+
+export class CommunityPostSchema extends BaseModel {
+  static $columns = ['body', 'createdAt', 'id', 'mediaType', 'mediaUrl', 'updatedAt', 'userId', 'visibility'] as const
+  $columns = CommunityPostSchema.$columns
+  @column()
+  declare body: string
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare mediaType: string
+  @column()
+  declare mediaUrl: string | null
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare userId: number
+  @column()
+  declare visibility: string
+}
+
+export class FollowSchema extends BaseModel {
+  static $columns = ['createdAt', 'followerId', 'followingId', 'id', 'updatedAt'] as const
+  $columns = FollowSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column()
+  declare followerId: number
+  @column()
+  declare followingId: number
+  @column({ isPrimary: true })
+  declare id: number
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class GardenerProfileSchema extends BaseModel {
+  static $columns = ['availabilitySchedule', 'bio', 'createdAt', 'experienceYears', 'headline', 'hourlyRate', 'id', 'isAvailable', 'portfolioUrl', 'publicPhone', 'ratingAverage', 'ratingCount', 'serviceArea', 'servicesOffered', 'updatedAt', 'userId'] as const
+  $columns = GardenerProfileSchema.$columns
+  @column()
+  declare availabilitySchedule: string | null
+  @column()
+  declare bio: string | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column()
+  declare experienceYears: number
+  @column()
+  declare headline: string | null
+  @column()
+  declare hourlyRate: number | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare isAvailable: boolean
+  @column()
+  declare portfolioUrl: string | null
+  @column()
+  declare publicPhone: string | null
+  @column()
+  declare ratingAverage: number
+  @column()
+  declare ratingCount: number
+  @column()
+  declare serviceArea: string | null
   @column()
   declare servicesOffered: string | null
   @column.dateTime({ autoCreate: true, autoUpdate: true })
@@ -31,38 +124,162 @@ export class GardenerProfileSchema extends BaseModel {
   declare userId: number | null
 }
 
+export class GardenerServiceSchema extends BaseModel {
+  static $columns = ['basePrice', 'createdAt', 'description', 'durationMinutes', 'gardenerProfileId', 'id', 'isActive', 'name', 'updatedAt'] as const
+  $columns = GardenerServiceSchema.$columns
+  @column()
+  declare basePrice: number | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column()
+  declare description: string | null
+  @column()
+  declare durationMinutes: number | null
+  @column()
+  declare gardenerProfileId: number
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare isActive: boolean
+  @column()
+  declare name: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class NurseryProductSchema extends BaseModel {
+  static $columns = ['category', 'createdAt', 'description', 'id', 'imageUrl', 'isActive', 'name', 'nurseryProfileId', 'price', 'stock', 'updatedAt'] as const
+  $columns = NurseryProductSchema.$columns
+  @column()
+  declare category: string | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column()
+  declare description: string | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare imageUrl: string | null
+  @column()
+  declare isActive: boolean
+  @column()
+  declare name: string
+  @column()
+  declare nurseryProfileId: number
+  @column()
+  declare price: number | null
+  @column()
+  declare stock: number
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
 export class NurseryProfileSchema extends BaseModel {
-  static $columns = ['createdAt', 'id', 'nurseryName', 'ownerName', 'updatedAt', 'userId'] as const
+  static $columns = ['address', 'bannerUrl', 'city', 'createdAt', 'description', 'id', 'isActive', 'logoUrl', 'nurseryName', 'nurserySlug', 'openingHours', 'ownerName', 'publicEmail', 'publicPhone', 'ratingAverage', 'ratingCount', 'updatedAt', 'userId'] as const
   $columns = NurseryProfileSchema.$columns
+  @column()
+  declare address: string | null
+  @column()
+  declare bannerUrl: string | null
+  @column()
+  declare city: string | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column()
+  declare description: string | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare isActive: boolean
+  @column()
+  declare logoUrl: string | null
+  @column()
+  declare nurseryName: string
+  @column()
+  declare nurserySlug: string | null
+  @column()
+  declare openingHours: string | null
+  @column()
+  declare ownerName: string
+  @column()
+  declare publicEmail: string | null
+  @column()
+  declare publicPhone: string | null
+  @column()
+  declare ratingAverage: number
+  @column()
+  declare ratingCount: number
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare userId: number
+}
+
+export class PostCommentSchema extends BaseModel {
+  static $columns = ['body', 'communityPostId', 'createdAt', 'id', 'updatedAt', 'userId'] as const
+  $columns = PostCommentSchema.$columns
+  @column()
+  declare body: string
+  @column()
+  declare communityPostId: number
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare userId: number
+}
+
+export class PostReactionSchema extends BaseModel {
+  static $columns = ['communityPostId', 'createdAt', 'id', 'type', 'updatedAt', 'userId'] as const
+  $columns = PostReactionSchema.$columns
+  @column()
+  declare communityPostId: number
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime | null
   @column({ isPrimary: true })
   declare id: number
   @column()
-  declare nurseryName: string
-  @column()
-  declare ownerName: string
+  declare type: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
   @column()
-  declare userId: number | null
+  declare userId: number
+}
+
+export class ServiceRequestSchema extends BaseModel {
+  static $columns = ['address', 'budget', 'clientUserId', 'createdAt', 'gardenerProfileId', 'id', 'notes', 'nurseryProfileId', 'scheduledFor', 'serviceType', 'status', 'updatedAt'] as const
+  $columns = ServiceRequestSchema.$columns
+  @column()
+  declare address: string | null
+  @column()
+  declare budget: number | null
+  @column()
+  declare clientUserId: number
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column()
+  declare gardenerProfileId: number | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare notes: string | null
+  @column()
+  declare nurseryProfileId: number | null
+  @column.dateTime()
+  declare scheduledFor: DateTime | null
+  @column()
+  declare serviceType: string
+  @column()
+  declare status: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
 }
 
 export class UserSchema extends BaseModel {
-  static $columns = [
-    'createdAt',
-    'dui',
-    'email',
-    'firstName',
-    'id',
-    'lastName',
-    'password',
-    'phone',
-    'profilePicture',
-    'role',
-    'updatedAt',
-    'username',
-  ] as const
+  static $columns = ['createdAt', 'dui', 'email', 'firstName', 'id', 'lastName', 'password', 'phone', 'profilePicture', 'role', 'updatedAt', 'username'] as const
   $columns = UserSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime | null

@@ -946,3 +946,27 @@ invalidated app/validators/user.ts
 │    Press h to show help                          │
 │                                                  │
 ╰──────────────────────────────────────────────────╯
+[ info ] created .adonisjs/server/controllers.ts (106 μs)
+[ info ] created .adonisjs/server/controllers.ts (33 μs)
+[ info ] created .adonisjs/server/controllers.ts (80 μs)
+[ info ] created .adonisjs/server/controllers.ts (269 ms)
+cupdate start/routes.ts
+[ info ] Underlying HTTP server died. Still watching for changes
+cupdate start/routes.ts
+[ info ] Underlying HTTP server died. Still watching for changes
+cupdate start/routes.ts
+[ info ] Underlying HTTP server died. Still watching for changes
+cupdate start/routes.ts
+[ info ] Underlying HTTP server died. Still watching for changes
+cupdate start/routes.ts
+[ info ] Underlying HTTP server died. Still watching for changes
+cupdate start/routes.ts
+╭──────────────────────────────────────────────────╮
+│                                                  │
+│    Server address: http://localhost:64870        │
+│    Mode: hmr                                     │
+│    Ready in: 1.33 s                              │
+│    Press h to show help                          │
+│                                                  │
+╰──────────────────────────────────────────────────╯
+[01:34:37.130] [32mINFO[39m (1536): [36mstarted HTTP server on localhost:64870[39m

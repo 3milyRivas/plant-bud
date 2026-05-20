@@ -8,5 +8,7 @@ export const controllers = {
   Generals: () => import('#controllers/generals_controller'),
   NewAccount: () => import('#controllers/new_account_controller'),
   Plants: () => import('#controllers/plants_controller'),
+  Homepages: () => import('#controllers/homepages_controller'),
+  Profiles: () => import('#controllers/profiles_controller'),
   Session: () => import('#controllers/session_controller'),
 }

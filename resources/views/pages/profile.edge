@@ -1,0 +1,184 @@
+@layout()
+@slot('title')
+<title>Profile</title>
+@endslot
+
+@let(displayName = accountProfile?.displayName || user.fullName || user.username)
+@let(avatarUrl = accountProfile?.avatarUrl || user.profilePicture || '/resources/images/profile/lady.png')
+@let(bannerUrl = accountProfile?.bannerUrl || '/resources/images/profile/profile-header.png')
+@let(memberSince = user.createdAt ? user.createdAt.toFormat('LLL yyyy') : 'Recently')
+
+<div class="relative z-10 min-h-dvh overflow-hidden bg-[#6B8C6C] text-[#1E3D19]">
+  <div class="fixed inset-0 pointer-events-none">
+    <img src="/resources/images/welcome/header3.png" alt="" class="h-full w-full object-cover opacity-25">
+    <div class="absolute inset-0 bg-gradient-to-b from-[#1E3D19]/80 via-[#728B6F]/80 to-[#6B8C6C]"></div>
+    <div class="absolute left-10 top-24 h-72 w-72 rounded-full bg-[#EDE7D6]/10 blur-3xl"></div>
+    <div class="absolute bottom-10 right-10 h-96 w-96 rounded-full bg-white/10 blur-3xl"></div>
+  </div>
+
+  <header class="relative z-20 px-5 py-5 lg:px-10">
+    <div class="mx-auto flex max-w-6xl items-center justify-between rounded-full border border-white/10 bg-white/10 px-5 py-4 shadow-[0_18px_55px_rgba(0,0,0,0.18)] backdrop-blur-2xl">
+      <a href="/homepage" class="flex items-center gap-3">
+        <img src="/resources/images/essential/logo.png" alt="" class="h-11 w-11 object-contain drop-shadow-lg">
+        <span class="hidden text-xl font-black text-white sm:block">Plant<span class="text-[#EDE7D6]"> Bud</span></span>
+      </a>
+
+      <div class="flex items-center gap-3">
+        <a href="/profile/settings" class="rounded-full bg-[#EDE7D6] px-5 py-2.5 text-sm font-black text-[#1E3D19] shadow-lg transition hover:-translate-y-0.5 hover:scale-[1.02]">
+          Settings
+        </a>
+        @form({ route: 'session.destroy', method: 'POST' })
+          <button type="submit" class="rounded-full border border-white/10 bg-white/10 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-white/20">
+            Logout
+          </button>
+        @end
+      </div>
+    </div>
+  </header>
+
+  <main class="relative z-10 mx-auto max-w-6xl px-5 pb-16 lg:px-10">
+    @if(flashMessages.get('success'))
+      <div class="mb-5 rounded-[1.5rem] border border-white/10 bg-white/15 px-5 py-4 text-sm font-bold text-[#EDE7D6] shadow-xl backdrop-blur-2xl">
+        {{ flashMessages.get('success') }}
+      </div>
+    @endif
+
+    <section class="isolate overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/10 shadow-[0_30px_90px_rgba(0,0,0,0.22)] backdrop-blur-3xl">
+      <div class="relative h-52 overflow-hidden sm:h-64 lg:h-72">
+        <img src="{{ bannerUrl }}" alt="" class="absolute inset-0 block h-full max-h-full w-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-t from-[#1E3D19] via-[#1E3D19]/15 to-transparent"></div>
+      </div>
+
+      <div class="px-6 pb-8 pt-6 sm:px-8 sm:pt-8">
+        <div class="grid gap-6 lg:grid-cols-[180px_1fr_auto] lg:items-center">
+          <div class="relative h-32 w-32 sm:h-40 sm:w-40">
+            <div class="absolute -inset-1 rounded-full bg-[#EDE7D6] shadow-[0_18px_55px_rgba(0,0,0,0.28)]"></div>
+            <img src="{{ avatarUrl }}" alt="" class="relative h-full w-full rounded-full border-4 border-white object-cover">
+          </div>
+
+          <div>
+            <div class="flex flex-wrap items-center gap-3">
+              <h1 class="text-4xl font-black leading-tight text-white lg:text-5xl">{{ displayName }}</h1>
+              <span class="rounded-full bg-[#EDE7D6] px-3 py-1.5 text-xs font-black uppercase tracking-[0.16em] text-[#1E3D19]">
+                {{ user.role }}
+              </span>
+            </div>
+            <p class="mt-2 text-base font-bold text-[#EDE7D6]">{{ '@' + user.username }}</p>
+            <p class="mt-4 max-w-2xl text-sm font-semibold leading-7 text-white/82">
+              {{ accountProfile?.bio || 'This profile is ready. Add a description from settings to tell the community what you grow, care for, or sell.' }}
+            </p>
+          </div>
+
+          <div class="grid grid-cols-3 gap-3 rounded-[1.5rem] bg-white/12 p-3 text-center text-white backdrop-blur-xl lg:min-w-80">
+            <div>
+              <p class="text-2xl font-black">{{ stats.posts }}</p>
+              <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#EDE7D6]">Posts</p>
+            </div>
+            <div>
+              <p class="text-2xl font-black">{{ stats.followers }}</p>
+              <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#EDE7D6]">Followers</p>
+            </div>
+            <div>
+              <p class="text-2xl font-black">{{ stats.following }}</p>
+              <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#EDE7D6]">Following</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 flex flex-wrap gap-3">
+          @if(accountProfile?.location)
+            <span class="rounded-full bg-white/12 px-4 py-2 text-sm font-bold text-white backdrop-blur-xl">
+              {{ accountProfile.location }}
+            </span>
+          @endif
+
+          <span class="rounded-full bg-white/12 px-4 py-2 text-sm font-bold text-white backdrop-blur-xl">
+            Member since {{ memberSince }}
+          </span>
+
+          <span class="rounded-full bg-white/12 px-4 py-2 text-sm font-bold text-white backdrop-blur-xl">
+            {{ stats.reliability }}% profile complete
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <section class="mt-6 grid gap-6 lg:grid-cols-[0.75fr_1.25fr]">
+      <aside class="space-y-6">
+        <div class="rounded-[2rem] border border-white/10 bg-white/12 p-6 text-white shadow-xl backdrop-blur-2xl">
+          <p class="text-sm font-black uppercase tracking-[0.18em] text-[#EDE7D6]">Linked accounts</p>
+          <div class="mt-5 space-y-3">
+            @each(link in accountLinks)
+              <a href="{{ link.url }}" target="_blank" rel="noreferrer" class="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm font-bold transition hover:-translate-y-0.5 hover:bg-white/20">
+                <span>{{ link.label }}</span>
+                <span class="text-xs font-black uppercase tracking-[0.16em] text-[#EDE7D6]">Open</span>
+              </a>
+            @else
+              <p class="rounded-2xl border border-dashed border-white/20 px-4 py-4 text-sm font-semibold text-white/75">
+                No linked accounts yet.
+              </p>
+            @end
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3 rounded-[2rem] border border-white/10 bg-white/12 p-4 text-center text-white shadow-xl backdrop-blur-2xl">
+          <div>
+            <p class="text-2xl font-black">{{ stats.likes }}</p>
+            <p class="text-[0.68rem] font-bold uppercase tracking-[0.12em] text-[#EDE7D6]">Likes</p>
+          </div>
+          <div>
+            <p class="text-2xl font-black">{{ stats.favorites }}</p>
+            <p class="text-[0.68rem] font-bold uppercase tracking-[0.12em] text-[#EDE7D6]">Saved</p>
+          </div>
+          <div>
+            <p class="text-2xl font-black">{{ stats.comments }}</p>
+            <p class="text-[0.68rem] font-bold uppercase tracking-[0.12em] text-[#EDE7D6]">Comments</p>
+          </div>
+        </div>
+      </aside>
+
+      <section class="rounded-[2rem] border border-white/10 bg-[#EDE7D6]/95 p-5 shadow-[0_24px_70px_rgba(0,0,0,0.18)]">
+        <div class="flex items-center justify-between gap-4 px-1 pb-5">
+          <div>
+            <p class="text-xs font-black uppercase tracking-[0.18em] text-[#728B6F]">Profile feed</p>
+            <h2 class="mt-1 text-2xl font-black text-[#1E3D19]">Posts</h2>
+          </div>
+          <a href="/community" class="rounded-full bg-white px-4 py-2 text-sm font-black text-[#1E3D19] shadow-sm transition hover:bg-[#D5DCD4]">
+            Community
+          </a>
+        </div>
+
+        @if(recentPosts.length)
+          <div class="grid grid-cols-2 gap-3 md:grid-cols-3">
+            @each(post in recentPosts)
+              <article class="group relative aspect-square overflow-hidden rounded-[1.5rem] bg-[#D5DCD4] shadow-lg">
+                @if(post.mediaUrl)
+                  <img src="{{ post.mediaUrl }}" alt="" class="h-full w-full object-cover transition duration-500 group-hover:scale-110">
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 transition group-hover:opacity-100"></div>
+                  <p class="absolute inset-x-4 bottom-4 line-clamp-3 text-sm font-bold leading-5 text-white opacity-0 transition group-hover:opacity-100">
+                    {{ post.body }}
+                  </p>
+                @else
+                  <div class="flex h-full w-full items-center justify-center p-5 text-center">
+                    <p class="line-clamp-6 text-sm font-black leading-6 text-[#1E3D19]">{{ post.body }}</p>
+                  </div>
+                @endif
+              </article>
+            @end
+          </div>
+        @else
+          <div class="flex min-h-80 items-center justify-center rounded-[1.5rem] border border-dashed border-[#728B6F]/40 bg-white/45 p-8 text-center">
+            <div class="max-w-sm">
+              <img src="/resources/images/homepagee/comunity.png" alt="" class="mx-auto h-24 w-24 object-contain">
+              <h3 class="mt-5 text-2xl font-black text-[#1E3D19]">No posts yet</h3>
+              <p class="mt-2 text-sm font-semibold leading-6 text-[#5D7459]">
+                Your future community posts will appear here as a clean profile grid.
+              </p>
+            </div>
+          </div>
+        @endif
+      </section>
+    </section>
+  </main>
+</div>
+@end

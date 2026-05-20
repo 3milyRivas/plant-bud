@@ -1,0 +1,89 @@
+@layout()
+@slot('title')
+<title>Gardener Homepage</title>
+@endslot
+
+<div class="relative z-10 min-h-dvh bg-[#F3F5EF] text-[#1E3D19]">
+  <header class="px-6 py-5 lg:px-10">
+    <div class="mx-auto flex max-w-7xl items-center justify-between border-b border-[#CBD6C4] pb-5">
+      <a href="/homepage" class="flex items-center gap-3">
+        <span class="flex h-11 w-11 items-center justify-center rounded-lg bg-[#1E3D19]">
+          <img src="/resources/images/essential/logo.png" alt="" class="h-8 w-8 object-contain">
+        </span>
+        <span>
+          <span class="block text-lg font-black">Plant Bud</span>
+          <span class="block text-xs font-semibold uppercase tracking-[0.18em] text-[#6B8C6C]">Gardener home</span>
+        </span>
+      </a>
+
+      <div class="flex items-center gap-3">
+        <span class="hidden rounded-lg bg-white px-3 py-2 text-sm font-semibold shadow-sm sm:inline-flex">
+          {{ user.fullName }}
+        </span>
+        @form({ route: 'session.destroy', method: 'POST' })
+        <button type="submit"
+          class="rounded-lg bg-[#1E3D19] px-4 py-2 text-sm font-bold text-white transition hover:bg-[#315F28]">
+          Logout
+        </button>
+        @end
+      </div>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-7xl px-6 pb-14 lg:px-10">
+    <section class="grid gap-8 py-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
+      <img src="/resources/images/services/services.png" alt="" class="h-80 w-full rounded-lg object-cover shadow-xl">
+
+      <div>
+        <p class="text-sm font-bold uppercase tracking-[0.22em] text-[#6B8C6C]">Professional workspace</p>
+        <h1 class="mt-3 max-w-2xl text-4xl font-black leading-tight text-[#183314] lg:text-5xl">
+          Manage requests, availability, and your gardening profile.
+        </h1>
+        <p class="mt-5 max-w-xl text-base font-medium leading-7 text-[#5D7459]">
+          {{ gardenerProfile?.headline || 'Gardening professional' }}
+        </p>
+      </div>
+    </section>
+
+    <section class="grid gap-4 md:grid-cols-3">
+      <div class="rounded-lg bg-white p-5 shadow-sm">
+        <p class="text-sm font-bold uppercase tracking-[0.16em] text-[#6B8C6C]">Availability</p>
+        <p class="mt-3 text-3xl font-black">{{ gardenerProfile?.isAvailable ? 'Open' : 'Closed' }}</p>
+        <p class="mt-2 text-sm font-medium text-[#5D7459]">Current public service status.</p>
+      </div>
+
+      <div class="rounded-lg bg-white p-5 shadow-sm">
+        <p class="text-sm font-bold uppercase tracking-[0.16em] text-[#6B8C6C]">Rating</p>
+        <p class="mt-3 text-3xl font-black">{{ gardenerProfile?.ratingAverage || 0 }}</p>
+        <p class="mt-2 text-sm font-medium text-[#5D7459]">Average from completed jobs.</p>
+      </div>
+
+      <div class="rounded-lg bg-white p-5 shadow-sm">
+        <p class="text-sm font-bold uppercase tracking-[0.16em] text-[#6B8C6C]">Area</p>
+        <p class="mt-3 text-3xl font-black">{{ gardenerProfile?.serviceArea || 'Pending' }}</p>
+        <p class="mt-2 text-sm font-medium text-[#5D7459]">Where clients can request you.</p>
+      </div>
+    </section>
+
+    <section class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <a href="/gardener/dashboard"
+        class="rounded-lg bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+        <span class="text-sm font-bold uppercase tracking-[0.16em] text-[#6B8C6C]">Dashboard</span>
+        <h2 class="mt-3 text-xl font-black">Open panel</h2>
+      </a>
+      <a href="/requested" class="rounded-lg bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+        <span class="text-sm font-bold uppercase tracking-[0.16em] text-[#6B8C6C]">Requests</span>
+        <h2 class="mt-3 text-xl font-black">Review jobs</h2>
+      </a>
+      <a href="/community" class="rounded-lg bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+        <span class="text-sm font-bold uppercase tracking-[0.16em] text-[#6B8C6C]">Community</span>
+        <h2 class="mt-3 text-xl font-black">Post progress</h2>
+      </a>
+      <a href="/profile" class="rounded-lg bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+        <span class="text-sm font-bold uppercase tracking-[0.16em] text-[#6B8C6C]">Profile</span>
+        <h2 class="mt-3 text-xl font-black">Edit account</h2>
+      </a>
+    </section>
+  </main>
+</div>
+@end

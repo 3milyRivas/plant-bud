@@ -1,11 +1,12 @@
 import { middleware } from '#start/kernel'
 import { controllers } from '#generated/controllers'
 import router from '@adonisjs/core/services/router'
-import ornamentalPlants from '#data/ornamentalPlants'
-import nurseries from '#data/nurseries'
+import ornamentalPlants from '#data/ornamental_plants'
 const GardenDesignerController = () => import('#controllers/garden_designers_controller')
+const HomepagesController = () => import('#controllers/homepages_controller')
 const NewAccountController = () => import('#controllers/new_account_controller')
 const PlantsController = () => import('#controllers/plants_controller')
+const ProfilesController = () => import('#controllers/profiles_controller')
 
 /* general views */
 router.on('/').render('pages/welcome').as('home')
@@ -13,14 +14,11 @@ router.on('/register').render('pages/register')
 router.on('/araceae').render('pages/araceae', { ornamentalPlants })
 router.on('/amaryllidaceae').render('pages/amaryllidaceae')
 
-router.on('/homepage2').render('pages/client/homepage2')
-
 router.on('/community').render('pages/community')
 router.on('/favorites').render('pages/favorites')
 router.on('/notification').render('pages/notification')
 router.on('/requested').render('pages/requested')
 
-router.on('/profile').render('pages/client/profile').as('profile')
 router.on('/maintenance').render('pages/services/maintenance').as('maintenance')
 router.on('/request').render('pages/services/request').as('request')
 router.on('/care3').render('pages/client/Plants/care3')
@@ -43,8 +41,16 @@ router.post('/plants/scan', [PlantsController, 'scan']).as('plants.scan')
     router.on('/nurseries').render('pages/client/nurseries')
   })
   .use([middleware.auth(), middleware.role(['client'])])*/
-router.on('/homepage').render('pages/client/homepage')
-router.on('/nurseries').render('pages/client/nurseries', { nurseries })
+router
+  .group(() => {
+    router.get('/homepage', [HomepagesController, 'index']).as('homepage')
+    router.get('/profile', [ProfilesController, 'show']).as('profile')
+    router.get('/profile/settings', [ProfilesController, 'settings']).as('profile.settings')
+    router.post('/profile', [ProfilesController, 'update']).as('profile.update')
+  })
+  .use(middleware.auth())
+
+router.on('/nurseries').render('pages/client/nurseries')
 /* gardeners views */
 router
   .group(() => {
@@ -63,6 +69,10 @@ router
   .group(() => {
     router.get('login', [controllers.Session, 'create']).as('session.create')
     router.post('login', [controllers.Session, 'store']).as('session.store')
+    router.get('/signup/client', [NewAccountController, 'createClient']).as('signup.client')
+    router.get('/signup/gardener', [NewAccountController, 'createGardener']).as('signup.gardener')
+    router.get('/signup/nursery', [NewAccountController, 'createNursery']).as('signup.nursery')
+    router.post('/signup', [NewAccountController, 'store']).as('new_account.store')
   })
   .use(middleware.guest())
 
@@ -72,8 +82,3 @@ router
     router.post('logout', [controllers.Session, 'destroy']).as('session.destroy')
   })
   .use(middleware.auth())
-
-router.get('/signup/client', [NewAccountController, 'createClient']).as('signup.client')
-router.get('/signup/gardener', [NewAccountController, 'createGardener']).as('signup.gardener')
-router.get('/signup/nursery', [NewAccountController, 'createNursery']).as('signup.nursery')
-router.post('/signup', [NewAccountController, 'store']).as('new_account.store')
