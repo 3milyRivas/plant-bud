@@ -428,7 +428,10 @@ function initCommunityPage() {
 
   if (!page) return
 
+  initCommunityNavbar(page)
+  initCommunityRails(page)
   page.querySelectorAll('[data-community-post-form]').forEach(bindCommunityPostForm)
+  page.querySelectorAll('[data-community-search-form]').forEach(bindCommunitySearchForm)
   page.querySelectorAll('[data-community-file-trigger]').forEach(bindCommunityFileTrigger)
   page.querySelectorAll('[data-community-image-input]').forEach(bindCommunityImageInput)
   page.querySelectorAll('[data-community-poll-trigger]').forEach(bindCommunityPollTrigger)
@@ -438,6 +441,245 @@ function initCommunityPage() {
   page.querySelectorAll('[data-poll-form]').forEach(bindCommunityPollForm)
   page.querySelectorAll('[data-follow-form]').forEach(bindCommunityFollowForm)
   page.querySelectorAll('[data-share-post]').forEach(bindCommunityShareButton)
+}
+
+function initCommunityNavbar(page) {
+  const navbar = page.querySelector('[data-community-navbar]')
+  const shell = page.querySelector('[data-community-navbar-shell]')
+  const leftPanel = page.querySelector('[data-community-navbar-left]')
+  const rightPanel = page.querySelector('[data-community-navbar-right]')
+  const searchForm = page.querySelector('[data-community-navbar-search]')
+  const searchBox = page.querySelector('[data-community-navbar-search-box]')
+  const searchInput = searchForm?.querySelector('[data-community-search-input]')
+  const searchButton = page.querySelector('[data-community-navbar-search-button]')
+  const brandText = page.querySelector('[data-community-brand-text]')
+  const profileText = page.querySelector('[data-community-profile-text]')
+
+  if (!navbar || !shell || !leftPanel || !rightPanel || shell.dataset.communityNavbarReady === 'true') {
+    return
+  }
+
+  const splitPanelClasses = [
+    'rounded-full',
+    'border',
+    'border-white/30',
+    'bg-white/28',
+    'px-3',
+    'py-2',
+    'shadow-[0_16px_46px_rgba(17,62,20,0.16)]',
+    'backdrop-blur-2xl',
+  ]
+  const shellBaseClasses = [
+    'max-w-[1240px]',
+    'rounded-[2rem]',
+    'border-white/30',
+    'bg-white/24',
+    'px-4',
+    'py-3',
+    'shadow-[0_18px_55px_rgba(17,62,20,0.18)]',
+    'backdrop-blur-2xl',
+    'sm:rounded-full',
+    'sm:px-5',
+  ]
+  const shellSplitClasses = [
+    'max-w-none',
+    'rounded-none',
+    'border-transparent',
+    'bg-transparent',
+    'px-0',
+    'py-0',
+    'shadow-none',
+    'backdrop-blur-none',
+  ]
+  const topTolerance = 8
+  let isSplit = false
+  let searchExpanded = false
+  let ticking = false
+
+  const setSearchExpanded = (expanded) => {
+    searchExpanded = expanded && isSplit
+
+    if (!searchBox || !searchInput) return
+
+    const shouldCollapse = isSplit && !searchExpanded
+
+    searchBox.style.width = shouldCollapse ? '0px' : ''
+    searchBox.style.opacity = shouldCollapse ? '0' : ''
+    searchBox.style.paddingLeft = shouldCollapse ? '0px' : ''
+    searchBox.style.paddingRight = shouldCollapse ? '0px' : ''
+    searchBox.style.pointerEvents = shouldCollapse ? 'none' : ''
+    searchInput.tabIndex = shouldCollapse ? -1 : 0
+  }
+
+  const setSplit = (shouldSplit) => {
+    const split = shouldSplit && window.innerWidth >= 1024
+
+    if (split === isSplit) return
+
+    isSplit = split
+    shell.classList.toggle('justify-between', true)
+    shellBaseClasses.forEach((className) => shell.classList.toggle(className, !split))
+    shellSplitClasses.forEach((className) => shell.classList.toggle(className, split))
+    ;[leftPanel, rightPanel].forEach((panel) => {
+      splitPanelClasses.forEach((className) => panel.classList.toggle(className, split))
+    })
+    if (!split) searchExpanded = false
+
+    brandText?.classList.toggle('lg:block', !split)
+    profileText?.classList.toggle('lg:block', !split)
+    if (split) {
+      shell.style.setProperty('backdrop-filter', 'none', 'important')
+      shell.style.setProperty('-webkit-backdrop-filter', 'none', 'important')
+    } else {
+      shell.style.removeProperty('backdrop-filter')
+      shell.style.removeProperty('-webkit-backdrop-filter')
+    }
+    leftPanel.style.flex = split ? '0 0 auto' : ''
+    rightPanel.style.flex = split ? '0 0 auto' : ''
+    setSearchExpanded(searchExpanded)
+  }
+
+  const updateNavbar = () => {
+    setSplit(window.scrollY > topTolerance)
+  }
+
+  shell.dataset.communityNavbarReady = 'true'
+  searchButton?.addEventListener('click', (event) => {
+    if (!isSplit || searchExpanded) return
+
+    event.preventDefault()
+    setSearchExpanded(true)
+    searchInput?.focus()
+  })
+  searchInput?.addEventListener('focus', () => {
+    if (isSplit) setSearchExpanded(true)
+  })
+  searchInput?.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape' || !isSplit) return
+
+    setSearchExpanded(false)
+    searchInput.blur()
+  })
+  document.addEventListener('click', (event) => {
+    const target = event.target
+
+    if (!(target instanceof Element) || !isSplit || !searchForm) return
+    if (searchForm.contains(target)) return
+
+    setSearchExpanded(false)
+  })
+  page.querySelectorAll('[data-community-scroll-top]').forEach((button) => {
+    button.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    })
+  })
+  page.querySelectorAll('[data-community-refresh-feed]').forEach((button) => {
+    button.addEventListener('click', () => {
+      window.location.reload()
+    })
+  })
+  window.addEventListener(
+    'scroll',
+    () => {
+      if (ticking) return
+
+      ticking = true
+      window.requestAnimationFrame(() => {
+        updateNavbar()
+        ticking = false
+      })
+    },
+    { passive: true }
+  )
+  window.addEventListener('resize', updateNavbar)
+  updateNavbar()
+}
+
+function initCommunityRails(page) {
+  const toggles = page.querySelectorAll('[data-community-rail-toggle]')
+  const panels = page.querySelectorAll('[data-community-rail-panel]')
+
+  if (!toggles.length || page.dataset.communityRailsReady === 'true') return
+
+  const hiddenToggleClasses = ['opacity-0', 'pointer-events-none', 'scale-95']
+  const toggleGroups = {
+    profile: ['profile'],
+    activity: ['activity', 'suggestions'],
+    suggestions: ['activity', 'suggestions'],
+  }
+
+  const setToggleHidden = (toggle, hidden) => {
+    hiddenToggleClasses.forEach((className) => toggle.classList.toggle(className, hidden))
+  }
+
+  const closePanels = () => {
+    panels.forEach((panel) => {
+      const side = panel.getAttribute('data-community-rail-side')
+      const hiddenTranslate = side === 'left' ? '-translate-x-[115%]' : 'translate-x-[115%]'
+
+      panel.classList.add('opacity-0', 'pointer-events-none', hiddenTranslate)
+      panel.classList.remove('opacity-100', 'translate-x-0')
+    })
+    toggles.forEach((toggle) => {
+      toggle.setAttribute('aria-expanded', 'false')
+      toggle.classList.remove('bg-[#EDE7D6]')
+      setToggleHidden(toggle, false)
+    })
+  }
+
+  const openPanel = (key) => {
+    const panel = page.querySelector(`[data-community-rail-panel="${CSS.escape(key)}"]`)
+    const toggle = page.querySelector(`[data-community-rail-toggle="${CSS.escape(key)}"]`)
+
+    if (!panel || !toggle) return
+
+    closePanels()
+    panel.classList.remove(
+      'opacity-0',
+      'pointer-events-none',
+      '-translate-x-[115%]',
+      'translate-x-[115%]'
+    )
+    panel.classList.add('opacity-100', 'translate-x-0')
+    toggle.setAttribute('aria-expanded', 'true')
+    toggle.classList.add('bg-[#EDE7D6]')
+    toggles.forEach((railToggle) => {
+      const railKey = railToggle.getAttribute('data-community-rail-toggle')
+      const shouldHide = railKey ? toggleGroups[key]?.includes(railKey) : false
+
+      setToggleHidden(railToggle, shouldHide)
+    })
+  }
+
+  page.dataset.communityRailsReady = 'true'
+  toggles.forEach((toggle) => {
+    toggle.addEventListener('click', () => {
+      const key = toggle.getAttribute('data-community-rail-toggle')
+      const isOpen = toggle.getAttribute('aria-expanded') === 'true'
+
+      if (!key) return
+      if (isOpen) {
+        closePanels()
+        return
+      }
+
+      openPanel(key)
+    })
+  })
+  page.querySelectorAll('[data-community-rail-close]').forEach((closeButton) => {
+    closeButton.addEventListener('click', closePanels)
+  })
+  document.addEventListener('click', (event) => {
+    const target = event.target
+
+    if (!(target instanceof Element)) return
+    if (target.closest('[data-community-rail-panel], [data-community-rail-toggle]')) return
+
+    closePanels()
+  })
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closePanels()
+  })
 }
 
 function bindCommunityPostForm(form) {
@@ -476,10 +718,9 @@ function bindCommunityFileTrigger(button) {
   button.dataset.communityTriggerReady = 'true'
   button.addEventListener('click', () => {
     const form = button.closest('[data-community-post-form]')
-    const details = form?.querySelector('[data-community-options]')
     const input = form?.querySelector('[data-community-image-input]')
 
-    if (details) details.open = true
+    clearCommunityPollFields(form)
     input?.click()
   })
 }
@@ -506,12 +747,161 @@ function bindCommunityPollTrigger(button) {
   button.dataset.communityTriggerReady = 'true'
   button.addEventListener('click', () => {
     const form = button.closest('[data-community-post-form]')
-    const details = form?.querySelector('[data-community-options]')
+    const panel = form?.querySelector('[data-community-poll-panel]')
     const input = form?.querySelector('[data-community-poll-input]')
 
-    if (details) details.open = true
+    clearCommunityImageInput(form)
+    panel?.classList.remove('hidden')
     input?.focus()
   })
+}
+
+function bindCommunitySearchForm(form) {
+  if (form.dataset.communitySearchReady === 'true') return
+
+  const input = form.querySelector('[data-community-search-input]')
+  const results = form.querySelector('[data-community-search-results]')
+
+  if (!input || !results) return
+
+  let timer = null
+  let controller = null
+
+  const hideResults = () => {
+    results.classList.add('hidden')
+    results.replaceChildren()
+  }
+
+  const scheduleSearch = () => {
+    window.clearTimeout(timer)
+    timer = window.setTimeout(async () => {
+      const query = input.value.trim()
+
+      if (!query) {
+        hideResults()
+        return
+      }
+
+      controller?.abort()
+      controller = new AbortController()
+
+      try {
+        const response = await fetch(
+          `/community/search/suggestions?q=${encodeURIComponent(query)}`,
+          {
+            credentials: 'same-origin',
+            headers: { Accept: 'application/json' },
+            signal: controller.signal,
+          }
+        )
+        const payload = await response.json()
+
+        renderCommunitySearchResults(results, payload)
+      } catch (error) {
+        if (error.name !== 'AbortError') hideResults()
+      }
+    }, 170)
+  }
+
+  form.dataset.communitySearchReady = 'true'
+  input.addEventListener('input', scheduleSearch)
+  input.addEventListener('focus', scheduleSearch)
+  form.addEventListener('submit', hideResults)
+  document.addEventListener('click', (event) => {
+    if (!form.contains(event.target)) hideResults()
+  })
+}
+
+function renderCommunitySearchResults(results, payload) {
+  results.replaceChildren()
+
+  const users = payload?.users || []
+  const hashtags = payload?.hashtags || []
+
+  if (!users.length && !hashtags.length) {
+    const empty = document.createElement('p')
+
+    empty.className = 'px-4 py-3 text-sm font-bold text-[#113E14]/60'
+    empty.textContent = 'No profiles or hashtags found yet.'
+    results.append(empty)
+    results.classList.remove('hidden')
+    return
+  }
+
+  if (users.length) {
+    results.append(createCommunitySearchHeading('Profiles'))
+    users.forEach((user) => results.append(createCommunityUserResult(user)))
+  }
+
+  if (hashtags.length) {
+    results.append(createCommunitySearchHeading('Hashtags'))
+    hashtags.forEach((hashtag) => results.append(createCommunityHashtagResult(hashtag)))
+  }
+
+  results.classList.remove('hidden')
+}
+
+function createCommunitySearchHeading(label) {
+  const heading = document.createElement('p')
+
+  heading.className = 'px-3 pb-1 pt-2 text-[11px] font-black uppercase tracking-[0.14em] text-[#315F28]/70'
+  heading.textContent = label
+
+  return heading
+}
+
+function createCommunityUserResult(user) {
+  const link = document.createElement('a')
+  const avatar = document.createElement(user.avatarUrl ? 'img' : 'span')
+  const text = document.createElement('span')
+  const name = document.createElement('span')
+  const meta = document.createElement('span')
+
+  link.href = `/users/${encodeURIComponent(user.username)}`
+  link.className = 'flex items-center gap-3 rounded-2xl px-3 py-2 transition hover:bg-white/70'
+
+  if (user.avatarUrl) {
+    avatar.src = user.avatarUrl
+    avatar.alt = ''
+    avatar.className = 'h-10 w-10 flex-none rounded-full object-cover'
+  } else {
+    avatar.className = 'flex h-10 w-10 flex-none items-center justify-center rounded-full bg-[#113E14] text-sm font-black text-[#EDE7D6]'
+    avatar.textContent = user.initial || 'P'
+  }
+
+  text.className = 'min-w-0 leading-tight'
+  name.className = 'block truncate text-sm font-black text-[#113E14]'
+  name.textContent = user.displayName || user.username
+  meta.className = 'block truncate text-xs font-bold text-[#315F28]/70'
+  meta.textContent = `${user.roleLabel || 'Member'} - @${user.username}`
+
+  text.append(name, meta)
+  link.append(avatar, text)
+
+  return link
+}
+
+function createCommunityHashtagResult(hashtag) {
+  const link = document.createElement('a')
+  const icon = document.createElement('span')
+  const text = document.createElement('span')
+  const tag = document.createElement('span')
+  const count = document.createElement('span')
+
+  link.href = `/community/hashtags/${encodeURIComponent(hashtag.tag)}`
+  link.className = 'flex items-center gap-3 rounded-2xl px-3 py-2 transition hover:bg-white/70'
+  icon.className = 'flex h-10 w-10 flex-none items-center justify-center rounded-full bg-[#EDE7D6] text-lg font-black text-[#113E14]'
+  icon.textContent = '#'
+  text.className = 'min-w-0 leading-tight'
+  tag.className = 'block truncate text-sm font-black text-[#113E14]'
+  tag.textContent = `#${hashtag.tag}`
+  count.className = 'block truncate text-xs font-bold text-[#315F28]/70'
+  count.textContent = `${hashtag.postsCount || 0} posts`
+
+  text.append(tag, count)
+  link.append(icon, text)
+
+  return link
 }
 
 function bindCommunityReactionForm(form) {
@@ -670,9 +1060,35 @@ function resetCommunityComposer(form) {
   form.querySelectorAll('details').forEach((details) => {
     details.open = false
   })
+  form.querySelectorAll('[data-community-poll-panel]').forEach((panel) => {
+    panel.classList.add('hidden')
+  })
   form.querySelectorAll('[data-community-file-name]').forEach((fileName) => {
     fileName.textContent = ''
     fileName.classList.add('hidden')
+  })
+}
+
+function clearCommunityImageInput(form) {
+  if (!form) return
+
+  form.querySelectorAll('[data-community-image-input]').forEach((input) => {
+    input.value = ''
+  })
+  form.querySelectorAll('[data-community-file-name]').forEach((fileName) => {
+    fileName.textContent = ''
+    fileName.classList.add('hidden')
+  })
+}
+
+function clearCommunityPollFields(form) {
+  if (!form) return
+
+  form.querySelectorAll('[data-community-poll-panel]').forEach((panel) => {
+    panel.classList.add('hidden')
+  })
+  form.querySelectorAll('[name="poll_question"], [name="poll_options"]').forEach((input) => {
+    input.value = ''
   })
 }
 

@@ -4,47 +4,59 @@
 <title>Saved Posts</title>
 @endslot
 
-<div class="relative z-10 min-h-dvh overflow-hidden text-[#1E3D19]" data-community-page data-favorites-page>
-  <div class="fixed inset-0 -z-10 pointer-events-none">
-    <img src="/resources/images/welcome/header3.png" alt="" class="h-full w-full object-cover opacity-25">
-    <div class="absolute inset-0 bg-gradient-to-b from-[#1E3D19]/85 via-[#6B8C6C]/88 to-[#728B6F]"></div>
-  </div>
-
-  <header class="sticky top-0 z-40 px-5 pt-5 lg:px-10">
-    <div class="mx-auto flex max-w-6xl items-center justify-between rounded-full border border-white/10 bg-white/10 px-5 py-4 shadow-[0_18px_55px_rgba(0,0,0,0.18)] backdrop-blur-2xl">
-      <a href="/homepage" class="flex items-center gap-3">
-        <img src="/resources/images/essential/logo.png" alt="" class="h-11 w-11 object-contain drop-shadow-lg">
-        <span class="hidden text-xl font-black text-white sm:block">Plant<span class="text-[#EDE7D6]"> Bud</span></span>
+<div class="min-h-screen bg-[#6C8E6B] text-[#113E14]" data-community-page data-favorites-page>
+  <header class="sticky top-0 z-40 px-4 py-4 lg:px-8">
+    <div class="mx-auto flex max-w-[1180px] items-center gap-3 rounded-[2rem] border border-white/30 bg-white/24 px-4 py-3 shadow-[0_18px_55px_rgba(17,62,20,0.18)] backdrop-blur-2xl sm:rounded-full sm:px-5">
+      <a href="/homepage" class="flex flex-none items-center gap-3">
+        <span class="h-11 w-11 rounded-full bg-[#113E14] bg-[url('/resources/images/essential/logo.png')] bg-contain bg-center bg-no-repeat shadow-md"></span>
+        <span class="hidden leading-tight md:block">
+          <span class="block text-sm font-black text-[#113E14]">Plant Bud</span>
+          <span class="block text-[11px] font-bold uppercase tracking-[0.18em] text-[#315F28]">Saved posts</span>
+        </span>
       </a>
 
-      <nav class="flex items-center gap-2">
-        <a href="/community" class="rounded-full bg-white/12 px-4 py-2 text-sm font-black text-white transition hover:bg-white/20">Community</a>
-        <a href="/favorites" class="rounded-full bg-[#EDE7D6] px-4 py-2 text-sm font-black text-[#1E3D19]">Saved</a>
-        <a href="/profile" class="hidden rounded-full bg-white/12 px-4 py-2 text-sm font-black text-white transition hover:bg-white/20 sm:inline-flex">Profile</a>
+      <nav class="flex min-w-0 flex-1 items-center justify-center gap-2" aria-label="Community navigation">
+        <a href="/community" class="h-10 w-10 rounded-xl bg-white/20 bg-[url('/resources/img/com.png')] bg-contain bg-center bg-no-repeat shadow-sm transition hover:-translate-y-0.5 hover:bg-[#EDE7D6]" aria-label="Community feed" title="Community"></a>
+        <a href="/favorites" class="h-10 w-10 rounded-xl bg-[#EDE7D6] bg-[url('/resources/img/fav.png')] bg-contain bg-center bg-no-repeat shadow-md ring-2 ring-white/35 transition hover:-translate-y-0.5" aria-label="Saved posts" title="Saved posts"></a>
+        <a href="/notification" class="h-10 w-10 rounded-xl bg-white/20 bg-[url('/resources/img/campana.png')] bg-contain bg-center bg-no-repeat shadow-sm transition hover:-translate-y-0.5 hover:bg-[#EDE7D6]" aria-label="Notifications" title="Notifications"></a>
       </nav>
+
+      <a href="/profile" class="flex flex-none items-center gap-2 rounded-full bg-white/18 py-1 pl-1 pr-3 transition hover:bg-white/28">
+        @if(viewer.avatarUrl)
+          <img src="{{ viewer.avatarUrl }}" alt="" class="h-10 w-10 rounded-full object-cover">
+        @else
+          <span class="flex h-10 w-10 items-center justify-center rounded-full bg-[#113E14] text-sm font-black text-[#EDE7D6]">{{ viewer.initial }}</span>
+        @endif
+        <span class="hidden text-sm font-black text-[#113E14] lg:block">Profile</span>
+      </a>
     </div>
   </header>
 
-  <main class="mx-auto grid max-w-6xl gap-6 px-5 pb-20 pt-8 lg:grid-cols-[1fr_18rem] lg:px-10">
+  <main class="mx-auto grid max-w-[1180px] gap-6 px-4 pb-20 pt-6 lg:grid-cols-[1fr_19rem] lg:px-8">
     <section class="min-w-0 space-y-6">
-      <div class="rounded-[2rem] border border-white/20 bg-white/14 p-7 text-white shadow-xl backdrop-blur-2xl">
-        <p class="text-sm font-black uppercase tracking-[0.22em] text-[#EDE7D6]">Saved</p>
-        <h1 class="mt-3 font-abril text-5xl leading-tight md:text-6xl">Posts you kept close.</h1>
-        <p class="mt-4 max-w-2xl text-base font-semibold leading-7 text-white/75">
-          Every saved post is now stored in the database and tied to your account.
-        </p>
+      <div class="rounded-3xl border border-white/30 bg-white/24 p-6 shadow-xl backdrop-blur-xl">
+        <p class="text-xs font-black uppercase tracking-[0.18em] text-black/42">Private collection</p>
+        <div class="mt-3 flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <h1 class="text-4xl font-black leading-tight text-black md:text-5xl">Saved posts</h1>
+            <p class="mt-3 max-w-2xl text-sm font-bold leading-6 text-black/50">
+              Posts you save live here only for your account.
+            </p>
+          </div>
+          <a href="/community" class="rounded-full bg-[#113E14] px-5 py-2.5 text-sm font-black text-white shadow-md transition hover:-translate-y-0.5">Back to feed</a>
+        </div>
       </div>
 
-      <div class="space-y-5">
+      <div class="space-y-5" data-community-feed>
         @each(post in posts)
           @!component('components/community-post-card', { post, viewer })
         @else
-          <div class="rounded-[2rem] border border-white/30 bg-white/70 p-10 text-center shadow-xl backdrop-blur-2xl">
-            <h2 class="text-3xl font-black text-[#1E3D19]">No saved posts yet</h2>
-            <p class="mt-3 text-sm font-bold leading-6 text-[#5D7459]">
+          <div class="rounded-3xl border border-white/30 bg-white/24 p-10 text-center shadow-xl backdrop-blur-xl">
+            <h2 class="text-3xl font-black text-black">No saved posts yet</h2>
+            <p class="mt-3 text-sm font-bold leading-6 text-black/50">
               Save community posts and they will appear here.
             </p>
-            <a href="/community" class="mt-6 inline-flex rounded-full bg-[#1E3D19] px-6 py-3 text-sm font-black text-white transition hover:bg-[#315F28]">
+            <a href="/community" class="mt-6 inline-flex rounded-full bg-[#113E14] px-6 py-3 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-[#315F28]">
               Explore community
             </a>
           </div>
@@ -53,36 +65,49 @@
     </section>
 
     <aside class="hidden lg:block">
-      <div class="sticky top-28 rounded-[2rem] border border-white/20 bg-white/14 p-5 text-white shadow-xl backdrop-blur-2xl">
-        <h2 class="text-lg font-black">Your community</h2>
-        <div class="mt-4 grid grid-cols-2 gap-3 text-center">
-          <div class="rounded-2xl bg-white/10 p-4">
-            <p class="text-2xl font-black" data-saved-total>{{ viewer.stats.saved }}</p>
-            <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#EDE7D6]">Saved</p>
+      <div class="sticky top-28 space-y-4">
+        <details open class="rounded-3xl border border-white/30 bg-white/22 p-4 text-black shadow-xl backdrop-blur-xl">
+          <summary class="flex cursor-pointer list-none items-center justify-between">
+            <h2 class="text-lg font-black">Your community</h2>
+            <span class="text-xs font-bold text-black/42">private</span>
+          </summary>
+          <div class="mt-4 grid grid-cols-2 gap-3 text-center">
+            <div class="rounded-2xl bg-white/30 p-4">
+              <p class="text-2xl font-black" data-saved-total>{{ viewer.stats.saved }}</p>
+              <p class="text-xs font-bold uppercase tracking-[0.14em] text-black/42">Saved</p>
+            </div>
+            <div class="rounded-2xl bg-white/30 p-4">
+              <p class="text-2xl font-black">{{ viewer.stats.posts }}</p>
+              <p class="text-xs font-bold uppercase tracking-[0.14em] text-black/42">Posts</p>
+            </div>
           </div>
-          <div class="rounded-2xl bg-white/10 p-4">
-            <p class="text-2xl font-black">{{ viewer.stats.posts }}</p>
-            <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#EDE7D6]">Posts</p>
-          </div>
-        </div>
+        </details>
 
-        <div class="mt-5 space-y-3">
-          @each(user in suggestions)
-            <a href="/users/{{ user.username }}" class="flex items-center gap-3 rounded-2xl bg-white/10 p-3 transition hover:bg-white/16">
-              @if(user.avatarUrl)
-                <img src="{{ user.avatarUrl }}" alt="" class="h-10 w-10 rounded-xl border-2 border-white object-cover">
-              @else
-                <span class="flex h-10 w-10 items-center justify-center rounded-xl border-2 border-white bg-[#1E3D19] text-sm font-black text-[#EDE7D6]">
-                  {{ user.initial }}
+        <details open class="rounded-3xl border border-white/30 bg-white/22 p-4 text-black shadow-xl backdrop-blur-xl">
+          <summary class="flex cursor-pointer list-none items-center justify-between">
+            <h2 class="text-sm font-black">Suggestions</h2>
+            <span class="text-xs font-bold text-black/42">new</span>
+          </summary>
+          <div class="mt-4 space-y-3">
+            @each(user in suggestions)
+              <a href="/users/{{ user.username }}" class="flex items-center gap-3 rounded-2xl bg-white/20 p-3 transition hover:-translate-y-0.5 hover:bg-white/34">
+                @if(user.avatarUrl)
+                  <img src="{{ user.avatarUrl }}" alt="" class="h-10 w-10 rounded-full object-cover">
+                @else
+                  <span class="flex h-10 w-10 items-center justify-center rounded-full bg-[#113E14] text-sm font-black text-[#EDE7D6]">
+                    {{ user.initial }}
+                  </span>
+                @endif
+                <span class="min-w-0">
+                  <span class="block truncate text-sm font-black">{{ user.displayName }}</span>
+                  <span class="block truncate text-xs font-bold text-black/42">{{ user.roleLabel }} - {{ '@' + user.username }}</span>
                 </span>
-              @endif
-              <span class="min-w-0">
-                <span class="block truncate text-sm font-black">{{ user.displayName }}</span>
-                <span class="block truncate text-xs font-bold text-[#EDE7D6]">{{ '@' + user.username }}</span>
-              </span>
-            </a>
-          @end
-        </div>
+              </a>
+            @else
+              <p class="text-xs font-semibold text-black/45">No suggestions right now.</p>
+            @end
+          </div>
+        </details>
       </div>
     </aside>
   </main>

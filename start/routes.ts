@@ -20,7 +20,6 @@ router.on('/araceae').render('pages/araceae', { ornamentalPlants })
 router.on('/amaryllidaceae').render('pages/amaryllidaceae', { horticulturalPlants })
 router.on('/cactaceae').render('pages/cactaceae', { succulentPlants })
 
-router.on('/notification').render('pages/notification')
 router.on('/requested').render('pages/requested')
 
 router.on('/maintenance').render('pages/services/maintenance').as('maintenance')
@@ -59,15 +58,27 @@ router
     router
       .post('/community/polls/:pollId/options/:optionId/vote', [CommunityController, 'votePoll'])
       .as('community.polls.vote')
+    router
+      .get('/community/search/suggestions', [CommunityController, 'searchSuggestions'])
+      .as('community.search.suggestions')
     router.get('/community/search', [CommunityController, 'search']).as('community.search')
+    router
+      .get('/community/hashtags/:tag', [CommunityController, 'hashtag'])
+      .as('community.hashtags.show')
     router
       .get('/community/media/:userId/:fileName', [CommunityController, 'media'])
       .as('community.media')
     router.get('/favorites', [CommunityController, 'favorites']).as('community.favorites')
+    router
+      .get('/notification', [CommunityController, 'notifications'])
+      .as('community.notifications')
     router.get('/users/:username', [CommunityController, 'showUser']).as('community.users.show')
     router
       .post('/users/:username/follow', [CommunityController, 'toggleFollow'])
       .as('community.users.follow')
+    router
+      .post('/users/:username/reviews', [CommunityController, 'storeReview'])
+      .as('community.users.reviews.store')
     router.get('/profile', [ProfilesController, 'show']).as('profile')
     router.get('/profile/settings', [ProfilesController, 'settings']).as('profile.settings')
     router

@@ -1,12 +1,18 @@
+import AccountLink from '#models/account_link'
 import AccountProfile from '#models/account_profile'
 import CommunityPost from '#models/community_post'
 import Follow from '#models/follow'
+import GardenerProfile from '#models/gardener_profile'
+import GardenerService from '#models/gardener_service'
+import NurseryProduct from '#models/nursery_product'
+import NurseryProfile from '#models/nursery_profile'
 import PostComment from '#models/post_comment'
 import PostHashtag from '#models/post_hashtag'
 import PostPoll from '#models/post_poll'
 import PostPollOption from '#models/post_poll_option'
 import PostPollVote from '#models/post_poll_vote'
 import PostReaction from '#models/post_reaction'
+import ProfileReview from '#models/profile_review'
 import User from '#models/user'
 import { communityCommentValidator, communityPostValidator } from '#validators/community'
 import {
@@ -51,6 +57,7 @@ export default class CommunityController {
       searchError: session.flashMessages.get('communitySearchError'),
       formErrors: session.flashMessages.get('errors') || {},
       old: session.flashMessages.get('old') || {},
+      activeHashtag: null,
     })
   }
 
@@ -78,12 +85,15 @@ export default class CommunityController {
     }
 
     const isOwnProfile = currentUser.id === profileUser.id
-    const [profilePosts, savedPosts, isFollowing, stats] = await Promise.all([
-      this.getUserPosts(profileUser, currentUser),
-      isOwnProfile ? this.getFavoritePosts(profileUser, currentUser) : [],
-      this.isFollowing(currentUser.id, profileUser.id),
-      this.getUserStats(profileUser.id),
-    ])
+    const [profilePosts, savedPosts, isFollowing, stats, accountLinks, publicRoleDetails] =
+      await Promise.all([
+        this.getUserPosts(profileUser, currentUser),
+        isOwnProfile ? this.getFavoritePosts(profileUser, currentUser) : [],
+        this.isFollowing(currentUser.id, profileUser.id),
+        this.getUserStats(profileUser.id),
+        AccountLink.query().where('userId', profileUser.id).orderBy('sortOrder', 'asc'),
+        this.getPublicRoleDetails(profileUser),
+      ])
 
     return view.render('pages/community_profile', {
       viewer: await this.getViewerProfile(currentUser),
@@ -91,6 +101,8 @@ export default class CommunityController {
       profileStats: stats,
       posts: profilePosts,
       savedPosts,
+      accountLinks: this.formatAccountLinks(accountLinks),
+      publicRoleDetails,
       isOwnProfile,
       isFollowing,
     })
@@ -138,7 +150,7 @@ export default class CommunityController {
         body: body || pollQuestion || '',
         mediaUrl,
         mediaType: mediaUrl ? 'image' : 'none',
-        visibility: payload.visibility || 'public',
+        visibility: 'public',
       })
 
       await this.createPostHashtags(post.id, this.extractHashtags(body, payload.hashtags))
@@ -312,10 +324,23 @@ export default class CommunityController {
   }
 
   async search({ request, response, session }: HttpContext) {
-    const username = this.normalizeUsernameSearch(request.input('username'))
+    const rawSearch = (request.input('q') || request.input('username') || '').toString().trim()
+
+    if (rawSearch.startsWith('#')) {
+      const tag = this.normalizeHashtagSearch(rawSearch)
+
+      if (!tag) {
+        session.flash('communitySearchError', 'Write a hashtag to search')
+        return response.redirect().toRoute('community.index')
+      }
+
+      return response.redirect(`/community/hashtags/${tag}`)
+    }
+
+    const username = this.normalizeUsernameSearch(rawSearch)
 
     if (!username) {
-      session.flash('communitySearchError', 'Write a username to search')
+      session.flash('communitySearchError', 'Write a profile or hashtag to search')
       return response.redirect().toRoute('community.index')
     }
 
@@ -329,6 +354,118 @@ export default class CommunityController {
     }
 
     return response.redirect(`/users/${user.username}`)
+  }
+
+  async searchSuggestions({ request, response }: HttpContext) {
+    const rawSearch = (request.input('q') || '').toString().trim()
+    const profileQuery = this.normalizeUsernameSearch(rawSearch)
+    const hashtagQuery = this.normalizeHashtagSearch(rawSearch)
+    const [users, hashtags] = await Promise.all([
+      profileQuery && !rawSearch.startsWith('#')
+        ? User.query()
+            .where('username', 'like', `${profileQuery}%`)
+            .preload('accountProfile')
+            .orderBy('username', 'asc')
+            .limit(6)
+        : [],
+      hashtagQuery
+        ? db
+            .from('post_hashtags')
+            .where('tag', 'like', `${hashtagQuery}%`)
+            .groupBy('tag')
+            .orderBy('total', 'desc')
+            .select('tag')
+            .count('* as total')
+            .limit(8)
+        : [],
+    ])
+
+    return response.json({
+      ok: true,
+      users: users.map((user) => this.formatUser(user)),
+      hashtags: hashtags.map((row) => ({
+        tag: String(row.tag),
+        postsCount: Number(row.total || 0),
+      })),
+    })
+  }
+
+  async hashtag({ auth, params, view, session, response }: HttpContext) {
+    const user = auth.user!
+    const tag = this.normalizeHashtagSearch(params.tag)
+
+    if (!tag) {
+      session.flash('communitySearchError', 'That hashtag is not available')
+      return response.redirect().toRoute('community.index')
+    }
+
+    return view.render('pages/community', {
+      viewer: await this.getViewerProfile(user),
+      posts: await this.getHashtagPosts(tag, user),
+      suggestions: await this.getSuggestedUsers(user),
+      searchError: session.flashMessages.get('communitySearchError'),
+      formErrors: session.flashMessages.get('errors') || {},
+      old: session.flashMessages.get('old') || {},
+      activeHashtag: tag,
+    })
+  }
+
+  async notifications({ auth, view }: HttpContext) {
+    const user = auth.user!
+
+    return view.render('pages/notification', {
+      viewer: await this.getViewerProfile(user),
+      notifications: await this.getNotificationItems(user),
+      suggestions: await this.getSuggestedUsers(user),
+    })
+  }
+
+  async storeReview({ auth, params, request, response, session }: HttpContext) {
+    const currentUser = auth.user!
+    const targetUser = await User.findByOrFail(
+      'username',
+      this.normalizeUsernameSearch(params.username)
+    )
+
+    if (targetUser.id === currentUser.id) {
+      session.flash('communitySearchError', 'You cannot review your own profile')
+      return response.redirect().back()
+    }
+
+    const target = await this.getReviewTarget(targetUser)
+
+    if (!target) {
+      return response.notFound('Review target not found')
+    }
+
+    const rating = Math.min(Math.max(Math.round(Number(request.input('rating')) || 0), 1), 5)
+    const comment = this.cleanOptional(request.input('comment'))?.slice(0, 500) || null
+    const reviewerProfile = await this.ensureAccountProfile(currentUser)
+    const reviewerName = reviewerProfile.displayName || currentUser.fullName || currentUser.username
+    const existingReview = await ProfileReview.query()
+      .where('reviewerUserId', currentUser.id)
+      .if(target.kind === 'gardener', (query) => query.where('gardenerProfileId', target.id))
+      .if(target.kind === 'nursery', (query) => query.where('nurseryProfileId', target.id))
+      .first()
+    const reviewPayload = {
+      reviewerUserId: currentUser.id,
+      gardenerProfileId: target.kind === 'gardener' ? target.id : null,
+      nurseryProfileId: target.kind === 'nursery' ? target.id : null,
+      rating,
+      reviewerName,
+      comment,
+    }
+
+    if (existingReview) {
+      existingReview.merge(reviewPayload)
+      await existingReview.save()
+    } else {
+      await ProfileReview.create(reviewPayload)
+    }
+
+    await this.refreshRoleRating(target.kind, target.id)
+
+    return response.redirect().back()
   }
 
   async toggleFollow({ auth, params, request, response }: HttpContext) {
@@ -396,9 +533,7 @@ export default class CommunityController {
 
   private async getFeedPosts(user: AuthUser) {
     const posts = await this.basePostQuery()
-      .where((query) => {
-        query.where('visibility', 'public').orWhere('userId', user.id)
-      })
+      .where('visibility', 'public')
       .orderBy('createdAt', 'desc')
       .limit(30)
 
@@ -421,6 +556,21 @@ export default class CommunityController {
     const post = await this.basePostQuery().where('id', postId).firstOrFail()
 
     return this.formatPost(post, currentUser.id)
+  }
+
+  private async getHashtagPosts(tag: string, currentUser: AuthUser) {
+    const hashtagRows = await PostHashtag.query().where('tag', tag).select('communityPostId')
+    const postIds = hashtagRows.map((row) => row.communityPostId)
+
+    if (!postIds.length) return []
+
+    const posts = await this.basePostQuery()
+      .whereIn('id', postIds)
+      .where('visibility', 'public')
+      .orderBy('createdAt', 'desc')
+      .limit(30)
+
+    return posts.map((post) => this.formatPost(post, currentUser.id))
   }
 
   private async getFavoritePosts(
@@ -625,6 +775,334 @@ export default class CommunityController {
     return users.map((suggestedUser) => this.formatUser(suggestedUser))
   }
 
+  private async getPublicRoleDetails(user: User) {
+    if (user.role === 'gardener') {
+      const profile = await this.ensureGardenerProfile(user)
+      const [services, reviews, rating] = await Promise.all([
+        GardenerService.query()
+          .where('gardenerProfileId', profile.id)
+          .where('isActive', true)
+          .orderBy('name', 'asc'),
+        ProfileReview.query()
+          .where('gardenerProfileId', profile.id)
+          .preload('reviewer', (query) => query.preload('accountProfile'))
+          .orderBy('createdAt', 'desc')
+          .limit(6),
+        this.getReviewRatingStats(
+          'gardener_profile_id',
+          profile.id,
+          profile.ratingAverage,
+          profile.ratingCount
+        ),
+      ])
+      const serviceNames = services.length
+        ? services.map((service) => service.name)
+        : this.splitStoredList(profile.servicesOffered)
+
+      return {
+        kind: 'gardener',
+        title: profile.headline || 'Gardening professional',
+        statusLabel: profile.isAvailable ? 'Available' : 'Not available',
+        statusTone: profile.isAvailable ? 'positive' : 'muted',
+        schedule: profile.availabilitySchedule,
+        location: profile.serviceArea,
+        contactPhone: profile.publicPhone,
+        contactEmail: null,
+        services: serviceNames,
+        paymentMethods: this.splitStoredList(profile.paymentMethods),
+        products: [],
+        ratingStars: [1, 2, 3, 4, 5],
+        rating,
+        reviews: this.formatReviews(reviews),
+      }
+    }
+
+    if (user.role === 'nursery') {
+      const profile = await this.ensureNurseryProfile(user)
+      const [products, reviews, rating] = await Promise.all([
+        NurseryProduct.query()
+          .where('nurseryProfileId', profile.id)
+          .where('isActive', true)
+          .orderBy('name', 'asc')
+          .limit(6),
+        ProfileReview.query()
+          .where('nurseryProfileId', profile.id)
+          .preload('reviewer', (query) => query.preload('accountProfile'))
+          .orderBy('createdAt', 'desc')
+          .limit(6),
+        this.getReviewRatingStats(
+          'nursery_profile_id',
+          profile.id,
+          profile.ratingAverage,
+          profile.ratingCount
+        ),
+      ])
+
+      return {
+        kind: 'nursery',
+        title: profile.nurseryName,
+        statusLabel: profile.isActive ? 'Open profile' : 'Temporarily inactive',
+        statusTone: profile.isActive ? 'positive' : 'muted',
+        schedule: profile.openingHours,
+        location: [profile.address, profile.city].filter(Boolean).join(', ') || null,
+        contactPhone: profile.publicPhone,
+        contactEmail: profile.publicEmail,
+        services: this.splitStoredList(profile.servicesOffered),
+        paymentMethods: this.splitStoredList(profile.paymentMethods),
+        products: products.map((product) => ({
+          name: product.name,
+          category: product.category,
+          price: product.price,
+          stock: product.stock,
+        })),
+        ratingStars: [1, 2, 3, 4, 5],
+        rating,
+        reviews: this.formatReviews(reviews),
+      }
+    }
+
+    return {
+      kind: 'client',
+      title: 'Community member',
+      statusLabel: null,
+      statusTone: 'muted',
+      schedule: null,
+      location: null,
+      contactPhone: null,
+      contactEmail: null,
+      services: [],
+      paymentMethods: [],
+      products: [],
+      ratingStars: [1, 2, 3, 4, 5],
+      rating: { average: 0, averageText: '0.0', count: 0 },
+      reviews: [],
+    }
+  }
+
+  private formatAccountLinks(links: AccountLink[]) {
+    return links
+      .map((link) => {
+        const url = this.safeExternalUrl(link.url)
+
+        if (!url) return null
+
+        return {
+          label: link.label,
+          url,
+        }
+      })
+      .filter(Boolean)
+  }
+
+  private formatReviews(reviews: ProfileReview[]) {
+    return reviews.map((review) => ({
+      id: review.id,
+      rating: review.rating,
+      comment: review.comment,
+      reviewerName:
+        review.reviewer?.accountProfile?.displayName ||
+        review.reviewerName ||
+        review.reviewer?.username ||
+        'Plant Bud member',
+      reviewerUsername: review.reviewer?.username || null,
+      createdAtHuman: review.createdAt?.toRelative() || 'Recently',
+    }))
+  }
+
+  private async getNotificationItems(user: AuthUser) {
+    const [follows, comments, likeMilestones] = await Promise.all([
+      Follow.query()
+        .where('followingId', user.id)
+        .preload('follower', (query) => query.preload('accountProfile'))
+        .orderBy('createdAt', 'desc')
+        .limit(8),
+      PostComment.query()
+        .whereNot('userId', user.id)
+        .whereHas('post', (postQuery) => {
+          postQuery.where('userId', user.id)
+        })
+        .preload('user', (query) => query.preload('accountProfile'))
+        .preload('post')
+        .orderBy('createdAt', 'desc')
+        .limit(8),
+      this.getLikeMilestoneNotifications(user.id),
+    ])
+    const followItems = follows.map((follow) => ({
+      type: 'follow',
+      title: 'New follower',
+      body: `${this.formatUser(follow.follower).displayName} started following you.`,
+      actor: this.formatUser(follow.follower),
+      href: `/users/${follow.follower.username}`,
+      thumbnailUrl: null,
+      createdAtHuman: follow.createdAt?.toRelative() || 'Recently',
+      timestamp: follow.createdAt?.toMillis() || 0,
+    }))
+    const commentItems = comments.map((comment) => {
+      const actor = this.formatUser(comment.user)
+      const postPreview = comment.post.body || 'your post'
+
+      return {
+        type: 'comment',
+        title: 'New comment',
+        body: `${actor.displayName}: "${comment.body.slice(0, 90)}"`,
+        actor,
+        href: `/community#post-${comment.communityPostId}`,
+        thumbnailUrl: comment.post.mediaUrl,
+        postPreview: postPreview.slice(0, 90),
+        createdAtHuman: comment.createdAt?.toRelative() || 'Recently',
+        timestamp: comment.createdAt?.toMillis() || 0,
+      }
+    })
+
+    return [...followItems, ...commentItems, ...likeMilestones]
+      .sort((first, second) => second.timestamp - first.timestamp)
+      .slice(0, 18)
+  }
+
+  private async getLikeMilestoneNotifications(userId: number) {
+    const rows = (await db
+      .from('post_reactions')
+      .join('community_posts', 'community_posts.id', 'post_reactions.community_post_id')
+      .where('community_posts.user_id', userId)
+      .where('post_reactions.type', 'like')
+      .groupBy(
+        'community_posts.id',
+        'community_posts.body',
+        'community_posts.media_url',
+        'community_posts.created_at'
+      )
+      .select(
+        'community_posts.id',
+        'community_posts.body',
+        'community_posts.media_url',
+        'community_posts.created_at'
+      )
+      .count('* as total')) as {
+      id: number
+      body?: string | null
+      media_url?: string | null
+      created_at?: string | Date
+      total?: number | string
+    }[]
+    const thresholds = [5, 10, 20, 30, 40, 50, 75, 100, 150, 200]
+
+    const notifications = rows
+      .map((row) => {
+        const total = Number(row.total || 0)
+        const threshold = thresholds.filter((candidate) => total >= candidate).pop()
+
+        if (!threshold) return null
+
+        return {
+          type: 'milestone',
+          title: `${threshold} likes reached`,
+          body: `One of your posts is now at ${total} likes.`,
+          actor: null,
+          href: `/community#post-${row.id}`,
+          thumbnailUrl: row.media_url || null,
+          postPreview: (row.body || 'Image post').slice(0, 90),
+          createdAtHuman: 'Community milestone',
+          timestamp: row.created_at ? new Date(row.created_at).getTime() : 0,
+        }
+      })
+      .filter((item): item is NonNullable<typeof item> => Boolean(item))
+
+    return notifications
+  }
+
+  private async getReviewTarget(user: User) {
+    if (user.role === 'gardener') {
+      const profile = await this.ensureGardenerProfile(user)
+
+      return { kind: 'gardener' as const, id: profile.id }
+    }
+
+    if (user.role === 'nursery') {
+      const profile = await this.ensureNurseryProfile(user)
+
+      return { kind: 'nursery' as const, id: profile.id }
+    }
+
+    return null
+  }
+
+  private async refreshRoleRating(kind: 'gardener' | 'nursery', profileId: number) {
+    const column = kind === 'gardener' ? 'gardener_profile_id' : 'nursery_profile_id'
+    const rating = await this.getReviewRatingStats(column, profileId, 0, 0)
+
+    if (kind === 'gardener') {
+      const profile = await GardenerProfile.findOrFail(profileId)
+      profile.ratingAverage = rating.average
+      profile.ratingCount = rating.count
+      await profile.save()
+      return
+    }
+
+    const profile = await NurseryProfile.findOrFail(profileId)
+    profile.ratingAverage = rating.average
+    profile.ratingCount = rating.count
+    await profile.save()
+  }
+
+  private async getReviewRatingStats(
+    targetColumn: 'gardener_profile_id' | 'nursery_profile_id',
+    targetId: number,
+    fallbackAverage: number,
+    fallbackCount: number
+  ) {
+    const result = (await db
+      .from('profile_reviews')
+      .where(targetColumn, targetId)
+      .avg('rating as average')
+      .count('* as total')
+      .first()) as { average?: number | string | null; total?: number | string | null } | null
+    const reviewCount = Number(result?.total || 0)
+    const ratingAverage =
+      reviewCount > 0 ? Number(result?.average || 0) : Number(fallbackAverage || 0)
+    const ratingCount = reviewCount > 0 ? reviewCount : Number(fallbackCount || 0)
+    const roundedAverage = Math.round(Math.min(Math.max(ratingAverage, 0), 5) * 10) / 10
+
+    return {
+      average: roundedAverage,
+      averageText: roundedAverage.toFixed(1),
+      count: ratingCount,
+    }
+  }
+
+  private async ensureGardenerProfile(user: User | AuthUser) {
+    return GardenerProfile.firstOrCreate(
+      { userId: user.id },
+      {
+        userId: user.id,
+        availabilitySchedule: '',
+        servicesOffered: '',
+        headline: 'Gardening professional',
+        isAvailable: true,
+        publicPhone: user.phone,
+      }
+    )
+  }
+
+  private async ensureNurseryProfile(user: User | AuthUser) {
+    const accountProfile = user.accountProfile || (await AccountProfile.findBy('userId', user.id))
+    const fallbackName = accountProfile?.displayName || user.fullName || user.username
+    const baseSlug = this.slugify(fallbackName) || `nursery-${user.id}`
+    const nurserySlug = `${baseSlug.slice(0, 72)}-${user.id}`.replace(/^-+|-+$/g, '')
+
+    return NurseryProfile.firstOrCreate(
+      { userId: user.id },
+      {
+        userId: user.id,
+        nurseryName: fallbackName,
+        nurserySlug,
+        ownerName: user.fullName || user.username,
+        publicPhone: user.phone,
+        publicEmail: user.email,
+        isActive: true,
+      }
+    )
+  }
+
   private async getUserStats(userId: number) {
     const [posts, followers, following, saved] = await Promise.all([
       this.countRows('community_posts', 'user_id', userId),
@@ -675,6 +1153,25 @@ export default class CommunityController {
       .first()
 
     return Boolean(follow)
+  }
+
+  private safeExternalUrl(value?: string | null) {
+    if (!value) return null
+
+    try {
+      const url = new URL(value)
+
+      return url.protocol === 'https:' || url.protocol === 'http:' ? url.toString() : null
+    } catch {
+      return null
+    }
+  }
+
+  private splitStoredList(value?: string | null) {
+    return (value || '')
+      .split(/[\n,;]+/)
+      .map((item) => item.trim())
+      .filter(Boolean)
   }
 
   private async countRows(tableName: string, columnName: string, value: number) {
@@ -986,6 +1483,27 @@ export default class CommunityController {
       .toLowerCase()
       .replace(/[^a-z0-9._]/g, '')
       .slice(0, 30)
+  }
+
+  private normalizeHashtagSearch(value?: string | null) {
+    return (value || '')
+      .toString()
+      .trim()
+      .replace(/^#+/, '')
+      .toLowerCase()
+      .replace(/[^\p{L}\p{N}_-]/gu, '')
+      .slice(0, 40)
+  }
+
+  private slugify(value?: string | null) {
+    return (value || '')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 80)
   }
 
   private wantsJson(request: HttpContext['request']) {

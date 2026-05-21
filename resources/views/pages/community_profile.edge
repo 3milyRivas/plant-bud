@@ -12,16 +12,36 @@
 
   <header class="relative z-30 px-5 pt-5 lg:px-10">
     <div class="mx-auto flex max-w-6xl items-center justify-between rounded-full border border-white/10 bg-white/10 px-5 py-4 shadow-[0_18px_55px_rgba(0,0,0,0.18)] backdrop-blur-2xl">
-      <a href="/community" class="flex items-center gap-3">
+      <a href="/homepage" class="flex items-center gap-3">
         <img src="/resources/images/essential/logo.png" alt="" class="h-11 w-11 object-contain drop-shadow-lg">
-        <span class="hidden text-xl font-black text-white sm:block">Community</span>
+        <span class="hidden text-xl font-black text-white sm:block">Plant<span class="text-[#EDE7D6]"> Bud</span></span>
       </a>
 
-      <nav class="flex items-center gap-2">
-        <a href="/community" class="rounded-full bg-white/12 px-4 py-2 text-sm font-black text-white transition hover:bg-white/20">Feed</a>
+      <nav class="hidden items-center gap-2 md:flex">
+        <a href="/community" class="rounded-full bg-[#EDE7D6] px-4 py-2 text-sm font-black text-[#1E3D19]">Community</a>
         <a href="/favorites" class="rounded-full bg-white/12 px-4 py-2 text-sm font-black text-white transition hover:bg-white/20">Saved</a>
-        <a href="/profile" class="hidden rounded-full bg-white/12 px-4 py-2 text-sm font-black text-white transition hover:bg-white/20 sm:inline-flex">My profile</a>
+        <a href="/notification" class="rounded-full bg-white/12 px-4 py-2 text-sm font-black text-white transition hover:bg-white/20">Alerts</a>
       </nav>
+
+      <details class="group relative">
+        <summary class="list-none">
+          <span class="flex cursor-pointer items-center gap-3 rounded-full bg-white/12 py-1 pl-1 pr-4 text-white transition hover:bg-white/20">
+            @if(viewer.avatarUrl)
+              <img src="{{ viewer.avatarUrl }}" alt="" class="h-10 w-10 rounded-full object-cover">
+            @else
+              <span class="flex h-10 w-10 items-center justify-center rounded-full bg-[#EDE7D6] text-sm font-black text-[#1E3D19]">{{ viewer.initial }}</span>
+            @endif
+            <span class="hidden text-sm font-black sm:block">Profile</span>
+          </span>
+        </summary>
+        <div class="absolute right-0 mt-3 w-56 overflow-hidden rounded-3xl border border-white/20 bg-[#F7F3E8]/95 p-2 shadow-2xl backdrop-blur-2xl">
+          <a href="/profile" class="block rounded-2xl px-4 py-3 text-sm font-black text-[#1E3D19] transition hover:bg-white/70">View profile</a>
+          <a href="/profile/settings" class="block rounded-2xl px-4 py-3 text-sm font-black text-[#1E3D19] transition hover:bg-white/70">Settings</a>
+          @form({ action: '/logout', method: 'POST' })
+            <button type="submit" class="w-full rounded-2xl px-4 py-3 text-left text-sm font-black text-red-900 transition hover:bg-red-100/70">Log out</button>
+          @end
+        </div>
+      </details>
     </div>
   </header>
 
@@ -104,7 +124,7 @@
       </div>
     </section>
 
-    <section class="mt-8 grid gap-8 lg:grid-cols-[1fr_0.85fr]">
+    <section class="mt-8 grid gap-8 lg:grid-cols-[1fr_0.9fr]">
       <div class="space-y-5">
         <div class="flex items-end justify-between gap-4 text-white">
           <div>
@@ -122,38 +142,173 @@
         @end
       </div>
 
-      @if(isOwnProfile)
-        <aside class="space-y-5">
-          <div class="rounded-[2rem] border border-white/20 bg-white/14 p-5 text-white shadow-xl backdrop-blur-2xl">
+      <aside class="space-y-5">
+        @if(accountLinks.length)
+          <section class="rounded-[2rem] border border-white/20 bg-white/14 p-5 text-white shadow-xl backdrop-blur-2xl">
+            <p class="text-sm font-black uppercase tracking-[0.22em] text-[#EDE7D6]">Links</p>
+            <div class="mt-4 flex flex-wrap gap-2">
+              @each(link in accountLinks)
+                <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer" class="rounded-full bg-white/12 px-4 py-2 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-[#EDE7D6] hover:text-[#1E3D19]">
+                  {{ link.label }}
+                </a>
+              @end
+            </div>
+          </section>
+        @endif
+
+        @if(publicRoleDetails.kind !== 'client')
+          <section class="rounded-[2rem] border border-white/20 bg-white/14 p-5 text-white shadow-xl backdrop-blur-2xl">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <p class="text-sm font-black uppercase tracking-[0.22em] text-[#EDE7D6]">{{ profileUser.roleLabel }}</p>
+                <h2 class="mt-2 text-2xl font-black">{{ publicRoleDetails.title }}</h2>
+              </div>
+              @if(publicRoleDetails.statusLabel)
+                <span class="{{ publicRoleDetails.statusTone === 'positive' ? 'bg-[#EDE7D6] text-[#1E3D19]' : 'bg-white/12 text-white' }} rounded-full px-3 py-1 text-[11px] font-black uppercase tracking-[0.12em]">
+                  {{ publicRoleDetails.statusLabel }}
+                </span>
+              @endif
+            </div>
+
+            <div class="mt-5 grid gap-3 sm:grid-cols-2">
+              @if(publicRoleDetails.schedule)
+                <div class="rounded-2xl bg-white/10 p-4">
+                  <p class="text-xs font-black uppercase tracking-[0.14em] text-[#EDE7D6]">Hours</p>
+                  <p class="mt-2 text-sm font-semibold leading-6 text-white/78">{{ publicRoleDetails.schedule }}</p>
+                </div>
+              @endif
+              @if(publicRoleDetails.location)
+                <div class="rounded-2xl bg-white/10 p-4">
+                  <p class="text-xs font-black uppercase tracking-[0.14em] text-[#EDE7D6]">Area</p>
+                  <p class="mt-2 text-sm font-semibold leading-6 text-white/78">{{ publicRoleDetails.location }}</p>
+                </div>
+              @endif
+              @if(publicRoleDetails.contactPhone || publicRoleDetails.contactEmail)
+                <div class="rounded-2xl bg-white/10 p-4 sm:col-span-2">
+                  <p class="text-xs font-black uppercase tracking-[0.14em] text-[#EDE7D6]">Contact</p>
+                  @if(publicRoleDetails.contactPhone)
+                    <p class="mt-2 text-sm font-semibold text-white/78">{{ publicRoleDetails.contactPhone }}</p>
+                  @endif
+                  @if(publicRoleDetails.contactEmail)
+                    <p class="mt-1 text-sm font-semibold text-white/78">{{ publicRoleDetails.contactEmail }}</p>
+                  @endif
+                </div>
+              @endif
+            </div>
+
+            @if(publicRoleDetails.services.length)
+              <div class="mt-5">
+                <p class="text-xs font-black uppercase tracking-[0.14em] text-[#EDE7D6]">Services</p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  @each(service in publicRoleDetails.services)
+                    <span class="rounded-full bg-white/12 px-3 py-1.5 text-xs font-black text-white">{{ service }}</span>
+                  @end
+                </div>
+              </div>
+            @endif
+
+            @if(publicRoleDetails.paymentMethods.length)
+              <div class="mt-5">
+                <p class="text-xs font-black uppercase tracking-[0.14em] text-[#EDE7D6]">Payment methods</p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  @each(method in publicRoleDetails.paymentMethods)
+                    <span class="rounded-full bg-[#EDE7D6] px-3 py-1.5 text-xs font-black text-[#1E3D19]">{{ method }}</span>
+                  @end
+                </div>
+              </div>
+            @endif
+
+            @if(publicRoleDetails.products.length)
+              <div class="mt-5">
+                <p class="text-xs font-black uppercase tracking-[0.14em] text-[#EDE7D6]">Catalog highlights</p>
+                <div class="mt-3 grid gap-2">
+                  @each(product in publicRoleDetails.products)
+                    <div class="rounded-2xl bg-white/10 px-4 py-3">
+                      <p class="text-sm font-black">{{ product.name }}</p>
+                      <p class="text-xs font-semibold text-white/65">{{ product.category || 'Plant item' }} - Stock {{ product.stock }}</p>
+                    </div>
+                  @end
+                </div>
+              </div>
+            @endif
+          </section>
+
+          <section class="rounded-[2rem] border border-white/20 bg-white/14 p-5 text-white shadow-xl backdrop-blur-2xl">
+            <div class="flex items-center justify-between gap-4">
+              <div>
+                <p class="text-sm font-black uppercase tracking-[0.22em] text-[#EDE7D6]">Rating</p>
+                <h2 class="mt-2 text-2xl font-black">{{ publicRoleDetails.rating.averageText }} / 5</h2>
+              </div>
+              <div class="text-right">
+                <div class="flex gap-1 text-xl">
+                  @each(star in publicRoleDetails.ratingStars)
+                    <span class="{{ star <= publicRoleDetails.rating.average ? 'text-[#EDE7D6]' : 'text-white/25' }}">★</span>
+                  @end
+                </div>
+                <p class="mt-1 text-xs font-bold text-white/60">{{ publicRoleDetails.rating.count }} reviews</p>
+              </div>
+            </div>
+
+            @if(!isOwnProfile)
+              @form({
+                action: '/users/' + profileUser.username + '/reviews',
+                method: 'POST',
+                class: 'mt-5 space-y-3'
+              })
+                <div class="flex flex-wrap gap-2">
+                  @each(star in publicRoleDetails.ratingStars)
+                    <label class="cursor-pointer">
+                      <input type="radio" name="rating" value="{{ star }}" class="peer sr-only" {{ star === 5 ? 'checked' : '' }}>
+                      <span class="block rounded-full bg-white/10 px-3 py-2 text-sm font-black text-white transition peer-checked:bg-[#EDE7D6] peer-checked:text-[#1E3D19]">{{ star }}</span>
+                    </label>
+                  @end
+                </div>
+                <textarea name="comment" maxlength="500" rows="3" placeholder="Share a short review..." class="w-full resize-none rounded-2xl border border-white/10 bg-white/90 px-4 py-3 text-sm font-bold text-[#1E3D19] outline-none"></textarea>
+                <button type="submit" class="rounded-full bg-[#EDE7D6] px-5 py-2 text-sm font-black text-[#1E3D19] transition hover:-translate-y-0.5">Send review</button>
+              @end
+            @endif
+
+            <div class="mt-5 space-y-3">
+              @each(review in publicRoleDetails.reviews)
+                <div class="rounded-2xl bg-white/10 p-4">
+                  <div class="flex items-center justify-between gap-3">
+                    <p class="text-sm font-black">{{ review.reviewerName }}</p>
+                    <p class="text-xs font-black text-[#EDE7D6]">{{ review.rating }}/5</p>
+                  </div>
+                  @if(review.comment)
+                    <p class="mt-2 text-sm font-semibold leading-6 text-white/72">{{ review.comment }}</p>
+                  @endif
+                </div>
+              @else
+                <p class="rounded-2xl border border-dashed border-white/25 p-4 text-sm font-semibold text-white/70">No reviews yet.</p>
+              @end
+            </div>
+          </section>
+        @endif
+
+        @if(isOwnProfile)
+          <section class="rounded-[2rem] border border-white/20 bg-white/14 p-5 text-white shadow-xl backdrop-blur-2xl">
             <p class="text-sm font-black uppercase tracking-[0.22em] text-[#EDE7D6]">Saved</p>
             <h2 class="mt-2 text-2xl font-black">Kept posts</h2>
             <p class="mt-2 text-sm font-semibold leading-6 text-white/70">
               Your saved posts are private and only appear here for you.
             </p>
-          </div>
 
-          <div class="space-y-4">
-            @each(post in savedPosts)
-              <a href="/community#post-{{ post.id }}" class="block overflow-hidden rounded-[1.5rem] border border-white/25 bg-white/70 p-4 shadow-lg backdrop-blur-2xl transition hover:-translate-y-0.5">
-                <p class="line-clamp-3 text-sm font-black leading-6 text-[#1E3D19]">{{ post.body || 'Image post' }}</p>
-                <p class="mt-2 text-xs font-bold text-[#728B6F]">By {{ '@' + post.author.username }}</p>
-              </a>
-            @else
-              <div class="rounded-[1.5rem] border border-dashed border-white/30 p-5 text-sm font-semibold leading-6 text-white/75">
-                No saved posts yet.
-              </div>
-            @end
-          </div>
-        </aside>
-      @else
-        <aside class="rounded-[2rem] border border-white/20 bg-white/14 p-5 text-white shadow-xl backdrop-blur-2xl">
-          <p class="text-sm font-black uppercase tracking-[0.22em] text-[#EDE7D6]">Privacy</p>
-          <h2 class="mt-2 text-2xl font-black">Saved posts stay private</h2>
-          <p class="mt-2 text-sm font-semibold leading-6 text-white/70">
-            Only shared posts are visible from another account's profile.
-          </p>
-        </aside>
-      @endif
+            <div class="mt-4 space-y-4">
+              @each(post in savedPosts)
+                <a href="/community#post-{{ post.id }}" class="block overflow-hidden rounded-[1.5rem] border border-white/25 bg-white/70 p-4 shadow-lg backdrop-blur-2xl transition hover:-translate-y-0.5">
+                  <p class="line-clamp-3 text-sm font-black leading-6 text-[#1E3D19]">{{ post.body || 'Image post' }}</p>
+                  <p class="mt-2 text-xs font-bold text-[#728B6F]">By {{ '@' + post.author.username }}</p>
+                </a>
+              @else
+                <div class="rounded-[1.5rem] border border-dashed border-white/30 p-5 text-sm font-semibold leading-6 text-white/75">
+                  No saved posts yet.
+                </div>
+              @end
+            </div>
+          </section>
+        @endif
+      </aside>
     </section>
   </main>
 </div>

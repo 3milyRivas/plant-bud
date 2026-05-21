@@ -3,208 +3,147 @@
 @slot('title')
 <title>Notifications</title>
 @endslot
-@vite(['resources/js/categories.js'])
 
-<div class="bg-[#6C8E6B] min-h-screen flex flex-col">
-    <div class="fixed top-0 left-0 w-full z-50 px-6 lg:px-10 py-6">
-        <div class="backdrop-blur-xl bg-white/20 border border-white/30
-              rounded-full px-8 py-4 flex items-center justify-between shadow-lg">
+<div class="min-h-screen bg-[#6C8E6B] text-[#113E14]" data-community-page>
+  <header class="sticky top-0 z-40 px-4 py-4 lg:px-8">
+    <div class="mx-auto flex max-w-[1180px] items-center gap-3 rounded-[2rem] border border-white/30 bg-white/24 px-4 py-3 shadow-[0_18px_55px_rgba(17,62,20,0.18)] backdrop-blur-2xl sm:rounded-full sm:px-5">
+      <a href="/homepage" class="flex flex-none items-center gap-3">
+        <span class="h-11 w-11 rounded-full bg-[#113E14] bg-[url('/resources/images/essential/logo.png')] bg-contain bg-center bg-no-repeat shadow-md"></span>
+        <span class="hidden leading-tight md:block">
+          <span class="block text-sm font-black text-[#113E14]">Plant Bud</span>
+          <span class="block text-[11px] font-bold uppercase tracking-[0.18em] text-[#315F28]">Notifications</span>
+        </span>
+      </a>
 
+      <nav class="flex min-w-0 flex-1 items-center justify-center gap-2" aria-label="Community navigation">
+        <a href="/community" class="h-10 w-10 rounded-xl bg-white/20 bg-[url('/resources/img/com.png')] bg-contain bg-center bg-no-repeat shadow-sm transition hover:-translate-y-0.5 hover:bg-[#EDE7D6]" aria-label="Community feed" title="Community"></a>
+        <a href="/favorites" class="h-10 w-10 rounded-xl bg-white/20 bg-[url('/resources/img/fav.png')] bg-contain bg-center bg-no-repeat shadow-sm transition hover:-translate-y-0.5 hover:bg-[#EDE7D6]" aria-label="Saved posts" title="Saved posts"></a>
+        <a href="/notification" class="h-10 w-10 rounded-xl bg-[#EDE7D6] bg-[url('/resources/img/campana.png')] bg-contain bg-center bg-no-repeat shadow-md ring-2 ring-white/35 transition hover:-translate-y-0.5" aria-label="Notifications" title="Notifications"></a>
+      </nav>
 
-            <div class="w-10 h-10 bg-[url('/resources/images/essential/logo.png')] bg-contain bg-no-repeat"></div>
-
-            <div class="flex items-center gap-6">
-
-                <div class="bg-white/70 rounded-full px-6 py-2 w-[280px]">
-                    <input type="text" placeholder="Search plants" class="bg-transparent outline-none w-full
-                      text-[#113E14] placeholder:text-[#6B8C6C]/70 text-sm">
-                </div>
-
-
-                <button class="w-10 h-10 rounded-full bg-[#113E14]
-                     flex items-center justify-center hover:bg-[#1b5420]
-                     transition duration-300 shadow-md">
-                    <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M21 21l-4.35-4.35m1.85-5.65a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z" />
-                    </svg>
-                </button>
-
-
-                <div class="flex items-center space-x-2 ml-4">
-                    <div class="w-8 h-8 bg-[url('/resources/img/img3.png')] bg-contain bg-no-repeat"></div>
-                    <span class="text-[#113E14] font-bold text-lg">Notifications</span>
-                    <div class="w-8 h-8 bg-[url('/resources/img/img3.png')] -scale-x-100 bg-contain bg-no-repeat"></div>
-                </div>
-
-
-                <button onclick="window.location.href='/community'"
-                    class="w-8 h-8 bg-[url('/resources/img/home2.png')] bg-contain bg-no-repeat rounded-lg transition"></button>
-
-
-                <button
-                    class="flex items-center space-x-2 bg-white rounded-xl px-4 py-2 shadow-md hover:bg-white/70 transition active:bg-green-900 active:text-white active:shadow-lg active:translate-y-1 focus:outline-none">
-                    <div class="w-5 h-5 bg-[url('/resources/img/campana2.png')] bg-contain bg-no-repeat"></div>
-                    <span class="font-semibold text-sm">Notifications</span>
-                </button>
-
-
-                <button onclick="window.location.href='/favorites'"
-                    class="w-8 h-8 bg-[url('/resources/img/fav.png')] bg-contain bg-no-repeat rounded-lg transition"></button>
-            </div>
-
-
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 bg-[url('/resources/img/phot.jpg')] bg-cover bg-center rounded-full"></div>
-                <div class="flex flex-col">
-                    <span class="text-black/60 text-sm font-semibold">María Antonieta de las Nieves</span>
-                    <a href="#" class="text-blue-600 hover:underline text-xs">Switch</a>
-                </div>
-            </div>
-        </div>
+      <a href="/profile" class="flex flex-none items-center gap-2 rounded-full bg-white/18 py-1 pl-1 pr-3 transition hover:bg-white/28">
+        @if(viewer.avatarUrl)
+          <img src="{{ viewer.avatarUrl }}" alt="" class="h-10 w-10 rounded-full object-cover">
+        @else
+          <span class="flex h-10 w-10 items-center justify-center rounded-full bg-[#113E14] text-sm font-black text-[#EDE7D6]">{{ viewer.initial }}</span>
+        @endif
+        <span class="hidden text-sm font-black text-[#113E14] lg:block">Profile</span>
+      </a>
     </div>
+  </header>
 
-
-    <div class="mx-14 pt-26">
-        <div
-            class="relative bg-[url('/resources/images/plant-budd.png')] bg-cover bg-center h-[60vh] w-full rounded-xl shadow-lg mt-8">
-
-            <div class="absolute inset-0 flex flex-col justify-center items-start px-12 space-y-4">
-                <h2
-                    class="text-4xl font-bold bg-gradient-to-r from-white to-[#113E14] bg-clip-text text-transparent drop-shadow-lg">
-                    Discover the community.
-                </h2>
-                <p class="text-2xl text-[#113E14] font-semibold max-w-xl">
-                    Explore elegant publicstions, connect with share ideas.
-                </p>
-
-
-
-            </div>
+  <main class="mx-auto grid max-w-[1180px] gap-6 px-4 pb-20 pt-6 lg:grid-cols-[1fr_19rem] lg:px-8">
+    <section class="min-w-0 space-y-6">
+      <div class="rounded-3xl border border-white/30 bg-white/24 p-6 shadow-xl backdrop-blur-xl">
+        <p class="text-xs font-black uppercase tracking-[0.18em] text-black/42">Community pulse</p>
+        <div class="mt-3 flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <h1 class="text-4xl font-black leading-tight text-black md:text-5xl">Notifications</h1>
+            <p class="mt-3 max-w-2xl text-sm font-bold leading-6 text-black/50">
+              Recent follows, comments, and like milestones from your posts.
+            </p>
+          </div>
+          <a href="/community" class="rounded-full bg-[#113E14] px-5 py-2.5 text-sm font-black text-white shadow-md transition hover:-translate-y-0.5">Back to feed</a>
         </div>
-    </div>
+      </div>
 
+      <div class="rounded-3xl border border-white/30 bg-white/24 p-4 shadow-xl backdrop-blur-xl">
+        <div class="space-y-3">
+          @each(notification in notifications)
+            <a href="{{ notification.href }}" class="group flex items-center justify-between gap-4 rounded-2xl bg-white/28 p-3 transition duration-300 hover:-translate-y-0.5 hover:bg-white/45">
+              <div class="flex min-w-0 items-center gap-3">
+                @if(notification.actor && notification.actor.avatarUrl)
+                  <img src="{{ notification.actor.avatarUrl }}" alt="" class="h-12 w-12 flex-none rounded-full object-cover">
+                @elseif(notification.actor)
+                  <span class="flex h-12 w-12 flex-none items-center justify-center rounded-full bg-[#113E14] font-black text-[#EDE7D6]">{{ notification.actor.initial }}</span>
+                @else
+                  <span class="flex h-12 w-12 flex-none items-center justify-center rounded-full bg-[#EDE7D6] font-black text-[#113E14]">PB</span>
+                @endif
 
+                <span class="min-w-0">
+                  <span class="block text-sm font-black text-black">{{ notification.title }}</span>
+                  <span class="block truncate text-sm font-semibold text-black/60">{{ notification.body }}</span>
+                  @if(notification.postPreview)
+                    <span class="mt-1 block truncate text-xs font-bold text-black/38">{{ notification.postPreview }}</span>
+                  @endif
+                </span>
+              </div>
 
-
-
-    <div class="flex bg-[#6C8E6B]/80 px-6 py-10 space-x-6">
-
-        <div class="flex flex-col mx-auto space-y-8 py-8">
-            <!-- la wea de Activity -->
-            <div class="rounded-3xl backdrop-blur-xl bg-white/20 border border-white/30 shadow-md p-6 w-[900px]">
-
-                <!-- Header -->
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-xl font-bold">Activity</h2>
-
-                    <div class="flex items-center space-x-2">
-                        <div class="w-[600px] h-[1px] bg-[url('/resources/img/line.png')] bg-cover bg-center"></div>
-                        <span class="text-white text-sm font-semibold">Sort by</span>
-                        <span class="text-black text-sm font-semibold">Recent</span>
-                        <div class="w-4 h-4 bg-[url('/resources/img/row.png')] bg-contain bg-no-repeat"></div>
-                    </div>
-                </div>
-
-                <div class="text-gray-500 text-sm font-semibold mb-4">Today</div>
-
-                <div class="space-y-4">
-
-
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-4">
-                            <div class="w-12 h-12 rounded-full bg-cover bg-center"
-                                style="background-image:url('/resources/img/phot.jpg')"></div>
-                            <div>
-                                <span class="font-semibold">Deraa</span>
-                                <span class="text-gray-600"> empezó a seguirte</span>
-                            </div>
-                        </div>
-                        <button class="text-blue-600 font-semibold hover:underline">
-                            Follow
-                        </button>
-                    </div>
-
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-4">
-                            <div class="w-12 h-12 rounded-full bg-cover bg-center"
-                                style="background-image:url('/resources/img/person2.jpg')"></div>
-                            <div>
-                                <span class="font-semibold">Ju4nit0</span>
-                                <span class="text-gray-600"> le dio like a tu foto</span>
-                            </div>
-                        </div>
-
-
-                        <div class="w-12 h-12 rounded-md bg-cover bg-center"
-                            style="background-image:url('/resources/img/flower3.jpg')"></div>
-                    </div>
-
-                </div>
-
-                <div class="text-gray-500 text-sm font-semibold mt-6 mb-4">Yesterday</div>
-
-                <div class="space-y-4">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-4">
-                            <div class="w-12 h-12 rounded-full bg-cover bg-center"
-                                style="background-image:url('/resources/img/person4.jpg')"></div>
-                            <div>
-                                <span class="font-semibold">Marquez</span>
-                                <span class="text-gray-600"> le dio like a tu foto</span>
-                            </div>
-                        </div>
-
-                        <div class="w-12 h-12 rounded-md bg-cover bg-center"
-                            style="background-image:url('/resources/img/flower5.jpg')"></div>
-                    </div>
-                </div>
-
+              <div class="flex flex-none items-center gap-3">
+                <span class="hidden text-xs font-black text-black/35 sm:block">{{ notification.createdAtHuman }}</span>
+                @if(notification.thumbnailUrl)
+                  <img src="{{ notification.thumbnailUrl }}" alt="" class="h-12 w-12 rounded-xl object-cover">
+                @else
+                  <span class="h-10 w-10 rounded-full bg-[url('/resources/img/campana.png')] bg-contain bg-center bg-no-repeat opacity-80 transition group-hover:scale-110"></span>
+                @endif
+              </div>
+            </a>
+          @else
+            <div class="rounded-3xl border border-dashed border-white/40 bg-white/18 p-10 text-center">
+              <h2 class="text-3xl font-black text-black">Quiet for now</h2>
+              <p class="mt-3 text-sm font-bold text-black/50">New follows, comments, and milestones will appear here.</p>
             </div>
-
-
-            <!-- el coso de Suggestions -->
-            <div class="backdrop-blur-xl bg-white/20 border border-white/30 rounded-xl shadow-md p-6 w-full w-[900px]">
-                <h2 class="text-xl font-bold mb-4">Suggestions for you</h2>
-                <div class="space-y-4">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-3">
-                            <div
-                                class="w-10 h-10 bg-[url('/resources/img/person6.jpg')] bg-cover bg-center rounded-full">
-                            </div>
-                            <span class="font-semibold">Carla Méndez</span>
-                        </div>
-                        <button class="text-blue-600 font-semibold hover:underline">Follow</button>
-                    </div>
-
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-3">
-                            <div
-                                class="w-10 h-10 bg-[url('/resources/img/person4.jpg')] bg-cover bg-center rounded-full">
-                            </div>
-                            <span class="font-semibold">Tatiana Zaldaña</span>
-                        </div>
-                        <button class="text-blue-600 font-semibold hover:underline">Follow</button>
-                    </div>
-
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-3">
-                            <div
-                                class="w-10 h-10 bg-[url('/resources/img/person5.jpg')] bg-cover bg-center rounded-full">
-                            </div>
-                            <span class="font-semibold">Dalia Rodriguez</span>
-                        </div>
-                        <button class="text-blue-600 font-semibold hover:underline">Follow</button>
-                    </div>
-                </div>
-            </div>
+          @end
         </div>
-    </div>
+      </div>
+    </section>
 
+    <aside class="hidden lg:block">
+      <div class="sticky top-28 space-y-4">
+        <details open class="rounded-3xl border border-white/30 bg-white/22 p-4 text-black shadow-xl backdrop-blur-xl">
+          <summary class="flex cursor-pointer list-none items-center justify-between">
+            <h2 class="text-lg font-black">Your profile</h2>
+            <span class="text-xs font-bold text-black/42">{{ viewer.roleLabel }}</span>
+          </summary>
+          <div class="mt-4 flex items-center gap-3">
+            @if(viewer.avatarUrl)
+              <img src="{{ viewer.avatarUrl }}" alt="" class="h-14 w-14 rounded-full object-cover">
+            @else
+              <span class="flex h-14 w-14 items-center justify-center rounded-full bg-[#113E14] text-xl font-black text-[#EDE7D6]">{{ viewer.initial }}</span>
+            @endif
+            <span class="min-w-0">
+              <span class="block truncate text-sm font-black">{{ viewer.displayName }}</span>
+              <span class="block truncate text-xs font-bold text-black/42">{{ '@' + viewer.username }}</span>
+            </span>
+          </div>
+        </details>
 
-
-
-
+        <details open class="rounded-3xl border border-white/30 bg-white/22 p-4 text-black shadow-xl backdrop-blur-xl">
+          <summary class="flex cursor-pointer list-none items-center justify-between">
+            <h2 class="text-sm font-black">Suggestions</h2>
+            <span class="text-xs font-bold text-black/42">new</span>
+          </summary>
+          <div class="mt-4 space-y-3">
+            @each(user in suggestions)
+              <div class="flex items-center justify-between gap-3 rounded-2xl bg-white/18 p-3">
+                <a href="/users/{{ user.username }}" class="flex min-w-0 items-center gap-3">
+                  @if(user.avatarUrl)
+                    <img src="{{ user.avatarUrl }}" alt="" class="h-10 w-10 rounded-full object-cover">
+                  @else
+                    <span class="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-[#113E14] text-sm font-black text-[#EDE7D6]">{{ user.initial }}</span>
+                  @endif
+                  <span class="min-w-0">
+                    <span class="block truncate text-sm font-black">{{ user.displayName }}</span>
+                    <span class="block truncate text-xs font-bold text-black/42">{{ '@' + user.username }}</span>
+                  </span>
+                </a>
+                @form({
+                  action: '/users/' + user.username + '/follow',
+                  method: 'POST',
+                  class: 'shrink-0',
+                  'data-follow-form': true
+                })
+                  <button type="submit" class="rounded-full bg-white/45 px-3 py-1.5 text-xs font-black text-blue-600 transition hover:bg-[#EDE7D6]" data-follow-label>follow</button>
+                @end
+              </div>
+            @else
+              <p class="text-xs font-semibold text-black/45">No suggestions right now.</p>
+            @end
+          </div>
+        </details>
+      </div>
+    </aside>
+  </main>
 </div>
 
 @end
