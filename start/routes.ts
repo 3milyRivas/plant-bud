@@ -7,6 +7,7 @@ import succulentPlants from '#data/succulentPlants'
 import nurseries from '#data/nurseries'
 
 
+
 const GardenDesignerController = () => import('#controllers/garden_designers_controller')
 const CommunityController = () => import('#controllers/community_controller')
 const HomepagesController = () => import('#controllers/homepages_controller')
@@ -14,13 +15,15 @@ const NewAccountController = () => import('#controllers/new_account_controller')
 const PlantsController = () => import('#controllers/plants_controller')
 const ProfilesController = () => import('#controllers/profiles_controller')
 
+
+
 /* general views */
 router.on('/').render('pages/welcome').as('home')
 router.on('/register').render('pages/register')
 router.on('/araceae').render('pages/araceae', { ornamentalPlants })
 router.on('/amaryllidaceae').render('pages/amaryllidaceae', { horticulturalPlants })
 router.on('/cactaceae').render('pages/cactaceae', { succulentPlants })
-
+router.get('/plants/search', '#controllers/PlantsSearchController.search')
 router.on('/requested').render('pages/requested')
 
 router.on('/maintenance').render('pages/services/maintenance').as('maintenance')
@@ -37,6 +40,7 @@ router
   .post('/designer/remove-background', [GardenDesignerController, 'removeBackground'])
   .as('garden_designer.remove_background')
 router.on('/scanner').render('pages/scanner/scanner')
+
 router.post('/plants/scan', [PlantsController, 'scan']).as('plants.scan')
 /* clients views */
 /*router

@@ -1,4 +1,4 @@
-<div class="pt-10 left-0 w-full z-50 px-10">
+<div class="pt-10 left-0 w-full px-10 relative z-[99999]">
   <div>
     <img decoding="async" src="resources/images/welcome/header3.png" class="absolute inset-0 w-full h-full object-cover"
       alt="">
@@ -7,59 +7,116 @@
   </div>
 
   <div>
-    <div class="backdrop-blur-xl bg-white/20 border border-white/30
-            rounded-full px-8 py-4 flex items-center justify-between shadow-lg">
+<div class="backdrop-blur-xl bg-white/20 border border-white/30
+  rounded-full px-8 py-4 flex items-center justify-between shadow-lg overflow-visible">
 
-      <img decoding="async" src="resources/images/essential/logo.png" alt="logo"
-        onclick="window.location.href='/homepage2'" class="w-14 h-14 hover:scale-105 transition duration-300">
+      <img decoding="async" src="/plants/logo.png" alt="logo" onclick="window.location.href='/homepage2'"
+        class="w-14 h-14 hover:scale-105 transition duration-300">
 
-      <div class="flex items-center gap-4">
-        <div class="bg-white/70 rounded-full px-6 py-3 w-[320px]">
+      <div class="flex items-center gap-4 mx-auto">
+        <div class="bg-white/70 rounded-full px-6 h-14 flex items-center w-[320px] relative z-[100000]">
+          <input id="searchInput" type="text" placeholder="Search plants"
+            class="bg-transparent outline-none w-full text-[#113E14] placeholder:text-[#6B8C6C]/70">
+          <div id="results"
+            class="absolute top-full left-0 w-full bg-[#D3DCD3]/90 mt-2 rounded shadow max-h-60 overflow-y-auto z-[999999]">
+          </div>
 
-          <input type="text" placeholder="Search plants" class="bg-transparent outline-none w-full
-                        text-[#113E14] placeholder:text-[#6B8C6C]/70">
         </div>
+      </div>
 
-        <button class="w-12 h-12 rounded-full bg-[#113E14]
-                    flex items-center justify-center hover:bg-[#1b5420]
-                    transition duration-300 shadow-md">
-          <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M21 21l-4.35-4.35m1.85-5.65a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z" />
-          </svg>
+      <button id="searchBtn" class="w-12 h-12 rounded-full bg-[#0e3b17] 
+         flex items-center justify-center 
+         shadow-[0_8px_20px_rgba(0,0,0,0.25)] 
+         hover:bg-[#14591d] transition">
+        <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M21 21l-4.35-4.35m1.85-5.65a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z" />
+        </svg>
+      </button>
+    </div>
+
+    <img decoding="async" src="/plants/logo-perfil.png" alt="profile"
+      class="w-14 h-14 rounded-full hover:scale-105 transition duration-300">
+
+  </div>
+</div>
+
+
+<section class="pt-8 px-10 relative z-0">
+  <div class="relative rounded-[40px] overflow-hidden shadow-2xl">
+    <img decoding="async" src="{{imageBg}}" alt="hero" class="w-full h-[420px] object-cover">
+    <div class="absolute inset-0 bg-gradient-to-r
+                from-[#113E14]/70 to-transparent"></div>
+
+    <div class="absolute inset-0 px-16 pt-20">
+      <div class="flex justify-end">
+
+        <button onclick="window.location.href='/care1'"
+          class="bg-[#113E14] font-abril text-3xl text-[#D3DCD3] py-2 px-28 rounded-full transition-all
+                         duration-300 hover:-translate-y-1hover:scale-105 hover:bg-[#D3DCD3] hover:text-[#113E14] shadow-[0_10px_30px_rgba(0,0,0,0.12)]">
+          Care
         </button>
       </div>
 
-      <img decoding="async" src="public\plants/logo-perfil.png" alt="profile"
-        class="w-14 h-14 rounded-full hover:scale-105 transition duration-300">
-    </div>
-  </div>
+      <div class="max-w-xl mt-12">
+        <h1 class="text-6xl font-abril leading-none text-[#f7f5f0]">{{title}}</h1>
 
-
-  <section class="pt-8 px-10">
-    <div class="relative rounded-[40px] overflow-hidden shadow-2xl">
-      <img decoding="async" src="{{imageBg}}" alt="hero" class="w-full h-[420px] object-cover">
-      <div class="absolute inset-0 bg-gradient-to-r
-                from-[#113E14]/70 to-transparent"></div>
-
-      <div class="absolute inset-0 px-16 pt-20">
-        <div class="flex justify-end">
-
-          <button onclick="window.location.href='/care1'"
-            class="bg-[#113E14] font-abril text-3xl text-[#D3DCD3] py-2 px-28 rounded-full transition-all
-                         duration-300 hover:-translate-y-1hover:scale-105 hover:bg-[#D3DCD3] hover:text-[#113E14] shadow-[0_10px_30px_rgba(0,0,0,0.12)]">
-            Care
-          </button>
-        </div>
-
-        <div class="max-w-xl mt-12">
-          <h1 class="text-6xl font-abril leading-none text-[#f7f5f0]">{{title}}</h1>
-
-          <p class="mt-6 text-white/80 text-lg leading-relaxed max-w-md">
-            {{text}}
-          </p>
-        </div>
+        <p class="mt-6 text-white/80 text-lg leading-relaxed max-w-md">
+          {{text}}
+        </p>
       </div>
-  </section>
+    </div>
+</section>
+
+<script>
+  const input = document.getElementById("searchInput")
+  const btn = document.getElementById("searchBtn")
+  const resultsDiv = document.getElementById("results")
+
+  async function searchPlants() {
+    const query = input.value.trim()
+
+    if (!query) {
+      resultsDiv.innerHTML = ""
+      return
+    }
+
+    try {
+      const res = await fetch(`/plants/search?search=${encodeURIComponent(query)}`)
+      const data = await res.json()
+
+      resultsDiv.innerHTML = ""
+
+      data.forEach(plant => {
+        const item = document.createElement("div")
+
+        item.className = "p-3 border-b hover:bg-green-100 cursor-pointer flex items-center gap-3"
+
+        item.innerHTML = `
+  <img src="/${plant.image}" class="w-10 h-10 object-cover rounded" />
+  <div>
+    <p class="font-semibold text-[#113E14]">${plant.name}</p>
+    <p class="text-sm text-gray-500">${plant.scientificName}</p>
+  </div>
+`
+
+
+        resultsDiv.appendChild(item)
+      })
+
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  btn.addEventListener("click", searchPlants)
+
+  input.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") searchPlants()
+  })
+
+  input.addEventListener("input", searchPlants)
+</script>
+
 </div>

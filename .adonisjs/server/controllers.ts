@@ -4,7 +4,6 @@
  */
 
 export const controllers = {
-  Community: () => import('#controllers/community_controller'),
   GardenDesigners: () => import('#controllers/garden_designers_controller'),
   Generals: () => import('#controllers/generals_controller'),
   Homepages: () => import('#controllers/homepages_controller'),
@@ -12,4 +11,6 @@ export const controllers = {
   Plants: () => import('#controllers/plants_controller'),
   Profiles: () => import('#controllers/profiles_controller'),
   Session: () => import('#controllers/session_controller'),
+  Community: () => import('#controllers/community_controller'),
+  PlantsSearch: () => import('#controllers/PlantsSearchController'),
 }
