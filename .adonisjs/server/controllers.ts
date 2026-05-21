@@ -13,4 +13,5 @@ export const controllers = {
   Profiles: () => import('#controllers/profiles_controller'),
   Session: () => import('#controllers/session_controller'),
   PlantsSearch: () => import('#controllers/plants_search_controller'),
+  Users: () => import('#controllers/users_controller'),
 }
