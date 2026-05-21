@@ -1,185 +1,81 @@
 @layout()
 @slot('title')
-<title>Request</title>
+<title>Request Service</title>
 @endslot
-@vite(['resources/js/requested.js'])
 
+<main class="relative z-10 min-h-screen px-6 py-10 text-[#113E14]">
+  <section class="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.95fr_1.05fr]">
+    <aside class="overflow-hidden rounded-[38px] bg-[#113E14] text-white shadow-2xl">
+      <div class="h-72 bg-[url('/resources/images/services/gardener-card.jpg')] bg-cover bg-center"></div>
+      <div class="p-8">
+        <p class="text-sm font-black uppercase tracking-[0.2em] text-[#EDE7D6]">Service request</p>
+        <h1 class="mt-4 font-abril text-5xl leading-tight">Tell the expert what your plants need.</h1>
+        <p class="mt-5 text-base font-semibold leading-7 text-white/75">
+          Share your location, budget, date, and the problem you want solved. This screen is ready to later connect with real service request records.
+        </p>
 
-<div class="flex bg-[#636863]/20 mx-12 py-8 rounded-[35px] mt-10">
-  <div class="w-full backdrop-blur-xl bg-[#d3dcd3]/20 border border-[#d3dcd3]/40 rounded-[35px] shadow-xl p-8">
-
-    <!-- TITLE -->
-    <div class="mb-10">
-      <h1 class="text-center font-bold text-5xl font-poppins bg-gradient-to-r from-[#113e14] to-[#48ae4d] bg-clip-text text-transparent">
-        Request your service
-      </h1>
-      <p class="text-center text-[#636863] mt-4 text-lg">
-        Connect with professionals and request personalized assistance.
-      </p>
-    </div>
-
-    <!-- MAIN GRID -->
-    <div class="grid grid-cols-12 gap-8">
-
-      <!-- LEFT SIDE -->
-      <div class="col-span-8 flex flex-col gap-6">
-
-        <!-- PROFILE CARD -->
-        <div class="bg-white/30 border border-[#d3dcd3]/40 rounded-[30px] p-6 backdrop-blur-xl shadow-lg">
-          <div class="flex gap-6 items-center">
-            <div class="w-[220px] h-[220px] bg-[url('/resources/images/services/gardener-card.jpg')] bg-cover bg-center rounded-[30px] shadow-xl shrink-0"></div>
-            <div class="flex flex-col justify-center flex-1">
-              <div class="flex items-center gap-4">
-                <div class="w-[65px] h-[65px] bg-[url('/resources/images/icons/plant-badge.png')] bg-contain bg-no-repeat bg-center rounded-2xl bg-[#d3dcd3]/30"></div>
-                <div>
-                  <h2 class="text-4xl font-bold text-[#113e14]">
-                    Laura Valentina Díaz Morales
-                  </h2>
-                  <div class="flex items-center gap-3 mt-4">
-                    <span class="bg-[#113e14] text-white px-4 py-2 rounded-full text-sm font-semibold">
-                      Garden Restoration
-                    </span>
-                    <div class="w-2 h-2 rounded-full bg-[#636863]"></div>
-                    <span class="text-[#636863] text-sm">
-                      5 years of experience
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- PROBLEM -->
-        <div class="bg-white/30 border border-[#d3dcd3]/40 rounded-[30px] p-6 backdrop-blur-xl shadow-lg">
-          <label class="text-[#113e14] font-semibold text-xl mb-4 block">
-            What is your problem?
-          </label>
-          <textarea placeholder="Describe your problem or the service you need..."
-            class="bg-white/40 border border-[#d3dcd3]/40 w-full h-[180px] rounded-[24px] px-5 py-4 text-[#113e14] outline-none resize-none focus:border-[#48ae4d]">
-          </textarea>
-        </div>
-
-        <!-- BOTTOM INPUTS -->
-        <div class="grid grid-cols-2 gap-6">
-
-          <!-- BUDGET -->
-          <div class="bg-white/30 border border-[#d3dcd3]/40 rounded-[30px] p-6">
-            <p class="mb-4 text-[#113e14] font-semibold text-lg">
-              How much budget do you have?
-            </p>
-            <div class="bg-white/40 border border-[#d3dcd3]/40 rounded-2xl px-4 py-4 flex items-center gap-4">
-              <div class="w-6 h-6 bg-[url('/resources/images/services/payment.png')] bg-contain bg-center bg-no-repeat opacity-80"></div>
-              <input type="text" placeholder="Type your budget"
-                class="outline-none bg-transparent text-[#113e14] text-sm w-full" />
-            </div>
-          </div>
-
-          <!-- LOCATION -->
-          <div class="bg-white/30 border border-[#d3dcd3]/40 rounded-[30px] p-6">
-            <p class="mb-4 text-[#113e14] font-semibold text-lg">
-              Where are you?
-            </p>
-            <div class="bg-white/40 border border-[#d3dcd3]/40 rounded-2xl px-4 py-4 flex items-center gap-4">
-              <div class="w-6 h-6 bg-[url('/resources/images/services/location.png')] bg-contain bg-center bg-no-repeat opacity-80"></div>
-              <input type="text" placeholder="Type your location"
-                class="outline-none bg-transparent text-[#113e14] text-sm w-full" />
-            </div>
-          </div>
-
+        <div class="mt-8 rounded-3xl bg-white/10 p-5">
+          <h2 class="text-xl font-black">Laura Valentina Diaz Morales</h2>
+          <p class="mt-2 text-sm font-semibold text-white/70">Garden restoration - 5 years of experience</p>
+          <p class="mt-4 text-sm font-bold text-[#EDE7D6]">4.8 rating - Santa Tecla - Mon-Fri</p>
         </div>
       </div>
+    </aside>
 
-      <!-- RIGHT SIDE -->
-      <div class="col-span-4 flex flex-col gap-6">
-
-        <!-- CALENDAR -->
-        <div class="bg-white/30 border border-[#d3dcd3]/60 rounded-[30px] p-6 shadow-lg">
-          <h3 class="text-[#113e14] text-2xl font-bold mb-5">
-            Schedule service
-          </h3>
-
-          <!-- DATE PICKER -->
-          <div class="relative w-full">
-            <label class="absolute -top-2 left-3 bg-[#d3dcd3] px-1 text-[11px] text-[#636863] z-10">
-              When do you need me?
-            </label>
-
-            <div id="date-picker-toggle"
-              class="flex items-center justify-between border-2 border-[#48ae4d] rounded-sm px-3 py-2 cursor-pointer">
-              <input id="selected-date-label" type="text" value="08/17/2025"
-                class="bg-transparent outline-none text-sm text-[#113e14] flex-1 min-w-0">
-              <input id="service-date-input" type="hidden" name="service_date" value="2025-08-17">
-              <button id="date-picker-button" type="button"
-                class="w-5 h-5 bg-[url('/resources/images/services/booking-calendar.png')] bg-contain bg-center bg-no-repeat opacity-80">
-              </button>
-            </div>
-
-            <!-- CALENDAR PANEL -->
-            <div id="date-picker-panel"
-              class="w-full mt-4 rounded-[28px] bg-[#d3dcd3]/40 border border-[#d3dcd3]/60 shadow-md p-5">
-
-              <!-- HEADER -->
-              <div class="flex items-center justify-between mb-6">
-                <button id="previous-month-button"
-                  class="w-4 h-4 bg-[url('/resources/images/services/arrow-left.png')] bg-contain bg-center bg-no-repeat"></button>
-
-                <div class="flex items-center gap-1">
-                  <select id="calendar-month-select"
-                    class="bg-transparent text-sm text-[#113e14] cursor-pointer">
-                    <option value="0">Jan</option>
-                    <option value="1">Feb</option>
-                    <option value="2">Mar</option>
-                    <option value="3">Apr</option>
-                    <option value="4">May</option>
-                    <option value="5">Jun</option>
-                    <option value="6">Jul</option>
-                    <option value="7">Aug</option>
-                    <option value="8">Sep</option>
-                    <option value="9">Oct</option>
-                    <option value="10">Nov</option>
-                    <option value="11">Dec</option>
-                  </select>
-                </div>
-
-                <div class="flex items-center gap-1">
-                  <select id="calendar-year-select"
-                    class="bg-transparent text-sm text-[#113e14] cursor-pointer">
-                  </select>
-                </div>
-
-                <button id="next-month-button"
-                  class="w-4 h-4 bg-[url('/resources/images/services/arrow-right.png')] bg-contain bg-center bg-no-repeat"></button>
-              </div>
-
-              <!-- DAYS -->
-              <div class="grid grid-cols-7 text-center text-[11px] text-[#636863] mb-4">
-                <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
-              </div>
-
-              <!-- NUMBERS -->
-              <div id="calendar-days" class="grid grid-cols-7 gap-y-3 text-sm text-center">
-                <!-- Calendar days go here -->
-              </div>
-
-
-              <div class="flex justify-end gap-7 mt-7 text-sm">
-                <button class="text-[#636863] font-medium hover:text-[#113e14] transition">
-                  Cancel
-                </button>
-                <button class="text-[#48ae4d] font-semibold hover:opacity-70 transition">
-                  OK
-                </button>
-              </div>
-
-            </div>
-          </div>
-        </div>
+    <form action="/requested" method="GET" class="rounded-[38px] border border-white/40 bg-white/76 p-6 shadow-2xl backdrop-blur-2xl sm:p-8">
+      <div class="mb-8">
+        <p class="text-sm font-black uppercase tracking-[0.18em] text-[#6B8C6C]">Details</p>
+        <h2 class="mt-2 text-4xl font-black">Request your service</h2>
       </div>
-    </div>
 
-   
-    <div class="flex justify-end mt-8">
-      <button class="bg-[#113e14] text-white font-semibold px-10 py-4 rounded-full shadow-lg hover:bg-[#48ae4"></button>
+      <div class="grid gap-5 sm:grid-cols-2">
+        <label class="block">
+          <span class="text-sm font-black text-[#456143]">Budget</span>
+          <span class="mt-2 flex items-center gap-3 rounded-2xl border border-[#D5DCD4] bg-white/70 px-4 py-3">
+            <img src="/resources/images/services/payment.png" alt="" class="h-5 w-5 object-contain">
+            <input name="budget" type="text" placeholder="$75" class="w-full bg-transparent text-sm font-semibold outline-none">
+          </span>
+        </label>
 
+        <label class="block">
+          <span class="text-sm font-black text-[#456143]">Location</span>
+          <span class="mt-2 flex items-center gap-3 rounded-2xl border border-[#D5DCD4] bg-white/70 px-4 py-3">
+            <img src="/resources/images/services/location.png" alt="" class="h-5 w-5 object-contain">
+            <input name="location" type="text" placeholder="Santa Tecla" class="w-full bg-transparent text-sm font-semibold outline-none">
+          </span>
+        </label>
+
+        <label class="block">
+          <span class="text-sm font-black text-[#456143]">Preferred date</span>
+          <input name="scheduled_for" type="date" class="mt-2 w-full rounded-2xl border border-[#D5DCD4] bg-white/70 px-4 py-3 text-sm font-semibold outline-none">
+        </label>
+
+        <label class="block">
+          <span class="text-sm font-black text-[#456143]">Service type</span>
+          <select name="service_type" class="mt-2 w-full rounded-2xl border border-[#D5DCD4] bg-white/70 px-4 py-3 text-sm font-semibold outline-none">
+            <option>Garden restoration</option>
+            <option>Lawn care</option>
+            <option>Irrigation system</option>
+            <option>Plant diagnosis</option>
+            <option>Delivery</option>
+          </select>
+        </label>
+      </div>
+
+      <label class="mt-5 block">
+        <span class="text-sm font-black text-[#456143]">What do you need?</span>
+        <textarea name="notes" rows="7" placeholder="Describe the problem, plants involved, space size, urgency, or special notes." class="mt-2 w-full resize-none rounded-[24px] border border-[#D5DCD4] bg-white/70 px-5 py-4 text-sm font-semibold leading-6 outline-none"></textarea>
+      </label>
+
+      <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-end">
+        <a href="/maintenance" class="rounded-full border border-[#113E14]/20 px-7 py-3 text-center text-sm font-black text-[#113E14] transition hover:bg-[#D5DCD4]">
+          Back
+        </a>
+        <button type="submit" class="rounded-full bg-[#113E14] px-8 py-3 text-sm font-black text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-[#1B5420]">
+          Send request
+        </button>
+      </div>
+    </form>
+  </section>
+</main>
 @end

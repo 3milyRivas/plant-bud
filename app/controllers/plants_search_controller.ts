@@ -65,7 +65,11 @@ function getScore(plant: SearchablePlant, family: string, query: string) {
 export default class PlantsSearchController {
   public search({ request, response }: HttpContext) {
     const rawQuery =
-      request.input('q') || request.input('search') || request.input('query') || request.input('term') || ''
+      request.input('q') ||
+      request.input('search') ||
+      request.input('query') ||
+      request.input('term') ||
+      ''
     const query = normalizeSearchText(String(rawQuery).trim())
 
     if (query.length < 2) {

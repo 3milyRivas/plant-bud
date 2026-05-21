@@ -152,8 +152,6 @@ export default class NewAccountController {
         return redirectBackWithFormErrors({ request, response, session }, validationErrors)
       }
 
-      console.log(error)
-
       session.flash('errors', {
         auth: ['Signup failed'],
       })
