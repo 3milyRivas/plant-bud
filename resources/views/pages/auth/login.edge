@@ -46,18 +46,15 @@
       </a>
 
       <div class="w-full max-w-md">
-
-        <div class="text-center mb-10">
-          <div class="relative inline-block mb-6">
+        <div class="text-center mb-6">
+          <div class="relative inline-block mb-2">
             <div class="absolute inset-0 bg-white/20 blur-3xl rounded-full scale-110"></div>
-            <img src="/resources/images/essential/logo-v2.png" class="relative w-40 mx-auto" alt="">
+            <img src="/resources/images/essential/pb-logo.png" class="relative w-56 mx-auto" alt="">
           </div>
 
-          <h1 class="text-4xl font-black text-white">Welcome Back</h1>
+          <h1 class="text-4xl font-black text-white">Welcome back</h1>
 
-          <div class="w-20 h-1 bg-[#EDE7D6] rounded-full mx-auto mt-5"></div>
-
-          <p class="mt-4 text-sm text-white/75 font-semibold leading-relaxed">
+          <p class="mt-4 text-sm text-white/90 font-semibold leading-relaxed">
             Sign in to continue your plant care journey
           </p>
         </div>
@@ -65,7 +62,7 @@
         <div class="relative">
           <div class="absolute -inset-2 bg-white/10 blur-3xl rounded-[2.5rem]"></div>
 
-          <div class="relative bg-white/10 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] p-8 shadow-[0_30px_90px_rgba(0,0,0,0.25)] overflow-hidden">
+          <div class="relative bg-white/10 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] px-8 py-6 shadow-[0_30px_90px_rgba(0,0,0,0.25)] overflow-hidden">
 
             @if(flashMessages.get('errors')?.auth)
               <p class="text-red-300 text-sm text-center mb-4">
@@ -75,7 +72,7 @@
 
             @form({ route: 'session.store', method: 'POST' })
 
-            <div class="space-y-5 relative z-10">
+            <div class="space-y-3 relative z-10">
 
               <div>
                 @field.root({ name: 'email' })

@@ -6,6 +6,7 @@ tmp/*
 !tmp/.gitkeep
 storage/*.log
 storage/profile_uploads
+storage/community_uploads
 
 # Secrets
 .env

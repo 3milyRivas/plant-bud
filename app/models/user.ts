@@ -5,6 +5,7 @@ import { DateTime } from 'luxon'
 import AccountLink from '#models/account_link'
 import AccountProfile from '#models/account_profile'
 import CommunityPost from '#models/community_post'
+import Follow from '#models/follow'
 import GardenerProfile from '#models/gardener_profile'
 import NurseryProfile from '#models/nursery_profile'
 import ServiceRequest from '#models/service_request'
@@ -64,6 +65,16 @@ export default class User extends withAuthFinder(hash, {
 
   @hasMany(() => CommunityPost)
   declare posts: HasMany<typeof CommunityPost>
+
+  @hasMany(() => Follow, {
+    foreignKey: 'followerId',
+  })
+  declare followingLinks: HasMany<typeof Follow>
+
+  @hasMany(() => Follow, {
+    foreignKey: 'followingId',
+  })
+  declare followerLinks: HasMany<typeof Follow>
 
   @hasMany(() => ServiceRequest, {
     foreignKey: 'clientUserId',

@@ -1,649 +1,381 @@
 @layout()
 
 @slot('title')
-<title>Home</title>
+<title>Community</title>
 @endslot
-@vite(['resources/js/categories.js'])
 
+@let(errors = formErrors || {})
 
-<div class="bg-[#6C8E6B] min-h-screen flex flex-col">
-  <div class="fixed top-0 left-0 w-full z-50 px-4 lg:px-8 py-4">
-    <div class="backdrop-blur-xl bg-white/20 border border-white/30
-              rounded-full px-5 py-3 flex items-center gap-5 shadow-lg max-w-[1240px] mx-auto">
+<div class="min-h-screen bg-[#6C8E6B] text-[#113E14]" data-community-page>
+  <div class="fixed left-0 top-0 z-50 w-full px-4 py-4 lg:px-8" data-community-navbar>
+    <div class="mx-auto flex max-w-[1240px] items-center justify-between gap-3 rounded-[2rem] border border-white/30 bg-white/24 px-4 py-3 shadow-[0_18px_55px_rgba(17,62,20,0.18)] backdrop-blur-2xl transition-all duration-500 sm:rounded-full sm:px-5" data-community-navbar-shell>
+      <div class="flex min-w-0 flex-1 items-center gap-3 transition-all duration-500" data-community-navbar-left>
+        <a href="/homepage" class="flex flex-none items-center gap-3">
+          <span class="h-11 w-11 rounded-full bg-[#113E14] bg-[url('/resources/images/essential/logo.png')] bg-contain bg-center bg-no-repeat shadow-md transition hover:scale-105"></span>
+          <span class="hidden leading-tight lg:block" data-community-brand-text>
+            <span class="block text-sm font-black text-[#113E14]">Plant Bud</span>
+            <span class="block text-[11px] font-bold uppercase tracking-[0.18em] text-[#315F28]">Community</span>
+          </span>
+        </a>
 
-      <div class="w-11 h-11 flex-none bg-[url('/resources/images/essential/logo.png')] bg-contain bg-no-repeat bg-center"></div>
+        @form({
+          action: '/community/search',
+          method: 'GET',
+          class: 'relative hidden flex-none items-center gap-2 transition-all duration-300 md:flex',
+          'data-community-search-form': true,
+          'data-community-navbar-search': true
+        })
+          <div class="w-[210px] overflow-hidden rounded-full bg-white/78 px-5 py-2 shadow-inner transition-all duration-300" data-community-navbar-search-box>
+            <input name="q" type="text" autocomplete="off" placeholder="Search @profile or #hashtag" class="w-full bg-transparent text-sm font-semibold text-[#113E14] outline-none placeholder:text-[#6B8C6C]/70" data-community-search-input>
+          </div>
+          <button type="submit" class="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-[#113E14] text-white shadow-md transition hover:-translate-y-0.5 hover:bg-[#1b5420]" aria-label="Search community" data-community-navbar-search-button>
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m1.85-5.65a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z" />
+            </svg>
+          </button>
+          <div class="absolute left-0 right-0 top-full mt-2 hidden overflow-hidden rounded-3xl border border-white/35 bg-[#F7F3E8]/95 p-2 shadow-2xl backdrop-blur-2xl" data-community-search-results></div>
+        @end
 
-      <div class="flex flex-none items-center gap-4">
-        <div class="bg-white/70 rounded-full px-6 py-2 w-[260px]">
-          <input type="text" placeholder="Search plants" class="bg-transparent outline-none w-full
-                      text-[#113E14] placeholder:text-[#6B8C6C]/70 text-sm">
+        <div class="flex min-w-0 flex-1 items-center justify-center gap-2 lg:hidden">
+          <div class="h-8 w-8 flex-none bg-[url('/resources/img/img3.png')] bg-contain bg-no-repeat"></div>
+          <span class="truncate text-base font-black text-[#113E14]">Community</span>
+        </div>
+      </div>
+
+      <div class="flex flex-none items-center gap-2 transition-all duration-500" data-community-navbar-right>
+        <nav class="flex items-center gap-2" aria-label="Community navigation">
+          <a href="/community" class="h-10 w-10 rounded-xl bg-[#EDE7D6] bg-[url('/resources/img/com.png')] bg-contain bg-center bg-no-repeat shadow-md ring-2 ring-white/35 transition hover:-translate-y-0.5" aria-label="Community feed" title="Community"></a>
+          <a href="/favorites" class="h-10 w-10 rounded-xl bg-white/20 bg-[url('/resources/img/fav.png')] bg-contain bg-center bg-no-repeat shadow-sm transition hover:-translate-y-0.5 hover:bg-[#EDE7D6]" aria-label="Saved posts" title="Saved posts"></a>
+          <a href="/notification" class="hidden h-10 w-10 rounded-xl bg-white/20 bg-[url('/resources/img/campana.png')] bg-contain bg-center bg-no-repeat shadow-sm transition hover:-translate-y-0.5 hover:bg-[#EDE7D6] sm:block" aria-label="Notifications" title="Notifications"></a>
+        </nav>
+
+        <details class="group relative">
+          <summary class="list-none">
+            <span class="flex cursor-pointer items-center gap-3 rounded-full bg-white/18 py-1 pl-1 pr-3 transition hover:bg-white/28">
+              @if(viewer.avatarUrl)
+                <img src="{{ viewer.avatarUrl }}" alt="" class="h-10 w-10 flex-none rounded-full object-cover">
+              @else
+                <span class="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-[#113E14] text-sm font-black text-[#EDE7D6]">
+                  {{ viewer.initial }}
+                </span>
+              @endif
+              <span class="hidden min-w-0 lg:block" data-community-profile-text>
+                <span class="block max-w-36 truncate text-sm font-black text-[#113E14]">{{ viewer.displayName }}</span>
+                <span class="block truncate text-xs font-bold text-blue-700">{{ '@' + viewer.username }}</span>
+              </span>
+            </span>
+          </summary>
+          <div class="absolute right-0 mt-3 w-56 overflow-hidden rounded-3xl border border-white/30 bg-[#F7F3E8]/96 p-2 shadow-2xl backdrop-blur-2xl">
+            <a href="/profile" class="block rounded-2xl px-4 py-3 text-sm font-black text-[#113E14] transition hover:bg-white/70">View profile</a>
+            <a href="/profile/settings" class="block rounded-2xl px-4 py-3 text-sm font-black text-[#113E14] transition hover:bg-white/70">Settings</a>
+            @form({ action: '/logout', method: 'POST' })
+              <button type="submit" class="w-full rounded-2xl px-4 py-3 text-left text-sm font-black text-red-900 transition hover:bg-red-100/70">Log out</button>
+            @end
+          </div>
+        </details>
+      </div>
+    </div>
+
+    @if(searchError)
+      <div class="mx-auto mt-3 max-w-[1240px] rounded-2xl border border-red-200/40 bg-red-950/30 px-5 py-3 text-sm font-bold text-red-100 backdrop-blur-xl">
+        {{ searchError }}
+      </div>
+    @endif
+  </div>
+
+  <div class="fixed bottom-5 left-4 z-50 flex items-center gap-2 rounded-2xl border border-white/30 bg-white/24 p-2 shadow-[0_18px_50px_rgba(17,62,20,0.22)] backdrop-blur-2xl sm:left-6" data-community-floating-actions>
+    <button type="button" class="flex h-11 w-11 items-center justify-center rounded-xl bg-[#113E14] text-white shadow-md transition hover:-translate-y-0.5 hover:bg-[#1b5420]" data-community-scroll-top aria-label="Back to top" title="Back to top">
+      <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M12 19V5m0 0-6 6m6-6 6 6" />
+      </svg>
+    </button>
+    <button type="button" class="flex h-11 w-11 items-center justify-center rounded-xl bg-[#EDE7D6] text-[#113E14] shadow-md transition hover:-translate-y-0.5 hover:bg-white" data-community-refresh-feed aria-label="Refresh feed" title="Refresh feed">
+      <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M20 7v5h-5M4 17v-5h5m9.2-3.2A7 7 0 0 0 6.1 7.7M5.8 15.2A7 7 0 0 0 17.9 16.3" />
+      </svg>
+    </button>
+  </div>
+
+  <div class="fixed left-4 top-1/2 z-40 hidden -translate-y-1/2 lg:block">
+    <button type="button" class="pointer-events-auto flex items-center gap-3 rounded-r-[2rem] rounded-l-2xl border border-white/35 bg-[#113E14] py-3 pl-3 pr-5 text-white shadow-[0_18px_50px_rgba(17,62,20,0.28)] backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:bg-[#EDE7D6] hover:text-[#113E14]" data-community-rail-toggle="profile" aria-expanded="false">
+      @if(viewer.avatarUrl)
+        <img src="{{ viewer.avatarUrl }}" alt="" class="h-11 w-11 rounded-full border-2 border-white object-cover">
+      @else
+        <span class="flex h-11 w-11 items-center justify-center rounded-full border-2 border-white bg-[#EDE7D6] text-sm font-black text-[#113E14]">{{ viewer.initial }}</span>
+      @endif
+      <span class="leading-tight text-left">
+        <span class="block text-sm font-black">Profile</span>
+        <span class="block text-[10px] font-black uppercase tracking-[0.14em] opacity-75">Open</span>
+      </span>
+    </button>
+  </div>
+
+  <div class="fixed right-4 top-1/2 z-40 hidden -translate-y-1/2 space-y-3 lg:block">
+    <button type="button" class="pointer-events-auto ml-auto flex items-center gap-3 rounded-l-[2rem] rounded-r-2xl border border-white/35 bg-[#EDE7D6] py-3 pl-5 pr-3 text-[#113E14] shadow-[0_18px_50px_rgba(17,62,20,0.22)] backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:bg-[#113E14] hover:text-white" data-community-rail-toggle="activity" aria-expanded="false">
+      <span class="leading-tight text-right">
+        <span class="block text-sm font-black">Activity</span>
+        <span class="block text-[10px] font-black uppercase tracking-[0.14em] opacity-70">Live</span>
+      </span>
+      <span class="flex h-11 w-11 items-center justify-center rounded-full bg-white/55">
+        <span class="h-7 w-7 bg-[url('/resources/img/campana.png')] bg-contain bg-center bg-no-repeat"></span>
+      </span>
+    </button>
+    <button type="button" class="pointer-events-auto ml-auto flex items-center gap-3 rounded-l-[2rem] rounded-r-2xl border border-white/35 bg-white/30 py-3 pl-5 pr-3 text-[#113E14] shadow-[0_18px_50px_rgba(17,62,20,0.2)] backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:bg-[#113E14] hover:text-white" data-community-rail-toggle="suggestions" aria-expanded="false">
+      <span class="leading-tight text-right">
+        <span class="block text-sm font-black">People</span>
+        <span class="block text-[10px] font-black uppercase tracking-[0.14em] opacity-70">Follow</span>
+      </span>
+      <span class="flex h-11 w-11 items-center justify-center rounded-full bg-[#EDE7D6] text-lg font-black text-[#113E14]">+</span>
+    </button>
+  </div>
+
+  <section class="pointer-events-none fixed left-5 top-36 z-40 w-72 -translate-x-[115%] opacity-0 transition duration-300 lg:block" data-community-rail-panel="profile" data-community-rail-side="left">
+    <div class="pointer-events-auto overflow-hidden rounded-3xl border border-white/30 bg-white/28 p-3 shadow-2xl backdrop-blur-2xl">
+      <div class="mb-3 flex items-center justify-between px-1">
+        <h2 class="text-sm font-black text-[#113E14]">Your profile</h2>
+        <button type="button" class="rounded-full bg-white/45 px-3 py-1 text-xs font-black text-[#113E14] transition hover:bg-[#EDE7D6]" data-community-rail-close>Close</button>
+      </div>
+
+      <div class="relative h-32 overflow-hidden rounded-2xl bg-[#113E14]/15">
+        @if(viewer.bannerUrl)
+          <img src="{{ viewer.bannerUrl }}" alt="" class="h-full w-full object-cover">
+        @else
+          <div class="h-full w-full bg-gradient-to-br from-[#113E14] via-[#315F28] to-[#6C8E6B]"></div>
+        @endif
+        <div class="absolute inset-0 bg-gradient-to-t from-[#113E14]/45 to-transparent"></div>
+      </div>
+
+      <div class="-mt-10 flex justify-center">
+        @if(viewer.avatarUrl)
+          <img src="{{ viewer.avatarUrl }}" alt="" class="relative h-20 w-20 rounded-full border-4 border-white object-cover shadow-lg">
+        @else
+          <span class="relative flex h-20 w-20 items-center justify-center rounded-full border-4 border-white bg-[#113E14] text-2xl font-black text-[#EDE7D6] shadow-lg">
+            {{ viewer.initial }}
+          </span>
+        @endif
+      </div>
+
+      <div class="mt-3 flex flex-col items-center px-2 text-center">
+        <h2 class="max-w-full truncate text-lg font-black text-black">{{ viewer.displayName }}</h2>
+        <p class="max-w-full truncate text-sm font-bold text-black/38">{{ '@' + viewer.username }}</p>
+        <span class="mt-3 rounded-full bg-[#EDE7D6] px-3 py-1 text-[11px] font-black uppercase tracking-[0.12em] text-[#113E14]">
+          {{ viewer.roleLabel }}
+        </span>
+
+        <div class="mt-5 grid w-full grid-cols-3 gap-2 text-center">
+          <div class="rounded-2xl bg-white/30 p-3">
+            <p class="font-black text-black">{{ viewer.stats.posts }}</p>
+            <p class="text-[11px] font-bold text-black/38">Posts</p>
+          </div>
+          <div class="rounded-2xl bg-white/30 p-3">
+            <p class="font-black text-black">{{ viewer.stats.followers }}</p>
+            <p class="text-[11px] font-bold text-black/38">Followers</p>
+          </div>
+          <div class="rounded-2xl bg-white/30 p-3">
+            <p class="font-black text-black">{{ viewer.stats.following }}</p>
+            <p class="text-[11px] font-bold text-black/38">Follows</p>
+          </div>
         </div>
 
-        <button class="w-10 h-10 rounded-full bg-[#113E14]
-                     flex items-center justify-center hover:bg-[#1b5420]
-                     transition duration-300 shadow-md">
-          <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M21 21l-4.35-4.35m1.85-5.65a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z" />
+        <a href="/profile" class="mt-4 w-full rounded-2xl bg-[#113E14] px-5 py-2.5 text-sm font-black text-white shadow-md transition hover:-translate-y-0.5 hover:bg-[#1b5420]">
+          View profile
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="pointer-events-none fixed right-5 top-36 z-40 w-[300px] translate-x-[115%] opacity-0 transition duration-300 lg:block" data-community-rail-panel="activity" data-community-rail-side="right">
+    <div class="pointer-events-auto rounded-3xl border border-white/30 bg-white/28 p-4 shadow-2xl backdrop-blur-2xl">
+      <div class="flex items-center justify-between">
+        <h2 class="text-lg font-black text-black">Activity</h2>
+        <button type="button" class="rounded-full bg-white/45 px-3 py-1 text-xs font-black text-[#113E14] transition hover:bg-[#EDE7D6]" data-community-rail-close>Close</button>
+      </div>
+
+      <div class="mt-4 space-y-3">
+        @each(post in posts.slice(0, 4))
+          <a href="#post-{{ post.id }}" class="flex items-center justify-between gap-3 rounded-2xl bg-white/18 p-2 transition hover:-translate-y-0.5 hover:bg-white/30" data-community-rail-close>
+            <div class="flex min-w-0 items-center gap-2">
+              @if(post.author.avatarUrl)
+                <img src="{{ post.author.avatarUrl }}" alt="" class="h-10 w-10 rounded-full object-cover">
+              @else
+                <span class="flex h-10 w-10 items-center justify-center rounded-full bg-[#113E14] text-xs font-black text-[#EDE7D6]">{{ post.author.initial }}</span>
+              @endif
+              <div class="min-w-0 leading-tight">
+                <p class="truncate text-xs font-black text-black">{{ post.author.displayName }}</p>
+                <p class="truncate text-[11px] font-bold text-black/42">{{ post.author.roleLabel }} - {{ post.createdAtHuman }}</p>
+              </div>
+            </div>
+            @if(post.mediaUrl)
+              <img src="{{ post.mediaUrl }}" alt="" class="h-10 w-10 rounded-xl object-cover">
+            @endif
+          </a>
+        @else
+          <p class="text-xs font-semibold text-black/45">Activity will appear here.</p>
+        @end
+      </div>
+    </div>
+  </section>
+
+  <section class="pointer-events-none fixed right-5 top-36 z-40 w-[300px] translate-x-[115%] opacity-0 transition duration-300 lg:block" data-community-rail-panel="suggestions" data-community-rail-side="right">
+    <div class="pointer-events-auto rounded-3xl border border-white/30 bg-white/28 p-4 shadow-2xl backdrop-blur-2xl">
+      <div class="flex items-center justify-between">
+        <h2 class="text-sm font-black text-black">Suggestions for you</h2>
+        <button type="button" class="rounded-full bg-white/45 px-3 py-1 text-xs font-black text-[#113E14] transition hover:bg-[#EDE7D6]" data-community-rail-close>Close</button>
+      </div>
+
+      <div class="mt-4 space-y-4">
+        @each(user in suggestions)
+          <div class="flex items-center justify-between gap-3">
+            <a href="/users/{{ user.username }}" class="flex min-w-0 items-center gap-3">
+              @if(user.avatarUrl)
+                <img src="{{ user.avatarUrl }}" alt="" class="h-11 w-11 rounded-full object-cover">
+              @else
+                <span class="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-[#113E14] font-black text-[#EDE7D6]">{{ user.initial }}</span>
+              @endif
+
+              <span class="min-w-0 leading-tight">
+                <span class="block truncate text-sm font-black text-black">{{ user.displayName }}</span>
+                <span class="block truncate text-[11px] font-bold text-gray-500">{{ user.roleLabel }} - {{ '@' + user.username }}</span>
+              </span>
+            </a>
+
+            @form({
+              action: '/users/' + user.username + '/follow',
+              method: 'POST',
+              class: 'shrink-0',
+              'data-follow-form': true
+            })
+              <button type="submit" class="rounded-full bg-white/45 px-3 py-1.5 text-xs font-black text-blue-600 transition hover:bg-[#EDE7D6]" data-follow-label>follow</button>
+            @end
+          </div>
+        @else
+          <p class="text-xs font-semibold text-black/45">No suggestions right now.</p>
+        @end
+      </div>
+    </div>
+  </section>
+
+  <div class="px-4 pb-10 pt-40 lg:px-6">
+    <main class="mx-auto min-w-0 max-w-[820px] space-y-6">
+      @form({
+        action: '/community/search',
+        method: 'GET',
+        class: 'relative flex items-center gap-2 md:hidden',
+        'data-community-search-form': true
+      })
+        <div class="min-w-0 flex-1 rounded-full bg-white/78 px-5 py-3 shadow-inner">
+          <input name="q" type="text" autocomplete="off" placeholder="Search @profile or #hashtag" class="w-full bg-transparent text-sm font-semibold text-[#113E14] outline-none placeholder:text-[#6B8C6C]/70" data-community-search-input>
+        </div>
+        <button type="submit" class="flex h-11 w-11 items-center justify-center rounded-full bg-[#113E14] text-white shadow-md" aria-label="Search community">
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m1.85-5.65a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z" />
           </svg>
         </button>
-      </div>
+        <div class="absolute left-0 right-0 top-full z-20 mt-2 hidden overflow-hidden rounded-3xl border border-white/35 bg-[#F7F3E8]/95 p-2 shadow-2xl backdrop-blur-2xl" data-community-search-results></div>
+      @end
 
-      <div class="flex flex-1 items-center justify-center space-x-2">
-        <div class="w-8 h-8 bg-[url('/resources/img/img3.png')] bg-contain bg-no-repeat"></div>
-        <span class="text-[#113E14] font-bold text-lg">Community</span>
-        <div class="w-8 h-8 bg-[url('/resources/img/img3.png')] -scale-x-100 bg-contain bg-no-repeat"></div>
-      </div>
-
-      <button
-        class="flex flex-none items-center space-x-2 bg-white rounded-xl px-4 py-2 shadow-md hover:bg-white/70 transition active:bg-green-900 active:text-white active:shadow-lg active:translate-y-1 focus:outline-none">
-        <div class="w-5 h-5 bg-[url('/resources/img/img4.png')] bg-contain bg-no-repeat"></div>
-        <span class="font-semibold text-sm">Home</span>
-      </button>
-
-      <button onclick="window.location.href='/notification'"
-        class="w-8 h-8 flex-none bg-[url('/resources/img/campana.png')] bg-contain bg-no-repeat rounded-lg transition"></button>
-      <button onclick="window.location.href='/favorites'"
-        class="w-8 h-8 flex-none bg-[url('/resources/img/fav.png')] bg-contain bg-no-repeat rounded-lg transition"></button>
-
-      <div class="flex flex-none items-center space-x-3 max-w-[260px]">
-        <div class="w-10 h-10 flex-none bg-[url('/resources/img/phot.jpg')] bg-cover bg-center rounded-full"></div>
-        <div class="flex min-w-0 flex-col">
-          <span class="truncate text-black/60 text-sm font-semibold">María Antonieta de las Nieves</span>
-          <a href="#" class="text-blue-600 hover:underline text-xs">Switch</a>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-
-
-  <div class="mx-14 pt-26">
-    <div
-      class="relative bg-[url('/resources/images/plant-budd.png')] bg-cover bg-center h-[60vh] w-full rounded-xl shadow-lg mt-8">
-
-      <div class="absolute inset-0 flex flex-col justify-center items-start px-12 space-y-4">
-        <h2
-          class="text-4xl font-bold bg-gradient-to-r from-white to-[#113E14] bg-clip-text text-transparent drop-shadow-lg">
-          Discover the community.
-        </h2>
-        <p class="text-2xl text-[#113E14] font-semibold max-w-xl">
-          Explore elegant publicstions, connect with share ideas.
-        </p>
-
-
-
-      </div>
-    </div>
-  </div>
-
-  <div class="flex bg-[#6C8E6B]/80 px-6 py-10 space-x-6">
-    <!--esta wea es la izquierda (el coso de perfil y woods)-->
-    <div class="w-64 space-y-6">
-      <div
-        class=" sticky top-40 rounded-3xl overflow-hidden shadow-md relative backdrop-blur-xl bg-white/20 border border-white/30 px-3 pt-3">
-        <div class="rounded-xl h-40 bg-[url('/resources/img/flo.jpg')] bg-cover bg-center"></div>
-        <div class="absolute left-1/2 top-20 transform -translate-x-1/2">
-          <div
-            class="w-24 h-24 bg-[url('/resources/img/phot.jpg')] bg-cover bg-center rounded-full border-4 border-white shadow-md">
+      @if(activeHashtag)
+        <div class="flex flex-wrap items-center justify-between gap-3 rounded-3xl border border-white/30 bg-white/22 p-4 shadow-xl backdrop-blur-xl">
+          <div>
+            <p class="text-xs font-black uppercase tracking-[0.18em] text-black/42">Hashtag feed</p>
+            <h1 class="mt-1 text-2xl font-black text-black">#{{ activeHashtag }}</h1>
           </div>
+          <a href="/community" class="rounded-full bg-[#113E14] px-5 py-2 text-sm font-black text-white transition hover:-translate-y-0.5">Clear</a>
         </div>
+      @endif
 
-        <div class="mt-4 flex flex-col items-center p-4">
+      <div class="rounded-3xl border border-white/30 bg-white/24 p-4 shadow-xl backdrop-blur-xl transition duration-300 hover:bg-white/28">
+        @form({
+          action: '/community/posts',
+          method: 'POST',
+          enctype: 'multipart/form-data',
+          class: 'space-y-4',
+          'data-community-post-form': true
+        })
+          <div class="flex items-start gap-4 sm:gap-6">
+            @if(viewer.avatarUrl)
+              <img src="{{ viewer.avatarUrl }}" alt="" class="h-12 w-12 rounded-full object-cover">
+            @else
+              <span class="flex h-12 w-12 flex-none items-center justify-center rounded-full bg-[#113E14] font-black text-[#EDE7D6]">
+                {{ viewer.initial }}
+              </span>
+            @endif
 
-          <h2 class="text-center text-lg font-bold text-black">Maria Antonieta de Las Nieves</h2>
-          <p class="text-black/30 font-semibold">@m4ria4nt0ni4</p>
-          <div class="flex justify-between w-full text-center mt-4">
-            <div class="flex-1">
-              <p class="font-bold text-black">250</p>
-              <p class="text-sm font-semibold text-black/30">Posts</p>
-            </div>
-            <div class="flex-1">
-              <p class="font-bold text-black">2022</p>
-              <p class="text-sm font-semibold text-black/30">Followers</p>
-            </div>
-            <div class="flex-1">
-              <p class="font-bold text-black">590</p>
-              <p class="text-sm font-semibold text-black/30">Follows</p>
+            <div class="min-w-0 flex-1 rounded-2xl bg-[#FBFBFB] px-4 py-3 shadow-sm">
+              <textarea name="body" maxlength="2000" rows="2" placeholder="Share a plant update, question, or small win..." class="min-h-16 w-full resize-none bg-transparent text-sm font-semibold text-gray-700 outline-none placeholder:text-gray-500">{{ old.body ?? '' }}</textarea>
             </div>
           </div>
-          <button
-            class="bg-[#113E14] text-white font-bold py-2 px-12 rounded-2xl shadow-md hover:bg-[#113E14]/70 transition mt-4 active:shadow-lg active:translate-y-1 focus:outline-none">
-            My profile
-          </button>
-        </div>
-      </div>
 
+          @if(errors.body)
+            <p class="text-xs font-bold text-red-800">{{ errors.body[0] }}</p>
+          @endif
+          <p class="hidden text-xs font-bold text-red-800" data-community-form-error></p>
 
+          <div class="grid gap-3 md:grid-cols-[1fr_auto]">
+            <label class="block rounded-2xl bg-white/22 px-4 py-3">
+              <span class="text-xs font-black uppercase tracking-[0.12em] text-black/50">Hashtags</span>
+              <input name="hashtags" value="{{ old.hashtags ?? '' }}" maxlength="240" placeholder="plants balcony care" class="mt-2 h-10 w-full bg-transparent text-sm font-semibold text-[#113E14] outline-none placeholder:text-black/35">
+            </label>
 
-    </div>
+            <div class="flex flex-wrap items-center gap-2 rounded-2xl bg-white/18 px-3 py-3">
+              <input type="file" name="image" accept="image/jpeg,image/png,image/webp" class="sr-only" data-community-image-input>
+              <button type="button" class="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-bold text-black/70 transition hover:bg-white/35 hover:text-[#113E14]" data-community-file-trigger>
+                <div class="h-6 w-6 bg-[url('/resources/img/imagen.png')] bg-contain bg-no-repeat"></div>
+                Images
+              </button>
+              <button type="button" class="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-bold text-black/70 transition hover:bg-white/35 hover:text-[#113E14]" data-community-poll-trigger>
+                <div class="h-6 w-6 bg-[url('/resources/img/pol.png')] bg-contain bg-no-repeat"></div>
+                Poll
+              </button>
+              <span class="hidden max-w-[12rem] truncate rounded-full bg-white/45 px-3 py-1.5 text-xs font-bold text-[#113E14]" data-community-file-name></span>
+            </div>
+          </div>
 
-    <!--Aquí va el cooso este de la caja de publicaciones, la inche linea de sort by y los otros cosos-->
-    <div class="flex-1 space-y-6">
-      <div class="backdrop-blur-xl bg-white/20 border border-white/30 rounded-3xl p-4 shadow-md space-y-4">
-        <div class="flex items-center space-x-6">
-          <div class="w-12 h-12 bg-[url('/resources/img/phot.jpg')] bg-cover bg-center rounded-full"></div>
+          @if(errors.image)
+            <p class="text-xs font-bold text-red-800">{{ errors.image[0] }}</p>
+          @endif
 
+          <div class="hidden rounded-2xl bg-white/24 p-4" data-community-poll-panel>
+            <div class="grid gap-4 md:grid-cols-2">
+              <label class="block">
+                <span class="text-xs font-black uppercase tracking-[0.12em] text-black/50">Poll question</span>
+                <input name="poll_question" value="{{ old.poll_question ?? '' }}" maxlength="160" placeholder="Which plant should I choose?" class="mt-2 h-11 w-full rounded-xl bg-white/75 px-3 text-sm font-semibold outline-none" data-community-poll-input>
+              </label>
+              <label class="block">
+                <span class="text-xs font-black uppercase tracking-[0.12em] text-black/50">Poll options</span>
+                <textarea name="poll_options" maxlength="600" rows="3" placeholder="Monstera&#10;Pothos&#10;Snake plant" class="mt-2 w-full resize-none rounded-xl bg-white/75 px-3 py-2 text-sm font-semibold outline-none">{{ old.poll_options ?? '' }}</textarea>
+              </label>
+            </div>
+            @if(errors.poll_options)
+              <span class="mt-2 block text-xs font-bold text-red-800">{{ errors.poll_options[0] }}</span>
+            @endif
+          </div>
 
-          <div class="flex bg-[#FBFBFB] items-center grow rounded-lg px-4 py-2 shadow-sm">
-            <input type="text" placeholder="Share something..."
-              class="grow bg-transparent outline-none text-gray-700 placeholder-gray-500" />
-            <button class="ml-2 p-2 rounded-full transition active:shadow-lg active:translate-y-1">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z" />
-              </svg>
+          <div class="flex justify-end">
+            <button type="submit" class="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-black text-[#113E14] transition hover:bg-[#EDE7D6] hover:shadow-md active:translate-y-0.5">
+              <div class="h-6 w-6 bg-[url('/resources/img/send.png')] bg-contain bg-no-repeat"></div>
+              Publish
             </button>
           </div>
-        </div>
-        <div class="flex justify-between">
-          <button
-            class="flex items-center space-x-2 px-3 py-2 rounded-lg active:shadow-lg active:translate-y-1 focus:outline-none">
-            <div class="w-6 h-6 bg-[url('/resources/img/imagen.png')] bg-contain bg-no-repeat"></div>
-            <span class="text-sm font-medium">Images</span>
-          </button>
-
-          <button
-            class="flex items-center space-x-2 px-3 py-2 rounded-lg active:shadow-lg active:translate-y-1 focus:outline-none">
-            <div class="w-6 h-6 bg-[url('/resources/img/video.png')] bg-contain bg-no-repeat"></div>
-            <span class="text-sm font-medium">Video</span>
-          </button>
-
-          <button
-            class="flex items-center space-x-2 px-3 py-2 rounded-lg active:shadow-lg active:translate-y-1 focus:outline-none">
-            <div class="w-6 h-6 bg-[url('/resources/img/pol.png')] bg-contain bg-no-repeat"></div>
-            <span class="text-sm font-medium">Poll</span>
-          </button>
-
-          <button
-            class="flex items-center space-x-2 px-3 py-2 text-black/46 rounded-lg active:shadow-lg active:translate-y-1 focus:outline-none">
-            <div class="w-6 h-6 bg-[url('/resources/img/send.png')] bg-contain bg-no-repeat"></div>
-            <span class="text-sm font-medium">Publish</span>
-          </button>
-        </div>
+        @end
       </div>
 
-      <div class="flex items-center justify-between">
-        <div class="w-full h-0.5 bg-[url('/resources/img/line.png')] bg-cover bg-center"></div>
-        <div class="flex items-center space-x-2 ml-2">
-          <span class="text-sm font-bold text-black/30">Sort by</span>
-          <span class="text-sm font-semibold text-black">Recent</span>
-          <div class="w-8 h-8 bg-[url('/resources/img/row.png')] bg-contain bg-no-repeat"></div>
-        </div>
+      <div class="flex items-center justify-between gap-4">
+        <div class="h-0.5 flex-1 bg-[url('/resources/img/line.png')] bg-cover bg-center"></div>
+        <p class="rounded-full bg-white/18 px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-black/42">Fresh from the community</p>
       </div>
 
-      <!-- Publicaciones -->
-      <div class="space-y-4">
-        <div
-          class="max-w-full px-20 backdrop-blur-xl bg-white/20 border border-white/30 rounded-3xl shadow-lg p-4 space-y-4">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-              <div class="w-12 h-12 bg-[url('/resources/img/aleja.jpg')] bg-cover bg-center rounded-full"></div>
-              <div>
-                <p class="font-semibold text-sm">Aleja.</p>
-                <p class="text-xs text-gray-500">12 minutes ago</p>
-              </div>
-            </div>
-
-            <button class="p-2 rounded-full hover:bg-gray-200">
-              <svg class="w-5 h-5 text-gray-600" fill="currentColor">
-                <circle cx="12" cy="5" r="1.5" />
-                <circle cx="12" cy="12" r="1.5" />
-                <circle cx="12" cy="19" r="1.5" />
-              </svg>
-            </button>
+      <div class="space-y-4" data-community-feed>
+        @each(post in posts)
+          @!component('components/community-post-card', { post, viewer })
+        @else
+          <div class="rounded-3xl border border-white/30 bg-white/22 p-8 text-center shadow-lg backdrop-blur-xl">
+            <h2 class="text-2xl font-black text-black">No posts yet</h2>
+            <p class="mt-2 text-sm font-bold text-black/45">Share the first plant update.</p>
           </div>
-
-
-          <p class="text-sm font-semibold">
-            Beautiful plant! 🌱
-            <span class="text-blue-500">#art #aesthetics #plants #gardens</span>
-          </p>
-
-
-          <div class="rounded-xl w-full h-96 bg-[url('/resources/img/flo.jpg')] bg-container bg-center"></div>
-
-
-
-          <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-6">
-              <button class="flex items-center space-x-2 group">
-                <div class="w-8 h-8 bg-[url('/resources/img/heart.png')] bg-cover bg-center"></div>
-                <span class="text-sm font-semibold text-black/30">320k</span>
-              </button>
-              <button class="flex items-center space-x-2">
-                <div class="w-5 h-5 bg-[url('/resources/img/com.png')] bg-cover bg-center"></div>
-                <span class="text-sm font-semibold text-black/30">120</span>
-              </button>
-              <button class="flex items-center space-x-2">
-                <div class="w-5 h-5 bg-[url('/resources/img/favo.png')] bg-cover bg-center"></div>
-                <span class="text-sm font-semibold text-black/30">95</span>
-              </button>
-            </div>
-            <button>
-              <div class="w-5 h-5 bg-[url('/resources/img/avion.png')] bg-cover bg-center"></div>
-            </button>
-          </div>
-
-          <div class="flex items-center space-x-3">
-            <div class="w-12 h-12 bg-[url('/resources/img/phot.jpg')] bg-cover bg-center rounded-full"></div>
-            <input type="text" placeholder="Write your comment..."
-              class="flex-1 px-4 py-2 rounded-full bg-gray-100 outline-none text-sm" />
-          </div>
-        </div>
-
-        <div
-          class="max-w-full px-20 backdrop-blur-xl bg-white/20 border border-white/30 rounded-3xl shadow-lg p-4 space-y-4">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-              <div class="w-12 h-12 bg-[url('/resources/img2/person.jpg')] bg-cover bg-center rounded-full"></div>
-              <div>
-                <p class="font-semibold text-sm">Angel.</p>
-                <p class="text-xs text-gray-500">13 minutes ago</p>
-              </div>
-            </div>
-
-            <button class="p-2 rounded-full hover:bg-gray-200">
-              <svg class="w-5 h-5 text-gray-600" fill="currentColor">
-                <circle cx="12" cy="5" r="1.5" />
-                <circle cx="12" cy="12" r="1.5" />
-                <circle cx="12" cy="19" r="1.5" />
-              </svg>
-            </button>
-          </div>
-
-
-          <p class="text-sm font-semibold">
-            Look, they have been growing.
-            <span class="text-blue-500">#newplants #plants #growingflowers #gardens</span>
-          </p>
-
-
-          <div class="rounded-xl w-full h-96 bg-[url('/resources/img/flower1.jpg')] bg-cover bg-center"></div>
-
-
-
-          <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-6">
-              <button class="flex items-center space-x-2 group">
-                <div class="w-8 h-8 bg-[url('/resources/img/heart.png')] bg-cover bg-center"></div>
-                <span class="text-sm font-semibold text-black/30">123k</span>
-              </button>
-              <button class="flex items-center space-x-2">
-                <div class="w-5 h-5 bg-[url('/resources/img/com.png')] bg-cover bg-center"></div>
-                <span class="text-sm font-semibold text-black/30">79</span>
-              </button>
-              <button class="flex items-center space-x-2">
-                <div class="w-5 h-5 bg-[url('/resources/img/favorites2.png')] bg-cover bg-center"></div>
-                <span class="text-sm font-semibold text-black/30">67</span>
-              </button>
-            </div>
-            <button>
-              <div class="w-5 h-5 bg-[url('/resources/img/avion.png')] bg-cover bg-center"></div>
-            </button>
-          </div>
-
-          <div class="flex items-center space-x-3">
-            <div class="w-12 h-12 bg-[url('/resources/img/phot.jpg')] bg-cover bg-center rounded-full"></div>
-            <input type="text" placeholder="Write your comment..."
-              class="flex-1 px-4 py-2 rounded-full bg-gray-100 outline-none text-sm" />
-          </div>
-        </div>
-
-        <div
-          class="max-w-full px-20 backdrop-blur-xl bg-white/20 border border-white/30 rounded-3xl shadow-lg p-4 space-y-4">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-              <div class="w-12 h-12 bg-[url('/resources/img2/person1.jpg')] bg-cover bg-center rounded-full"></div>
-              <div>
-                <p class="font-semibold text-sm">Evelyn.</p>
-                <p class="text-xs text-gray-500">13 minutes ago</p>
-              </div>
-            </div>
-
-            <button class="p-2 rounded-full hover:bg-gray-200">
-              <svg class="w-5 h-5 text-gray-600" fill="currentColor">
-                <circle cx="12" cy="5" r="1.5" />
-                <circle cx="12" cy="12" r="1.5" />
-                <circle cx="12" cy="19" r="1.5" />
-              </svg>
-            </button>
-          </div>
-
-
-          <p class="text-sm font-semibold">
-            I bought it yesterday
-            <span class="text-blue-500">#newplants #growingflowers #plants #gardens</span>
-          </p>
-
-
-          <div class="rounded-xl w-full h-96 bg-[url('/resources/img/flower2.jpg')] bg-cover bg-center"></div>
-
-
-
-          <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-6">
-              <button class="flex items-center space-x-2 group">
-                <div class="w-8 h-8 bg-[url('/resources/img/heart.png')] bg-cover bg-center"></div>
-                <span class="text-sm font-semibold text-black/30">984k</span>
-              </button>
-              <button class="flex items-center space-x-2">
-                <div class="w-5 h-5 bg-[url('/resources/img/com.png')] bg-cover bg-center"></div>
-                <span class="text-sm font-semibold text-black/30">345</span>
-              </button>
-              <button class="flex items-center space-x-2">
-                <div class="w-5 h-5 bg-[url('/resources/img/favo.png')] bg-cover bg-center"></div>
-                <span class="text-sm font-semibold text-black/30">203</span>
-              </button>
-            </div>
-            <button>
-              <div class="w-5 h-5 bg-[url('/resources/img/avion.png')] bg-cover bg-center"></div>
-            </button>
-          </div>
-
-          <div class="flex items-center space-x-3">
-            <div class="w-12 h-12 bg-[url('/resources/img/phot.jpg')] bg-cover bg-center rounded-full"></div>
-            <input type="text" placeholder="Write your comment..."
-              class="flex-1 px-4 py-2 rounded-full bg-gray-100 outline-none text-sm" />
-          </div>
-        </div>
-
-        <div
-          class="max-w-full px-20 backdrop-blur-xl bg-white/20 border border-white/30 rounded-3xl shadow-lg p-4 space-y-4">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-              <div class="w-12 h-12 bg-[url('/resources/img2/person2.jpg')] bg-cover bg-center rounded-full"></div>
-              <div>
-                <p class="font-semibold text-sm">Anne.</p>
-                <p class="text-xs text-gray-500">13 minutes ago</p>
-              </div>
-            </div>
-
-            <button class="p-2 rounded-full hover:bg-gray-200">
-              <svg class="w-5 h-5 text-gray-600" fill="currentColor">
-                <circle cx="12" cy="5" r="1.5" />
-                <circle cx="12" cy="12" r="1.5" />
-                <circle cx="12" cy="19" r="1.5" />
-              </svg>
-            </button>
-          </div>
-
-
-          <p class="text-sm font-semibold">
-            I looks so beautifull
-            <span class="text-blue-500">#art #aesthetics #plants #gardens</span>
-          </p>
-
-
-          <div class="rounded-xl w-full h-96 bg-[url('/resources/img/flower3.jpg')] bg-cover bg-center"></div>
-
-
-
-          <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-6">
-              <button class="flex items-center space-x-2 group">
-                <div class="w-8 h-8 bg-[url('/resources/img/heart.png')] bg-cover bg-center"></div>
-                <span class="text-sm font-semibold text-black/30">320k</span>
-              </button>
-              <button class="flex items-center space-x-2">
-                <div class="w-5 h-5 bg-[url('/resources/img/com.png')] bg-cover bg-center"></div>
-                <span class="text-sm font-semibold text-black/30">120</span>
-              </button>
-              <button class="flex items-center space-x-2">
-                <div class="w-5 h-5 bg-[url('/resources/img/favo.png')] bg-cover bg-center"></div>
-                <span class="text-sm font-semibold text-black/30">95</span>
-              </button>
-            </div>
-            <button>
-              <div class="w-5 h-5 bg-[url('/resources/img/avion.png')] bg-cover bg-center"></div>
-            </button>
-          </div>
-
-          <div class="flex items-center space-x-3">
-            <div class="w-12 h-12 bg-[url('/resources/img/phot.jpg')] bg-cover bg-center rounded-full"></div>
-            <input type="text" placeholder="Write your comment..."
-              class="flex-1 px-4 py-2 rounded-full bg-gray-100 outline-none text-sm" />
-          </div>
-        </div>
-        <!--y aqui se cierra el coso de las publicacipnes nasda mas-->
+        @end
       </div>
-      <!--aquí se cierra el coso central-->
-    </div>
-
-    <!-- Columna derecha-->
-    <aside class="sticky top-28 self-start max-h-[calc(100vh-8rem)] overflow-y-auto space-y-4 [&::-webkit-scrollbar]:hidden [scrollbar-width:none] [-ms-overflow-style:none]">
-      <div class="m-3 space-y-4 pb-3 backdrop-blur-xl bg-white/20 border border-white/30 rounded-3xl p-3 max-w-[300px]">
-        <!--Activity-->
-
-        <div class="flex items-center justify-between">
-          <h2 class="text-lg font-bold text-black">Activity</h2>
-
-          <button class="text-gray-500 text-xs">
-            see all
-          </button>
-        </div>
-
-        <div class="flex items-center justify-between">
-
-          <div class="flex items-center gap-2">
-
-
-            <div class="bg-[url('/resources/img2/person2.jpg')] w-10 h-10 rounded-full bg-cover bg-center">
-            </div>
-
-
-            <div class="leading-tight">
-              <p class="text-xs">
-                <span class="font-bold">Deraa</span>
-                <span class="text-gray-500">started</span>
-              </p>
-
-              <p class="text-xs text-gray-500">
-                following you
-                <span class="text-gray-400 ml-1">5m</span>
-              </p>
-            </div>
-          </div>
-
-
-          <button class="text-blue-500 text-xs font-medium">
-            follow
-          </button>
-        </div>
-
-
-        <div class="flex items-center justify-between">
-
-          <div class="flex items-center gap-2">
-
-            <div class="bg-[url('/resources/img/person3.jpg')] w-10 h-10 rounded-full bg-cover bg-center">
-            </div>
-
-            <div class="leading-tight">
-              <p class="text-xs">
-                <span class="font-bold">Ju4nit0</span>
-                <span class="text-gray-500">liked your</span>
-              </p>
-
-              <p class="text-xs text-gray-500">
-                photo.
-                <span class="text-gray-400 ml-1">30m</span>
-              </p>
-            </div>
-          </div>
-
-
-          <div class="w-10 h-10 rounded-lg bg-cover bg-center bg-[url('/resources/img/flower3.jpg')]"></div>
-        </div>
-
-        <h3 class="text-xs font-bold text-black pt-1">
-          Yesterday
-        </h3>
-
-
-        <div class="flex items-center justify-between">
-
-          <div class="flex items-center gap-2">
-
-            <div class="bg-[url('/resources/img/person5.jpg')] w-10 h-10 rounded-full bg-cover bg-center">
-            </div>
-
-            <div class="leading-tight">
-              <p class="text-xs">
-                <span class="font-bold">M4rquez</span>
-                <span class="text-gray-500">liked your</span>
-              </p>
-
-              <p class="text-xs text-gray-500">
-                photo.
-                <span class="text-gray-400 ml-1">1D</span>
-              </p>
-            </div>
-          </div>
-
-          <div class="bg-[url('/resources/img/flower6.jpg')] w-10 h-10 rounded-lg bg-cover bg-center"></div>
-        </div>
-
-
-        <div class="flex items-center justify-between">
-
-          <div class="flex items-center gap-2">
-
-            <div class="bg-[url('/resources/img/person7.jpg')] w-10 h-10 rounded-full bg-cover bg-center">
-            </div>
-
-            <div class="leading-tight">
-              <p class="text-xs">
-                <span class="font-bold">M4rquez</span>
-                <span class="text-gray-500">liked your</span>
-              </p>
-
-              <p class="text-xs text-gray-500">
-                photo.
-                <span class="text-gray-400 ml-1">1D</span>
-              </p>
-            </div>
-          </div>
-
-          <div class="bg-[url('/resources/img/flower7.jpg')] w-10 h-10 rounded-lg bg-cover bg-center"></div>
-        </div>
-        <!--final de los la wea de activity-->
-      </div>
-
-      <div class="m-3 space-y-3 pb-3 backdrop-blur-xl bg-white/20 border border-white/30 rounded-3xl p-3 max-w-[300px]">
-
-        <div class="flex items-center justify-between">
-          <h2 class="text-sm font-bold text-black">
-            Suggestes for you
-          </h2>
-
-          <button class="text-xs text-gray-500">
-            see all
-          </button>
-        </div>
-
-
-        <div class="flex items-center justify-between">
-
-          <div class="flex items-center gap-3">
-
-
-            <div class="bg-[url('/resources/img/person7.jpg')] w-11 h-11 rounded-full bg-cover bg-center">
-            </div>
-
-
-            <div class="leading-tight">
-              <p class="text-sm font-bold text-black">
-                M3lani3
-              </p>
-
-              <p class="text-[11px] text-gray-500">
-                Followed by Dlms
-              </p>
-            </div>
-          </div>
-
-
-          <button class="text-sm text-gray-500 font-medium">
-            Followed
-          </button>
-        </div>
-
-        <div class="flex items-center justify-between">
-
-          <div class="flex items-center gap-3">
-
-            <div class="bg-[url('/resources/img/person3.jpg')] w-11 h-11 rounded-full bg-cover bg-center">
-            </div>
-
-            <div class="leading-tight">
-              <p class="text-sm font-bold text-black">
-                Laur4
-              </p>
-
-              <p class="text-[11px] text-gray-500">
-                Suggested for you
-              </p>
-            </div>
-          </div>
-
-          <button class="text-sm text-gray-500 font-medium">
-            Followed
-          </button>
-        </div>
-
-
-        <div class="flex items-center justify-between">
-
-          <div class="flex items-center gap-3">
-
-            <div class="bg-[url('/resources/img/person4.jpg')] w-11 h-11 rounded-full bg-cover bg-center">
-            </div>
-
-            <div class="leading-tight">
-              <p class="text-sm font-bold text-black">
-                Rodr1G
-              </p>
-
-              <p class="text-[11px] text-gray-500">
-                Suggested for you
-              </p>
-            </div>
-          </div>
-
-          <button class="text-sm text-blue-500 font-medium">
-            follow
-          </button>
-        </div>
-
-
-        <div class="flex items-center justify-between">
-
-          <div class="flex items-center gap-3">
-
-            <div class="bg-[url('/resources/img/person5.jpg')] w-11 h-11 rounded-full bg-cover bg-center">
-            </div>
-
-            <div class="leading-tight">
-              <p class="text-sm font-bold text-black">
-                lo3l
-              </p>
-
-              <p class="text-[11px] text-gray-500">
-                Followed by L0ris
-              </p>
-            </div>
-          </div>
-
-          <button class="text-sm text-blue-500 font-medium">
-            follow
-          </button>
-        </div>
-
-      </div>
-    </aside>
+    </main>
   </div>
 </div>
 

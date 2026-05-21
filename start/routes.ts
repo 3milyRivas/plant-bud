@@ -7,6 +7,7 @@ import succulentPlants from '#data/succulentPlants'
 import nurseries from '#data/nurseries'
 
 const GardenDesignerController = () => import('#controllers/garden_designers_controller')
+const CommunityController = () => import('#controllers/community_controller')
 const HomepagesController = () => import('#controllers/homepages_controller')
 const NewAccountController = () => import('#controllers/new_account_controller')
 const PlantsController = () => import('#controllers/plants_controller')
@@ -19,9 +20,6 @@ router.on('/araceae').render('pages/araceae', { ornamentalPlants })
 router.on('/amaryllidaceae').render('pages/amaryllidaceae', { horticulturalPlants })
 router.on('/cactaceae').render('pages/cactaceae', { succulentPlants })
 
-router.on('/community').render('pages/community')
-router.on('/favorites').render('pages/favorites')
-router.on('/notification').render('pages/notification')
 router.on('/requested').render('pages/requested')
 
 router.on('/maintenance').render('pages/services/maintenance').as('maintenance')
@@ -49,14 +47,49 @@ router.post('/plants/scan', [PlantsController, 'scan']).as('plants.scan')
 router
   .group(() => {
     router.get('/homepage', [HomepagesController, 'index']).as('homepage')
+    router.get('/community', [CommunityController, 'index']).as('community.index')
+    router.post('/community/posts', [CommunityController, 'store']).as('community.posts.store')
+    router
+      .post('/community/posts/:id/reactions/:type', [CommunityController, 'toggleReaction'])
+      .as('community.posts.reactions.toggle')
+    router
+      .post('/community/posts/:id/comments', [CommunityController, 'comment'])
+      .as('community.posts.comments.store')
+    router
+      .post('/community/polls/:pollId/options/:optionId/vote', [CommunityController, 'votePoll'])
+      .as('community.polls.vote')
+    router
+      .get('/community/search/suggestions', [CommunityController, 'searchSuggestions'])
+      .as('community.search.suggestions')
+    router.get('/community/search', [CommunityController, 'search']).as('community.search')
+    router
+      .get('/community/hashtags/:tag', [CommunityController, 'hashtag'])
+      .as('community.hashtags.show')
+    router
+      .get('/community/media/:userId/:fileName', [CommunityController, 'media'])
+      .as('community.media')
+    router.get('/favorites', [CommunityController, 'favorites']).as('community.favorites')
+    router
+      .get('/notification', [CommunityController, 'notifications'])
+      .as('community.notifications')
+    router.get('/users/:username', [CommunityController, 'showUser']).as('community.users.show')
+    router
+      .post('/users/:username/follow', [CommunityController, 'toggleFollow'])
+      .as('community.users.follow')
+    router
+      .post('/users/:username/reviews', [CommunityController, 'storeReview'])
+      .as('community.users.reviews.store')
     router.get('/profile', [ProfilesController, 'show']).as('profile')
     router.get('/profile/settings', [ProfilesController, 'settings']).as('profile.settings')
+    router
+      .get('/profile/media/:userId/:kind/:fileName', [ProfilesController, 'media'])
+      .as('profile.media.owner')
     router.get('/profile/media/:kind/:fileName', [ProfilesController, 'media']).as('profile.media')
     router.post('/profile', [ProfilesController, 'update']).as('profile.update')
   })
   .use(middleware.auth())
 
-router.on('/nurseries').render('pages/client/nurseries', {nurseries})
+router.on('/nurseries').render('pages/client/nurseries', { nurseries })
 /* gardeners views */
 router
   .group(() => {

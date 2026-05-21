@@ -6,10 +6,12 @@
 @vite(['resources/js/categories.js'])
 
 <div class="relative overflow-x-hidden">
-  @!component('components/header2', {
-  title: "Discover ornamental plants",
-  text: "Explore elegant tropical species,connect with gardeners and create beautiful green spaces."
-  })
+    @!component('components/header-plants', {
+    title: "Discover ornamental plants",
+    text: "Explore elegant tropical species,connect with gardeners and create beautiful green spaces.",
+    imageBg:'resources/images/00-2.jpg'
+    })
+
   <div class="flex justify-center mt-4">
     <div class="flex justify-center mt-18">
       <div class="flex gap-3 bg-[#ffff]/80 backdrop-blur-md px-3 py-2 rounded-full shadow-inner shadow-[#48AE4D]/70">
