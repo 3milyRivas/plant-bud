@@ -88,7 +88,7 @@ export class FollowSchema extends BaseModel {
 }
 
 export class GardenerProfileSchema extends BaseModel {
-  static $columns = ['availabilitySchedule', 'bio', 'createdAt', 'experienceYears', 'headline', 'hourlyRate', 'id', 'isAvailable', 'paymentMethods', 'portfolioUrl', 'publicPhone', 'ratingAverage', 'ratingCount', 'serviceArea', 'servicesOffered', 'updatedAt', 'userId'] as const
+  static $columns = ['availabilitySchedule', 'bio', 'createdAt', 'experienceYears', 'headline', 'hourlyRate', 'id', 'isAvailable', 'paymentMethods', 'portfolioUrl', 'publicPhone', 'ratingAverage', 'ratingCount', 'serviceArea', 'servicesOffered', 'test', 'updatedAt', 'userId'] as const
   $columns = GardenerProfileSchema.$columns
   @column()
   declare availabilitySchedule: string | null
@@ -120,6 +120,8 @@ export class GardenerProfileSchema extends BaseModel {
   declare serviceArea: string | null
   @column()
   declare servicesOffered: string | null
+  @column()
+  declare test: string | null
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
   @column()
@@ -236,6 +238,70 @@ export class PostCommentSchema extends BaseModel {
   declare updatedAt: DateTime | null
   @column()
   declare userId: number
+}
+
+export class PostHashtagSchema extends BaseModel {
+  static $columns = ['communityPostId', 'createdAt', 'id', 'tag', 'updatedAt'] as const
+  $columns = PostHashtagSchema.$columns
+  @column()
+  declare communityPostId: number
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare tag: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class PostPollOptionSchema extends BaseModel {
+  static $columns = ['createdAt', 'id', 'label', 'postPollId', 'sortOrder', 'updatedAt'] as const
+  $columns = PostPollOptionSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare label: string
+  @column()
+  declare postPollId: number
+  @column()
+  declare sortOrder: number
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class PostPollVoteSchema extends BaseModel {
+  static $columns = ['createdAt', 'id', 'postPollId', 'postPollOptionId', 'updatedAt', 'userId'] as const
+  $columns = PostPollVoteSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare postPollId: number
+  @column()
+  declare postPollOptionId: number
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare userId: number
+}
+
+export class PostPollSchema extends BaseModel {
+  static $columns = ['communityPostId', 'createdAt', 'id', 'question', 'updatedAt'] as const
+  $columns = PostPollSchema.$columns
+  @column()
+  declare communityPostId: number
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare question: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
 }
 
 export class PostReactionSchema extends BaseModel {

@@ -4,6 +4,7 @@
  */
 
 export const controllers = {
+  Community: () => import('#controllers/community_controller'),
   GardenDesigners: () => import('#controllers/garden_designers_controller'),
   Generals: () => import('#controllers/generals_controller'),
   Homepages: () => import('#controllers/homepages_controller'),

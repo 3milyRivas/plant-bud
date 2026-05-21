@@ -5,6 +5,14 @@
 
 @source "../views";
 
+@theme {
+  --color-DGreen: #113e14;
+  --color-Tangerine: #eb7d00;
+  --color-MGreen: #8b8410;
+  --color-LGreen: #a8b841;
+  --color-pGray: #ebe3a7;
+}
+
 [x-cloak] {
   display: none !important;
 }

@@ -11,8 +11,23 @@ export type ScannedRoutes = {
     'garden_designer.remove_background': { paramsTuple?: []; params?: {} }
     'plants.scan': { paramsTuple?: []; params?: {} }
     'homepage': { paramsTuple?: []; params?: {} }
+    'community.index': { paramsTuple?: []; params?: {} }
+    'community.posts.store': { paramsTuple?: []; params?: {} }
+    'community.posts.reactions.toggle': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'type': ParamValue} }
+    'community.posts.comments.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'community.polls.vote': { paramsTuple: [ParamValue,ParamValue]; params: {'pollId': ParamValue,'optionId': ParamValue} }
+    'community.search.suggestions': { paramsTuple?: []; params?: {} }
+    'community.search': { paramsTuple?: []; params?: {} }
+    'community.hashtags.show': { paramsTuple: [ParamValue]; params: {'tag': ParamValue} }
+    'community.media': { paramsTuple: [ParamValue,ParamValue]; params: {'userId': ParamValue,'fileName': ParamValue} }
+    'community.favorites': { paramsTuple?: []; params?: {} }
+    'community.notifications': { paramsTuple?: []; params?: {} }
+    'community.users.show': { paramsTuple: [ParamValue]; params: {'username': ParamValue} }
+    'community.users.follow': { paramsTuple: [ParamValue]; params: {'username': ParamValue} }
+    'community.users.reviews.store': { paramsTuple: [ParamValue]; params: {'username': ParamValue} }
     'profile': { paramsTuple?: []; params?: {} }
     'profile.settings': { paramsTuple?: []; params?: {} }
+    'profile.media.owner': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'userId': ParamValue,'kind': ParamValue,'fileName': ParamValue} }
     'profile.media': { paramsTuple: [ParamValue,ParamValue]; params: {'kind': ParamValue,'fileName': ParamValue} }
     'profile.update': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
@@ -29,8 +44,17 @@ export type ScannedRoutes = {
     'request': { paramsTuple?: []; params?: {} }
     'garden_designer.search_assets': { paramsTuple?: []; params?: {} }
     'homepage': { paramsTuple?: []; params?: {} }
+    'community.index': { paramsTuple?: []; params?: {} }
+    'community.search.suggestions': { paramsTuple?: []; params?: {} }
+    'community.search': { paramsTuple?: []; params?: {} }
+    'community.hashtags.show': { paramsTuple: [ParamValue]; params: {'tag': ParamValue} }
+    'community.media': { paramsTuple: [ParamValue,ParamValue]; params: {'userId': ParamValue,'fileName': ParamValue} }
+    'community.favorites': { paramsTuple?: []; params?: {} }
+    'community.notifications': { paramsTuple?: []; params?: {} }
+    'community.users.show': { paramsTuple: [ParamValue]; params: {'username': ParamValue} }
     'profile': { paramsTuple?: []; params?: {} }
     'profile.settings': { paramsTuple?: []; params?: {} }
+    'profile.media.owner': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'userId': ParamValue,'kind': ParamValue,'fileName': ParamValue} }
     'profile.media': { paramsTuple: [ParamValue,ParamValue]; params: {'kind': ParamValue,'fileName': ParamValue} }
     'session.create': { paramsTuple?: []; params?: {} }
     'signup.client': { paramsTuple?: []; params?: {} }
@@ -43,8 +67,17 @@ export type ScannedRoutes = {
     'request': { paramsTuple?: []; params?: {} }
     'garden_designer.search_assets': { paramsTuple?: []; params?: {} }
     'homepage': { paramsTuple?: []; params?: {} }
+    'community.index': { paramsTuple?: []; params?: {} }
+    'community.search.suggestions': { paramsTuple?: []; params?: {} }
+    'community.search': { paramsTuple?: []; params?: {} }
+    'community.hashtags.show': { paramsTuple: [ParamValue]; params: {'tag': ParamValue} }
+    'community.media': { paramsTuple: [ParamValue,ParamValue]; params: {'userId': ParamValue,'fileName': ParamValue} }
+    'community.favorites': { paramsTuple?: []; params?: {} }
+    'community.notifications': { paramsTuple?: []; params?: {} }
+    'community.users.show': { paramsTuple: [ParamValue]; params: {'username': ParamValue} }
     'profile': { paramsTuple?: []; params?: {} }
     'profile.settings': { paramsTuple?: []; params?: {} }
+    'profile.media.owner': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'userId': ParamValue,'kind': ParamValue,'fileName': ParamValue} }
     'profile.media': { paramsTuple: [ParamValue,ParamValue]; params: {'kind': ParamValue,'fileName': ParamValue} }
     'session.create': { paramsTuple?: []; params?: {} }
     'signup.client': { paramsTuple?: []; params?: {} }
@@ -54,6 +87,12 @@ export type ScannedRoutes = {
   POST: {
     'garden_designer.remove_background': { paramsTuple?: []; params?: {} }
     'plants.scan': { paramsTuple?: []; params?: {} }
+    'community.posts.store': { paramsTuple?: []; params?: {} }
+    'community.posts.reactions.toggle': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'type': ParamValue} }
+    'community.posts.comments.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'community.polls.vote': { paramsTuple: [ParamValue,ParamValue]; params: {'pollId': ParamValue,'optionId': ParamValue} }
+    'community.users.follow': { paramsTuple: [ParamValue]; params: {'username': ParamValue} }
+    'community.users.reviews.store': { paramsTuple: [ParamValue]; params: {'username': ParamValue} }
     'profile.update': { paramsTuple?: []; params?: {} }
     'session.store': { paramsTuple?: []; params?: {} }
     'new_account.store': { paramsTuple?: []; params?: {} }
