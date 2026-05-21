@@ -4,13 +4,13 @@
  */
 
 export const controllers = {
+  Community: () => import('#controllers/community_controller'),
   GardenDesigners: () => import('#controllers/garden_designers_controller'),
   Generals: () => import('#controllers/generals_controller'),
   Homepages: () => import('#controllers/homepages_controller'),
   NewAccount: () => import('#controllers/new_account_controller'),
   Plants: () => import('#controllers/plants_controller'),
+  PlantsSearch: () => import('#controllers/PlantsSearchController'),
   Profiles: () => import('#controllers/profiles_controller'),
   Session: () => import('#controllers/session_controller'),
-  Community: () => import('#controllers/community_controller'),
-  PlantsSearch: () => import('#controllers/PlantsSearchController'),
 }
