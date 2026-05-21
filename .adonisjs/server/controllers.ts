@@ -10,7 +10,7 @@ export const controllers = {
   Homepages: () => import('#controllers/homepages_controller'),
   NewAccount: () => import('#controllers/new_account_controller'),
   Plants: () => import('#controllers/plants_controller'),
-  PlantsSearch: () => import('#controllers/plants_search_controller'),
   Profiles: () => import('#controllers/profiles_controller'),
   Session: () => import('#controllers/session_controller'),
+  PlantsSearch: () => import('#controllers/plants_search_controller'),
 }
