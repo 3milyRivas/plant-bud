@@ -2,20 +2,24 @@
 @let(imageAlt = $props.get('imageAlt') ?? '')
 @let(title = $props.get('title') ?? '')
 @let(scientificName = $props.get('scientificName') ?? '')
-@let(buttonText = $props.get('buttonText') ?? 'Acquire')
 
 <div class="group relative w-[270px] min-h-[455px] overflow-hidden rounded-[40px] bg-[#d3dcd3] shadow-[0_18px_45px_rgba(17,62,20,0.14)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_60px_rgba(72,174,77,0.22)]">
-  <div class="absolute -top-16 -right-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
+  <div class="absolute -right-16 -top-16 h-44 w-44 rounded-full bg-[#48ae4d]/15 blur-3xl"></div>
 
   <div class="relative p-5">
     <div class="overflow-hidden rounded-[30px] shadow-[0_12px_30px_rgba(0,0,0,0.16)]">
-      <img loading="lazy" decoding="async" src="{{ asset(imageSrc) }}" alt="{{ imageAlt }}"
-        class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110">
+      <img
+        loading="lazy"
+        decoding="async"
+        src="{{ asset(imageSrc) }}"
+        alt="{{ imageAlt }}"
+        class="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-110"
+      >
     </div>
   </div>
 
   <div class="flex flex-col px-6 pb-6">
-    <h3 class="font-abril text-[21px] leading-tight text-[#113e14] h-[52px] overflow-hidden">
+    <h3 class="h-[52px] overflow-hidden font-abril text-[21px] leading-tight text-[#113e14]">
       {{ title }}
     </h3>
 
@@ -24,12 +28,12 @@
       <p class="text-[10px] font-semibold uppercase tracking-[4px] text-[#636863]">
         Scientific Name
       </p>
-      <p class="mt-2 text-[15px] leading-relaxed text-[#113e14]/80 h-[48px] overflow-hidden">
+      <p class="mt-2 h-[48px] overflow-hidden text-[15px] leading-relaxed text-[#113e14]/80">
         {{ scientificName }}
       </p>
     </div>
 
-    <a href="/nursery" type="button" class="mt-auto text-center rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
+    <a href="/nurseries" type="button" class="mt-auto text-center rounded-full bg-[#113e14] py-3.5 font-abril text-xl text-[#d3dcd3] shadow-md transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:shadow-[0_0_15px_4px_rgba(72,174,77,0.6),0_0_30px_8px_rgba(72,174,77,0.4)] active:translate-y-0 active:scale-100 active:shadow-[0_0_8px_2px_rgba(72,174,77,0.5)]">
       Go to nursery
     </a>
   </div>

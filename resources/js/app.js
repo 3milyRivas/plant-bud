@@ -517,6 +517,7 @@ function initCommunityNavbar(page) {
     if (split === isSplit) return
 
     isSplit = split
+    shell.style.setProperty('transition-property', 'none', 'important')
     shell.classList.toggle('justify-between', true)
     shellBaseClasses.forEach((className) => shell.classList.toggle(className, !split))
     shellSplitClasses.forEach((className) => shell.classList.toggle(className, split))
@@ -1129,11 +1130,14 @@ function updateCommunityReaction(form, payload) {
 
   if (type === 'like') {
     icon?.classList.toggle('scale-110', payload.active)
+    if (icon) {
+      icon.style.backgroundImage = `url('${payload.active ? '/resources/images/community/liked.png' : '/resources/images/community/like.png'}')`
+    }
   }
 
   if (type === 'favorite') {
     if (icon) {
-      icon.style.backgroundImage = `url('${payload.active ? '/resources/img/favorites2.png' : '/resources/img/favo.png'}')`
+      icon.style.backgroundImage = `url('${payload.active ? '/resources/images/community/saved-active.png' : '/resources/images/community/save.png'}')`
     }
 
     if (!payload.active && document.querySelector('[data-favorites-page]') && post) {
@@ -1258,10 +1262,289 @@ function decrementSavedTotal() {
   })
 }
 
+function initPlantCatalogSearch() {
+  document.querySelectorAll('[data-plant-search]').forEach((form) => {
+    if (form.dataset.plantSearchReady === 'true') return
+
+    const input = form.querySelector('[data-plant-search-input]')
+    const resultsBox = form.querySelector('[data-plant-search-results]')
+
+    if (!input || !resultsBox) return
+
+    let searchTimeout = null
+    let activeRequest = null
+
+    form.dataset.plantSearchReady = 'true'
+
+    const closeResults = () => {
+      resultsBox.classList.add('hidden')
+      input.setAttribute('aria-expanded', 'false')
+    }
+
+    const openResults = () => {
+      resultsBox.classList.remove('hidden')
+      input.setAttribute('aria-expanded', 'true')
+    }
+
+    const runSearch = async () => {
+      const query = input.value.trim()
+
+      activeRequest?.abort()
+
+      if (query.length < 2) {
+        renderPlantSearchStatus(resultsBox, query ? 'Keep typing to search the catalog.' : '')
+        if (!query) closeResults()
+        return
+      }
+
+      activeRequest = new AbortController()
+      renderPlantSearchStatus(resultsBox, 'Searching...')
+      openResults()
+
+      try {
+        const searchUrl = new URL('/plants/search', window.location.origin)
+        searchUrl.searchParams.set('q', query)
+        searchUrl.searchParams.set('search', query)
+        searchUrl.searchParams.set('query', query)
+
+        const response = await fetch(searchUrl, {
+          headers: { Accept: 'application/json' },
+          credentials: 'same-origin',
+          cache: 'no-store',
+          signal: activeRequest.signal,
+        })
+
+        if (!response.ok) throw new Error('Plant search failed')
+
+        const payload = await response.json()
+        const results = Array.isArray(payload) ? payload : payload.results || []
+        renderPlantSearchResults(resultsBox, results.length > 0 ? results : getLocalPlantSearchResults(query))
+        openResults()
+      } catch (error) {
+        if (error.name === 'AbortError') return
+
+        renderPlantSearchResults(resultsBox, getLocalPlantSearchResults(query))
+        openResults()
+      }
+    }
+
+    input.addEventListener('input', () => {
+      window.clearTimeout(searchTimeout)
+      searchTimeout = window.setTimeout(runSearch, 160)
+    })
+
+    input.addEventListener('focus', () => {
+      if (resultsBox.children.length > 0 && input.value.trim().length >= 2) {
+        openResults()
+      }
+    })
+
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        closeResults()
+        input.blur()
+      }
+    })
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault()
+
+      const firstResult = resultsBox.querySelector('[data-plant-search-result]')
+
+      if (firstResult) {
+        navigateToPlant(firstResult.getAttribute('href'), event)
+        closeResults()
+        return
+      }
+
+      runSearch()
+    })
+
+    resultsBox.addEventListener('click', (event) => {
+      const link = event.target.closest('[data-plant-search-result]')
+
+      if (!link) return
+
+      navigateToPlant(link.getAttribute('href'), event)
+      closeResults()
+    })
+
+    document.addEventListener('click', (event) => {
+      if (!form.contains(event.target)) closeResults()
+    })
+  })
+
+  highlightPlantFromHash()
+}
+
+function renderPlantSearchStatus(resultsBox, message) {
+  resultsBox.replaceChildren()
+
+  if (!message) return
+
+  const status = document.createElement('p')
+  status.className = 'px-4 py-3 text-sm font-bold text-[#113E14]/70'
+  status.textContent = message
+  resultsBox.append(status)
+}
+
+function renderPlantSearchResults(resultsBox, results) {
+  resultsBox.replaceChildren()
+
+  if (results.length === 0) {
+    renderPlantSearchStatus(resultsBox, 'No matches yet. Try a plant name, scientific name, or family.')
+    return
+  }
+
+  results.forEach((plant) => {
+    const link = document.createElement('a')
+    const image = document.createElement('img')
+    const content = document.createElement('span')
+    const name = document.createElement('span')
+    const meta = document.createElement('span')
+    const badge = document.createElement('span')
+
+    link.href = plant.href
+    link.dataset.plantSearchResult = 'true'
+    link.className = 'flex items-center gap-3 rounded-[1rem] px-3 py-2 text-left transition hover:bg-white/80 focus:bg-white/80 focus:outline-none focus:ring-2 focus:ring-[#48AE4D]/45'
+    link.setAttribute('role', 'option')
+
+    image.src = plant.imageUrl || `/${plant.image}`
+    image.alt = ''
+    image.className = 'h-12 w-12 flex-none rounded-xl object-cover shadow-sm'
+    image.loading = 'lazy'
+    image.decoding = 'async'
+    image.addEventListener('error', () => image.remove())
+
+    content.className = 'min-w-0 flex-1'
+    name.className = 'block truncate text-sm font-black text-[#113E14]'
+    name.textContent = plant.name
+    meta.className = 'block truncate text-xs font-semibold text-[#113E14]/60'
+    meta.textContent = `${plant.scientificName} - ${plant.family}`
+
+    badge.className = 'hidden rounded-full bg-[#113E14]/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-[#113E14] sm:inline-flex'
+    badge.textContent = plant.catalog
+
+    content.append(name, meta)
+    link.append(image, content, badge)
+    resultsBox.append(link)
+  })
+}
+
+function getLocalPlantSearchResults(query) {
+  const normalizedQuery = normalizePlantSearchValue(query)
+
+  if (normalizedQuery.length < 2) return []
+
+  return Array.from(document.querySelectorAll('[data-plant-card]'))
+    .map((card) => {
+      const section = card.closest('.category-section')
+      const name = card.querySelector('h3')?.textContent?.trim() || ''
+      const scientificName = Array.from(card.querySelectorAll('p'))
+        .map((item) => item.textContent?.trim() || '')
+        .find((text) => text && !text.toLowerCase().includes('scientific name')) || ''
+      const image = card.querySelector('img')?.getAttribute('src') || ''
+      const family = section?.id || ''
+      const searchable = normalizePlantSearchValue(`${name} ${scientificName} ${family}`)
+
+      if (!card.id || !searchable.includes(normalizedQuery)) return null
+
+      return {
+        id: card.id,
+        name,
+        scientificName,
+        family: family ? family.charAt(0).toUpperCase() + family.slice(1) : 'Current catalog',
+        catalog: 'Current catalog',
+        imageUrl: image,
+        href: `${window.location.pathname}#${card.id}`,
+      }
+    })
+    .filter(Boolean)
+    .slice(0, 8)
+}
+
+function normalizePlantSearchValue(value) {
+  return String(value || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+}
+
+function navigateToPlant(href, event) {
+  if (!href) return
+
+  const targetUrl = new URL(href, window.location.origin)
+
+  if (targetUrl.origin === window.location.origin && targetUrl.pathname === window.location.pathname) {
+    event.preventDefault()
+    window.history.pushState({}, '', `${targetUrl.pathname}${targetUrl.hash}`)
+    highlightPlantFromHash()
+    return
+  }
+
+  window.location.href = targetUrl.toString()
+}
+
+function highlightPlantFromHash() {
+  if (!window.location.hash) return
+
+  const targetId = decodeURIComponent(window.location.hash.slice(1))
+  const target = document.getElementById(targetId)
+
+  if (!target?.matches('[data-plant-card]')) return
+
+  const section = target.closest('.category-section')
+
+  if (section) {
+    revealPlantCategory(section)
+  }
+
+  window.requestAnimationFrame(() => {
+    document.querySelectorAll('.plant-catalog-highlight').forEach((plant) => {
+      plant.classList.remove('plant-catalog-highlight')
+    })
+
+    target.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    target.classList.add('plant-catalog-highlight')
+
+    window.setTimeout(() => {
+      target.classList.remove('plant-catalog-highlight')
+    }, 2800)
+  })
+}
+
+function revealPlantCategory(section) {
+  if (typeof window.showCategory === 'function') {
+    window.showCategory(null, section.id)
+    return
+  }
+
+  document.querySelectorAll('.category-section').forEach((categorySection) => {
+    categorySection.classList.toggle('hidden', categorySection !== section)
+  })
+
+  document.querySelectorAll('.category-btn').forEach((button) => {
+    const target = button.dataset.categoryTarget || button.getAttribute('onclick')?.match(/'([^']+)'/)?.[1]
+    const isActive = target === section.id
+
+    button.classList.toggle('bg-[#113e14]', isActive)
+    button.classList.toggle('text-white', isActive)
+    button.classList.toggle('shadow-md', isActive)
+    button.classList.toggle('text-[#2D2B2B]', !isActive)
+  })
+}
+
+window.addEventListener('hashchange', highlightPlantFromHash)
+window.PlantBudCatalog = {
+  ...(window.PlantBudCatalog || {}),
+  highlightFromHash: highlightPlantFromHash,
+}
+
 function initApp() {
   initAuthForms()
   initProfilePage()
   initCommunityPage()
+  initPlantCatalogSearch()
 }
 
 if (document.readyState === 'loading') {

@@ -1,9 +1,7 @@
-/*FONTS*/
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Abril+Fatface&display=swap');
-
 @import 'tailwindcss';
 
 @source "../views";
+@source "../js";
 
 @theme {
   --color-DGreen: #113e14;
@@ -28,8 +26,8 @@ input[type='password']::-webkit-credentials-auto-fill-button {
 }
 
 @theme {
-  --font-poppins: 'Poppins', sans-serif;
-  --font-abril: 'Abril Fatface', serif;
+  --font-poppins: 'Segoe UI', Arial, sans-serif;
+  --font-abril: Georgia, 'Times New Roman', serif;
 }
 
 @keyframes float {
@@ -127,4 +125,31 @@ input[type='password']::-webkit-credentials-auto-fill-button {
 
 .homepage-lively-icon {
   transition: transform 320ms ease;
+}
+
+@keyframes plantCatalogGlow {
+  0% {
+    box-shadow: 0 0 0 0 rgb(237 231 214 / 0);
+    transform: scale(1);
+  }
+
+  20% {
+    box-shadow:
+      0 0 0 6px rgb(237 231 214 / 0.9),
+      0 0 38px rgb(72 174 77 / 0.45);
+    transform: scale(1.025);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgb(237 231 214 / 0);
+    transform: scale(1);
+  }
+}
+
+.plant-catalog-anchor {
+  will-change: transform, box-shadow;
+}
+
+.plant-catalog-highlight {
+  animation: plantCatalogGlow 2.8s ease both;
 }

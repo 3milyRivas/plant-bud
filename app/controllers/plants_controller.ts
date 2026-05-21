@@ -3,6 +3,7 @@ import fs from 'node:fs/promises'
 import axios from 'axios'
 import env from '#start/env'
 
+
 export default class PlantsController {
   private apiKey = env.get('PLANT_ID_API_KEY')
   private url = 'https://api.plant.id/v3/identification'
@@ -10,7 +11,7 @@ export default class PlantsController {
   public async scan({ request, response }: HttpContext) {
     const image = request.file('image', {
       size: '10mb',
-      extnames: ['jpg', 'jpeg', 'png', 'webp'],
+      extnames: ['jpg', 'jpeg', 'png', 'webp'],      
     })
 
     if (!image) {
@@ -97,6 +98,7 @@ export default class PlantsController {
       debug_raw: result,
     })
   }
+  
 
   private getSpecies(top: any) {
     return top?.name || top?.species?.scientificName || top?.scientific_name || 'Unknown plant'
@@ -252,4 +254,8 @@ export default class PlantsController {
       },
     }
   }
+
 }
+
+
+

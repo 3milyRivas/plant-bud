@@ -1,0 +1,78 @@
+@let(name = $props.get('name'))
+@let(photo = $props.get('photo'))
+@let(specialty = $props.get('specialty'))
+@let(experience = $props.get('experience'))
+@let(rating = $props.get('rating'))
+@let(reviews = $props.get('reviews'))
+@let(location = $props.get('location'))
+@let(phone = $props.get('phone'))
+@let(email = $props.get('email'))
+@let(services = $props.get('services') ?? [])
+@let(schedule = $props.get('schedule'))
+@let(hours = $props.get('hours'))
+
+<article class="grid gap-6 rounded-[28px] border border-white/45 bg-white/78 p-6 text-[#113E14] shadow-xl backdrop-blur-2xl transition duration-300 hover:-translate-y-1 hover:shadow-2xl lg:grid-cols-[220px_1fr]">
+  <img loading="lazy" decoding="async" src="{{ photo }}" alt="{{ name }}" class="h-56 w-full rounded-[24px] object-cover shadow-lg lg:h-full">
+
+  <div class="grid gap-6 xl:grid-cols-[1fr_0.9fr]">
+    <div>
+      <div class="flex items-start gap-3">
+        <img src="/resources/images/services/leave.png" alt="" class="mt-1 h-5 w-5 object-contain">
+        <div>
+          <h2 class="text-2xl font-black leading-tight">{{ name }}</h2>
+          <div class="mt-3 flex flex-wrap items-center gap-2 text-sm font-bold text-[#636863]">
+            <span>{{ specialty }}</span>
+            <span class="h-1.5 w-1.5 rounded-full bg-[#6B8C6C]"></span>
+            <span>{{ experience }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-4 flex items-center gap-2 text-sm font-black">
+        <img src="/resources/images/services/star.png" alt="" class="h-5 w-5 object-contain">
+        <span>{{ rating }}</span>
+        <span class="text-[#636863]">({{ reviews }} reviews)</span>
+      </div>
+
+      <div class="mt-5 space-y-3 text-sm font-semibold text-[#456143]">
+        <p class="flex items-center gap-3">
+          <img src="/resources/images/services/ubication.png" alt="" class="h-4 w-4 object-contain">
+          {{ location }}
+        </p>
+        <p class="flex items-center gap-3">
+          <img src="/resources/images/services/phone.png" alt="" class="h-4 w-4 object-contain">
+          {{ phone }}
+        </p>
+        <p class="flex items-center gap-3">
+          <img src="/resources/images/services/letter.png" alt="" class="h-4 w-4 object-contain">
+          {{ email }}
+        </p>
+      </div>
+    </div>
+
+    <div>
+      <div class="mb-4 flex items-center gap-3">
+        <img src="/resources/images/services/services.png" alt="" class="h-5 w-5 object-contain">
+        <h3 class="font-black">Specific services</h3>
+      </div>
+
+      <ul class="space-y-2 text-sm font-semibold text-[#456143]">
+        @each(service in services)
+          <li class="rounded-full bg-[#D5DCD4]/70 px-4 py-2">{{ service }}</li>
+        @endeach
+      </ul>
+
+      <div class="mt-5 flex gap-3 rounded-2xl bg-white/70 p-4 text-sm font-semibold text-[#456143]">
+        <img src="/resources/images/services/calendar.png" alt="" class="mt-0.5 h-5 w-5 object-contain">
+        <div>
+          <p>{{ schedule }}</p>
+          <p>{{ hours }}</p>
+        </div>
+      </div>
+
+      <a href="/request" class="mt-5 inline-flex rounded-full bg-[#113E14] px-8 py-3 text-sm font-black text-white shadow-md transition hover:-translate-y-0.5 hover:bg-[#1B5420]">
+        Contact
+      </a>
+    </div>
+  </div>
+</article>

@@ -1,6 +1,33 @@
+function getCategoryButton(categoryId) {
+    return Array.from(document.querySelectorAll(".category-btn")).find((button) => {
+        const target = button.dataset.categoryTarget ||
+            button.getAttribute("onclick")?.match(/'([^']+)'/)?.[1];
+
+        return target === categoryId;
+    });
+}
+
+function getCategoryIdFromHash() {
+    if (!window.location.hash) {
+        return null;
+    }
+
+    const targetId = decodeURIComponent(window.location.hash.slice(1));
+    const target = document.getElementById(targetId);
+
+    if (!target) {
+        return null;
+    }
+
+    if (target.classList.contains("category-section")) {
+        return target.id;
+    }
+
+    return target.closest(".category-section")?.id ?? null;
+}
+
 window.showCategory = function(event, categoryId) {
 
-    // SECCIONES
     const sections = document.querySelectorAll(".category-section");
 
     sections.forEach(section => {
@@ -15,50 +42,53 @@ window.showCategory = function(event, categoryId) {
 
 
 
-    // BOTONES
     const buttons = document.querySelectorAll(".category-btn");
 
     buttons.forEach(button => {
 
-        // quitar estilo activo
         button.classList.remove(
             "bg-[#113e14]",
             "text-white",
             "shadow-md"
         );
 
-        // volver al estilo normal
         button.classList.add(
             "text-[#2D2B2B]"
         );
     });
 
 
+    const activeButton = event?.currentTarget || getCategoryButton(categoryId);
 
-    // activar botón clickeado
-    event.currentTarget.classList.add(
-        "bg-[#113e14]",
-        "text-white",
-        "shadow-md"
-    );
+    if (activeButton) {
+        activeButton.classList.add(
+            "bg-[#113e14]",
+            "text-white",
+            "shadow-md"
+        );
 
-    event.currentTarget.classList.remove(
-        "text-[#2D2B2B]"
-    );
+        activeButton.classList.remove(
+            "text-[#2D2B2B]"
+        );
+    }
 };
 
 function initializeCategoriesPage() {
     const firstButton = document.querySelector(".category-btn");
+    const hashCategoryId = getCategoryIdFromHash();
 
-    if (firstButton) {
+    if (hashCategoryId) {
+        window.showCategory(null, hashCategoryId);
+    } else if (firstButton) {
         const firstCategoryId = firstButton.getAttribute("onclick")
             ?.match(/'([^']+)'/)?.[1];
 
         if (firstCategoryId) {
-            firstButton.click(); // simulate click
+            firstButton.click();
         }
     }
 
+    window.PlantBudCatalog?.highlightFromHash?.();
     setupFavoriteButtons();
 }
 

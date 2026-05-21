@@ -75,13 +75,13 @@
         'data-reaction-type': 'like'
       })
         <button type="submit" class="group flex items-center gap-2 rounded-full px-1 py-1 transition hover:bg-white/22 {{ post.liked ? 'text-[#113E14]' : '' }}">
-          <div class="h-8 w-8 bg-[url('/resources/img/heart.png')] bg-cover bg-center transition group-hover:scale-110 {{ post.liked ? 'scale-110' : '' }}" data-reaction-icon="like"></div>
+          <div class="h-8 w-8 bg-cover bg-center transition group-hover:scale-110 {{ post.liked ? 'scale-110' : '' }}" style="background-image: url('{{ post.liked ? '/resources/images/community/liked.png' : '/resources/images/community/like.png' }}')" data-reaction-icon="like"></div>
           <span class="text-sm font-black {{ post.liked ? 'text-[#113E14]' : 'text-black/35' }}" data-reaction-count="like">{{ post.counts.likes }}</span>
         </button>
       @end
 
       <button type="button" class="flex items-center gap-2 rounded-full px-1 py-1 transition hover:bg-white/22" data-comment-focus>
-        <div class="h-5 w-5 bg-[url('/resources/img/com.png')] bg-cover bg-center"></div>
+        <div class="h-5 w-5 bg-[url('/resources/images/community/community.png')] bg-cover bg-center"></div>
         <span class="text-sm font-black text-black/35" data-comment-count>{{ post.counts.comments }}</span>
       </button>
 
@@ -92,14 +92,14 @@
         'data-reaction-type': 'favorite'
       })
         <button type="submit" class="flex items-center gap-2 rounded-full px-1 py-1 transition hover:bg-white/22">
-          <div class="h-5 w-5 bg-cover bg-center" style="background-image: url('{{ post.favorited ? '/resources/img/favorites2.png' : '/resources/img/favo.png' }}')" data-reaction-icon="favorite"></div>
+          <div class="h-5 w-5 bg-cover bg-center" style="background-image: url('{{ post.favorited ? '/resources/images/community/saved-active.png' : '/resources/images/community/save.png' }}')" data-reaction-icon="favorite"></div>
           <span class="text-sm font-black {{ post.favorited ? 'text-[#113E14]' : 'text-black/35' }}" data-reaction-count="favorite">{{ post.counts.favorites }}</span>
         </button>
       @end
     </div>
 
     <button type="button" class="rounded-full p-2 transition hover:bg-white/22" data-share-post="/community#post-{{ post.id }}" aria-label="Copy post link">
-      <div class="h-5 w-5 bg-[url('/resources/img/avion.png')] bg-cover bg-center"></div>
+      <div class="h-5 w-5 bg-[url('/resources/images/community/share.png')] bg-cover bg-center"></div>
     </button>
   </div>
 

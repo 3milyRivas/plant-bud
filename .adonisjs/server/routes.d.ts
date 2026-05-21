@@ -5,12 +5,20 @@ type ParamValue = string | number | bigint | boolean
 export type ScannedRoutes = {
   ALL: {
     'home': { paramsTuple?: []; params?: {} }
+    'session.create': { paramsTuple?: []; params?: {} }
+    'session.store': { paramsTuple?: []; params?: {} }
+    'signup.client': { paramsTuple?: []; params?: {} }
+    'signup.gardener': { paramsTuple?: []; params?: {} }
+    'signup.nursery': { paramsTuple?: []; params?: {} }
+    'new_account.store': { paramsTuple?: []; params?: {} }
+    'homepage': { paramsTuple?: []; params?: {} }
+    'unauthorized': { paramsTuple?: []; params?: {} }
+    'plants_search.search': { paramsTuple?: []; params?: {} }
+    'plants.scan': { paramsTuple?: []; params?: {} }
     'maintenance': { paramsTuple?: []; params?: {} }
     'request': { paramsTuple?: []; params?: {} }
     'garden_designer.search_assets': { paramsTuple?: []; params?: {} }
     'garden_designer.remove_background': { paramsTuple?: []; params?: {} }
-    'plants.scan': { paramsTuple?: []; params?: {} }
-    'homepage': { paramsTuple?: []; params?: {} }
     'community.index': { paramsTuple?: []; params?: {} }
     'community.posts.store': { paramsTuple?: []; params?: {} }
     'community.posts.reactions.toggle': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'type': ParamValue} }
@@ -30,20 +38,20 @@ export type ScannedRoutes = {
     'profile.media.owner': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'userId': ParamValue,'kind': ParamValue,'fileName': ParamValue} }
     'profile.media': { paramsTuple: [ParamValue,ParamValue]; params: {'kind': ParamValue,'fileName': ParamValue} }
     'profile.update': { paramsTuple?: []; params?: {} }
-    'session.create': { paramsTuple?: []; params?: {} }
-    'session.store': { paramsTuple?: []; params?: {} }
-    'signup.client': { paramsTuple?: []; params?: {} }
-    'signup.gardener': { paramsTuple?: []; params?: {} }
-    'signup.nursery': { paramsTuple?: []; params?: {} }
-    'new_account.store': { paramsTuple?: []; params?: {} }
     'session.destroy': { paramsTuple?: []; params?: {} }
   }
   GET: {
     'home': { paramsTuple?: []; params?: {} }
+    'session.create': { paramsTuple?: []; params?: {} }
+    'signup.client': { paramsTuple?: []; params?: {} }
+    'signup.gardener': { paramsTuple?: []; params?: {} }
+    'signup.nursery': { paramsTuple?: []; params?: {} }
+    'homepage': { paramsTuple?: []; params?: {} }
+    'unauthorized': { paramsTuple?: []; params?: {} }
+    'plants_search.search': { paramsTuple?: []; params?: {} }
     'maintenance': { paramsTuple?: []; params?: {} }
     'request': { paramsTuple?: []; params?: {} }
     'garden_designer.search_assets': { paramsTuple?: []; params?: {} }
-    'homepage': { paramsTuple?: []; params?: {} }
     'community.index': { paramsTuple?: []; params?: {} }
     'community.search.suggestions': { paramsTuple?: []; params?: {} }
     'community.search': { paramsTuple?: []; params?: {} }
@@ -56,17 +64,19 @@ export type ScannedRoutes = {
     'profile.settings': { paramsTuple?: []; params?: {} }
     'profile.media.owner': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'userId': ParamValue,'kind': ParamValue,'fileName': ParamValue} }
     'profile.media': { paramsTuple: [ParamValue,ParamValue]; params: {'kind': ParamValue,'fileName': ParamValue} }
-    'session.create': { paramsTuple?: []; params?: {} }
-    'signup.client': { paramsTuple?: []; params?: {} }
-    'signup.gardener': { paramsTuple?: []; params?: {} }
-    'signup.nursery': { paramsTuple?: []; params?: {} }
   }
   HEAD: {
     'home': { paramsTuple?: []; params?: {} }
+    'session.create': { paramsTuple?: []; params?: {} }
+    'signup.client': { paramsTuple?: []; params?: {} }
+    'signup.gardener': { paramsTuple?: []; params?: {} }
+    'signup.nursery': { paramsTuple?: []; params?: {} }
+    'homepage': { paramsTuple?: []; params?: {} }
+    'unauthorized': { paramsTuple?: []; params?: {} }
+    'plants_search.search': { paramsTuple?: []; params?: {} }
     'maintenance': { paramsTuple?: []; params?: {} }
     'request': { paramsTuple?: []; params?: {} }
     'garden_designer.search_assets': { paramsTuple?: []; params?: {} }
-    'homepage': { paramsTuple?: []; params?: {} }
     'community.index': { paramsTuple?: []; params?: {} }
     'community.search.suggestions': { paramsTuple?: []; params?: {} }
     'community.search': { paramsTuple?: []; params?: {} }
@@ -79,14 +89,12 @@ export type ScannedRoutes = {
     'profile.settings': { paramsTuple?: []; params?: {} }
     'profile.media.owner': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'userId': ParamValue,'kind': ParamValue,'fileName': ParamValue} }
     'profile.media': { paramsTuple: [ParamValue,ParamValue]; params: {'kind': ParamValue,'fileName': ParamValue} }
-    'session.create': { paramsTuple?: []; params?: {} }
-    'signup.client': { paramsTuple?: []; params?: {} }
-    'signup.gardener': { paramsTuple?: []; params?: {} }
-    'signup.nursery': { paramsTuple?: []; params?: {} }
   }
   POST: {
-    'garden_designer.remove_background': { paramsTuple?: []; params?: {} }
+    'session.store': { paramsTuple?: []; params?: {} }
+    'new_account.store': { paramsTuple?: []; params?: {} }
     'plants.scan': { paramsTuple?: []; params?: {} }
+    'garden_designer.remove_background': { paramsTuple?: []; params?: {} }
     'community.posts.store': { paramsTuple?: []; params?: {} }
     'community.posts.reactions.toggle': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'type': ParamValue} }
     'community.posts.comments.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -94,8 +102,6 @@ export type ScannedRoutes = {
     'community.users.follow': { paramsTuple: [ParamValue]; params: {'username': ParamValue} }
     'community.users.reviews.store': { paramsTuple: [ParamValue]; params: {'username': ParamValue} }
     'profile.update': { paramsTuple?: []; params?: {} }
-    'session.store': { paramsTuple?: []; params?: {} }
-    'new_account.store': { paramsTuple?: []; params?: {} }
     'session.destroy': { paramsTuple?: []; params?: {} }
   }
 }

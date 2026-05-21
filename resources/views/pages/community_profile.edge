@@ -4,23 +4,25 @@
 <title>{{ '@' + profileUser.username }}</title>
 @endslot
 
-<div class="relative z-10 min-h-dvh overflow-hidden text-[#1E3D19]" data-community-page>
+<div class="relative z-10 min-h-dvh overflow-hidden bg-[#6B8C6C] text-[#1E3D19]" data-community-page>
   <div class="fixed inset-0 -z-10 pointer-events-none">
     <img src="/resources/images/welcome/header3.png" alt="" class="h-full w-full object-cover opacity-25">
-    <div class="absolute inset-0 bg-gradient-to-b from-[#1E3D19]/85 via-[#6B8C6C]/88 to-[#728B6F]"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-[#1E3D19]/80 via-[#728B6F]/80 to-[#6B8C6C]"></div>
+    <div class="absolute left-10 top-24 h-72 w-72 rounded-full bg-[#EDE7D6]/10 blur-3xl"></div>
+    <div class="absolute bottom-10 right-10 h-96 w-96 rounded-full bg-white/10 blur-3xl"></div>
   </div>
 
-  <header class="relative z-30 px-5 pt-5 lg:px-10">
+  <header class="relative z-30 px-5 py-5 lg:px-10">
     <div class="mx-auto flex max-w-6xl items-center justify-between rounded-full border border-white/10 bg-white/10 px-5 py-4 shadow-[0_18px_55px_rgba(0,0,0,0.18)] backdrop-blur-2xl">
       <a href="/homepage" class="flex items-center gap-3">
         <img src="/resources/images/essential/logo.png" alt="" class="h-11 w-11 object-contain drop-shadow-lg">
         <span class="hidden text-xl font-black text-white sm:block">Plant<span class="text-[#EDE7D6]"> Bud</span></span>
       </a>
 
-      <nav class="hidden items-center gap-2 md:flex">
-        <a href="/community" class="rounded-full bg-[#EDE7D6] px-4 py-2 text-sm font-black text-[#1E3D19]">Community</a>
-        <a href="/favorites" class="rounded-full bg-white/12 px-4 py-2 text-sm font-black text-white transition hover:bg-white/20">Saved</a>
-        <a href="/notification" class="rounded-full bg-white/12 px-4 py-2 text-sm font-black text-white transition hover:bg-white/20">Alerts</a>
+      <nav class="flex items-center gap-2" aria-label="Community navigation">
+        <a href="/community" class="h-10 w-10 rounded-xl bg-[#EDE7D6] bg-[url('/resources/images/community/community.png')] bg-contain bg-center bg-no-repeat shadow-md ring-2 ring-white/25 transition hover:-translate-y-0.5" aria-label="Community feed" title="Community"></a>
+        <a href="/favorites" class="h-10 w-10 rounded-xl bg-white/12 bg-[url('/resources/images/community/saved.png')] bg-contain bg-center bg-no-repeat shadow-sm transition hover:-translate-y-0.5 hover:bg-[#EDE7D6]" aria-label="Saved posts" title="Saved posts"></a>
+        <a href="/notification" class="h-10 w-10 rounded-xl bg-white/12 bg-[url('/resources/images/community/notifications.png')] bg-contain bg-center bg-no-repeat shadow-sm transition hover:-translate-y-0.5 hover:bg-[#EDE7D6]" aria-label="Notifications" title="Notifications"></a>
       </nav>
 
       <details class="group relative">
@@ -45,25 +47,25 @@
     </div>
   </header>
 
-  <main class="mx-auto max-w-6xl px-5 pb-20 pt-8 lg:px-10">
-    <section class="overflow-hidden rounded-[2.5rem] border border-white/15 bg-white/12 shadow-[0_28px_80px_rgba(0,0,0,0.22)] backdrop-blur-3xl">
-      <div class="relative h-52 overflow-hidden sm:h-64">
+  <main class="mx-auto max-w-6xl px-5 pb-20 lg:px-10">
+    <section class="isolate overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/10 shadow-[0_30px_90px_rgba(0,0,0,0.22)] backdrop-blur-3xl">
+      <div class="relative h-52 overflow-hidden sm:h-64 lg:h-72">
         @if(profileUser.bannerUrl)
           <img src="{{ profileUser.bannerUrl }}" alt="" class="absolute inset-0 h-full w-full object-cover">
         @else
           <div class="absolute inset-0 bg-gradient-to-br from-[#1E3D19] via-[#315F28] to-[#728B6F]"></div>
         @endif
-        <div class="absolute inset-0 bg-gradient-to-t from-[#1E3D19] via-transparent to-transparent"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-[#1E3D19] via-[#1E3D19]/15 to-transparent"></div>
       </div>
 
-      <div class="px-6 pb-7 pt-6 sm:px-8">
-        <div class="grid gap-6 lg:grid-cols-[9rem_1fr_auto] lg:items-center">
-          <div class="relative h-32 w-32">
-            <div class="absolute -inset-1 rounded-[2rem] bg-[#EDE7D6] shadow-xl"></div>
+      <div class="px-6 pb-8 pt-6 sm:px-8 sm:pt-8">
+        <div class="grid gap-6 lg:grid-cols-[180px_1fr_auto] lg:items-center">
+          <div class="relative h-32 w-32 sm:h-40 sm:w-40">
+            <div class="absolute -inset-1 rounded-full bg-[#EDE7D6] shadow-[0_18px_55px_rgba(0,0,0,0.28)]"></div>
             @if(profileUser.avatarUrl)
-              <img src="{{ profileUser.avatarUrl }}" alt="" class="relative h-full w-full rounded-[1.8rem] border-4 border-white object-cover">
+              <img src="{{ profileUser.avatarUrl }}" alt="" class="relative h-full w-full rounded-full border-4 border-white object-cover">
             @else
-              <span class="relative flex h-full w-full items-center justify-center rounded-[1.8rem] border-4 border-white bg-[#1E3D19] text-5xl font-black text-[#EDE7D6]">
+              <span class="relative flex h-full w-full items-center justify-center rounded-full border-4 border-white bg-[#1E3D19] text-5xl font-black text-[#EDE7D6] shadow-inner sm:text-6xl">
                 {{ profileUser.initial }}
               </span>
             @endif

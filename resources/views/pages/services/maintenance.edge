@@ -3,572 +3,109 @@
 <title>Maintenance</title>
 @endslot
 
-<div class="relative z-10">
-    <div class="bg-[url('/resources/images/plants/plant.budd.png')] bg-cover bg-center w-full h-64 flex items-center justify-center">
-        <img decoding="async" src="resources/images/essential/logo.png" class="pl-0.5 h-22 w-22"> 
-        <div class="flex items-center gap-3 bg-white/70 rounded-full px-5 py-3 w-96">
-            <input type="text" placeholder="Search"
-                class="w-full bg-transparent outline-none text-sm text-gray-700 placeholder-gray-500" />
-            <div class="text-gray-600"></div>
-        </div>
+<div class="relative z-10 min-h-screen text-[#113E14]">
+  <header class="relative overflow-hidden bg-[url('/resources/images/plant-budd.png')] bg-cover bg-center px-6 py-16 shadow-2xl">
+    <div class="absolute inset-0 bg-gradient-to-r from-[#113E14]/82 via-[#113E14]/42 to-transparent"></div>
+    <div class="relative mx-auto flex max-w-7xl flex-col gap-8 text-white lg:flex-row lg:items-center lg:justify-between">
+      <a href="/homepage" class="flex items-center gap-4">
+        <span class="flex h-16 w-16 items-center justify-center rounded-full bg-white/80 shadow-lg">
+          <img src="/resources/images/essential/logo.png" alt="" class="h-12 w-12 object-contain">
+        </span>
+        <span>
+          <span class="block text-2xl font-black">Plant Bud</span>
+          <span class="block text-sm font-bold uppercase tracking-[0.18em] text-[#EDE7D6]">Maintenance</span>
+        </span>
+      </a>
+
+      <nav class="flex flex-wrap gap-3">
+        <a href="/homepage" class="rounded-full bg-white/14 px-5 py-2.5 text-sm font-black backdrop-blur-xl transition hover:bg-white/24">Home</a>
+        <a href="/scanner" class="rounded-full bg-white/14 px-5 py-2.5 text-sm font-black backdrop-blur-xl transition hover:bg-white/24">Scanner</a>
+        <a href="/designer" class="rounded-full bg-white/14 px-5 py-2.5 text-sm font-black backdrop-blur-xl transition hover:bg-white/24">Designer</a>
+        <a href="/community" class="rounded-full bg-white/14 px-5 py-2.5 text-sm font-black backdrop-blur-xl transition hover:bg-white/24">Community</a>
+      </nav>
     </div>
 
-    <div class="bg-[#D5DCD4] py-4 text-center">
-        <h1 class="text-2xl font-semibold">Maintenance</h1>
+    <div class="relative mx-auto mt-16 max-w-7xl">
+      <p class="text-sm font-black uppercase tracking-[0.22em] text-[#EDE7D6]">Find a gardener</p>
+      <h1 class="mt-4 max-w-3xl font-abril text-5xl leading-tight text-white md:text-7xl">Reliable care for every green space.</h1>
+      <p class="mt-5 max-w-2xl text-lg font-semibold leading-8 text-white/78">
+        Browse trusted professionals, compare experience, and request support for maintenance, restoration, irrigation, and pruning.
+      </p>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-7xl px-6 py-12">
+    <div class="mb-8 flex flex-col gap-4 rounded-[28px] border border-white/45 bg-white/28 p-5 shadow-xl backdrop-blur-2xl md:flex-row md:items-center md:justify-between">
+      <div>
+        <p class="text-sm font-black uppercase tracking-[0.18em] text-[#6B8C6C]">Available providers</p>
+        <h2 class="mt-2 text-3xl font-black">Maintenance specialists</h2>
+      </div>
+      <a href="/request" class="inline-flex rounded-full bg-[#113E14] px-6 py-3 text-sm font-black text-white shadow-md transition hover:-translate-y-0.5 hover:bg-[#1B5420]">
+        Request a service
+      </a>
     </div>
 
-<main>
-    
+    <section class="grid gap-6">
+      @!component('components/services/provider-card', {
+        name: 'Ana Isabel Perez Vasquez',
+        photo: '/resources/images/services/Ana-Isabel.png',
+        specialty: 'Lawn care',
+        experience: '6 years of experience',
+        rating: '4.8',
+        reviews: '36',
+        location: 'Santa Tecla',
+        phone: '+503 7678-7645',
+        email: 'ana.isabel@gmail.com',
+        services: ['Lawn mowing', 'Organic fertilization', 'Pest control'],
+        schedule: 'Available Monday to Friday',
+        hours: '8:00 AM - 6:00 PM'
+      })
 
-<aside class="fixed top-0 left-0 h-screen fixed w-44 bg-[#113E14] text-white p-6 shadow-lg">
-    <div class="flex items-center gap-3 mb-10">
-            <h2 class="text-xl font-bold">Menu</h2>
-        </div>
-        <nav class="flex flex-col gap-4">
-            <a href="" class="hover:bg-green-700 px-4 py-2 rounded-lg">
-                Home
-            </a>
-            <a href="" class="hover:bg-green-700 px-4 py-2 rounded-lg">
-                Maintenance
-            </a>
-            <a href="" class="hover:bg-green-700 px-4 py-2 rounded-lg">
-                Services
-            </a>
-            <a href="" class="hover:bg-green-700 px-4 py-2 rounded-lg">
-                Contact
-            </a>
-        </nav>
-</aside>
-<div class="p-12 flex flex-col gap-6 ml-40">
-        <div class="flex gap-12 bg-white p-6 rounded-xl shadow-xl/30">
-            <img decoding="async" src="/resources/images/services/Ana-Isabel.png" alt="Foto de perfil"
-                class="w-60 h-60 rounded-full object-cover border-4 border-white shadow-md ml-5 mr-10">
-            <div class="flex-1 grid grid-cols-2 gap-4">
+      @!component('components/services/provider-card', {
+        name: 'Laura Valentina Diaz Morales',
+        photo: '/resources/images/services/profile2.png',
+        specialty: 'Garden restoration',
+        experience: '5 years of experience',
+        rating: '4.1',
+        reviews: '32',
+        location: 'Santa Tecla',
+        phone: '+503 7099-7876',
+        email: 'laura.morales@gmail.com',
+        services: ['Bush trimming', 'Leaf removal', 'Pest control'],
+        schedule: 'Available Monday to Friday',
+        hours: '6:00 AM - 5:00 PM'
+      })
 
-                <div>
-                    <div class="flex">
-                        <img decoding="async" src="resources/images/services/leave.png" alt="leave" class="w-4 h-4 mt-2 ml-2 mr-2">
-                        <h2 class="text-xl font-semibold">Ana Isabel Pérez Vásquez</h2>
-                    </div>
-                    <div class="flex">
-                        <p class="text-gray-600">Lawn Care</p>
-                        <img loading="lazy" decoding="async" src="resources/images/services/spot.png" alt="spot" class="w-2 h-2 mt-2 ml-2 mr-2">
-                        <p class="text-gray-500">6 years of experience</p>
-                    </div>
+      @!component('components/services/provider-card', {
+        name: 'Daniela Alejandra Perez Romero',
+        photo: '/resources/images/services/profile3.png',
+        specialty: 'Irrigation systems',
+        experience: '3 years of experience',
+        rating: '4.2',
+        reviews: '23',
+        location: 'Santa Tecla',
+        phone: '+503 9754-2806',
+        email: 'daniela.perez@gmail.com',
+        services: ['Tree planting', 'Leaf removal', 'Vertical garden setup'],
+        schedule: 'Available Monday to Friday',
+        hours: '9:00 AM - 8:00 PM'
+      })
 
-                    <div class="mt-3 flex">
-                        <img loading="lazy" decoding="async" src="resources/images/services/star.png" alt="star" class="w-4 h-4 ml-2 mr-2 mt-1 mb-1">
-                        <div class="flex">
-                            <p class="mt-1 mb-1">4.8</p>
-                            <p class="mt-1 mb-1 ml-1 font-semibold"> (36 reviews) </p>
-                        </div>
-                    </div>
-
-                    <div class="mt-3 flex flex-col gap-3">
-                        <div class="flex">
-                            <img loading="lazy" decoding="async" src="resources/images/services/ubication.png" alt="ubication"
-                                class="w-3 h-4 ml-2 mr-2 mt-0.5">
-                            <p>Santa Tecla</p>
-                        </div>
-                        <div class="flex">
-                            <img loading="lazy" decoding="async" src="resources/images/services/phone.png" alt="phone" class="w-4 h-4 ml-2 mr-2 mt-1">
-                            <p>+503 7678-7645</p>
-                        </div>
-                        <div class="flex">
-                            <img loading="lazy" decoding="async" src="resources/images/services/letter.png" alt="letter" class="w-4 h-4 ml-2 mr-2 mt-1">
-                            <p>ana.isabel@gmail.com</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <div class="flex mb-4">
-                        <img loading="lazy" decoding="async" src="resources/images/services/services.png" alt="services" class="w-5 h-4 mt-1 ml-2 mr-2">
-                        <h2 class="font-semibold">Specific Services</h2>
-                    </div>
-                    <ul class=" text-gray-700 mb-4 list-disc">
-                        <li>Corte de césped</li>
-                        <li>Fertilización orgánica</li>
-                        <li>Control de plagas</li>
-                    </ul>
-
-                    <div class="flex">
-                        <img loading="lazy" decoding="async" src="resources/images/services/calendar.png" alt="calendar" class="w-6 h-6 ml-2 mr-2 mt-2">
-                        <div class="">
-                            <p>Available monday to friday</p>
-                            <p>8:00am - 6:00pm</p>
-                        </div>
-                    </div>
-                    <a href=""
-                        class="inline-block mt-3 bg-[#113E14] text-white px-16 py-2 rounded-full hover:bg-green-700">Contact</a>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="flex gap-12 bg-white p-6 rounded-xl shadow-xl/30">
-            <img loading="lazy" decoding="async" src="/resources/images/services/profile2.png" alt="Foto de perfil2"
-                class="w-60 h-60 rounded-full object-cover border-4 border-white shadow-md ml-5 mr-10">
-            <div class="flex-1 grid grid-cols-2 gap-4">
-
-                <div>
-                    <div class="flex">
-                        <img loading="lazy" decoding="async" src="resources/images/services/leave.png" alt="leave" class="w-4 h-4 mt-2 ml-2 mr-2">
-                        <h2 class="text-xl font-semibold">Laura Valentina Díaz Morales</h2>
-                    </div>
-                    <div class="flex">
-                        <p class="text-gray-600">Garden Restauration</p>
-                        <img loading="lazy" decoding="async" src="resources/images/services/spot.png" alt="spot" class="w-2 h-2 mt-2 ml-2 mr-2">
-                        <p class="text-gray-500">5 years of experience</p>
-                    </div>
-
-                    <div class="mt-3 flex">
-                        <img loading="lazy" decoding="async" src="resources/images/services/star.png" alt="star" class="w-4 h-4 ml-2 mr-2 mt-1 mb-1">
-                        <div class="flex">
-                            <p class="mt-1 mb-1">4.1</p>
-                            <p class="mt-1 mb-1 ml-1 font-semibold"> (32 reviews) </p>
-                        </div>
-                    </div>
-
-                    <div class="mt-3 flex flex-col gap-3">
-                        <div class="flex">
-                            <img loading="lazy" decoding="async" src="resources/images/services/ubication.png" alt="ubication"
-                                class="w-3 h-4 ml-2 mr-2 mt-0.5">
-                            <p>Santa Tecla</p>
-                        </div>
-                        <div class="flex">
-                            <img loading="lazy" decoding="async" src="resources/images/services/phone.png" alt="phone" class="w-4 h-4 ml-2 mr-2 mt-1">
-                            <p>+503 7099-7876</p>
-                        </div>
-                        <div class="flex">
-                            <img loading="lazy" decoding="async" src="resources/images/services/letter.png" alt="letter" class="w-4 h-4 ml-2 mr-2 mt-1">
-                            <p>laura.morales@gmail.com</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <div class="flex mb-4">
-                        <img loading="lazy" decoding="async" src="resources/images/services/services.png" alt="services" class="w-5 h-4 mt-1 ml-2 mr-2">
-                        <h2 class="font-semibold">Specific Services</h2>
-                    </div>
-                    <ul class=" text-gray-700 mb-4 list-disc">
-                        <li>Bush trimming</li>
-                        <li>Leaf removal</li>
-                        <li>Pest control</li>
-                    </ul>
-
-                    <div class="flex">
-                        <img loading="lazy" decoding="async" src="resources/images/services/calendar.png" alt="calendar" class="w-6 h-6 ml-2 mr-2 mt-2">
-                        <div class="">
-                            <p>Available monday to friday</p>
-                            <p>6:00am - 5:00pm</p>
-                        </div>
-                    </div>
-                    <a href=""
-                        class="inline-block mt-3 bg-[#113E14] text-white px-16 py-2 rounded-full hover:bg-green-700">Contact</a>
-                </div>
-            </div>
-        </div>
-
-
-<div class="flex gap-12 bg-white p-6 rounded-xl shadow-xl/30">
-            <img loading="lazy" decoding="async" src="/resources/images/services/profile3.png" alt="Foto de perfil3"
-                class="w-60 h-60 rounded-full object-cover border-4 border-white shadow-md ml-5 mr-10">
-            <div class="flex-1 grid grid-cols-2 gap-4">
-
-                <div>
-                    <div class="flex">
-                        <img loading="lazy" decoding="async" src="resources/images/services/leave.png" alt="leave" class="w-4 h-4 mt-2 ml-2 mr-2">
-                        <h2 class="text-xl font-semibold">Daniela Alejandra Pérez Romero</h2>
-                    </div>
-                    <div class="flex">
-                        <p class="text-gray-600">Irrigation System</p>
-                        <img loading="lazy" decoding="async" src="resources/images/services/spot.png" alt="spot" class="w-2 h-2 mt-2 ml-2 mr-2">
-                        <p class="text-gray-500">3 years of experience</p>
-                    </div>
-
-                    <div class="mt-3 flex">
-                        <img loading="lazy" decoding="async" src="resources/images/services/star.png" alt="star" class="w-4 h-4 ml-2 mr-2 mt-1 mb-1">
-                        <div class="flex">
-                            <p class="mt-1 mb-1">3.2</p>
-                            <p class="mt-1 mb-1 ml-1 font-semibold"> (23 reviews) </p>
-                        </div>
-                    </div>
-
-                    <div class="mt-3 flex flex-col gap-3">
-                        <div class="flex">
-                            <img loading="lazy" decoding="async" src="resources/images/services/ubication.png" alt="ubication"
-                                class="w-3 h-4 ml-2 mr-2 mt-0.5">
-                            <p>Santa Tecla</p>
-                        </div>
-                        <div class="flex">
-                            <img loading="lazy" decoding="async" src="resources/images/services/phone.png" alt="phone" class="w-4 h-4 ml-2 mr-2 mt-1">
-                            <p>+503 9754-2806</p>
-                        </div>
-                        <div class="flex">
-                            <img loading="lazy" decoding="async" src="resources/images/services/letter.png" alt="letter" class="w-4 h-4 ml-2 mr-2 mt-1">
-                            <p>daniela.perez@gmail.com</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <div class="flex mb-4">
-                        <img loading="lazy" decoding="async" src="resources/images/services/services.png" alt="services" class="w-5 h-4 mt-1 ml-2 mr-2">
-                        <h2 class="font-semibold">Specific Services</h2>
-                    </div>
-                    <ul class=" text-gray-700 mb-4 list-disc">
-                        <li>Tree planting</li>
-                        <li>Leaf removal</li>
-                        <li>Vertical garden setup</li>
-                    </ul>
-
-                    <div class="flex">
-                        <img loading="lazy" decoding="async" src="resources/images/services/calendar.png" alt="calendar" class="w-6 h-6 ml-2 mr-2 mt-2">
-                        <div class="">
-                            <p>Available monday to friday</p>
-                            <p>9:00am - 8:00pm</p>
-                        </div>
-                    </div>
-                    <a href=""
-                        class="inline-block mt-3 bg-[#113E14] text-white px-16 py-2 rounded-full hover:bg-green-700">Contact</a>
-                </div>
-            </div>
-        </div>
-
-
-<div class="flex gap-12 bg-white p-6 rounded-xl shadow-xl/30">
-            <img loading="lazy" decoding="async" src="/resources/images/services/profile4.png" alt="Foto de perfil4"
-                class="w-60 h-60 rounded-full object-cover border-4 border-white shadow-md ml-5 mr-10">
-            <div class="flex-1 grid grid-cols-2 gap-4">
-
-                <div>
-                    <div class="flex">
-                        <img loading="lazy" decoding="async" src="resources/images/services/leave.png" alt="leave" class="w-4 h-4 mt-2 ml-2 mr-2">
-                        <h2 class="text-xl font-semibold">Valeria Beatriz Campos Herrera</h2>
-                    </div>
-                    <div class="flex">
-                        <p class="text-gray-600">Lawn Care</p>
-                        <img loading="lazy" decoding="async" src="resources/images/services/spot.png" alt="spot" class="w-2 h-2 mt-2 ml-2 mr-2">
-                        <p class="text-gray-500">7 years of experience</p>
-                    </div>
-
-                    <div class="mt-3 flex">
-                        <img loading="lazy" decoding="async" src="resources/images/services/star.png" alt="star" class="w-4 h-4 ml-2 mr-2 mt-1 mb-1">
-                        <div class="flex">
-                            <p class="mt-1 mb-1">5.2</p>
-                            <p class="mt-1 mb-1 ml-1 font-semibold"> (40 reviews) </p>
-                        </div>
-                    </div>
-
-                    <div class="mt-3 flex flex-col gap-3">
-                        <div class="flex">
-                            <img loading="lazy" decoding="async" src="resources/images/services/ubication.png" alt="ubication"
-                                class="w-3 h-4 ml-2 mr-2 mt-0.5">
-                            <p>Santa Tecla</p>
-                        </div>
-                        <div class="flex">
-                            <img loading="lazy" decoding="async" src="resources/images/services/phone.png" alt="phone" class="w-4 h-4 ml-2 mr-2 mt-1">
-                            <p>+503 7544-0876</p>
-                        </div>
-                        <div class="flex">
-                            <img loading="lazy" decoding="async" src="resources/images/services/letter.png" alt="letter" class="w-4 h-4 ml-2 mr-2 mt-1">
-                            <p>beatriz.campos@gmail.com</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <div class="flex mb-4">
-                        <img loading="lazy" decoding="async" src="resources/images/services/services.png" alt="services" class="w-5 h-4 mt-1 ml-2 mr-2">
-                        <h2 class="font-semibold">Specific Services</h2>
-                    </div>
-                    <ul class=" text-gray-700 mb-4 list-disc">
-                        <li>Soil amendment</li>
-                        <li>Tree planting</li>
-                        <li>Fertilization organic</li>
-                    </ul>
-
-                    <div class="flex">
-                        <img loading="lazy" decoding="async" src="resources/images/services/calendar.png" alt="calendar" class="w-6 h-6 ml-2 mr-2 mt-2">
-                        <div class="">
-                            <p>Available monday to friday</p>
-                            <p>6:00am - 5:00pm</p>
-                        </div>
-                    </div>
-                    <a href=""
-                        class="inline-block mt-3 bg-[#113E14] text-white px-16 py-2 rounded-full hover:bg-green-700">Contact</a>
-                </div>
-            </div>
-        </div>
-
-
-<div class="flex gap-12 bg-white p-6 rounded-xl shadow-xl/30">
-            <img loading="lazy" decoding="async" src="/resources/images/services/profile5.png" alt="Foto de perfil5"
-                class="w-60 h-60 rounded-full object-cover border-4 border-white shadow-md ml-5 mr-10">
-            <div class="flex-1 grid grid-cols-2 gap-4">
-
-                <div>
-                    <div class="flex">
-                        <img loading="lazy" decoding="async" src="resources/images/services/leave.png" alt="leave" class="w-4 h-4 mt-2 ml-2 mr-2">
-                        <h2 class="text-xl font-semibold">David Francisco Martínez Ramos</h2>
-                    </div>
-                    <div class="flex">
-                        <p class="text-gray-600">Landscreaping</p>
-                        <img loading="lazy" decoding="async" src="resources/images/services/spot.png" alt="spot" class="w-2 h-2 mt-2 ml-2 mr-2">
-                        <p class="text-gray-500">8 years of experience</p>
-                    </div>
-
-                    <div class="mt-3 flex">
-                        <img loading="lazy" decoding="async" src="resources/images/services/star.png" alt="star" class="w-4 h-4 ml-2 mr-2 mt-1 mb-1">
-                        <div class="flex">
-                            <p class="mt-1 mb-1">3.6</p>
-                            <p class="mt-1 mb-1 ml-1 font-semibold"> (37 reviews) </p>
-                        </div>
-                    </div>
-
-                    <div class="mt-3 flex flex-col gap-3">
-                        <div class="flex">
-                            <img loading="lazy" decoding="async" src="resources/images/services/ubication.png" alt="ubication"
-                                class="w-3 h-4 ml-2 mr-2 mt-0.5">
-                            <p>Santa Tecla</p>
-                        </div>
-                        <div class="flex">
-                            <img loading="lazy" decoding="async" src="resources/images/services/phone.png" alt="phone" class="w-4 h-4 ml-2 mr-2 mt-1">
-                            <p>+503 75733-8899</p>
-                        </div>
-                        <div class="flex">
-                            <img loading="lazy" decoding="async" src="resources/images/services/letter.png" alt="letter" class="w-4 h-4 ml-2 mr-2 mt-1">
-                            <p>francisco.ramos@gmail.com</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <div class="flex mb-4">
-                        <img loading="lazy" decoding="async" src="resources/images/services/services.png" alt="services" class="w-5 h-4 mt-1 ml-2 mr-2">
-                        <h2 class="font-semibold">Specific Services</h2>
-                    </div>
-                    <ul class=" text-gray-700 mb-4 list-disc">
-                        <li>Urban Garden Planning</li>
-                        <li>Bush trimming</li>
-                        <li>Fertilization organic</li>
-                    </ul>
-
-                    <div class="flex">
-                        <img loading="lazy" decoding="async" src="resources/images/services/calendar.png" alt="calendar" class="w-6 h-6 ml-2 mr-2 mt-2">
-                        <div class="">
-                            <p>Available monday to friday</p>
-                            <p>7:00am - 4:30pm</p>
-                        </div>
-                    </div>
-                    <a href=""
-                        class="inline-block mt-3 bg-[#113E14] text-white px-16 py-2 rounded-full hover:bg-green-700">Contact</a>
-                </div>
-            </div>
-        </div>
-
-
-<div class="flex gap-12 bg-white p-6 rounded-xl shadow-xl/30">
-            <img loading="lazy" decoding="async" src="/resources/images/services/profile6.png" alt="Foto de perfil6"
-                class="w-60 h-60 rounded-full object-cover border-4 border-white shadow-md ml-5 mr-10">
-            <div class="flex-1 grid grid-cols-2 gap-4">
-
-                <div>
-                    <div class="flex">
-                        <img loading="lazy" decoding="async" src="resources/images/services/leave.png" alt="leave" class="w-4 h-4 mt-2 ml-2 mr-2">
-                        <h2 class="text-xl font-semibold">Nelson David Cruz Pineda</h2>
-                    </div>
-                    <div class="flex">
-                        <p class="text-gray-600">Specialized pruning</p>
-                        <img loading="lazy" decoding="async" src="resources/images/services/spot.png" alt="spot" class="w-2 h-2 mt-2 ml-2 mr-2">
-                        <p class="text-gray-500">8 years of experience</p>
-                    </div>
-
-                    <div class="mt-3 flex">
-                        <img loading="lazy" decoding="async" src="resources/images/services/star.png" alt="star" class="w-4 h-4 ml-2 mr-2 mt-1 mb-1">
-                        <div class="flex">
-                            <p class="mt-1 mb-1">4.5</p>
-                            <p class="mt-1 mb-1 ml-1 font-semibold"> (34 reviews) </p>
-                        </div>
-                    </div>
-
-                    <div class="mt-3 flex flex-col gap-3">
-                        <div class="flex">
-                            <img loading="lazy" decoding="async" src="resources/images/services/ubication.png" alt="ubication"
-                                class="w-3 h-4 ml-2 mr-2 mt-0.5">
-                            <p>Santa Tecla</p>
-                        </div>
-                        <div class="flex">
-                            <img loading="lazy" decoding="async" src="resources/images/services/phone.png" alt="phone" class="w-4 h-4 ml-2 mr-2 mt-1">
-                            <p>+503 7764-2129</p>
-                        </div>
-                        <div class="flex">
-                            <img loading="lazy" decoding="async" src="resources/images/services/letter.png" alt="letter" class="w-4 h-4 ml-2 mr-2 mt-1">
-                            <p>nelson.pineda@gmail.com</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <div class="flex mb-4">
-                        <img loading="lazy" decoding="async" src="resources/images/services/services.png" alt="services" class="w-5 h-4 mt-1 ml-2 mr-2">
-                        <h2 class="font-semibold">Specific Services</h2>
-                    </div>
-                    <ul class=" text-gray-700 mb-4 list-disc">
-                        <li>Garden Maintenance</li>
-                        <li>Hedge Pruning</li>
-                        <li>Leaf removal</li>
-                    </ul>
-
-                    <div class="flex">
-                        <img loading="lazy" decoding="async" src="resources/images/services/calendar.png" alt="calendar" class="w-6 h-6 ml-2 mr-2 mt-2">
-                        <div class="">
-                            <p>Available monday to friday</p>
-                            <p>7:00am - 4:30pm</p>
-                        </div>
-                    </div>
-                    <a href=""
-                        class="inline-block mt-3 bg-[#113E14] text-white px-16 py-2 rounded-full hover:bg-green-700">Contact</a>
-                </div>
-            </div>
-        </div>
-
-
-<div class="flex gap-12 bg-white p-6 rounded-xl shadow-xl/30">
-            <img loading="lazy" decoding="async" src="/resources/images/services/profile7.png" alt="Foto de perfil7"
-                class="w-60 h-60 rounded-full object-cover border-4 border-white shadow-md ml-5 mr-10">
-            <div class="flex-1 grid grid-cols-2 gap-4">
-
-                <div>
-                    <div class="flex">
-                        <img loading="lazy" decoding="async" src="resources/images/services/leave.png" alt="leave" class="w-4 h-4 mt-2 ml-2 mr-2">
-                        <h2 class="text-xl font-semibold">Mario José Gonzáles Martínez</h2>
-                    </div>
-                    <div class="flex">
-                        <p class="text-gray-600">Specialized pruning</p>
-                        <img loading="lazy" decoding="async" src="resources/images/services/spot.png" alt="spot" class="w-2 h-2 mt-2 ml-2 mr-2">
-                        <p class="text-gray-500">2 years of experience</p>
-                    </div>
-
-                    <div class="mt-3 flex">
-                        <img loading="lazy" decoding="async" src="resources/images/services/star.png" alt="star" class="w-4 h-4 ml-2 mr-2 mt-1 mb-1">
-                        <div class="flex">
-                            <p class="mt-1 mb-1">3.5</p>
-                            <p class="mt-1 mb-1 ml-1 font-semibold"> (24 reviews) </p>
-                        </div>
-                    </div>
-
-                    <div class="mt-3 flex flex-col gap-3">
-                        <div class="flex">
-                            <img loading="lazy" decoding="async" src="resources/images/services/ubication.png" alt="ubication"
-                                class="w-3 h-4 ml-2 mr-2 mt-0.5">
-                            <p>Santa Ana</p>
-                        </div>
-                        <div class="flex">
-                            <img loading="lazy" decoding="async" src="resources/images/services/phone.png" alt="phone" class="w-4 h-4 ml-2 mr-2 mt-1">
-                            <p>+503 3356-8879</p>
-                        </div>
-                        <div class="flex">
-                            <img loading="lazy" decoding="async" src="resources/images/services/letter.png" alt="letter" class="w-4 h-4 ml-2 mr-2 mt-1">
-                            <p>mario.gonzales@gmail.com</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <div class="flex mb-4">
-                        <img loading="lazy" decoding="async" src="resources/images/services/services.png" alt="services" class="w-5 h-4 mt-1 ml-2 mr-2">
-                        <h2 class="font-semibold">Specific Services</h2>
-                    </div>
-                    <ul class=" text-gray-700 mb-4 list-disc">
-                        <li>Plant watering</li>
-                        <li>Bug removal</li>
-                        <li>Leaf removal</li>
-                    </ul>
-
-                    <div class="flex">
-                        <img loading="lazy" decoding="async" src="resources/images/services/calendar.png" alt="calendar" class="w-6 h-6 ml-2 mr-2 mt-2">
-                        <div class="">
-                            <p>Available monday to friday</p>
-                            <p>7:00am - 4:00pm</p>
-                        </div>
-                    </div>
-                    <a href=""
-                        class="inline-block mt-3 bg-[#113E14] text-white px-16 py-2 rounded-full hover:bg-green-700">Contact</a>
-                </div>
-            </div>
-        </div>
-
-
-<div class="flex gap-12 bg-white p-6 rounded-xl shadow-xl/30">
-            <img loading="lazy" decoding="async" src="/resources/images/services/profile8.png" alt="Foto de perfil8"
-                class="w-60 h-60 rounded-full object-cover border-4 border-white shadow-md ml-5 mr-10">
-            <div class="flex-1 grid grid-cols-2 gap-4">
-
-                <div>
-                    <div class="flex">
-                        <img loading="lazy" decoding="async" src="resources/images/services/leave.png" alt="leave" class="w-4 h-4 mt-2 ml-2 mr-2">
-                        <h2 class="text-xl font-semibold">Marta Melissa de Paz Rivas</h2>
-                    </div>
-                    <div class="flex">
-                        <p class="text-gray-600">Specialized pruning</p>
-                        <img loading="lazy" decoding="async" src="resources/images/services/spot.png" alt="spot" class="w-2 h-2 mt-2 ml-2 mr-2">
-                        <p class="text-gray-500">9 years of experience</p>
-                    </div>
-
-                    <div class="mt-3 flex">
-                        <img loading="lazy" decoding="async" src="resources/images/services/star.png" alt="star" class="w-4 h-4 ml-2 mr-2 mt-1 mb-1">
-                        <div class="flex">
-                            <p class="mt-1 mb-1">4.5</p>
-                            <p class="mt-1 mb-1 ml-1 font-semibold"> (40 reviews) </p>
-                        </div>
-                    </div>
-
-                    <div class="mt-3 flex flex-col gap-3">
-                        <div class="flex">
-                            <img loading="lazy" decoding="async" src="resources/images/services/ubication.png" alt="ubication"
-                                class="w-3 h-4 ml-2 mr-2 mt-0.5">
-                            <p>Sonsonate</p>
-                        </div>
-                        <div class="flex">
-                            <img loading="lazy" decoding="async" src="resources/images/services/phone.png" alt="phone" class="w-4 h-4 ml-2 mr-2 mt-1">
-                            <p>+503 6756-4567</p>
-                        </div>
-                        <div class="flex">
-                            <img loading="lazy" decoding="async" src="resources/images/services/letter.png" alt="letter" class="w-4 h-4 ml-2 mr-2 mt-1">
-                            <p>marta.depaz@gmail.com</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <div class="flex mb-4">
-                        <img loading="lazy" decoding="async" src="resources/images/services/services.png" alt="services" class="w-5 h-4 mt-1 ml-2 mr-2">
-                        <h2 class="font-semibold">Specific Services</h2>
-                    </div>
-                    <ul class=" text-gray-700 mb-4 list-disc">
-                        <li>Plant watering</li>
-                        <li>Urban Garden Planning</li>
-                        <li>Leaf removal</li>
-                    </ul>
-
-                    <div class="flex">
-                        <img loading="lazy" decoding="async" src="resources/images/services/calendar.png" alt="calendar" class="w-6 h-6 ml-2 mr-2 mt-2">
-                        <div class="">
-                            <p>Available monday to friday</p>
-                            <p>9:00am - 7:30pm</p>
-                        </div>
-                    </div>
-                    <a href=""
-                        class="inline-block mt-3 bg-[#113E14] text-white px-16 py-2 rounded-full hover:bg-green-700">Contact</a>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</main>
-
+      @!component('components/services/provider-card', {
+        name: 'Valeria Beatriz Campos Herrera',
+        photo: '/resources/images/services/profile4.png',
+        specialty: 'Lawn care',
+        experience: '7 years of experience',
+        rating: '5.0',
+        reviews: '40',
+        location: 'Santa Tecla',
+        phone: '+503 7544-0876',
+        email: 'beatriz.campos@gmail.com',
+        services: ['Soil amendment', 'Tree planting', 'Organic fertilization'],
+        schedule: 'Available Monday to Friday',
+        hours: '6:00 AM - 5:00 PM'
+      })
+    </section>
+  </main>
 </div>
 @end

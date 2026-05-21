@@ -60,19 +60,19 @@
             <a href="/araceae"
                 class="group w-20 h-20 rounded-full bg-white/50 backdrop-blur-md flex items-center justify-center transition-all duration-500 hover:scale-110 hover:bg-[#D3DCCB]">
 
-                <img loading="lazy" decoding="async" src="public\plants/icon.flower.png"
+                <img loading="lazy" decoding="async" src="/plants/icon.flower.png"
                     class="w-10 h-10 transition-all duration-500 group-hover:scale-110" />
             </a>
 
             <a href="/amaryllidaceae"
                 class="group w-20 h-20 rounded-full bg-[#6C8E6B] flex items-center justify-center transition-all duration-500 hover:scale-110 hover:rotate-6">
-                <img loading="lazy" decoding="async" src="public\plants/icon.vegetables.png"
+                <img loading="lazy" decoding="async" src="/plants/icon.vegetables.png"
                     class="w-10 h-10 transition-all duration-500 group-hover:scale-110" />
             </a>
 
             <a href="/cactaceae"
                 class="group w-20 h-20 rounded-full bg-white/50 backdrop-blur-md flex items-center justify-center transition-all duration-500 hover:scale-110 hover:bg-[#D3DCCB]">
-                <img loading="lazy" decoding="async" src="public\plants/icon.plant.png"
+                <img loading="lazy" decoding="async" src="/plants/icon.plant.png"
                     class="w-10 h-10 transition-all duration-500 group-hover:scale-110" />
             </a>
         </div>
@@ -80,14 +80,16 @@
 
         @each((plants, familyName, index) in horticulturalPlants)
         <div id="{{ familyName }}" class="category-section grid grid-cols-3 gap-12 {{ index != 0 ? 'hidden' : '' }}">
-            @each(plant in plants)
-            @component('components/plants/plant-card', {
-            imageSrc: plant.image,
-            imageAlt: plant.imageAlt,
-            title: plant.name,
-            scientificName: plant.scientificName
-            })
-            @end
+            @each((plant, plantIndex) in plants)
+            <div id="plant-{{ familyName }}-{{ plantIndex }}" class="plant-catalog-anchor scroll-mt-32 rounded-[42px] transition-all duration-500" data-plant-card>
+                @component('components/plants/plant-card', {
+                imageSrc: plant.image,
+                imageAlt: plant.alt,
+                title: plant.name,
+                scientificName: plant.scientificName
+                })
+                @end
+            </div>
             @endeach
         </div>
         @end
