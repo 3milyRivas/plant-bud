@@ -87,7 +87,7 @@ router
     router.get('/profile/media/:kind/:fileName', [ProfilesController, 'media']).as('profile.media')
     router.post('/profile', [ProfilesController, 'update']).as('profile.update')
   })
-  .use(middleware.auth())
+    .use(middleware.auth())
 
 router.on('/nurseries').render('pages/client/nurseries', { nurseries })
 /* gardeners views */
