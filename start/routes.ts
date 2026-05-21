@@ -1,10 +1,11 @@
 import { middleware } from '#start/kernel'
 import { controllers } from '#generated/controllers'
 import router from '@adonisjs/core/services/router'
-import ornamentalPlants from '#data/ornamental_plants'
+import ornamentalPlants from '#data/ornamentalPlants'
 import horticulturalPlants from '#data/horticulturalPlants'
 import succulentPlants from '#data/succulentPlants'
 import nurseries from '#data/nurseries'
+
 
 const GardenDesignerController = () => import('#controllers/garden_designers_controller')
 const HomepagesController = () => import('#controllers/homepages_controller')
