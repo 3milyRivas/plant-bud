@@ -23,3 +23,31 @@ Start the app and the garden designer AI service together:
 ```bash
 npm run dev
 ```
+
+## Demo bots
+
+Create realistic demo users, posts, follows, likes, comments, polls, reviews, services, and nursery products:
+
+```bash
+npm run demo:bots
+```
+
+Rebuild the demo dataset:
+
+```bash
+npm run demo:bots -- --refresh
+```
+
+Use Pexels images when `PEXELS_API_KEY` is available:
+
+```bash
+npm run demo:bots -- --refresh --with-pexels
+```
+
+Remove only the demo bot dataset:
+
+```bash
+npm run demo:bots -- --cleanup
+```
+
+Demo accounts use the `@bot.plantbud.test` email domain and default password `PlantBudDemo123!`.

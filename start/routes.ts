@@ -77,6 +77,9 @@ router
       .post('/users/:username/follow', [CommunityController, 'toggleFollow'])
       .as('community.users.follow')
     router
+      .post('/users/:username/favorite', [CommunityController, 'toggleFavoriteAccount'])
+      .as('community.users.favorite')
+    router
       .post('/users/:username/reviews', [CommunityController, 'storeReview'])
       .as('community.users.reviews.store')
     router.get('/profile', [ProfilesController, 'show']).as('profile')

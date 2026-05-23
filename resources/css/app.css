@@ -153,3 +153,134 @@ input[type='password']::-webkit-credentials-auto-fill-button {
 .plant-catalog-highlight {
   animation: plantCatalogGlow 2.8s ease both;
 }
+
+.community-search-results-scroll::-webkit-scrollbar {
+  width: 0.45rem;
+}
+
+.community-search-results-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.community-search-results-scroll::-webkit-scrollbar-thumb {
+  background: rgb(237 231 214 / 0.55);
+  border-radius: 999px;
+}
+
+.community-search-results-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(17 62 20 / 0.3) transparent;
+}
+
+.community-sidebar-shell {
+  --community-sidebar-height: calc(100vh - 8rem);
+  --community-sidebar-top: 7rem;
+  top: var(--community-sidebar-top);
+  transition: top 280ms ease;
+}
+
+.community-navbar-away .community-sidebar-shell {
+  --community-sidebar-height: calc(100vh - 2rem);
+  --community-sidebar-top: 1rem;
+}
+
+.community-sidebar-scroll {
+  --community-sidebar-mask: linear-gradient(
+    to bottom,
+    transparent 0,
+    #000 0.65rem,
+    #000 calc(100% - 2rem),
+    rgb(0 0 0 / 0.82) calc(100% - 0.9rem),
+    transparent 100%
+  );
+  --community-sidebar-away-mask: linear-gradient(
+    to bottom,
+    transparent 0,
+    rgb(0 0 0 / 0.65) 0.75rem,
+    #000 2.25rem,
+    #000 calc(100% - 2rem),
+    rgb(0 0 0 / 0.82) calc(100% - 0.9rem),
+    transparent 100%
+  );
+  mask-image: var(--community-sidebar-mask);
+  max-height: var(--community-sidebar-height);
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: rgb(237 231 214 / 0.65) transparent;
+  -webkit-mask-image: var(--community-sidebar-mask);
+  transition: max-height 280ms ease;
+}
+
+.community-navbar-away .community-sidebar-scroll {
+  mask-image: var(--community-sidebar-away-mask);
+  -webkit-mask-image: var(--community-sidebar-away-mask);
+}
+
+.community-sidebar-scroll::-webkit-scrollbar {
+  width: 0.45rem;
+}
+
+.community-sidebar-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.community-sidebar-scroll::-webkit-scrollbar-thumb {
+  background: rgb(237 231 214 / 0.65);
+  border-radius: 999px;
+}
+
+.community-favorite-accounts-scroll {
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: rgb(237 231 214 / 0.65) transparent;
+}
+
+.community-favorite-accounts-scroll::-webkit-scrollbar {
+  width: 0.45rem;
+}
+
+.community-favorite-accounts-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.community-favorite-accounts-scroll::-webkit-scrollbar-thumb {
+  background: rgb(237 231 214 / 0.65);
+  border-radius: 999px;
+}
+
+details[open] .app-navbar-profile-menu {
+  animation: appNavbarProfileMenuIn 180ms ease both;
+}
+
+.app-navbar-profile-menu.is-entering {
+  animation: appNavbarProfileMenuIn 180ms ease both;
+}
+
+@keyframes appNavbarProfileMenuIn {
+  from {
+    opacity: 0;
+    transform: translateY(-0.45rem) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.community-lazy-media {
+  opacity: 0;
+  transform: scale(0.992);
+  transition:
+    opacity 360ms ease,
+    transform 360ms ease;
+}
+
+.community-lazy-media.is-loaded {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.community-comments-panel:not(.hidden) {
+  animation: softPop 220ms ease both;
+}

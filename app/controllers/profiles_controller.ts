@@ -1,10 +1,12 @@
 import AccountLink from '#models/account_link'
 import AccountProfile from '#models/account_profile'
 import CommunityPost from '#models/community_post'
+import Follow from '#models/follow'
 import GardenerProfile from '#models/gardener_profile'
 import GardenerService from '#models/gardener_service'
 import NurseryProfile from '#models/nursery_profile'
 import ProfileReview from '#models/profile_review'
+import User from '#models/user'
 import { profileValidator } from '#validators/profile'
 import {
   redirectBackWithFormErrors,
@@ -105,6 +107,13 @@ export default class ProfilesController {
       .orderBy('createdAt', 'desc')
       .limit(9)
     const roleDetails = await this.getRoleProfileDetails(user)
+    const [stats, profileRelations] = await Promise.all([
+      this.getProfileStats(user.id, accountProfile, {
+        phone: user.phone,
+        socialLinks: accountLinks.length,
+      }),
+      this.getProfileRelations(user.id),
+    ])
 
     return view.render('pages/profile', {
       user,
@@ -113,10 +122,8 @@ export default class ProfilesController {
       recentPosts,
       ...roleDetails,
       avatarInitial: this.getProfileInitial(accountProfile, user),
-      stats: await this.getProfileStats(user.id, accountProfile, {
-        phone: user.phone,
-        socialLinks: accountLinks.length,
-      }),
+      stats,
+      profileRelations,
     })
   }
 
@@ -1022,10 +1029,11 @@ export default class ProfilesController {
     accountProfile: AccountProfile,
     options: { phone?: string | null; socialLinks?: number } = {}
   ) {
-    const [posts, followers, following, likes, favorites, comments] = await Promise.all([
+    const [posts, followers, following, friends, likes, favorites, comments] = await Promise.all([
       this.countRows('community_posts', 'user_id', userId),
       this.countRows('follows', 'following_id', userId),
       this.countRows('follows', 'follower_id', userId),
+      this.countMutualFriends(userId),
       this.countRows('post_reactions', 'user_id', userId, { type: 'like' }),
       this.countRows('post_reactions', 'user_id', userId, { type: 'favorite' }),
       this.countRows('post_comments', 'user_id', userId),
@@ -1045,11 +1053,91 @@ export default class ProfilesController {
       posts,
       followers,
       following,
+      friends,
       likes,
       favorites,
       comments,
       reliability: Math.round((reliabilitySignals / 7) * 100),
     }
+  }
+
+  private async getProfileRelations(userId: number) {
+    const [followers, following, friendIds] = await Promise.all([
+      Follow.query()
+        .where('followingId', userId)
+        .preload('follower', (query) => query.preload('accountProfile'))
+        .orderBy('createdAt', 'desc')
+        .limit(80),
+      Follow.query()
+        .where('followerId', userId)
+        .preload('following', (query) => query.preload('accountProfile'))
+        .orderBy('createdAt', 'desc')
+        .limit(80),
+      this.getFriendIds(userId),
+    ])
+    const friendSet = new Set(friendIds)
+
+    return {
+      followers: followers.map((follow) =>
+        this.formatRelationUser(follow.follower, userId, friendSet)
+      ),
+      following: following.map((follow) =>
+        this.formatRelationUser(follow.following, userId, friendSet)
+      ),
+      friends: following
+        .filter((follow) => friendSet.has(follow.followingId))
+        .map((follow) => this.formatRelationUser(follow.following, userId, friendSet)),
+    }
+  }
+
+  private formatRelationUser(user: User, currentUserId: number, friendIds: Set<number>) {
+    const profile = user.accountProfile || null
+    const displayName = profile?.displayName || user.fullName || user.username
+    const initial = Array.from((displayName || user.username || 'P').trim())[0] || 'P'
+
+    return {
+      id: user.id,
+      username: user.username,
+      displayName,
+      role: user.role,
+      roleLabel: this.roleLabel(user.role),
+      avatarUrl: this.profileMediaUrl(user.id, profile?.avatarUrl || user.profilePicture),
+      initial: initial.toLocaleUpperCase('en'),
+      relationLabel: user.id === currentUserId ? 'You' : friendIds.has(user.id) ? 'Friend' : null,
+    }
+  }
+
+  private async getFriendIds(userId: number) {
+    const [followingRows, followerRows] = await Promise.all([
+      Follow.query().where('followerId', userId).select('followingId'),
+      Follow.query().where('followingId', userId).select('followerId'),
+    ])
+    const followerIds = new Set(followerRows.map((row) => row.followerId))
+
+    return followingRows.map((row) => row.followingId).filter((id) => followerIds.has(id))
+  }
+
+  private async countMutualFriends(userId: number) {
+    return (await this.getFriendIds(userId)).length
+  }
+
+  private profileMediaUrl(userId: number, url?: string | null) {
+    if (!url) return null
+
+    const legacySecureUrl = url.match(/^\/profile\/media\/(avatar|banner)\/([^/]+)$/)
+
+    if (legacySecureUrl) {
+      return `/profile/media/${userId}/${legacySecureUrl[1]}/${legacySecureUrl[2]}`
+    }
+
+    return url
+  }
+
+  private roleLabel(role: string) {
+    if (role === 'gardener') return 'Gardener'
+    if (role === 'nursery') return 'Nursery'
+
+    return 'Client'
   }
 
   private async countRows(

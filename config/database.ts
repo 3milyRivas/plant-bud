@@ -27,9 +27,9 @@ const dbConfig = defineConfig({
         paths: ['database/migrations'],
       },
       /**
-       * Emit SQL queries to the logger in development.
+       * Emit SQL queries only when explicitly needed.
        */
-      debug: app.inDev,
+      debug: app.inDev && process.env.DB_DEBUG === 'true',
     },
 
     /**

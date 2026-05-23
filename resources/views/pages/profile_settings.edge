@@ -31,25 +31,35 @@
     <div class="absolute bottom-10 left-10 h-96 w-96 rounded-full bg-white/10 blur-3xl"></div>
   </div>
 
-  <header class="relative z-20 px-5 py-5 lg:px-10">
-    <div class="mx-auto flex max-w-6xl items-center justify-between rounded-full border border-white/10 bg-white/10 px-5 py-4 shadow-[0_18px_55px_rgba(0,0,0,0.18)] backdrop-blur-2xl">
-      <a href="/profile" class="flex items-center gap-3">
-        <img src="/resources/images/essential/logo.png" alt="" class="h-11 w-11 object-contain drop-shadow-lg">
-        <span class="hidden text-xl font-black text-white sm:block">Profile<span class="text-[#EDE7D6]"> Settings</span></span>
-      </a>
-
-      <div class="flex items-center gap-3">
-        <a href="/profile" class="rounded-full bg-[#EDE7D6] px-5 py-2.5 text-sm font-black text-[#1E3D19] shadow-lg transition hover:-translate-y-0.5 hover:scale-[1.02]">
-          View profile
-        </a>
-        @form({ route: 'session.destroy', method: 'POST' })
-          <button type="submit" class="rounded-full border border-white/10 bg-white/10 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-white/20">
-            Logout
-          </button>
-        @end
-      </div>
-    </div>
-  </header>
+  @!component('components/app-navbar', {
+    section: 'Profile settings',
+    active: 'settings',
+    maxWidth: 'max-w-[min(1500px,calc(100vw-2rem))]',
+    avatarUrl,
+    avatarInitial,
+    displayName,
+    roleLabel: user.role,
+    items: [
+      {
+        key: 'profile',
+        href: '/profile',
+        label: 'Profile',
+        icon: '',
+      },
+      {
+        key: 'community',
+        href: '/community',
+        label: 'Community',
+        icon: '/resources/images/community/community.png',
+      },
+      {
+        key: 'settings',
+        href: '/profile/settings',
+        label: 'Settings',
+        icon: '',
+      },
+    ],
+  })
 
   <main class="relative z-10 mx-auto max-w-6xl px-5 pb-16 lg:px-10">
     @form({

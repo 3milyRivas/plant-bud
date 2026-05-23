@@ -48,12 +48,24 @@ export default class CommunityController {
   async index({ auth, view, session }: HttpContext) {
     const user = auth.user!
     const viewer = await this.getViewerProfile(user)
-    const posts = await this.getFeedPosts(user)
+    const [posts, suggestions, trendingHashtags, favoriteAccounts, friendAccounts, friendActivity] =
+      await Promise.all([
+        this.getFeedPosts(user),
+        this.getSuggestedUsers(user),
+        this.getTrendingHashtags(),
+        this.getFavoriteAccounts(user),
+        this.getFriendAccounts(user),
+        this.getFriendActivity(user),
+      ])
 
     return view.render('pages/community', {
       viewer,
       posts,
-      suggestions: await this.getSuggestedUsers(user),
+      suggestions,
+      trendingHashtags,
+      favoriteAccounts,
+      friendAccounts,
+      friendActivity,
       searchError: session.flashMessages.get('communitySearchError'),
       formErrors: session.flashMessages.get('errors') || {},
       old: session.flashMessages.get('old') || {},
@@ -85,12 +97,25 @@ export default class CommunityController {
     }
 
     const isOwnProfile = currentUser.id === profileUser.id
-    const [profilePosts, savedPosts, isFollowing, stats, accountLinks, publicRoleDetails] =
+    const [
+      profilePosts,
+      savedPosts,
+      isFollowing,
+      isFriend,
+      isFavoriteAccount,
+      stats,
+      profileRelations,
+      accountLinks,
+      publicRoleDetails,
+    ] =
       await Promise.all([
         this.getUserPosts(profileUser, currentUser),
         isOwnProfile ? this.getFavoritePosts(profileUser, currentUser) : [],
         this.isFollowing(currentUser.id, profileUser.id),
+        isOwnProfile ? false : this.isFriend(currentUser.id, profileUser.id),
+        isOwnProfile ? false : this.isFavoriteAccount(currentUser.id, profileUser.id),
         this.getUserStats(profileUser.id),
+        this.getProfileRelations(profileUser, currentUser),
         AccountLink.query().where('userId', profileUser.id).orderBy('sortOrder', 'asc'),
         this.getPublicRoleDetails(profileUser),
       ])
@@ -99,12 +124,15 @@ export default class CommunityController {
       viewer: await this.getViewerProfile(currentUser),
       profileUser: this.formatUser(profileUser),
       profileStats: stats,
+      profileRelations,
       posts: profilePosts,
       savedPosts,
       accountLinks: this.formatAccountLinks(accountLinks),
       publicRoleDetails,
       isOwnProfile,
       isFollowing,
+      isFriend,
+      isFavoriteAccount,
     })
   }
 
@@ -358,17 +386,19 @@ export default class CommunityController {
 
   async searchSuggestions({ request, response }: HttpContext) {
     const rawSearch = (request.input('q') || '').toString().trim()
+    const isProfileSearch = rawSearch.startsWith('@')
+    const isHashtagSearch = rawSearch.startsWith('#')
     const profileQuery = this.normalizeUsernameSearch(rawSearch)
     const hashtagQuery = this.normalizeHashtagSearch(rawSearch)
     const [users, hashtags] = await Promise.all([
-      profileQuery && !rawSearch.startsWith('#')
+      profileQuery && !isHashtagSearch
         ? User.query()
             .where('username', 'like', `${profileQuery}%`)
             .preload('accountProfile')
             .orderBy('username', 'asc')
             .limit(6)
         : [],
-      hashtagQuery
+      hashtagQuery && !isProfileSearch
         ? db
             .from('post_hashtags')
             .where('tag', 'like', `${hashtagQuery}%`)
@@ -399,10 +429,25 @@ export default class CommunityController {
       return response.redirect().toRoute('community.index')
     }
 
+    const [viewer, posts, suggestions, trendingHashtags, favoriteAccounts, friendAccounts, friendActivity] =
+      await Promise.all([
+        this.getViewerProfile(user),
+        this.getHashtagPosts(tag, user),
+        this.getSuggestedUsers(user),
+        this.getTrendingHashtags(),
+        this.getFavoriteAccounts(user),
+        this.getFriendAccounts(user),
+        this.getFriendActivity(user),
+      ])
+
     return view.render('pages/community', {
-      viewer: await this.getViewerProfile(user),
-      posts: await this.getHashtagPosts(tag, user),
-      suggestions: await this.getSuggestedUsers(user),
+      viewer,
+      posts,
+      suggestions,
+      trendingHashtags,
+      favoriteAccounts,
+      friendAccounts,
+      friendActivity,
       searchError: session.flashMessages.get('communitySearchError'),
       formErrors: session.flashMessages.get('errors') || {},
       old: session.flashMessages.get('old') || {},
@@ -500,7 +545,48 @@ export default class CommunityController {
       return response.json({
         ok: true,
         following,
+        isFriend: await this.isFriend(currentUser.id, targetUser.id),
         followers: await this.countRows('follows', 'following_id', targetUser.id),
+      })
+    }
+
+    return response.redirect().back()
+  }
+
+  async toggleFavoriteAccount({ auth, params, request, response }: HttpContext) {
+    const currentUser = auth.user!
+    const username = this.normalizeUsernameSearch(params.username)
+    const targetUser = await User.query().where('username', username).first()
+
+    if (!targetUser || targetUser.id === currentUser.id) {
+      return response.notFound('Profile not found')
+    }
+
+    const existingFavorite = await db
+      .from('favorite_accounts')
+      .where('user_id', currentUser.id)
+      .where('favorite_user_id', targetUser.id)
+      .first()
+    let favorite = false
+
+    if (existingFavorite) {
+      await db
+        .from('favorite_accounts')
+        .where('user_id', currentUser.id)
+        .where('favorite_user_id', targetUser.id)
+        .delete()
+    } else {
+      await db.table('favorite_accounts').insert({
+        user_id: currentUser.id,
+        favorite_user_id: targetUser.id,
+      })
+      favorite = true
+    }
+
+    if (this.wantsJson(request)) {
+      return response.json({
+        ok: true,
+        favorite,
       })
     }
 
@@ -770,9 +856,139 @@ export default class CommunityController {
       query.whereNotIn('id', followingIds)
     }
 
-    const users = await query.limit(5)
+    const users = await query.limit(12)
 
-    return users.map((suggestedUser) => this.formatUser(suggestedUser))
+    return users
+      .sort(
+        (first, second) =>
+          this.suggestionRolePriority(first.role) - this.suggestionRolePriority(second.role)
+      )
+      .slice(0, 5)
+      .map((suggestedUser) => this.formatUser(suggestedUser))
+  }
+
+  private suggestionRolePriority(role: string) {
+    if (role === 'gardener') return 0
+    if (role === 'nursery') return 1
+
+    return 2
+  }
+
+  private async getTrendingHashtags() {
+    const rows = await db
+      .from('post_hashtags')
+      .select('tag')
+      .count('* as total')
+      .groupBy('tag')
+      .orderBy('total', 'desc')
+      .limit(8)
+
+    return rows.map((row) => ({
+      tag: String(row.tag),
+      postsCount: Number(row.total || 0),
+    }))
+  }
+
+  private async getFavoriteAccounts(user: AuthUser) {
+    const favoriteRows = await db
+      .from('favorite_accounts')
+      .where('user_id', user.id)
+      .select('favorite_user_id')
+      .orderBy('created_at', 'desc')
+      .limit(40)
+    const favoriteIds = favoriteRows.map((row) => Number(row.favorite_user_id)).filter(Boolean)
+
+    if (!favoriteIds.length) return []
+
+    const users = await User.query()
+      .whereIn('id', favoriteIds)
+      .preload('accountProfile')
+    const order = new Map(favoriteIds.map((id, index) => [id, index]))
+
+    return users
+      .sort((first, second) => (order.get(first.id) ?? 0) - (order.get(second.id) ?? 0))
+      .map((account) => ({
+        ...this.formatUser(account),
+        relationLabel: 'Favorite',
+      }))
+  }
+
+  private async getFriendAccounts(user: AuthUser) {
+    const friendIds = await this.getFriendIds(user.id)
+
+    if (!friendIds.length) return []
+
+    const users = await User.query()
+      .whereIn('id', friendIds.slice(0, 40))
+      .preload('accountProfile')
+    const order = new Map(friendIds.map((id, index) => [id, index]))
+
+    return users
+      .sort((first, second) => (order.get(first.id) ?? 0) - (order.get(second.id) ?? 0))
+      .map((account) => ({
+        ...this.formatUser(account),
+        relationLabel: 'Friend',
+      }))
+  }
+
+  private async getFriendActivity(user: AuthUser) {
+    const friendIds = await this.getFriendIds(user.id)
+
+    if (!friendIds.length) return []
+
+    const posts = await this.basePostQuery()
+      .whereIn('userId', friendIds)
+      .where('visibility', 'public')
+      .orderBy('createdAt', 'desc')
+      .limit(5)
+
+    return posts.map((post) => this.formatPost(post, user.id))
+  }
+
+  private async getFriendIds(userId: number) {
+    const [followingRows, followerRows] = await Promise.all([
+      Follow.query().where('followerId', userId).select('followingId'),
+      Follow.query().where('followingId', userId).select('followerId'),
+    ])
+    const followerIds = new Set(followerRows.map((row) => row.followerId))
+
+    return followingRows.map((row) => row.followingId).filter((id) => followerIds.has(id))
+  }
+
+  private async getProfileRelations(profileUser: User, currentUser: AuthUser) {
+    const [followers, following, friendIds] = await Promise.all([
+      Follow.query()
+        .where('followingId', profileUser.id)
+        .preload('follower', (query) => query.preload('accountProfile'))
+        .orderBy('createdAt', 'desc')
+        .limit(80),
+      Follow.query()
+        .where('followerId', profileUser.id)
+        .preload('following', (query) => query.preload('accountProfile'))
+        .orderBy('createdAt', 'desc')
+        .limit(80),
+      this.getFriendIds(currentUser.id),
+    ])
+    const friendSet = new Set(friendIds)
+
+    return {
+      followers: followers.map((follow) =>
+        this.formatRelationUser(follow.follower, currentUser.id, friendSet)
+      ),
+      following: following.map((follow) =>
+        this.formatRelationUser(follow.following, currentUser.id, friendSet)
+      ),
+      friends: following
+        .filter((follow) => friendSet.has(follow.followingId))
+        .map((follow) => this.formatRelationUser(follow.following, currentUser.id, friendSet)),
+    }
+  }
+
+  private formatRelationUser(user: User, currentUserId: number, friendIds: Set<number>) {
+    return {
+      ...this.formatUser(user),
+      relationLabel: user.id === currentUserId ? 'You' : friendIds.has(user.id) ? 'Friend' : null,
+    }
   }
 
   private async getPublicRoleDetails(user: User) {
@@ -1104,10 +1320,11 @@ export default class CommunityController {
   }
 
   private async getUserStats(userId: number) {
-    const [posts, followers, following, saved] = await Promise.all([
+    const [posts, followers, following, friends, saved] = await Promise.all([
       this.countRows('community_posts', 'user_id', userId),
       this.countRows('follows', 'following_id', userId),
       this.countRows('follows', 'follower_id', userId),
+      this.getFriendIds(userId).then((ids) => ids.length),
       db
         .from('post_reactions')
         .where('user_id', userId)
@@ -1120,6 +1337,7 @@ export default class CommunityController {
       posts,
       followers,
       following,
+      friends,
       saved: Number((saved as { total?: number | string } | null)?.total || 0),
     }
   }
@@ -1153,6 +1371,25 @@ export default class CommunityController {
       .first()
 
     return Boolean(follow)
+  }
+
+  private async isFriend(currentUserId: number, targetUserId: number) {
+    const [youFollow, followsYou] = await Promise.all([
+      this.isFollowing(currentUserId, targetUserId),
+      this.isFollowing(targetUserId, currentUserId),
+    ])
+
+    return youFollow && followsYou
+  }
+
+  private async isFavoriteAccount(currentUserId: number, targetUserId: number) {
+    const favorite = await db
+      .from('favorite_accounts')
+      .where('user_id', currentUserId)
+      .where('favorite_user_id', targetUserId)
+      .first()
+
+    return Boolean(favorite)
   }
 
   private safeExternalUrl(value?: string | null) {

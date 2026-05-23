@@ -18,25 +18,35 @@
     <div class="absolute bottom-10 right-10 h-96 w-96 rounded-full bg-white/10 blur-3xl"></div>
   </div>
 
-  <header class="relative z-20 px-5 py-5 lg:px-10">
-    <div class="mx-auto flex max-w-6xl items-center justify-between rounded-full border border-white/10 bg-white/10 px-5 py-4 shadow-[0_18px_55px_rgba(0,0,0,0.18)] backdrop-blur-2xl">
-      <a href="/homepage" class="flex items-center gap-3">
-        <img src="/resources/images/essential/logo.png" alt="" class="h-11 w-11 object-contain drop-shadow-lg">
-        <span class="hidden text-xl font-black text-white sm:block">Plant<span class="text-[#EDE7D6]"> Bud</span></span>
-      </a>
-
-      <div class="flex items-center gap-3">
-        <a href="/profile/settings" class="rounded-full bg-[#EDE7D6] px-5 py-2.5 text-sm font-black text-[#1E3D19] shadow-lg transition hover:-translate-y-0.5 hover:scale-[1.02]">
-          Settings
-        </a>
-        @form({ route: 'session.destroy', method: 'POST' })
-          <button type="submit" class="rounded-full border border-white/10 bg-white/10 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-white/20">
-            Logout
-          </button>
-        @end
-      </div>
-    </div>
-  </header>
+  @!component('components/app-navbar', {
+    section: 'Profile',
+    active: 'profile',
+    maxWidth: 'max-w-[min(1500px,calc(100vw-2rem))]',
+    avatarUrl,
+    avatarInitial,
+    displayName: publicDisplayName,
+    roleLabel: user.role,
+    items: [
+      {
+        key: 'homepage',
+        href: '/homepage',
+        label: 'Home',
+        icon: '/resources/images/essential/logo.png',
+      },
+      {
+        key: 'community',
+        href: '/community',
+        label: 'Community',
+        icon: '/resources/images/community/community.png',
+      },
+      {
+        key: 'settings',
+        href: '/profile/settings',
+        label: 'Settings',
+        icon: '',
+      },
+    ],
+  })
 
   <main class="relative z-10 mx-auto max-w-6xl px-5 pb-16 lg:px-10">
     @if(flashMessages.get('success'))
@@ -81,19 +91,23 @@
             </p>
           </div>
 
-          <div class="grid grid-cols-3 gap-3 rounded-[1.5rem] bg-white/12 p-3 text-center text-white backdrop-blur-xl lg:min-w-80">
+          <div class="grid grid-cols-2 gap-3 rounded-[1.5rem] bg-white/12 p-3 text-center text-white backdrop-blur-xl sm:grid-cols-4 lg:min-w-[26rem]">
             <div>
               <p class="text-2xl font-black">{{ stats.posts }}</p>
               <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#EDE7D6]">Posts</p>
             </div>
-            <div>
+            <button type="button" class="rounded-2xl transition hover:-translate-y-0.5 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-[#EDE7D6]/70" data-relations-open="followers">
               <p class="text-2xl font-black">{{ stats.followers }}</p>
               <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#EDE7D6]">Followers</p>
-            </div>
-            <div>
-              <p class="text-2xl font-black">{{ stats.following }}</p>
+            </button>
+            <button type="button" class="rounded-2xl transition hover:-translate-y-0.5 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-[#EDE7D6]/70" data-relations-open="following">
+              <p class="text-2xl font-black" data-following-count>{{ stats.following }}</p>
               <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#EDE7D6]">Following</p>
-            </div>
+            </button>
+            <button type="button" class="rounded-2xl transition hover:-translate-y-0.5 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-[#EDE7D6]/70" data-relations-open="friends">
+              <p class="text-2xl font-black" data-friends-count>{{ stats.friends }}</p>
+              <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#EDE7D6]">Friends</p>
+            </button>
           </div>
         </div>
 
@@ -328,5 +342,11 @@
       </section>
     </section>
   </main>
+
+  @!component('components/profile-relations-modal', {
+    relations: profileRelations,
+    showFriends: true,
+    canManage: true
+  })
 </div>
 @end

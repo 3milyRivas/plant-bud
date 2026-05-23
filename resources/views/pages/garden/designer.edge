@@ -13,48 +13,12 @@
         class="absolute inset-0 bg-gradient-to-br from-[#1E3D19]/70 via-[#728B6F]/55 to-[#6B8C6C]/70 pointer-events-none">
     </div>
 
-    <header class="w-full z-50 px-6 lg:px-10 pt-6">
-        <div
-            class="max-w-7xl mx-auto bg-white/10 backdrop-blur-xl border border-white/10 rounded-full px-6 py-4 flex items-center justify-between shadow-[0_10px_40px_rgba(0,0,0,0.15)]">
-
-            <div class="flex items-center gap-4 select-none">
-                <img src="/resources/images/essential/logo.png"
-                    class="w-14 pointer-events-none select-none hover:rotate-6 transition duration-500"
-                    alt="Plant Bud Logo">
-
-                <div>
-                    <h1 class="text-2xl font-black text-white tracking-wide">
-                        Plant <span class="text-[#EDE7D6]">Bud</span>
-                    </h1>
-                    <p class="text-xs font-bold tracking-[0.25em] uppercase text-white/60">
-                        Garden Designer
-                    </p>
-                </div>
-            </div>
-
-            <div class="flex items-center gap-3">
-
-                <a href="/homepage"
-                    class="inline-flex items-center gap-2 bg-white/10 text-white font-bold px-5 py-3 rounded-full border border-white/10 hover:bg-white/15 transition-all duration-300 select-none">
-                    Exit
-                </a>
-
-                <label for="upload"
-                    class="cursor-pointer inline-flex items-center gap-2 bg-white/10 text-white font-bold px-5 py-3 rounded-full border border-white/10 hover:bg-white/15 transition-all duration-300 select-none">
-                    Upload
-                </label>
-
-                <input id="upload" type="file" accept="image/*" class="hidden">
-
-                <button onclick="sendToBackend()"
-                    class="inline-flex items-center gap-2 bg-[#EDE7D6] text-[#1E3D19] font-black px-6 py-3 rounded-full hover:scale-105 transition-all duration-300 shadow-lg select-none">
-                    Generate AI
-                </button>
-
-            </div>
-
-        </div>
-    </header>
+    @!component('components/app-navbar', {
+        section: 'Garden designer',
+        toolMode: 'designer',
+        maxWidth: 'max-w-7xl',
+    })
+    <input id="upload" type="file" accept="image/*" class="hidden">
 
     <main class="relative z-10 pt-10 pb-10 px-6 lg:px-10 select-none">
 

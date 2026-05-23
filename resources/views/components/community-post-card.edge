@@ -2,7 +2,7 @@
   <div class="flex items-start justify-between gap-4">
     <a href="/users/{{ post.author.username }}" class="flex min-w-0 items-center gap-3">
       @if(post.author.avatarUrl)
-        <img src="{{ post.author.avatarUrl }}" alt="" class="h-12 w-12 flex-none rounded-full object-cover shadow-sm">
+        <img src="{{ post.author.avatarUrl }}" alt="" loading="lazy" decoding="async" class="h-12 w-12 flex-none rounded-full object-cover shadow-sm">
       @else
         <span class="flex h-12 w-12 flex-none items-center justify-center rounded-full bg-[#113E14] font-black text-[#EDE7D6] shadow-sm">
           {{ post.author.initial }}
@@ -35,7 +35,7 @@
 
   @if(post.mediaUrl)
     <div class="mt-4 overflow-hidden rounded-2xl border border-white/35 bg-[#113E14]/10">
-      <img src="{{ post.mediaUrl }}" alt="" class="mx-auto block max-h-[38rem] w-full object-contain">
+      <img src="{{ post.mediaUrl }}" alt="" loading="lazy" decoding="async" fetchpriority="low" class="community-lazy-media mx-auto block max-h-[38rem] w-full object-contain" data-community-lazy-image>
     </div>
   @endif
 
@@ -80,9 +80,10 @@
         </button>
       @end
 
-      <button type="button" class="flex items-center gap-2 rounded-full px-1 py-1 transition hover:bg-white/22" data-comment-focus>
+      <button type="button" class="flex items-center gap-2 rounded-full px-1 py-1 transition hover:bg-white/22" data-comment-toggle aria-expanded="false">
         <div class="h-5 w-5 bg-[url('/resources/images/community/community.png')] bg-cover bg-center"></div>
         <span class="text-sm font-black text-black/35" data-comment-count>{{ post.counts.comments }}</span>
+        <span class="hidden text-xs font-black text-black/35 sm:inline" data-comment-toggle-label>Comments</span>
       </button>
 
       @form({
@@ -103,28 +104,30 @@
     </button>
   </div>
 
-  <div class="mt-3 space-y-2" data-comments-list>
-    @each(comment in post.comments)
-      <div class="rounded-2xl bg-white/45 px-4 py-2">
-        <a href="/users/{{ comment.author.username }}" class="text-xs font-black text-[#113E14]">{{ '@' + comment.author.username }}</a>
-        <p class="text-sm font-semibold leading-6 text-black/70">{{ comment.body }}</p>
-      </div>
+  <div class="community-comments-panel mt-3 hidden rounded-3xl border border-white/25 bg-white/18 p-3" data-comments-panel>
+    <div class="space-y-2" data-comments-list>
+      @each(comment in post.comments)
+        <div class="rounded-2xl bg-white/45 px-4 py-2">
+          <a href="/users/{{ comment.author.username }}" class="text-xs font-black text-[#113E14]">{{ '@' + comment.author.username }}</a>
+          <p class="text-sm font-semibold leading-6 text-black/70">{{ comment.body }}</p>
+        </div>
+      @end
+    </div>
+
+    @form({
+      action: '/community/posts/' + post.id + '/comments',
+      method: 'POST',
+      class: 'mt-3 flex items-center gap-3',
+      'data-comment-form': true
+    })
+      @if(viewer.avatarUrl)
+        <img src="{{ viewer.avatarUrl }}" alt="" loading="lazy" decoding="async" class="h-11 w-11 flex-none rounded-full object-cover">
+      @else
+        <span class="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-[#113E14] font-black text-[#EDE7D6]">
+          {{ viewer.initial }}
+        </span>
+      @endif
+      <input name="body" maxlength="500" type="text" placeholder="Write your comment..." class="h-11 min-w-0 flex-1 rounded-full bg-white/72 px-4 text-sm font-semibold outline-none placeholder:text-black/35" data-comment-input>
     @end
   </div>
-
-  @form({
-    action: '/community/posts/' + post.id + '/comments',
-    method: 'POST',
-    class: 'mt-3 flex items-center gap-3',
-    'data-comment-form': true
-  })
-    @if(viewer.avatarUrl)
-      <img src="{{ viewer.avatarUrl }}" alt="" class="h-11 w-11 flex-none rounded-full object-cover">
-    @else
-      <span class="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-[#113E14] font-black text-[#EDE7D6]">
-        {{ viewer.initial }}
-      </span>
-    @endif
-    <input name="body" maxlength="500" type="text" placeholder="Write your comment..." class="h-11 min-w-0 flex-1 rounded-full bg-white/72 px-4 text-sm font-semibold outline-none placeholder:text-black/35" data-comment-input>
-  @end
 </article>

@@ -9,28 +9,12 @@
     <div class="absolute inset-0 bg-black/45"></div>
     <div class="absolute inset-0 bg-gradient-to-br from-[#1E3D19]/70 via-[#728B6F]/55 to-[#6B8C6C]/70"></div>
 
-    <header class="w-full z-50 px-6 lg:px-10 pt-6">
-        <div
-            class="max-w-7xl mx-auto bg-white/10 backdrop-blur-xl border border-white/10 rounded-full px-6 py-4 flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <img src="/resources/images/essential/logo.png" class="w-14">
-                <div>
-                    <h1 class="text-2xl font-black text-white">Plant <span class="text-[#EDE7D6]">Bud</span></h1>
-                    <p class="text-xs font-bold tracking-[0.25em] uppercase text-white/60">Plant Scanner</p>
-                </div>
-            </div>
-
-            <div class="flex gap-3">
-                <a href="/homepage"
-                    class="bg-white/10 text-white font-bold px-5 py-3 rounded-full border border-white/10">Exit</a>
-                <label for="plantUpload"
-                    class="cursor-pointer bg-white/10 text-white font-bold px-5 py-3 rounded-full border border-white/10">Upload</label>
-                <input id="plantUpload" type="file" accept="image/*" class="hidden">
-                <button id="scanBtn"
-                    class="bg-[#EDE7D6] text-[#1E3D19] font-black px-6 py-3 rounded-full">Analyze</button>
-            </div>
-        </div>
-    </header>
+    @!component('components/app-navbar', {
+        section: 'Plant scanner',
+        toolMode: 'scanner',
+        maxWidth: 'max-w-7xl',
+    })
+    <input id="plantUpload" type="file" accept="image/*" class="hidden">
 
     <main class="relative z-10 pt-10 pb-10 px-6 lg:px-10">
         <div class="max-w-7xl mx-auto grid grid-cols-1 xl:grid-cols-[360px_1fr] gap-8 min-h-[calc(100vh-11rem)]">

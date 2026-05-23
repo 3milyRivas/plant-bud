@@ -24,6 +24,7 @@ export type ScannedRoutes = {
     'community.notifications': { paramsTuple?: []; params?: {} }
     'community.users.show': { paramsTuple: [ParamValue]; params: {'username': ParamValue} }
     'community.users.follow': { paramsTuple: [ParamValue]; params: {'username': ParamValue} }
+    'community.users.favorite': { paramsTuple: [ParamValue]; params: {'username': ParamValue} }
     'community.users.reviews.store': { paramsTuple: [ParamValue]; params: {'username': ParamValue} }
     'profile': { paramsTuple?: []; params?: {} }
     'profile.settings': { paramsTuple?: []; params?: {} }
@@ -92,6 +93,7 @@ export type ScannedRoutes = {
     'community.posts.comments.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'community.polls.vote': { paramsTuple: [ParamValue,ParamValue]; params: {'pollId': ParamValue,'optionId': ParamValue} }
     'community.users.follow': { paramsTuple: [ParamValue]; params: {'username': ParamValue} }
+    'community.users.favorite': { paramsTuple: [ParamValue]; params: {'username': ParamValue} }
     'community.users.reviews.store': { paramsTuple: [ParamValue]; params: {'username': ParamValue} }
     'profile.update': { paramsTuple?: []; params?: {} }
     'session.store': { paramsTuple?: []; params?: {} }

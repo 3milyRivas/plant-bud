@@ -12,40 +12,11 @@
     <div class="absolute bottom-10 right-10 h-96 w-96 rounded-full bg-white/10 blur-3xl"></div>
   </div>
 
-  <header class="relative z-30 px-5 py-5 lg:px-10">
-    <div class="mx-auto flex max-w-6xl items-center justify-between rounded-full border border-white/10 bg-white/10 px-5 py-4 shadow-[0_18px_55px_rgba(0,0,0,0.18)] backdrop-blur-2xl">
-      <a href="/homepage" class="flex items-center gap-3">
-        <img src="/resources/images/essential/logo.png" alt="" class="h-11 w-11 object-contain drop-shadow-lg">
-        <span class="hidden text-xl font-black text-white sm:block">Plant<span class="text-[#EDE7D6]"> Bud</span></span>
-      </a>
-
-      <nav class="flex items-center gap-2" aria-label="Community navigation">
-        <a href="/community" class="h-10 w-10 rounded-xl bg-[#EDE7D6] bg-[url('/resources/images/community/community.png')] bg-contain bg-center bg-no-repeat shadow-md ring-2 ring-white/25 transition hover:-translate-y-0.5" aria-label="Community feed" title="Community"></a>
-        <a href="/favorites" class="h-10 w-10 rounded-xl bg-white/12 bg-[url('/resources/images/community/saved.png')] bg-contain bg-center bg-no-repeat shadow-sm transition hover:-translate-y-0.5 hover:bg-[#EDE7D6]" aria-label="Saved posts" title="Saved posts"></a>
-        <a href="/notification" class="h-10 w-10 rounded-xl bg-white/12 bg-[url('/resources/images/community/notifications.png')] bg-contain bg-center bg-no-repeat shadow-sm transition hover:-translate-y-0.5 hover:bg-[#EDE7D6]" aria-label="Notifications" title="Notifications"></a>
-      </nav>
-
-      <details class="group relative">
-        <summary class="list-none">
-          <span class="flex cursor-pointer items-center gap-3 rounded-full bg-white/12 py-1 pl-1 pr-4 text-white transition hover:bg-white/20">
-            @if(viewer.avatarUrl)
-              <img src="{{ viewer.avatarUrl }}" alt="" class="h-10 w-10 rounded-full object-cover">
-            @else
-              <span class="flex h-10 w-10 items-center justify-center rounded-full bg-[#EDE7D6] text-sm font-black text-[#1E3D19]">{{ viewer.initial }}</span>
-            @endif
-            <span class="hidden text-sm font-black sm:block">Profile</span>
-          </span>
-        </summary>
-        <div class="absolute right-0 mt-3 w-56 overflow-hidden rounded-3xl border border-white/20 bg-[#F7F3E8]/95 p-2 shadow-2xl backdrop-blur-2xl">
-          <a href="/profile" class="block rounded-2xl px-4 py-3 text-sm font-black text-[#1E3D19] transition hover:bg-white/70">View profile</a>
-          <a href="/profile/settings" class="block rounded-2xl px-4 py-3 text-sm font-black text-[#1E3D19] transition hover:bg-white/70">Settings</a>
-          @form({ action: '/logout', method: 'POST' })
-            <button type="submit" class="w-full rounded-2xl px-4 py-3 text-left text-sm font-black text-red-900 transition hover:bg-red-100/70">Log out</button>
-          @end
-        </div>
-      </details>
-    </div>
-  </header>
+  @!component('components/community/top-navbar', {
+    viewer,
+    active: 'community',
+    section: 'Profile'
+  })
 
   <main class="mx-auto max-w-6xl px-5 pb-20 lg:px-10">
     <section class="isolate overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/10 shadow-[0_30px_90px_rgba(0,0,0,0.22)] backdrop-blur-3xl">
@@ -77,6 +48,11 @@
               <span class="rounded-full bg-[#EDE7D6] px-3 py-1.5 text-xs font-black uppercase tracking-[0.16em] text-[#1E3D19]">
                 {{ profileUser.roleLabel }}
               </span>
+              @if(!isOwnProfile)
+                <span class="{{ isFriend ? '' : 'hidden' }} rounded-full border border-[#EDE7D6]/50 bg-white/16 px-3 py-1.5 text-xs font-black uppercase tracking-[0.16em] text-[#EDE7D6] shadow-lg backdrop-blur-xl" data-friend-badge>
+                  Friend
+                </span>
+              @endif
             </div>
             <p class="mt-2 text-base font-bold text-[#EDE7D6]">{{ '@' + profileUser.username }}</p>
             <p class="mt-4 max-w-2xl text-sm font-semibold leading-7 text-white/78">
@@ -99,6 +75,15 @@
                   <span data-follow-label>{{ isFollowing ? 'Following' : 'Follow' }}</span>
                 </button>
               @end
+              @form({
+                action: '/users/' + profileUser.username + '/favorite',
+                method: 'POST',
+                'data-favorite-account-form': true
+              })
+                <button type="submit" class="{{ isFavoriteAccount ? 'bg-[#EDE7D6] text-[#1E3D19]' : 'bg-white/15 text-white' }} w-full rounded-full px-6 py-3 text-sm font-black shadow-lg transition hover:-translate-y-0.5" data-favorite-account-button>
+                  <span data-favorite-account-label>{{ isFavoriteAccount ? 'Favorite' : 'Add favorite' }}</span>
+                </button>
+              @end
             @endif
           </div>
         </div>
@@ -108,14 +93,14 @@
             <p class="text-2xl font-black">{{ profileStats.posts }}</p>
             <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#EDE7D6]">Posts</p>
           </div>
-          <div class="rounded-2xl bg-white/10 p-4">
+          <button type="button" class="rounded-2xl bg-white/10 p-4 transition hover:-translate-y-0.5 hover:bg-white/16 focus:outline-none focus:ring-2 focus:ring-[#EDE7D6]/70" data-relations-open="followers">
             <p class="text-2xl font-black" data-followers-count>{{ profileStats.followers }}</p>
             <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#EDE7D6]">Followers</p>
-          </div>
-          <div class="rounded-2xl bg-white/10 p-4">
-            <p class="text-2xl font-black">{{ profileStats.following }}</p>
+          </button>
+          <button type="button" class="rounded-2xl bg-white/10 p-4 transition hover:-translate-y-0.5 hover:bg-white/16 focus:outline-none focus:ring-2 focus:ring-[#EDE7D6]/70" data-relations-open="following">
+            <p class="text-2xl font-black" data-following-count>{{ profileStats.following }}</p>
             <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#EDE7D6]">Following</p>
-          </div>
+          </button>
           @if(isOwnProfile)
             <div class="rounded-2xl bg-white/10 p-4">
               <p class="text-2xl font-black">{{ profileStats.saved }}</p>
@@ -313,6 +298,12 @@
       </aside>
     </section>
   </main>
+
+  @!component('components/profile-relations-modal', {
+    relations: profileRelations,
+    showFriends: isOwnProfile,
+    canManage: isOwnProfile
+  })
 </div>
 
 @end

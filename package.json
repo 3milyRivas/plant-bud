@@ -12,6 +12,7 @@
     "build": "node ace build",
     "dev": "node scripts/dev.mjs",
     "dev:web": "node ace serve --hmr",
+    "demo:bots": "node ace demo:bots",
     "setup": "node scripts/setup_python.mjs",
     "test": "node ace test",
     "lint": "eslint .",

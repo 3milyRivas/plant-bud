@@ -134,6 +134,177 @@ function initProfilePage() {
   initAvatarCropper(page)
 }
 
+function initProfileRelationsModal() {
+  const modal = document.querySelector('[data-profile-relations-modal]')
+
+  if (!modal || modal.dataset.relationsReady === 'true') return
+
+  const title = modal.querySelector('[data-profile-relations-title]')
+  const tabs = Array.from(modal.querySelectorAll('[data-relations-tab]'))
+  const panels = Array.from(modal.querySelectorAll('[data-profile-relations-panel]'))
+  const closeButtons = modal.querySelectorAll('[data-profile-relations-close]')
+  const openButtons = document.querySelectorAll('[data-relations-open]')
+  const unfollowForms = modal.querySelectorAll('[data-relation-unfollow-form]')
+  let previousBodyOverflow = ''
+
+  const setActivePanel = (type) => {
+    const requestedType = ['followers', 'following', 'friends'].includes(type) ? type : 'followers'
+    const activeType = panels.some((panel) => panel.dataset.profileRelationsPanel === requestedType)
+      ? requestedType
+      : 'followers'
+
+    title.textContent =
+      activeType === 'following' ? 'Following' : activeType === 'friends' ? 'Friends' : 'Followers'
+
+    tabs.forEach((tab) => {
+      const isActive = tab.dataset.relationsTab === activeType
+
+      tab.classList.toggle('bg-[#1E3D19]', isActive)
+      tab.classList.toggle('text-[#EDE7D6]', isActive)
+      tab.classList.toggle('shadow-md', isActive)
+      tab.classList.toggle('bg-white', !isActive)
+      tab.classList.toggle('text-[#1E3D19]', !isActive)
+      tab.classList.toggle('shadow-sm', !isActive)
+    })
+
+    panels.forEach((panel) => {
+      panel.classList.toggle('hidden', panel.dataset.profileRelationsPanel !== activeType)
+    })
+  }
+
+  const openModal = (type) => {
+    setActivePanel(type)
+    previousBodyOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    modal.classList.remove('hidden')
+    modal.classList.add('flex')
+    modal.setAttribute('aria-hidden', 'false')
+  }
+
+  const closeModal = () => {
+    modal.classList.add('hidden')
+    modal.classList.remove('flex')
+    modal.setAttribute('aria-hidden', 'true')
+    document.body.style.overflow = previousBodyOverflow
+  }
+
+  modal.dataset.relationsReady = 'true'
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => setActivePanel(tab.dataset.relationsTab))
+  })
+  closeButtons.forEach((button) => button.addEventListener('click', closeModal))
+  openButtons.forEach((button) => {
+    button.addEventListener('click', () => openModal(button.dataset.relationsOpen))
+  })
+  unfollowForms.forEach(bindRelationUnfollowForm)
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !modal.classList.contains('hidden')) {
+      closeModal()
+    }
+  })
+}
+
+function initAppNavbarMenus() {
+  document.querySelectorAll('[data-app-profile-menu]').forEach((menu) => {
+    if (menu.dataset.appProfileMenuReady === 'true') return
+
+    const panel = menu.querySelector('.app-navbar-profile-menu')
+
+    menu.dataset.appProfileMenuReady = 'true'
+    menu.addEventListener('toggle', () => {
+      if (!menu.open || !panel) return
+
+      panel.classList.remove('is-entering')
+      void panel.offsetWidth
+      panel.classList.add('is-entering')
+    })
+  })
+
+  if (document.documentElement.dataset.appNavbarMenusReady === 'true') return
+
+  document.documentElement.dataset.appNavbarMenusReady = 'true'
+  document.addEventListener('click', (event) => {
+    const target = event.target
+
+    if (!(target instanceof Element)) return
+
+    document.querySelectorAll('[data-app-profile-menu][open]').forEach((menu) => {
+      if (menu.contains(target)) return
+
+      menu.removeAttribute('open')
+    })
+  })
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return
+
+    document.querySelectorAll('[data-app-profile-menu][open]').forEach((menu) => {
+      menu.removeAttribute('open')
+    })
+  })
+}
+
+function bindRelationUnfollowForm(form) {
+  if (form.dataset.relationUnfollowReady === 'true') return
+
+  form.dataset.relationUnfollowReady = 'true'
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault()
+
+    const button = form.querySelector('[data-relation-unfollow-button]')
+    const userId = form.dataset.relationUserId
+    const wasFriend = form.dataset.wasFriend === 'true'
+
+    if (!userId) return
+
+    try {
+      const formData = createCommunityFormData(form)
+
+      if (button) {
+        button.disabled = true
+        button.textContent = '...'
+      }
+
+      const payload = await submitCommunityForm(form, formData)
+
+      if (!payload?.ok || payload.following) {
+        throw new Error('Unfollow failed')
+      }
+
+      removeRelationRows(userId, wasFriend)
+      updateRelationCounters({ followingDelta: -1, friendsDelta: wasFriend ? -1 : 0 })
+    } catch {
+      form.submit()
+    }
+  })
+}
+
+function removeRelationRows(userId, wasFriend) {
+  document
+    .querySelectorAll(
+      `[data-profile-relations-panel="following"] [data-relation-user-id="${CSS.escape(userId)}"], [data-profile-relations-panel="friends"] [data-relation-user-id="${CSS.escape(userId)}"]`
+    )
+    .forEach((row) => {
+      row.classList.add('opacity-0', 'scale-[0.98]')
+      setTimeout(() => row.remove(), 160)
+    })
+
+  if (!wasFriend) return
+
+  document
+    .querySelectorAll(`[data-profile-relations-panel="followers"] [data-relation-user-id="${CSS.escape(userId)}"] [data-relation-label]`)
+    .forEach((label) => label.remove())
+}
+
+function updateRelationCounters({ followingDelta = 0, friendsDelta = 0 }) {
+  document.querySelectorAll('[data-following-count]').forEach((count) => {
+    count.textContent = Math.max(0, Number(count.textContent || 0) + followingDelta)
+  })
+  document.querySelectorAll('[data-friends-count]').forEach((count) => {
+    count.textContent = Math.max(0, Number(count.textContent || 0) + friendsDelta)
+  })
+}
+
 function initAvatarCropper(page) {
   const input = page.querySelector('[data-avatar-input]')
   const previewTargetId = input?.getAttribute('data-preview-target')
@@ -429,156 +600,73 @@ function initCommunityPage() {
   if (!page) return
 
   initCommunityNavbar(page)
-  initCommunityRails(page)
   page.querySelectorAll('[data-community-post-form]').forEach(bindCommunityPostForm)
   page.querySelectorAll('[data-community-search-form]').forEach(bindCommunitySearchForm)
   page.querySelectorAll('[data-community-file-trigger]').forEach(bindCommunityFileTrigger)
   page.querySelectorAll('[data-community-image-input]').forEach(bindCommunityImageInput)
   page.querySelectorAll('[data-community-poll-trigger]').forEach(bindCommunityPollTrigger)
+  page.querySelectorAll('[data-community-lazy-image]').forEach(bindCommunityLazyImage)
   page.querySelectorAll('[data-reaction-form]').forEach(bindCommunityReactionForm)
   page.querySelectorAll('[data-comment-form]').forEach(bindCommunityCommentForm)
-  page.querySelectorAll('[data-comment-focus]').forEach(bindCommunityCommentFocus)
+  page.querySelectorAll('[data-comment-toggle]').forEach(bindCommunityCommentsToggle)
   page.querySelectorAll('[data-poll-form]').forEach(bindCommunityPollForm)
   page.querySelectorAll('[data-follow-form]').forEach(bindCommunityFollowForm)
+  page.querySelectorAll('[data-favorite-account-form]').forEach(bindFavoriteAccountForm)
   page.querySelectorAll('[data-share-post]').forEach(bindCommunityShareButton)
 }
 
 function initCommunityNavbar(page) {
   const navbar = page.querySelector('[data-community-navbar]')
   const shell = page.querySelector('[data-community-navbar-shell]')
-  const leftPanel = page.querySelector('[data-community-navbar-left]')
-  const rightPanel = page.querySelector('[data-community-navbar-right]')
-  const searchForm = page.querySelector('[data-community-navbar-search]')
-  const searchBox = page.querySelector('[data-community-navbar-search-box]')
-  const searchInput = searchForm?.querySelector('[data-community-search-input]')
-  const searchButton = page.querySelector('[data-community-navbar-search-button]')
+  const isDynamic = navbar?.getAttribute('data-community-navbar-dynamic') === 'true'
   const brandText = page.querySelector('[data-community-brand-text]')
   const profileText = page.querySelector('[data-community-profile-text]')
 
-  if (!navbar || !shell || !leftPanel || !rightPanel || shell.dataset.communityNavbarReady === 'true') {
+  if (!navbar || !shell || page.dataset.communityNavbarReady === 'true') {
     return
   }
 
-  const splitPanelClasses = [
-    'rounded-full',
-    'border',
-    'border-white/30',
-    'bg-white/28',
-    'px-3',
-    'py-2',
-    'shadow-[0_16px_46px_rgba(17,62,20,0.16)]',
-    'backdrop-blur-2xl',
-  ]
-  const shellBaseClasses = [
-    'max-w-[1240px]',
-    'rounded-[2rem]',
-    'border-white/30',
-    'bg-white/24',
-    'px-4',
-    'py-3',
-    'shadow-[0_18px_55px_rgba(17,62,20,0.18)]',
-    'backdrop-blur-2xl',
-    'sm:rounded-full',
-    'sm:px-5',
-  ]
-  const shellSplitClasses = [
-    'max-w-none',
-    'rounded-none',
-    'border-transparent',
-    'bg-transparent',
-    'px-0',
-    'py-0',
-    'shadow-none',
-    'backdrop-blur-none',
-  ]
-  const topTolerance = 8
-  let isSplit = false
-  let searchExpanded = false
   let ticking = false
+  let lastScrollY = window.scrollY
 
-  const setSearchExpanded = (expanded) => {
-    searchExpanded = expanded && isSplit
+  const setNavbarCompact = (compact) => {
+    const shouldCompact = isDynamic && compact && window.innerWidth >= 1024
 
-    if (!searchBox || !searchInput) return
+    shell.classList.toggle('py-3.5', !shouldCompact)
+    shell.classList.toggle('py-3', shouldCompact)
+    shell.classList.toggle('bg-white/20', !shouldCompact)
+    shell.classList.toggle('bg-white/24', shouldCompact)
+    shell.classList.toggle('shadow-lg', !shouldCompact)
+    shell.classList.toggle('shadow-[0_14px_45px_rgba(17,62,20,0.18)]', shouldCompact)
+    shell.classList.toggle('scale-[0.985]', shouldCompact)
 
-    const shouldCollapse = isSplit && !searchExpanded
-
-    searchBox.style.width = shouldCollapse ? '0px' : ''
-    searchBox.style.opacity = shouldCollapse ? '0' : ''
-    searchBox.style.paddingLeft = shouldCollapse ? '0px' : ''
-    searchBox.style.paddingRight = shouldCollapse ? '0px' : ''
-    searchBox.style.pointerEvents = shouldCollapse ? 'none' : ''
-    searchInput.tabIndex = shouldCollapse ? -1 : 0
+    brandText?.classList.toggle('lg:block', !shouldCompact)
+    brandText?.classList.toggle('lg:hidden', shouldCompact)
+    profileText?.classList.toggle('lg:block', !shouldCompact)
+    profileText?.classList.toggle('lg:hidden', shouldCompact)
   }
 
-  const setSplit = (shouldSplit) => {
-    const split = shouldSplit && window.innerWidth >= 1024
+  const setNavbarHidden = (hidden) => {
+    if (!isDynamic) return
 
-    if (split === isSplit) return
-
-    isSplit = split
-    shell.style.setProperty('transition-property', 'none', 'important')
-    shell.classList.toggle('justify-between', true)
-    shellBaseClasses.forEach((className) => shell.classList.toggle(className, !split))
-    shellSplitClasses.forEach((className) => shell.classList.toggle(className, split))
-    ;[leftPanel, rightPanel].forEach((panel) => {
-      splitPanelClasses.forEach((className) => panel.classList.toggle(className, split))
-    })
-    if (!split) searchExpanded = false
-
-    brandText?.classList.toggle('lg:block', !split)
-    profileText?.classList.toggle('lg:block', !split)
-    if (split) {
-      shell.style.setProperty('backdrop-filter', 'none', 'important')
-      shell.style.setProperty('-webkit-backdrop-filter', 'none', 'important')
-    } else {
-      shell.style.removeProperty('backdrop-filter')
-      shell.style.removeProperty('-webkit-backdrop-filter')
-    }
-    leftPanel.style.flex = split ? '0 0 auto' : ''
-    rightPanel.style.flex = split ? '0 0 auto' : ''
-    setSearchExpanded(searchExpanded)
+    navbar.classList.toggle('-translate-y-[115%]', hidden)
+    navbar.classList.toggle('opacity-0', hidden)
+    page.classList.toggle('community-navbar-away', hidden)
   }
 
-  const updateNavbar = () => {
-    setSplit(window.scrollY > topTolerance)
+  page.dataset.communityNavbarReady = 'true'
+  const updateChrome = () => {
+    if (!isDynamic) return
+
+    const currentScrollY = window.scrollY
+    const nearTop = currentScrollY < 32
+    const scrollingDown = currentScrollY > lastScrollY && currentScrollY > 180
+
+    setNavbarCompact(!nearTop)
+    setNavbarHidden(scrollingDown)
+    lastScrollY = currentScrollY
   }
 
-  shell.dataset.communityNavbarReady = 'true'
-  searchButton?.addEventListener('click', (event) => {
-    if (!isSplit || searchExpanded) return
-
-    event.preventDefault()
-    setSearchExpanded(true)
-    searchInput?.focus()
-  })
-  searchInput?.addEventListener('focus', () => {
-    if (isSplit) setSearchExpanded(true)
-  })
-  searchInput?.addEventListener('keydown', (event) => {
-    if (event.key !== 'Escape' || !isSplit) return
-
-    setSearchExpanded(false)
-    searchInput.blur()
-  })
-  document.addEventListener('click', (event) => {
-    const target = event.target
-
-    if (!(target instanceof Element) || !isSplit || !searchForm) return
-    if (searchForm.contains(target)) return
-
-    setSearchExpanded(false)
-  })
-  page.querySelectorAll('[data-community-scroll-top]').forEach((button) => {
-    button.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-    })
-  })
-  page.querySelectorAll('[data-community-refresh-feed]').forEach((button) => {
-    button.addEventListener('click', () => {
-      window.location.reload()
-    })
-  })
   window.addEventListener(
     'scroll',
     () => {
@@ -586,101 +674,20 @@ function initCommunityNavbar(page) {
 
       ticking = true
       window.requestAnimationFrame(() => {
-        updateNavbar()
+        updateChrome()
         ticking = false
       })
     },
     { passive: true }
   )
-  window.addEventListener('resize', updateNavbar)
-  updateNavbar()
-}
+  window.addEventListener('resize', updateChrome)
+  document.addEventListener('mousemove', (event) => {
+    if (!isDynamic || event.clientY > 90) return
 
-function initCommunityRails(page) {
-  const toggles = page.querySelectorAll('[data-community-rail-toggle]')
-  const panels = page.querySelectorAll('[data-community-rail-panel]')
-
-  if (!toggles.length || page.dataset.communityRailsReady === 'true') return
-
-  const hiddenToggleClasses = ['opacity-0', 'pointer-events-none', 'scale-95']
-  const toggleGroups = {
-    profile: ['profile'],
-    activity: ['activity', 'suggestions'],
-    suggestions: ['activity', 'suggestions'],
-  }
-
-  const setToggleHidden = (toggle, hidden) => {
-    hiddenToggleClasses.forEach((className) => toggle.classList.toggle(className, hidden))
-  }
-
-  const closePanels = () => {
-    panels.forEach((panel) => {
-      const side = panel.getAttribute('data-community-rail-side')
-      const hiddenTranslate = side === 'left' ? '-translate-x-[115%]' : 'translate-x-[115%]'
-
-      panel.classList.add('opacity-0', 'pointer-events-none', hiddenTranslate)
-      panel.classList.remove('opacity-100', 'translate-x-0')
-    })
-    toggles.forEach((toggle) => {
-      toggle.setAttribute('aria-expanded', 'false')
-      toggle.classList.remove('bg-[#EDE7D6]')
-      setToggleHidden(toggle, false)
-    })
-  }
-
-  const openPanel = (key) => {
-    const panel = page.querySelector(`[data-community-rail-panel="${CSS.escape(key)}"]`)
-    const toggle = page.querySelector(`[data-community-rail-toggle="${CSS.escape(key)}"]`)
-
-    if (!panel || !toggle) return
-
-    closePanels()
-    panel.classList.remove(
-      'opacity-0',
-      'pointer-events-none',
-      '-translate-x-[115%]',
-      'translate-x-[115%]'
-    )
-    panel.classList.add('opacity-100', 'translate-x-0')
-    toggle.setAttribute('aria-expanded', 'true')
-    toggle.classList.add('bg-[#EDE7D6]')
-    toggles.forEach((railToggle) => {
-      const railKey = railToggle.getAttribute('data-community-rail-toggle')
-      const shouldHide = railKey ? toggleGroups[key]?.includes(railKey) : false
-
-      setToggleHidden(railToggle, shouldHide)
-    })
-  }
-
-  page.dataset.communityRailsReady = 'true'
-  toggles.forEach((toggle) => {
-    toggle.addEventListener('click', () => {
-      const key = toggle.getAttribute('data-community-rail-toggle')
-      const isOpen = toggle.getAttribute('aria-expanded') === 'true'
-
-      if (!key) return
-      if (isOpen) {
-        closePanels()
-        return
-      }
-
-      openPanel(key)
-    })
+    setNavbarHidden(false)
   })
-  page.querySelectorAll('[data-community-rail-close]').forEach((closeButton) => {
-    closeButton.addEventListener('click', closePanels)
-  })
-  document.addEventListener('click', (event) => {
-    const target = event.target
-
-    if (!(target instanceof Element)) return
-    if (target.closest('[data-community-rail-panel], [data-community-rail-toggle]')) return
-
-    closePanels()
-  })
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') closePanels()
-  })
+  navbar.addEventListener('mouseenter', () => setNavbarHidden(false))
+  updateChrome()
 }
 
 function bindCommunityPostForm(form) {
@@ -795,7 +802,14 @@ function bindCommunitySearchForm(form) {
             signal: controller.signal,
           }
         )
+        if (!response.ok) {
+          hideResults()
+          return
+        }
+
         const payload = await response.json()
+
+        if (input.value.trim() !== query) return
 
         renderCommunitySearchResults(results, payload)
       } catch (error) {
@@ -859,12 +873,14 @@ function createCommunityUserResult(user) {
   const meta = document.createElement('span')
 
   link.href = `/users/${encodeURIComponent(user.username)}`
-  link.className = 'flex items-center gap-3 rounded-2xl px-3 py-2 transition hover:bg-white/70'
+  link.className = 'flex items-center gap-3 rounded-2xl px-3 py-2 transition hover:bg-white/70 focus:bg-white/70 focus:outline-none focus:ring-2 focus:ring-[#48AE4D]/35'
 
   if (user.avatarUrl) {
     avatar.src = user.avatarUrl
     avatar.alt = ''
     avatar.className = 'h-10 w-10 flex-none rounded-full object-cover'
+    avatar.loading = 'lazy'
+    avatar.decoding = 'async'
   } else {
     avatar.className = 'flex h-10 w-10 flex-none items-center justify-center rounded-full bg-[#113E14] text-sm font-black text-[#EDE7D6]'
     avatar.textContent = user.initial || 'P'
@@ -890,7 +906,7 @@ function createCommunityHashtagResult(hashtag) {
   const count = document.createElement('span')
 
   link.href = `/community/hashtags/${encodeURIComponent(hashtag.tag)}`
-  link.className = 'flex items-center gap-3 rounded-2xl px-3 py-2 transition hover:bg-white/70'
+  link.className = 'flex items-center gap-3 rounded-2xl px-3 py-2 transition hover:bg-white/70 focus:bg-white/70 focus:outline-none focus:ring-2 focus:ring-[#48AE4D]/35'
   icon.className = 'flex h-10 w-10 flex-none items-center justify-center rounded-full bg-[#EDE7D6] text-lg font-black text-[#113E14]'
   icon.textContent = '#'
   text.className = 'min-w-0 leading-tight'
@@ -1000,6 +1016,41 @@ function bindCommunityFollowForm(form) {
   })
 }
 
+function bindFavoriteAccountForm(form) {
+  if (form.dataset.favoriteAccountReady === 'true') return
+
+  form.dataset.favoriteAccountReady = 'true'
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault()
+
+    try {
+      const formData = createCommunityFormData(form)
+
+      setCommunityFormBusy(form, true)
+      const payload = await submitCommunityForm(form, formData)
+
+      if (payload?.ok) updateFavoriteAccountButton(form, payload)
+    } catch {
+      form.submit()
+    } finally {
+      setCommunityFormBusy(form, false)
+    }
+  })
+}
+
+function updateFavoriteAccountButton(form, payload) {
+  const button = form.querySelector('[data-favorite-account-button]')
+  const label = form.querySelector('[data-favorite-account-label]')
+
+  if (label) label.textContent = payload.favorite ? 'Favorite' : 'Add favorite'
+  if (!button) return
+
+  button.classList.toggle('bg-[#EDE7D6]', payload.favorite)
+  button.classList.toggle('text-[#1E3D19]', payload.favorite)
+  button.classList.toggle('bg-white/15', !payload.favorite)
+  button.classList.toggle('text-white', !payload.favorite)
+}
+
 function createCommunityFormData(form) {
   const formData = new FormData(form)
 
@@ -1052,8 +1103,9 @@ function prependCommunityPost(form, payload) {
   post.querySelectorAll('[data-reaction-form]').forEach(bindCommunityReactionForm)
   post.querySelectorAll('[data-comment-form]').forEach(bindCommunityCommentForm)
   post.querySelectorAll('[data-poll-form]').forEach(bindCommunityPollForm)
-  post.querySelectorAll('[data-comment-focus]').forEach(bindCommunityCommentFocus)
+  post.querySelectorAll('[data-comment-toggle]').forEach(bindCommunityCommentsToggle)
   post.querySelectorAll('[data-share-post]').forEach(bindCommunityShareButton)
+  post.querySelectorAll('[data-community-lazy-image]').forEach(bindCommunityLazyImage)
 }
 
 function resetCommunityComposer(form) {
@@ -1152,6 +1204,8 @@ function updateCommunityReaction(form, payload) {
 
 function appendCommunityComment(form, payload) {
   const post = form.closest('[data-community-post]')
+  const panel = post?.querySelector('[data-comments-panel]')
+  const toggle = post?.querySelector('[data-comment-toggle]')
   const list = post?.querySelector('[data-comments-list]')
   const count = post?.querySelector('[data-comment-count]')
   const comment = payload.comment
@@ -1175,15 +1229,57 @@ function appendCommunityComment(form, payload) {
   if (count && payload.count !== undefined) {
     count.textContent = payload.count
   }
+
+  panel?.classList.remove('hidden')
+  toggle?.setAttribute('aria-expanded', 'true')
+  updateCommunityCommentsLabel(post)
 }
 
-function bindCommunityCommentFocus(button) {
-  if (button.dataset.communityCommentFocusReady === 'true') return
+function bindCommunityCommentsToggle(button) {
+  if (button.dataset.communityCommentsToggleReady === 'true') return
 
-  button.dataset.communityCommentFocusReady = 'true'
+  button.dataset.communityCommentsToggleReady = 'true'
   button.addEventListener('click', () => {
-    button.closest('[data-community-post]')?.querySelector('[data-comment-input]')?.focus()
+    const post = button.closest('[data-community-post]')
+    const panel = post?.querySelector('[data-comments-panel]')
+
+    if (!panel || !post) return
+
+    const willOpen = panel.classList.contains('hidden')
+
+    panel.classList.toggle('hidden', !willOpen)
+    button.setAttribute('aria-expanded', willOpen ? 'true' : 'false')
+    updateCommunityCommentsLabel(post)
+
+    if (willOpen) {
+      window.setTimeout(() => post.querySelector('[data-comment-input]')?.focus(), 120)
+    }
   })
+
+  updateCommunityCommentsLabel(button.closest('[data-community-post]'))
+}
+
+function updateCommunityCommentsLabel(post) {
+  if (!post) return
+
+  const panel = post.querySelector('[data-comments-panel]')
+  const label = post.querySelector('[data-comment-toggle-label]')
+
+  if (!panel || !label) return
+
+  label.textContent = panel.classList.contains('hidden') ? 'Comments' : 'Hide'
+}
+
+function bindCommunityLazyImage(image) {
+  if (image.dataset.communityLazyReady === 'true') return
+
+  const markLoaded = () => image.classList.add('is-loaded')
+
+  image.dataset.communityLazyReady = 'true'
+  image.addEventListener('load', markLoaded, { once: true })
+  image.addEventListener('error', () => image.classList.add('is-loaded'), { once: true })
+
+  if (image.complete) markLoaded()
 }
 
 function bindCommunityShareButton(button) {
@@ -1253,6 +1349,12 @@ function updateCommunityFollow(form, payload) {
 
   document.querySelectorAll('[data-followers-count]').forEach((count) => {
     if (payload.followers !== undefined) count.textContent = payload.followers
+  })
+
+  document.querySelectorAll('[data-friend-badge]').forEach((badge) => {
+    if (payload.isFriend === undefined) return
+
+    badge.classList.toggle('hidden', !payload.isFriend)
   })
 }
 
@@ -1543,6 +1645,8 @@ window.PlantBudCatalog = {
 function initApp() {
   initAuthForms()
   initProfilePage()
+  initProfileRelationsModal()
+  initAppNavbarMenus()
   initCommunityPage()
   initPlantCatalogSearch()
 }
