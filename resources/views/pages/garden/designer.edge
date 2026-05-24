@@ -3,15 +3,12 @@
 <title>Garden Designer</title>
 @endslot
 
-<div class="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#1E3D19] via-[#728B6F] to-[#6B8C6C]">
-
+<div class="relative min-h-screen overflow-hidden">
     <img src="/resources/images/welcome/header3.png"
-        class="absolute inset-0 w-full h-full object-cover pointer-events-none select-none" alt="">
-
-    <div class="absolute inset-0 bg-black/45 pointer-events-none"></div>
-    <div
-        class="absolute inset-0 bg-gradient-to-br from-[#1E3D19]/70 via-[#728B6F]/55 to-[#6B8C6C]/70 pointer-events-none">
-    </div>
+        class="absolute inset-0 h-full w-full object-cover opacity-24 mix-blend-soft-light pointer-events-none select-none"
+        alt="">
+    <div class="absolute inset-0 bg-[#113e14]/34 pointer-events-none"></div>
+    <div class="absolute inset-0 bg-gradient-to-br from-[#416543]/28 via-transparent to-[#113e14]/42 pointer-events-none"></div>
 
     @!component('components/app-navbar', {
         section: 'Garden designer',
@@ -28,39 +25,42 @@
                 <div class="absolute -inset-2 bg-white/10 blur-2xl rounded-[2.5rem] opacity-70"></div>
 
                 <div
-                    class="relative h-full bg-white/10 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-6 shadow-[0_30px_80px_rgba(0,0,0,0.25)] overflow-hidden">
+                    class="relative h-full bg-white/12 backdrop-blur-2xl border border-white/18 rounded-[2.5rem] p-6 shadow-[0_24px_70px_rgba(0,0,0,0.16)] overflow-hidden">
+                    <div class="absolute inset-x-6 top-0 h-1 rounded-b-full bg-[#a8b841]/60"></div>
 
                     <div class="relative space-y-8">
 
                         <section>
-                            <h2 class="text-white text-xl font-black">Asset Search</h2>
-                            <div class="w-14 h-1 bg-[#EDE7D6] rounded-full mt-3 mb-5"></div>
+                            <p class="text-xs font-black uppercase tracking-[0.22em] text-[#ebe3a7]">Step 1</p>
+                            <h2 class="mt-2 text-white text-xl font-black">Find design assets</h2>
+                            <div class="w-14 h-1 bg-[#dca15d] rounded-full mt-3 mb-5"></div>
 
                             <div class="relative">
                                 <input id="searchInput" type="text" placeholder="Search plants or furniture..."
-                                    class="w-full bg-white/10 border border-white/10 rounded-full pl-5 pr-24 py-3 text-sm text-white placeholder:text-white/45 font-semibold outline-none focus:ring-2 focus:ring-[#EDE7D6]/40">
+                                    class="w-full bg-white/10 border border-white/14 rounded-full pl-5 pr-24 py-3 text-sm text-white placeholder:text-white/48 font-semibold outline-none focus:ring-2 focus:ring-[#a8b841]/50">
 
                                 <button type="button" onclick="searchPexels()"
-                                    class="absolute right-1.5 top-1/2 -translate-y-1/2 bg-[#EDE7D6] text-[#1E3D19] font-black px-4 py-2 text-xs rounded-full hover:scale-105 transition-all duration-300">
+                                    class="absolute right-1.5 top-1/2 -translate-y-1/2 bg-[#dca15d] text-[#113e14] font-black px-4 py-2 text-xs rounded-full hover:bg-[#ebe3a7] transition-all duration-300">
                                     Search
                                 </button>
                             </div>
 
                             <p class="text-white/60 text-sm font-semibold leading-relaxed mt-3">
-                                Search images and add them to your inventory.
+                                Search plants or furniture, then choose items to place on the workspace.
                             </p>
                         </section>
 
                         <section>
-                            <h2 class="text-white text-xl font-black">Inventory</h2>
-                            <div class="w-14 h-1 bg-[#EDE7D6] rounded-full mt-3 mb-5"></div>
+                            <p class="text-xs font-black uppercase tracking-[0.22em] text-[#ebe3a7]">Step 2</p>
+                            <h2 class="mt-2 text-white text-xl font-black">Build your inventory</h2>
+                            <div class="w-14 h-1 bg-[#dca15d] rounded-full mt-3 mb-5"></div>
 
                             <div id="inventory"
                                 class="grid grid-cols-2 gap-3 max-h-[340px] overflow-y-auto pr-1 select-none">
 
-                                <div class="col-span-2 text-center py-8 rounded-3xl bg-white/5 border border-white/5">
+                                <div class="col-span-2 text-center py-8 rounded-3xl bg-white/10 border border-white/14">
                                     <p class="text-white/55 text-sm font-semibold">
-                                        No assets added yet
+                                        No assets yet. Search above or upload your own image.
                                     </p>
                                 </div>
 
@@ -68,57 +68,58 @@
                         </section>
 
                         <section>
-                            <h2 class="text-white text-xl font-black">Actions</h2>
-                            <div class="w-14 h-1 bg-[#EDE7D6] rounded-full mt-3 mb-5"></div>
+                            <p class="text-xs font-black uppercase tracking-[0.22em] text-[#ebe3a7]">Step 3</p>
+                            <h2 class="mt-2 text-white text-xl font-black">Edit selected item</h2>
+                            <div class="w-14 h-1 bg-[#dca15d] rounded-full mt-3 mb-5"></div>
 
                             <div class="space-y-2">
 
                                 <div class="grid grid-cols-2 gap-2">
                                     <button onclick="clearSelection()"
-                                        class="bg-white/10 hover:bg-white/15 text-white py-3 rounded-xl">⊙
+                                        class="bg-white/10 hover:bg-white/14 text-white py-3 rounded-xl font-bold transition">⊙
                                         Deselect</button>
                                     <button onclick="clearAll()"
-                                        class="bg-white/10 hover:bg-white/15 text-white py-3 rounded-xl">🧹
+                                        class="bg-white/10 hover:bg-white/14 text-white py-3 rounded-xl font-bold transition">🧹
                                         Clear</button>
                                 </div>
 
                                 <div class="grid grid-cols-2 gap-2">
                                     <button onclick="duplicateSelected()"
-                                        class="bg-white/10 hover:bg-white/15 text-white py-3 rounded-xl">📄
+                                        class="bg-white/10 hover:bg-white/14 text-white py-3 rounded-xl font-bold transition">📄
                                         Copy</button>
                                     <button onclick="deleteSelected()"
-                                        class="bg-white/10 hover:bg-white/15 text-white py-3 rounded-xl">🗑
+                                        class="bg-white/10 hover:bg-white/14 text-white py-3 rounded-xl font-bold transition">🗑
                                         Delete</button>
                                 </div>
 
                                 <div class="grid grid-cols-2 gap-2">
                                     <button onclick="undo()"
-                                        class="bg-[#EDE7D6] text-[#1E3D19] font-black py-3 rounded-xl">↶ Undo</button>
+                                        class="bg-[#dca15d] text-[#113e14] font-black py-3 rounded-xl hover:bg-[#ebe3a7] transition">↶ Undo</button>
                                     <button onclick="redo()"
-                                        class="bg-[#EDE7D6] text-[#1E3D19] font-black py-3 rounded-xl">↷ Redo</button>
+                                        class="bg-[#dca15d] text-[#113e14] font-black py-3 rounded-xl hover:bg-[#ebe3a7] transition">↷ Redo</button>
                                 </div>
 
-                                <div class="grid grid-cols-2 gap-2 p-2 rounded-xl bg-white/5">
+                                <div class="grid grid-cols-2 gap-2 p-2 rounded-xl bg-white/8 border border-white/10">
                                     <button onclick="rotateSelected()"
-                                        class="bg-white/10 hover:bg-white/15 text-white py-3 rounded-xl">⟳
+                                        class="bg-[#113e14]/26 hover:bg-[#113e14]/36 text-white py-3 rounded-xl font-bold transition">⟳
                                         Rotate</button>
                                     <button onclick="flipSelected()"
-                                        class="bg-white/10 hover:bg-white/15 text-white py-3 rounded-xl">⇋ Flip
+                                        class="bg-[#113e14]/26 hover:bg-[#113e14]/36 text-white py-3 rounded-xl font-bold transition">⇋ Flip
                                         X</button>
                                     <button onclick="flipYSelected()"
-                                        class="bg-white/10 hover:bg-white/15 text-white py-3 rounded-xl">⇅ Flip
+                                        class="bg-[#113e14]/26 hover:bg-[#113e14]/36 text-white py-3 rounded-xl font-bold transition">⇅ Flip
                                         Y</button>
                                     <button onclick="toggleLock()"
-                                        class="bg-white/10 hover:bg-white/15 text-white py-3 rounded-xl">🔒
+                                        class="bg-[#113e14]/26 hover:bg-[#113e14]/36 text-white py-3 rounded-xl font-bold transition">🔒
                                         Lock</button>
                                 </div>
 
-                                <div class="grid grid-cols-2 gap-2 p-2 rounded-xl bg-white/5">
+                                <div class="grid grid-cols-2 gap-2 p-2 rounded-xl bg-white/8 border border-white/10">
                                     <button onclick="bringFront()"
-                                        class="bg-white/10 hover:bg-white/15 text-white py-3 rounded-xl">⬆
+                                        class="bg-[#113e14]/26 hover:bg-[#113e14]/36 text-white py-3 rounded-xl font-bold transition">⬆
                                         Front</button>
                                     <button onclick="sendBack()"
-                                        class="bg-white/10 hover:bg-white/15 text-white py-3 rounded-xl">⬇ Back</button>
+                                        class="bg-[#113e14]/26 hover:bg-[#113e14]/36 text-white py-3 rounded-xl font-bold transition">⬇ Back</button>
                                 </div>
 
                             </div>
@@ -132,30 +133,33 @@
                 <div class="absolute -inset-2 bg-white/10 blur-2xl rounded-[3rem] opacity-70"></div>
 
                 <div
-                    class="relative h-full bg-white/10 backdrop-blur-2xl border border-white/10 rounded-[3rem] p-5 lg:p-7 shadow-[0_30px_80px_rgba(0,0,0,0.25)] overflow-hidden">
+                    class="relative h-full bg-white/92 backdrop-blur-2xl border border-white/55 rounded-[3rem] p-5 text-[#113e14] shadow-[0_24px_70px_rgba(17,62,20,0.18)] overflow-hidden lg:p-7">
+                    <div class="absolute right-0 top-0 h-full w-1 bg-[#dca15d]/55"></div>
+                    <div class="absolute left-0 top-0 h-28 w-full bg-gradient-to-b from-[#ebe3a7]/34 to-transparent pointer-events-none"></div>
 
                     <div class="relative flex flex-col h-full">
 
                         <div class="flex items-center justify-between gap-4 mb-6">
                             <div>
-                                <h2 class="text-3xl md:text-4xl font-black text-white">
+                                <p class="text-sm font-black uppercase tracking-[0.22em] text-[#416543]">Plant Bud Studio</p>
+                                <h2 class="mt-2 text-3xl md:text-4xl font-black text-[#113e14]">
                                     Garden Workspace
                                 </h2>
-                                <p class="text-white/75 font-semibold mt-2">
-                                    Design your outdoor space with drag and drop
+                                <p class="text-[#416543] font-semibold mt-2">
+                                    Upload a base photo, add inventory items, then drag, resize, rotate, and layer them.
                                 </p>
                             </div>
                         </div>
 
                         <div
-                            class="flex-1 min-h-[600px] rounded-[2.5rem] bg-black/15 border border-white/10 p-4 lg:p-6 overflow-auto">
+                            class="flex-1 min-h-[600px] rounded-[2.5rem] bg-[#416543]/8 border border-[#416543]/12 p-4 lg:p-6 overflow-auto">
 
                             <div id="workspace" class="w-full h-full flex items-center justify-center">
 
                                 <div class="canvas-placeholder">
 
                                     <div id="canvas-container"
-                                        class="relative isolate overflow-hidden inline-flex items-center justify-center bg-white/5 border border-white/10 rounded-[2rem] shadow-[0_20px_60px_rgba(0,0,0,0.35)] select-none">
+                                        class="relative isolate overflow-hidden inline-flex items-center justify-center bg-white border border-[#416543]/14 rounded-[2rem] shadow-[0_18px_50px_rgba(17,62,20,0.16)] select-none">
 
                                         <img id="baseImage"
                                             class="relative z-0 block max-w-full max-h-[75vh] w-auto h-auto object-contain pointer-events-none select-none"
@@ -165,12 +169,12 @@
                                             class="absolute inset-0 flex items-center justify-center text-center p-10 pointer-events-none z-20">
 
                                             <div>
-                                                <h3 class="text-white text-3xl font-black">
+                                                <div class="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-[#ebe3a7] text-2xl font-black text-[#113e14]">PB</div>
+                                                <h3 class="text-[#113e14] text-3xl font-black">
                                                     Upload a Garden Photo
                                                 </h3>
-                                                <p class="text-white/70 font-semibold mt-3 max-w-md">
-                                                    Start by uploading an image and add plants, furniture, and
-                                                    decorations
+                                                <p class="text-[#416543] font-semibold mt-3 max-w-md">
+                                                    Use Upload in the navbar first. Then search assets and place them on top of the photo.
                                                 </p>
                                             </div>
 
@@ -197,12 +201,12 @@
         <div class="absolute inset-0 flex items-center justify-center p-4">
 
             <div
-                class="relative w-full max-w-6xl max-h-[90vh] bg-white/10 backdrop-blur-3xl border border-white/10 rounded-[3rem] overflow-hidden">
+                class="relative w-full max-w-6xl max-h-[90vh] bg-[#113e14]/92 backdrop-blur-3xl border border-[#ebe3a7]/12 rounded-[3rem] overflow-hidden">
 
-                <div class="relative flex items-center justify-between px-8 py-6 border-b border-white/10">
+                <div class="relative flex items-center justify-between px-8 py-6 border-b border-[#ebe3a7]/12">
                     <h3 class="text-2xl font-black text-white">Search Results</h3>
                     <button onclick="closeSearchModal()"
-                        class="w-10 h-10 rounded-full bg-white/10 text-white">×</button>
+                        class="w-10 h-10 rounded-full bg-[#ebe3a7]/10 text-white hover:bg-[#ebe3a7]/16">×</button>
                 </div>
 
                 <div id="searchResults"
@@ -214,7 +218,7 @@
     </div>
 
     <div id="loadingText"
-        class="fixed bottom-6 left-1/2 -translate-x-1/2 hidden z-50 bg-white/10 backdrop-blur-2xl border border-white/10 rounded-full px-6 py-4 text-white font-bold">
+        class="fixed bottom-6 left-1/2 -translate-x-1/2 hidden z-50 bg-[#113e14]/86 backdrop-blur-2xl border border-[#ebe3a7]/14 rounded-full px-6 py-4 text-[#ebe3a7] font-bold">
         Processing...
     </div>
 

@@ -50,6 +50,9 @@ router
     router.get('/community', [CommunityController, 'index']).as('community.index')
     router.post('/community/posts', [CommunityController, 'store']).as('community.posts.store')
     router
+      .post('/community/posts/:id/delete', [CommunityController, 'destroy'])
+      .as('community.posts.destroy')
+    router
       .post('/community/posts/:id/reactions/:type', [CommunityController, 'toggleReaction'])
       .as('community.posts.reactions.toggle')
     router

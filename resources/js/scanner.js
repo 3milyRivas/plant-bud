@@ -64,11 +64,11 @@ document.getElementById('education').innerHTML=`
 document.getElementById('tips').innerHTML=(data.plant_education?.care_guide?.general||[]).map(t=>`<li>${t}</li>`).join('')
 
 document.getElementById('matches').innerHTML=(data.matches||[]).map(m=>
-`<div onclick="window.open('${m.google_search}','_blank')" class="cursor-pointer hover:scale-105 transition bg-white/5 border border-white/10 rounded-xl overflow-hidden">
+`<div onclick="window.open('${m.google_search}','_blank')" class="cursor-pointer hover:scale-105 transition bg-white border border-[#416543]/12 rounded-xl overflow-hidden shadow-sm">
 <img src="${m.image||''}" class="w-full h-28 object-cover">
 <div class="p-2">
-<p class="text-white text-sm font-bold">${m.name}</p>
-<p class="text-[#EDE7D6] text-xs">${m.confidence}%</p>
+<p class="text-[#113e14] text-sm font-bold">${m.name}</p>
+<p class="text-[#dca15d] text-xs font-black">${m.confidence}%</p>
 </div>
 </div>`
 ).join('')

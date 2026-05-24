@@ -28,42 +28,48 @@
         <img decoding="async" src="/resources/images/essential/logo.png" alt="" class="h-12 w-12 object-contain drop-shadow-lg">
       </span>
       <span class="hidden min-w-0 sm:block" data-community-brand-text>
-        <span class="block truncate text-xl font-black tracking-wide text-white drop-shadow">Plant<span class="text-[#EDE7D6]"> Bud</span></span>
-        <span class="block truncate text-xs font-bold uppercase tracking-[0.16em] text-[#EDE7D6]/85">{{ section }}</span>
+        <span class="block truncate text-xl font-black tracking-wide text-white drop-shadow">Plant<span class="text-[#ebe3a7]"> Bud</span></span>
+        <span class="block truncate text-xs font-bold uppercase tracking-[0.16em] text-[#ebe3a7]/85">{{ section }}</span>
       </span>
     </a>
 
     @if(catalogSearch)
       <form class="relative mx-auto flex w-full max-w-[520px] items-center justify-self-center" data-plant-search autocomplete="off">
         <label for="plantCatalogSearch" class="sr-only">Search plants</label>
-        <div class="relative flex h-11 w-full items-center rounded-full border border-white/50 bg-white/75 px-4 shadow-inner shadow-[#48AE4D]/20 transition focus-within:bg-white/90 focus-within:ring-2 focus-within:ring-[#EDE7D6]/80">
-          <input id="plantCatalogSearch" type="search" placeholder="Search plants" class="w-full bg-transparent pr-10 text-sm font-semibold text-[#113E14] outline-none placeholder:text-[#6B8C6C]/75" data-plant-search-input aria-autocomplete="list" aria-expanded="false" aria-controls="plantCatalogSearchResults">
-          <button type="submit" class="absolute right-1.5 flex h-8 w-8 items-center justify-center rounded-full bg-[#113E14] text-white shadow-[0_8px_18px_rgba(17,62,20,0.22)] transition hover:-translate-y-0.5 hover:bg-[#14591d]" aria-label="Search plants">
+        <div class="relative flex h-11 w-full items-center rounded-full border border-[#ebe3a7]/45 bg-[#ebe3a7]/78 px-4 shadow-inner shadow-[#113e14]/15 transition focus-within:bg-[#ebe3a7]/90 focus-within:ring-2 focus-within:ring-[#a8b841]/55">
+          <input id="plantCatalogSearch" type="search" placeholder="Search plants" class="w-full bg-transparent pr-10 text-sm font-semibold text-[#113e14] outline-none placeholder:text-[#416543]/75" data-plant-search-input aria-autocomplete="list" aria-expanded="false" aria-controls="plantCatalogSearchResults">
+          <button type="submit" class="absolute right-1.5 flex h-8 w-8 items-center justify-center rounded-full bg-[#113e14] text-white shadow-[0_8px_18px_rgba(17,62,20,0.22)] transition hover:-translate-y-0.5 hover:bg-[#416543]" aria-label="Search plants">
             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m1.85-5.65a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z" />
             </svg>
           </button>
         </div>
 
-        <div id="plantCatalogSearchResults" class="absolute left-0 right-0 top-[calc(100%+0.65rem)] z-[100000] hidden overflow-hidden rounded-[1.5rem] border border-white/45 bg-[#F7F4E8]/95 p-2 shadow-2xl shadow-[#113E14]/25 backdrop-blur-2xl" data-plant-search-results role="listbox"></div>
+        <div id="plantCatalogSearchResults" class="absolute left-0 right-0 top-[calc(100%+0.65rem)] z-[100000] hidden overflow-hidden rounded-[1.5rem] border border-white/45 bg-[#ebe3a7]/95 p-2 shadow-2xl shadow-[#113e14]/25 backdrop-blur-2xl" data-plant-search-results role="listbox"></div>
       </form>
     @elseif(toolMode === 'scanner')
       <div class="flex min-w-0 items-center justify-center gap-2 justify-self-center">
-        <a href="/homepage" class="flex h-10 items-center justify-center rounded-full border border-white/10 bg-white/10 px-4 text-sm font-black text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-white/16 hover:text-[#EDE7D6]">Exit</a>
-        <label for="plantUpload" class="flex h-10 cursor-pointer items-center justify-center rounded-full border border-white/10 bg-white/10 px-4 text-sm font-black text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-white/16 hover:text-[#EDE7D6]">Upload</label>
-        <button id="scanBtn" type="button" class="flex h-10 items-center justify-center rounded-xl bg-[#EDE7D6] px-4 text-sm font-black text-[#113E14] shadow-sm transition hover:-translate-y-0.5 hover:bg-white">Analyze</button>
+        <span class="hidden h-10 items-center rounded-full border border-[#ebe3a7]/14 bg-[#113e14]/28 px-4 text-xs font-black uppercase tracking-[0.12em] text-[#ebe3a7] backdrop-blur-xl lg:flex">
+          Uses left: --
+        </span>
+        <a href="/homepage" class="flex h-10 items-center justify-center rounded-full border border-[#ebe3a7]/12 bg-[#416543]/24 px-4 text-sm font-black text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#416543]/36 hover:text-[#ebe3a7]">Exit</a>
+        <label for="plantUpload" class="flex h-10 cursor-pointer items-center justify-center rounded-full border border-[#ebe3a7]/12 bg-[#416543]/24 px-4 text-sm font-black text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#416543]/36 hover:text-[#ebe3a7]">Upload</label>
+        <button id="scanBtn" type="button" class="flex h-10 items-center justify-center rounded-xl bg-[#dca15d] px-4 text-sm font-black text-[#113e14] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]">Analyze</button>
       </div>
     @elseif(toolMode === 'designer')
       <div class="flex min-w-0 items-center justify-center gap-2 justify-self-center">
-        <a href="/homepage" class="flex h-10 items-center justify-center rounded-full border border-white/10 bg-white/10 px-4 text-sm font-black text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-white/16 hover:text-[#EDE7D6]">Exit</a>
-        <label for="upload" class="flex h-10 cursor-pointer items-center justify-center rounded-full border border-white/10 bg-white/10 px-4 text-sm font-black text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-white/16 hover:text-[#EDE7D6]">Upload</label>
-        <button type="button" onclick="sendToBackend()" class="flex h-10 items-center justify-center rounded-xl bg-[#EDE7D6] px-4 text-sm font-black text-[#113E14] shadow-sm transition hover:-translate-y-0.5 hover:bg-white">Generate AI</button>
+        <span class="hidden h-10 items-center rounded-full border border-[#ebe3a7]/14 bg-[#113e14]/28 px-4 text-xs font-black uppercase tracking-[0.12em] text-[#ebe3a7] backdrop-blur-xl lg:flex">
+          Uses left: --
+        </span>
+        <a href="/homepage" class="flex h-10 items-center justify-center rounded-full border border-[#ebe3a7]/12 bg-[#416543]/24 px-4 text-sm font-black text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#416543]/36 hover:text-[#ebe3a7]">Exit</a>
+        <label for="upload" class="flex h-10 cursor-pointer items-center justify-center rounded-full border border-[#ebe3a7]/12 bg-[#416543]/24 px-4 text-sm font-black text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#416543]/36 hover:text-[#ebe3a7]">Upload</label>
+        <button type="button" onclick="sendToBackend()" class="flex h-10 items-center justify-center rounded-xl bg-[#dca15d] px-4 text-sm font-black text-[#113e14] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]">Download</button>
       </div>
     @else
       <nav class="flex min-w-0 items-center justify-center gap-2 justify-self-center" aria-label="{{ section }} navigation" data-community-navbar-nav>
         @each(item in items)
           @let(isActive = active === item.key)
-          <a href="{{ item.href }}" class="{{ isActive ? 'bg-[#EDE7D6] text-[#113E14] ring-2 ring-white/35' : 'bg-white/10 text-white/80 hover:bg-white/16 hover:text-[#EDE7D6]' }} group flex h-10 min-w-10 items-center justify-center gap-2 rounded-full px-4 text-sm font-black shadow-sm transition hover:-translate-y-0.5" aria-label="{{ item.label }}" title="{{ item.label }}">
+          <a href="{{ item.href }}" class="{{ isActive ? 'bg-[#ebe3a7] text-[#113e14] ring-2 ring-white/35' : 'bg-white/10 text-white/82 hover:bg-white/16 hover:text-[#ebe3a7]' }} group flex h-10 min-w-10 items-center justify-center gap-2 rounded-full px-4 text-sm font-black shadow-sm transition hover:-translate-y-0.5" aria-label="{{ item.label }}" title="{{ item.label }}">
             @if(item.icon)
               <span class="h-5 w-5 bg-contain bg-center bg-no-repeat transition group-hover:scale-110" style="background-image: url('{{ item.icon }}')"></span>
             @endif
@@ -75,7 +81,7 @@
 
     <details class="group relative justify-self-end" data-app-profile-menu>
       <summary class="list-none">
-        <span class="flex h-12 w-12 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 border-white/70 bg-[#113E14] text-sm font-black text-[#EDE7D6] shadow-lg transition hover:-translate-y-0.5 hover:shadow-[0_0_18px_rgba(237,231,214,0.55)]">
+        <span class="flex h-12 w-12 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 border-white/70 bg-[#113e14] text-sm font-black text-[#ebe3a7] shadow-lg transition hover:-translate-y-0.5 hover:shadow-[0_0_18px_rgba(235,227,167,0.55)]">
           @if(avatarUrl)
             <img src="{{ avatarUrl }}" alt="" class="h-full w-full object-cover">
           @else
@@ -85,58 +91,58 @@
           @endif
         </span>
       </summary>
-      <div class="app-navbar-profile-menu fixed right-3 top-[5.4rem] w-[min(17rem,calc(100vw-1.5rem))] origin-top-right overflow-hidden rounded-[1.5rem] border border-white/55 bg-[#F7F3E8]/94 p-2.5 text-[#113E14] shadow-[0_24px_70px_rgba(17,62,20,0.24)] backdrop-blur-2xl sm:right-5 lg:right-6">
+      <div class="app-navbar-profile-menu fixed right-3 top-[5.4rem] w-[min(17rem,calc(100vw-1.5rem))] origin-top-right overflow-hidden rounded-[1.5rem] border border-white/70 bg-white/92 p-2.5 text-[#113e14] shadow-[0_24px_70px_rgba(17,62,20,0.24)] backdrop-blur-2xl sm:right-5 lg:right-6">
         @if(auth.user)
-          <div class="rounded-[1.2rem] border border-white/70 bg-white/72 p-3.5 shadow-sm">
+          <div class="rounded-[1.2rem] border border-[#416543]/12 bg-[#ebe3a7]/28 p-3.5 shadow-sm">
             <div class="flex items-center gap-3">
               @if(avatarUrl)
                 <img src="{{ avatarUrl }}" alt="" class="h-11 w-11 flex-none rounded-full border-2 border-white object-cover shadow-md">
               @else
-                <span class="flex h-11 w-11 flex-none items-center justify-center rounded-full border-2 border-white bg-[#113E14] text-sm font-black text-[#EDE7D6] shadow-md">
+                <span class="flex h-11 w-11 flex-none items-center justify-center rounded-full border-2 border-white bg-[#113e14] text-sm font-black text-[#ebe3a7] shadow-md">
                   {{ avatarInitial }}
                 </span>
               @endif
               <span class="min-w-0">
-                <span class="block truncate text-base font-black text-[#113E14]">{{ displayName }}</span>
-                <span class="mt-0.5 block truncate text-xs font-bold uppercase tracking-[0.14em] text-[#6B8C6C]">{{ roleLabel }}</span>
+                <span class="block truncate text-base font-black text-[#113e14]">{{ displayName }}</span>
+                <span class="mt-0.5 block truncate text-xs font-bold uppercase tracking-[0.14em] text-[#416543]">{{ roleLabel }}</span>
               </span>
             </div>
           </div>
 
-          <div class="mt-2.5 rounded-[1.2rem] border border-[#D5DCD4] bg-[#EDE7D6]/70 p-3.5">
+          <div class="mt-2.5 rounded-[1.2rem] border border-[#416543]/12 bg-[#416543]/8 p-3.5">
             <div class="flex items-center justify-between gap-3">
               <div>
-                <p class="text-[11px] font-black uppercase tracking-[0.16em] text-[#6B8C6C]">Plan</p>
-                <p class="mt-1 text-sm font-black text-[#113E14]">{{ planLabel }}</p>
+                <p class="text-[11px] font-black uppercase tracking-[0.16em] text-[#416543]">Plan</p>
+                <p class="mt-1 text-sm font-black text-[#113e14]">{{ planLabel }}</p>
               </div>
-            <a href="/profile/settings" class="rounded-full bg-[#113E14] px-4 py-2 text-xs font-black text-[#EDE7D6] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#315F28]">
+            <a href="/profile/settings" class="rounded-full bg-[#dca15d] px-4 py-2 text-xs font-black text-[#113e14] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]">
                 Upgrade
               </a>
             </div>
           </div>
 
           <div class="mt-2.5 space-y-1">
-            <a href="/profile" class="flex items-center justify-between rounded-2xl px-4 py-2.5 text-sm font-black transition hover:bg-white/75">
+            <a href="/profile" class="flex items-center justify-between rounded-2xl px-4 py-2.5 text-sm font-black transition hover:bg-[#416543]/10">
               <span>View profile</span>
-              <span class="text-[#6B8C6C]">›</span>
+              <span class="text-[#416543]">›</span>
             </a>
-            <a href="/profile/settings" class="flex items-center justify-between rounded-2xl px-4 py-2.5 text-sm font-black transition hover:bg-white/75">
+            <a href="/profile/settings" class="flex items-center justify-between rounded-2xl px-4 py-2.5 text-sm font-black transition hover:bg-[#416543]/10">
               <span>Settings</span>
-              <span class="text-[#6B8C6C]">›</span>
+              <span class="text-[#416543]">›</span>
             </a>
           </div>
 
           @form({ route: 'session.destroy', method: 'POST' })
-            <button type="submit" class="mt-1 w-full rounded-2xl px-4 py-2.5 text-left text-sm font-black text-red-900 transition hover:bg-red-100/70">Log out</button>
+            <button type="submit" class="mt-1 w-full rounded-2xl px-4 py-2.5 text-left text-sm font-black text-[#113e14] transition hover:bg-[#dca15d]/18">Log out</button>
           @end
         @else
-          <div class="rounded-[1.35rem] border border-white/70 bg-white/72 p-4 shadow-sm">
-            <p class="text-base font-black text-[#113E14]">Plant Bud</p>
-            <p class="mt-1 text-sm font-semibold leading-6 text-[#6B8C6C]">Log in to open your profile and saved community tools.</p>
+          <div class="rounded-[1.35rem] border border-[#416543]/12 bg-[#ebe3a7]/28 p-4 shadow-sm">
+            <p class="text-base font-black text-[#113e14]">Plant Bud</p>
+            <p class="mt-1 text-sm font-semibold leading-6 text-[#416543]">Log in to open your profile and saved community tools.</p>
           </div>
           <div class="mt-3 space-y-1">
-            <a href="/login" class="block rounded-2xl px-4 py-3 text-sm font-black transition hover:bg-white/75">Log in</a>
-            <a href="/register" class="block rounded-2xl px-4 py-3 text-sm font-black transition hover:bg-white/75">Create account</a>
+            <a href="/login" class="block rounded-2xl bg-[#dca15d] px-4 py-3 text-sm font-black text-[#113e14] transition hover:bg-[#ebe3a7]">Log in</a>
+            <a href="/register" class="block rounded-2xl px-4 py-3 text-sm font-black transition hover:bg-[#416543]/10">Create account</a>
           </div>
         @endif
       </div>

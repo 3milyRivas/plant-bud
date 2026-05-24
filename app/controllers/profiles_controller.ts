@@ -102,7 +102,7 @@ export default class ProfilesController {
     const accountLinks = await AccountLink.query()
       .where('userId', user.id)
       .orderBy('sortOrder', 'asc')
-    const recentPosts = await CommunityPost.query()
+    const recentPostRows = await CommunityPost.query()
       .where('userId', user.id)
       .orderBy('createdAt', 'desc')
       .limit(9)
@@ -119,7 +119,7 @@ export default class ProfilesController {
       user,
       accountProfile,
       accountLinks,
-      recentPosts,
+      recentPosts: await this.getProfilePostPreviews(recentPostRows),
       ...roleDetails,
       avatarInitial: this.getProfileInitial(accountProfile, user),
       stats,
@@ -1059,6 +1059,110 @@ export default class ProfilesController {
       comments,
       reliability: Math.round((reliabilitySignals / 7) * 100),
     }
+  }
+
+  private async getProfilePostPreviews(posts: CommunityPost[]) {
+    if (!posts.length) return []
+
+    const postIds = posts.map((post) => post.id)
+    const [reactionRows, commentRows, pollRows] = await Promise.all([
+      db
+        .from('post_reactions')
+        .whereIn('community_post_id', postIds)
+        .groupBy('community_post_id', 'type')
+        .select('community_post_id', 'type')
+        .count('* as total'),
+      db
+        .from('post_comments')
+        .whereIn('community_post_id', postIds)
+        .groupBy('community_post_id')
+        .select('community_post_id')
+        .count('* as total'),
+      db.from('post_polls').whereIn('community_post_id', postIds).select('id', 'community_post_id', 'question'),
+    ])
+    const statsByPost = new Map<number, { likes: number; favorites: number; comments: number }>()
+    const pollIds = pollRows.map((row) => Number(row.id))
+    const pollPostIds = new Set(pollRows.map((row) => Number(row.community_post_id)))
+    const pollByPost = new Map<number, { question: string; totalVotes: number; options: { label: string; votes: number; percent: number }[] }>()
+
+    postIds.forEach((postId) => statsByPost.set(postId, { likes: 0, favorites: 0, comments: 0 }))
+
+    reactionRows.forEach((row) => {
+      const postId = Number(row.community_post_id)
+      const stats = statsByPost.get(postId)
+
+      if (!stats) return
+
+      if (row.type === 'like') stats.likes = Number(row.total || 0)
+      if (row.type === 'favorite') stats.favorites = Number(row.total || 0)
+    })
+
+    commentRows.forEach((row) => {
+      const stats = statsByPost.get(Number(row.community_post_id))
+
+      if (stats) stats.comments = Number(row.total || 0)
+    })
+
+    if (pollIds.length) {
+      const [optionRows, voteRows] = await Promise.all([
+        db
+          .from('post_poll_options')
+          .whereIn('post_poll_id', pollIds)
+          .orderBy('sort_order', 'asc')
+          .select('id', 'post_poll_id', 'label'),
+        db
+          .from('post_poll_votes')
+          .whereIn('post_poll_id', pollIds)
+          .groupBy('post_poll_id', 'post_poll_option_id')
+          .select('post_poll_id', 'post_poll_option_id')
+          .count('* as total'),
+      ])
+      const votesByOption = new Map<number, number>()
+
+      voteRows.forEach((row) => {
+        votesByOption.set(Number(row.post_poll_option_id), Number(row.total || 0))
+      })
+
+      pollRows.forEach((poll) => {
+        const pollId = Number(poll.id)
+        const options = optionRows.filter((option) => Number(option.post_poll_id) === pollId)
+        const totalVotes = options.reduce(
+          (total, option) => total + (votesByOption.get(Number(option.id)) || 0),
+          0
+        )
+
+        pollByPost.set(Number(poll.community_post_id), {
+          question: String(poll.question || ''),
+          totalVotes,
+          options: options.map((option) => {
+            const votes = votesByOption.get(Number(option.id)) || 0
+
+            return {
+              label: String(option.label || ''),
+              votes,
+              percent: totalVotes ? Math.round((votes / totalVotes) * 100) : 0,
+            }
+          }),
+        })
+      })
+    }
+
+    return posts.map((post) => {
+      const kind = pollPostIds.has(post.id) ? 'poll' : post.mediaUrl ? 'image' : 'text'
+      const stats = statsByPost.get(post.id) || { likes: 0, favorites: 0, comments: 0 }
+
+      return {
+        id: post.id,
+        body: post.body,
+        mediaUrl: post.mediaUrl,
+        kind,
+        kindLabel: kind === 'poll' ? 'Poll' : kind === 'image' ? 'Image' : 'Text',
+        createdAtHuman: post.createdAt?.toRelative() || 'Recently',
+        poll: pollByPost.get(post.id) || null,
+        pollJson: pollByPost.has(post.id) ? JSON.stringify(pollByPost.get(post.id)) : '',
+        ...stats,
+      }
+    })
   }
 
   private async getProfileRelations(userId: number) {

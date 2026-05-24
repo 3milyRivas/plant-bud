@@ -159,11 +159,11 @@ function initProfileRelationsModal() {
     tabs.forEach((tab) => {
       const isActive = tab.dataset.relationsTab === activeType
 
-      tab.classList.toggle('bg-[#1E3D19]', isActive)
-      tab.classList.toggle('text-[#EDE7D6]', isActive)
+      tab.classList.toggle('bg-[#113e14]', isActive)
+      tab.classList.toggle('text-[#ebe3a7]', isActive)
       tab.classList.toggle('shadow-md', isActive)
       tab.classList.toggle('bg-white', !isActive)
-      tab.classList.toggle('text-[#1E3D19]', !isActive)
+      tab.classList.toggle('text-[#113e14]', !isActive)
       tab.classList.toggle('shadow-sm', !isActive)
     })
 
@@ -202,6 +202,146 @@ function initProfileRelationsModal() {
     if (event.key === 'Escape' && !modal.classList.contains('hidden')) {
       closeModal()
     }
+  })
+}
+
+function initProfilePostPreview() {
+  const modal = document.querySelector('[data-profile-post-modal]')
+  const buttons = document.querySelectorAll('[data-profile-post-preview]')
+
+  if (!modal || !buttons.length || modal.dataset.profilePostPreviewReady === 'true') return
+
+  const image = modal.querySelector('[data-profile-post-modal-image]')
+  const emptyState = modal.querySelector('[data-profile-post-modal-empty]')
+  const body = modal.querySelector('[data-profile-post-modal-body]')
+  const meta = modal.querySelector('[data-profile-post-modal-meta]')
+  const author = modal.querySelector('[data-profile-post-modal-author]')
+  const kind = modal.querySelector('[data-profile-post-modal-kind]')
+  const likes = modal.querySelector('[data-profile-post-modal-likes]')
+  const favorites = modal.querySelector('[data-profile-post-modal-favorites]')
+  const comments = modal.querySelector('[data-profile-post-modal-comments]')
+  const pollPanel = modal.querySelector('[data-profile-post-modal-poll]')
+  const pollQuestion = modal.querySelector('[data-profile-post-modal-poll-question]')
+  const pollTotal = modal.querySelector('[data-profile-post-modal-poll-total]')
+  const pollOptions = modal.querySelector('[data-profile-post-modal-poll-options]')
+  const deleteForm = modal.querySelector('[data-profile-post-delete-form]')
+  const deleteConfirm = modal.querySelector('[data-profile-post-delete-confirm]')
+  const deleteOpen = modal.querySelector('[data-profile-post-delete-open]')
+  const deleteCancel = modal.querySelector('[data-profile-post-delete-cancel]')
+  const closeButtons = modal.querySelectorAll('[data-profile-post-modal-close]')
+  let previousBodyOverflow = ''
+
+  const openModal = (button) => {
+    const mediaUrl = button.dataset.postMedia || ''
+    const deleteAction = button.dataset.postDeleteAction || ''
+
+    if (body) body.textContent = button.dataset.postBody || 'No description yet.'
+    if (meta) meta.textContent = button.dataset.postCreated || 'Recently'
+    if (author) author.textContent = button.dataset.postAuthor || ''
+    if (kind) kind.textContent = button.dataset.postKind || 'Post'
+    if (likes) likes.textContent = button.dataset.postLikes || '0'
+    if (favorites) favorites.textContent = button.dataset.postFavorites || '0'
+    if (comments) comments.textContent = button.dataset.postComments || '0'
+
+    renderProfilePostPoll(button.dataset.postPoll || '', {
+      panel: pollPanel,
+      question: pollQuestion,
+      total: pollTotal,
+      options: pollOptions,
+    })
+
+    if (image && emptyState) {
+      image.classList.toggle('hidden', !mediaUrl)
+      emptyState.classList.toggle('hidden', Boolean(mediaUrl))
+
+      if (mediaUrl) image.src = mediaUrl
+    }
+
+    if (deleteForm) {
+      deleteForm.classList.toggle('hidden', !deleteAction)
+      if (deleteAction) deleteForm.setAttribute('action', deleteAction)
+    }
+    deleteConfirm?.classList.add('hidden')
+
+    previousBodyOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    modal.classList.remove('hidden')
+    modal.classList.add('flex')
+    modal.setAttribute('aria-hidden', 'false')
+  }
+
+  const closeModal = () => {
+    modal.classList.add('hidden')
+    modal.classList.remove('flex')
+    modal.setAttribute('aria-hidden', 'true')
+    document.body.style.overflow = previousBodyOverflow
+  }
+
+  modal.dataset.profilePostPreviewReady = 'true'
+  buttons.forEach((button) => {
+    button.addEventListener('click', () => openModal(button))
+  })
+  closeButtons.forEach((button) => button.addEventListener('click', closeModal))
+  deleteOpen?.addEventListener('click', () => {
+    deleteConfirm?.classList.remove('hidden')
+  })
+  deleteCancel?.addEventListener('click', () => {
+    deleteConfirm?.classList.add('hidden')
+  })
+  modal.addEventListener('click', (event) => {
+    if (event.target === modal) closeModal()
+  })
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !modal.classList.contains('hidden')) {
+      closeModal()
+    }
+  })
+}
+
+function renderProfilePostPoll(rawPoll, elements) {
+  const { panel, question, total, options } = elements
+
+  if (!panel || !question || !total || !options) return
+
+  let poll = null
+
+  try {
+    poll = rawPoll ? JSON.parse(rawPoll) : null
+  } catch {
+    poll = null
+  }
+
+  panel.classList.toggle('hidden', !poll)
+  options.replaceChildren()
+
+  if (!poll) return
+
+  question.textContent = poll.question || 'Poll'
+  total.textContent = `${poll.totalVotes || 0} ${poll.totalVotes === 1 ? 'vote' : 'votes'}`
+
+  ;(poll.options || []).forEach((option) => {
+    const item = document.createElement('div')
+    const row = document.createElement('div')
+    const label = document.createElement('span')
+    const value = document.createElement('span')
+    const track = document.createElement('div')
+    const bar = document.createElement('div')
+    const percent = Number(option.percent || 0)
+
+    item.className = 'space-y-2'
+    row.className = 'flex items-center justify-between gap-3 text-xs font-black text-[#113e14]'
+    label.className = 'min-w-0 truncate'
+    value.className = 'flex-none text-[#416543]'
+    track.className = 'h-2 overflow-hidden rounded-full bg-white/80'
+    bar.className = 'h-full rounded-full bg-[#dca15d]'
+    bar.style.width = `${Math.min(Math.max(percent, 0), 100)}%`
+    label.textContent = option.label || 'Option'
+    value.textContent = `${percent}% - ${option.votes || 0}`
+
+    row.append(label, value)
+    track.append(bar)
+    item.append(row, track)
+    options.append(item)
   })
 }
 
@@ -836,7 +976,7 @@ function renderCommunitySearchResults(results, payload) {
   if (!users.length && !hashtags.length) {
     const empty = document.createElement('p')
 
-    empty.className = 'px-4 py-3 text-sm font-bold text-[#113E14]/60'
+    empty.className = 'px-4 py-3 text-sm font-bold text-[#113e14]/60'
     empty.textContent = 'No profiles or hashtags found yet.'
     results.append(empty)
     results.classList.remove('hidden')
@@ -859,7 +999,7 @@ function renderCommunitySearchResults(results, payload) {
 function createCommunitySearchHeading(label) {
   const heading = document.createElement('p')
 
-  heading.className = 'px-3 pb-1 pt-2 text-[11px] font-black uppercase tracking-[0.14em] text-[#315F28]/70'
+  heading.className = 'px-3 pb-1 pt-2 text-[11px] font-black uppercase tracking-[0.14em] text-[#416543]/70'
   heading.textContent = label
 
   return heading
@@ -882,14 +1022,14 @@ function createCommunityUserResult(user) {
     avatar.loading = 'lazy'
     avatar.decoding = 'async'
   } else {
-    avatar.className = 'flex h-10 w-10 flex-none items-center justify-center rounded-full bg-[#113E14] text-sm font-black text-[#EDE7D6]'
+    avatar.className = 'flex h-10 w-10 flex-none items-center justify-center rounded-full bg-[#113e14] text-sm font-black text-[#ebe3a7]'
     avatar.textContent = user.initial || 'P'
   }
 
   text.className = 'min-w-0 leading-tight'
-  name.className = 'block truncate text-sm font-black text-[#113E14]'
+  name.className = 'block truncate text-sm font-black text-[#113e14]'
   name.textContent = user.displayName || user.username
-  meta.className = 'block truncate text-xs font-bold text-[#315F28]/70'
+  meta.className = 'block truncate text-xs font-bold text-[#416543]/70'
   meta.textContent = `${user.roleLabel || 'Member'} - @${user.username}`
 
   text.append(name, meta)
@@ -907,12 +1047,12 @@ function createCommunityHashtagResult(hashtag) {
 
   link.href = `/community/hashtags/${encodeURIComponent(hashtag.tag)}`
   link.className = 'flex items-center gap-3 rounded-2xl px-3 py-2 transition hover:bg-white/70 focus:bg-white/70 focus:outline-none focus:ring-2 focus:ring-[#48AE4D]/35'
-  icon.className = 'flex h-10 w-10 flex-none items-center justify-center rounded-full bg-[#EDE7D6] text-lg font-black text-[#113E14]'
+  icon.className = 'flex h-10 w-10 flex-none items-center justify-center rounded-full bg-[#ebe3a7] text-lg font-black text-[#113e14]'
   icon.textContent = '#'
   text.className = 'min-w-0 leading-tight'
-  tag.className = 'block truncate text-sm font-black text-[#113E14]'
+  tag.className = 'block truncate text-sm font-black text-[#113e14]'
   tag.textContent = `#${hashtag.tag}`
-  count.className = 'block truncate text-xs font-bold text-[#315F28]/70'
+  count.className = 'block truncate text-xs font-bold text-[#416543]/70'
   count.textContent = `${hashtag.postsCount || 0} posts`
 
   text.append(tag, count)
@@ -1045,8 +1185,8 @@ function updateFavoriteAccountButton(form, payload) {
   if (label) label.textContent = payload.favorite ? 'Favorite' : 'Add favorite'
   if (!button) return
 
-  button.classList.toggle('bg-[#EDE7D6]', payload.favorite)
-  button.classList.toggle('text-[#1E3D19]', payload.favorite)
+  button.classList.toggle('bg-[#ebe3a7]', payload.favorite)
+  button.classList.toggle('text-[#113e14]', payload.favorite)
   button.classList.toggle('bg-white/15', !payload.favorite)
   button.classList.toggle('text-white', !payload.favorite)
 }
@@ -1176,7 +1316,7 @@ function updateCommunityReaction(form, payload) {
 
   if (count && payload.counts?.[countKey] !== undefined) {
     count.textContent = payload.counts[countKey]
-    count.classList.toggle('text-[#113E14]', payload.active)
+    count.classList.toggle('text-[#113e14]', payload.active)
     count.classList.toggle('text-black/30', !payload.active)
   }
 
@@ -1217,7 +1357,7 @@ function appendCommunityComment(form, payload) {
   const body = document.createElement('p')
 
   item.className = 'rounded-2xl bg-white/45 px-4 py-2'
-  link.className = 'text-xs font-bold text-[#113E14]'
+  link.className = 'text-xs font-bold text-[#113e14]'
   link.href = `/users/${encodeURIComponent(comment.author.username)}`
   link.textContent = `@${comment.author.username}`
   body.className = 'text-sm font-semibold leading-6 text-black/70'
@@ -1318,11 +1458,11 @@ function updateCommunityPoll(form, payload) {
     if (percent) percent.textContent = `${option.percent}%`
     if (bar) {
       bar.style.width = `${option.percent}%`
-      bar.classList.toggle('bg-[#113E14]', option.selected)
-      bar.classList.toggle('bg-[#6C8E6B]', !option.selected)
+      bar.classList.toggle('bg-[#113e14]', option.selected)
+      bar.classList.toggle('bg-[#416543]', !option.selected)
     }
     if (button) {
-      button.classList.toggle('bg-[#113E14]/10', option.selected)
+      button.classList.toggle('bg-[#113e14]/10', option.selected)
       button.classList.toggle('bg-white/70', !option.selected)
     }
   })
@@ -1343,8 +1483,8 @@ function updateCommunityFollow(form, payload) {
   if (button?.className.includes('rounded-full')) {
     button.classList.toggle('bg-white/15', payload.following)
     button.classList.toggle('text-white', payload.following)
-    button.classList.toggle('bg-[#EDE7D6]', !payload.following)
-    button.classList.toggle('text-[#1E3D19]', !payload.following)
+    button.classList.toggle('bg-[#dca15d]', !payload.following)
+    button.classList.toggle('text-[#113e14]', !payload.following)
   }
 
   document.querySelectorAll('[data-followers-count]').forEach((count) => {
@@ -1485,7 +1625,7 @@ function renderPlantSearchStatus(resultsBox, message) {
   if (!message) return
 
   const status = document.createElement('p')
-  status.className = 'px-4 py-3 text-sm font-bold text-[#113E14]/70'
+  status.className = 'px-4 py-3 text-sm font-bold text-[#113e14]/70'
   status.textContent = message
   resultsBox.append(status)
 }
@@ -1519,12 +1659,12 @@ function renderPlantSearchResults(resultsBox, results) {
     image.addEventListener('error', () => image.remove())
 
     content.className = 'min-w-0 flex-1'
-    name.className = 'block truncate text-sm font-black text-[#113E14]'
+    name.className = 'block truncate text-sm font-black text-[#113e14]'
     name.textContent = plant.name
-    meta.className = 'block truncate text-xs font-semibold text-[#113E14]/60'
+    meta.className = 'block truncate text-xs font-semibold text-[#113e14]/60'
     meta.textContent = `${plant.scientificName} - ${plant.family}`
 
-    badge.className = 'hidden rounded-full bg-[#113E14]/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-[#113E14] sm:inline-flex'
+    badge.className = 'hidden rounded-full bg-[#113e14]/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-[#113e14] sm:inline-flex'
     badge.textContent = plant.catalog
 
     content.append(name, meta)
@@ -1646,6 +1786,7 @@ function initApp() {
   initAuthForms()
   initProfilePage()
   initProfileRelationsModal()
+  initProfilePostPreview()
   initAppNavbarMenus()
   initCommunityPage()
   initPlantCatalogSearch()

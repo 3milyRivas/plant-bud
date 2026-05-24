@@ -13,6 +13,7 @@ export type ScannedRoutes = {
     'homepage': { paramsTuple?: []; params?: {} }
     'community.index': { paramsTuple?: []; params?: {} }
     'community.posts.store': { paramsTuple?: []; params?: {} }
+    'community.posts.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'community.posts.reactions.toggle': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'type': ParamValue} }
     'community.posts.comments.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'community.polls.vote': { paramsTuple: [ParamValue,ParamValue]; params: {'pollId': ParamValue,'optionId': ParamValue} }
@@ -89,6 +90,7 @@ export type ScannedRoutes = {
     'garden_designer.remove_background': { paramsTuple?: []; params?: {} }
     'plants.scan': { paramsTuple?: []; params?: {} }
     'community.posts.store': { paramsTuple?: []; params?: {} }
+    'community.posts.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'community.posts.reactions.toggle': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'type': ParamValue} }
     'community.posts.comments.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'community.polls.vote': { paramsTuple: [ParamValue,ParamValue]; params: {'pollId': ParamValue,'optionId': ParamValue} }

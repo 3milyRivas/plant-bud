@@ -270,6 +270,29 @@ export default class CommunityController {
     return response.redirect().back()
   }
 
+  async destroy({ auth, params, request, response, session }: HttpContext) {
+    const user = auth.user!
+    const post = await CommunityPost.findOrFail(params.id)
+
+    if (post.userId !== user.id) {
+      if (this.wantsJson(request)) {
+        return response.forbidden({ ok: false, error: 'You cannot delete this post' })
+      }
+
+      session.flash('error', 'You cannot delete this post')
+      return response.redirect().back()
+    }
+
+    await post.delete()
+
+    if (this.wantsJson(request)) {
+      return response.json({ ok: true, id: post.id })
+    }
+
+    session.flash('success', 'Post deleted')
+    return response.redirect().back()
+  }
+
   async comment({ auth, params, request, response, session }: HttpContext) {
     const user = auth.user!
 
