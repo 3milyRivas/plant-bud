@@ -127,6 +127,32 @@ input[type='password']::-webkit-credentials-auto-fill-button {
   transition: transform 320ms ease;
 }
 
+.care-focus-panel {
+  background: rgb(255 255 255 / 0.9);
+  border-color: rgb(235 227 167 / 0.48);
+}
+
+.care-tip-grid > .group > div {
+  border-color: rgb(235 227 167 / 0.48);
+}
+
+.care-tip-grid > .group:nth-child(3n + 1) > div {
+  background: rgb(235 227 167 / 0.84);
+}
+
+.care-tip-grid > .group:nth-child(3n + 2) > div {
+  background: rgb(255 255 255 / 0.9);
+}
+
+.care-tip-grid > .group:nth-child(3n) > div {
+  background: rgb(235 227 167 / 0.84);
+}
+
+.care-tip-grid > .group:nth-child(3n) .w-14 {
+  background: #113e14;
+  color: #ebe3a7;
+}
+
 @keyframes plantCatalogGlow {
   0% {
     box-shadow: 0 0 0 0 rgb(237 231 214 / 0);

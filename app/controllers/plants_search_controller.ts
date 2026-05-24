@@ -20,18 +20,18 @@ type CatalogConfig = {
 
 const catalogs: CatalogConfig[] = [
   {
-    path: '/araceae',
-    label: 'Araceae catalog',
+    path: '/ornamental',
+    label: 'Ornamental catalog',
     families: ornamentalPlants as unknown as PlantFamilyMap,
   },
   {
-    path: '/amaryllidaceae',
-    label: 'Amaryllidaceae catalog',
+    path: '/horticultural',
+    label: 'Horticultural catalog',
     families: horticulturalPlants as unknown as PlantFamilyMap,
   },
   {
-    path: '/cactaceae',
-    label: 'Cactaceae catalog',
+    path: '/succulent',
+    label: 'Succulent catalog',
     families: succulentPlants as unknown as PlantFamilyMap,
   },
 ]
