@@ -6,7 +6,7 @@
 
 @let(errors = formErrors || {})
 
-<div class="min-h-screen bg-[#6C8E6B] text-[#113E14]" data-community-page>
+<div class="min-h-screen text-[#113E14]" data-community-page>
   @!component('components/community/top-navbar', {
     viewer,
     active: 'community',
@@ -210,49 +210,6 @@
         @else
           <div class="mt-5 rounded-2xl bg-white/12 p-4">
             <p class="text-sm font-bold leading-6 text-[#C7D8BF]">Mark gardeners, nurseries, or clients as favorites from their profile to keep them one tap away.</p>
-          </div>
-        @endif
-      </section>
-
-      <section class="rounded-3xl border border-white/30 bg-[#EDE7D6]/92 p-4 text-[#113E14] shadow-xl backdrop-blur-xl">
-        <p class="text-xs font-black uppercase tracking-[0.18em] text-[#6B8C6B]">Mutual follows</p>
-        <div class="mt-1 flex items-end justify-between gap-3">
-          <h2 class="text-2xl font-black">Friends</h2>
-          @if(friendAccounts.length)
-            <span class="rounded-full bg-white/55 px-3 py-1 text-xs font-black text-[#315F28]">{{ friendAccounts.length }}</span>
-          @endif
-        </div>
-
-        @if(friendAccounts.length)
-          <details class="group mt-5" open>
-            <summary class="flex cursor-pointer list-none items-center justify-between gap-3 rounded-2xl bg-white/40 px-4 py-3 text-sm font-black transition hover:bg-white/60">
-              <span>Friend shortcuts</span>
-              <span class="text-xs uppercase tracking-[0.16em] text-[#6B8C6B] group-open:hidden">Show</span>
-              <span class="hidden text-xs uppercase tracking-[0.16em] text-[#6B8C6B] group-open:inline">Hide</span>
-            </summary>
-
-            <div class="community-favorite-accounts-scroll mt-3 max-h-80 space-y-3 overflow-y-auto pr-1">
-              @each(account in friendAccounts)
-                <a href="/users/{{ account.username }}" class="flex items-center justify-between gap-3 rounded-2xl bg-white/42 p-3 transition hover:-translate-y-0.5 hover:bg-white/70">
-                  <span class="flex min-w-0 items-center gap-3">
-                    @if(account.avatarUrl)
-                      <img src="{{ account.avatarUrl }}" alt="" loading="lazy" decoding="async" class="h-11 w-11 flex-none rounded-full object-cover">
-                    @else
-                      <span class="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-[#113E14] font-black text-[#EDE7D6]">{{ account.initial }}</span>
-                    @endif
-                    <span class="min-w-0 leading-tight">
-                      <span class="block truncate text-sm font-black">{{ account.displayName }}</span>
-                      <span class="block truncate text-[11px] font-bold text-[#6B8C6B]">{{ '@' + account.username }}</span>
-                    </span>
-                  </span>
-                  <span class="rounded-full bg-[#113E14] px-3 py-1 text-[10px] font-black uppercase tracking-[0.1em] text-[#EDE7D6]">{{ account.relationLabel }}</span>
-                </a>
-              @end
-            </div>
-          </details>
-        @else
-          <div class="mt-5 rounded-2xl bg-white/38 p-4">
-            <p class="text-sm font-bold leading-6 text-[#5D7459]">When you and another account follow each other, they will appear here.</p>
           </div>
         @endif
       </section>
