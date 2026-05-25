@@ -10,37 +10,47 @@
 @let(bannerUrl = accountProfile?.bannerUrl)
 @let(memberSince = user.createdAt ? user.createdAt.toFormat('LLL yyyy') : 'Recently')
 
-<div class="relative z-10 min-h-dvh overflow-hidden bg-[#6B8C6C] text-[#1E3D19]">
+<div class="relative z-10 min-h-dvh overflow-hidden bg-[#416543] text-[#113e14]">
   <div class="fixed inset-0 pointer-events-none">
     <img src="/resources/images/welcome/header3.png" alt="" class="h-full w-full object-cover opacity-25">
-    <div class="absolute inset-0 bg-gradient-to-b from-[#1E3D19]/80 via-[#728B6F]/80 to-[#6B8C6C]"></div>
-    <div class="absolute left-10 top-24 h-72 w-72 rounded-full bg-[#EDE7D6]/10 blur-3xl"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-[#113e14]/80 via-[#416543]/80 to-[#416543]"></div>
+    <div class="absolute left-10 top-24 h-72 w-72 rounded-full bg-[#ebe3a7]/10 blur-3xl"></div>
     <div class="absolute bottom-10 right-10 h-96 w-96 rounded-full bg-white/10 blur-3xl"></div>
   </div>
 
-  <header class="relative z-20 px-5 py-5 lg:px-10">
-    <div class="mx-auto flex max-w-6xl items-center justify-between rounded-full border border-white/10 bg-white/10 px-5 py-4 shadow-[0_18px_55px_rgba(0,0,0,0.18)] backdrop-blur-2xl">
-      <a href="/homepage" class="flex items-center gap-3">
-        <img src="/resources/images/essential/logo.png" alt="" class="h-11 w-11 object-contain drop-shadow-lg">
-        <span class="hidden text-xl font-black text-white sm:block">Plant<span class="text-[#EDE7D6]"> Bud</span></span>
-      </a>
-
-      <div class="flex items-center gap-3">
-        <a href="/profile/settings" class="rounded-full bg-[#EDE7D6] px-5 py-2.5 text-sm font-black text-[#1E3D19] shadow-lg transition hover:-translate-y-0.5 hover:scale-[1.02]">
-          Settings
-        </a>
-        @form({ route: 'session.destroy', method: 'POST' })
-          <button type="submit" class="rounded-full border border-white/10 bg-white/10 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-white/20">
-            Logout
-          </button>
-        @end
-      </div>
-    </div>
-  </header>
+  @!component('components/app-navbar', {
+    section: 'Profile',
+    active: 'profile',
+    maxWidth: 'max-w-[min(1500px,calc(100vw-2rem))]',
+    avatarUrl,
+    avatarInitial,
+    displayName: publicDisplayName,
+    roleLabel: user.role,
+    items: [
+      {
+        key: 'homepage',
+        href: '/homepage',
+        label: 'Home',
+        icon: '',
+      },
+      {
+        key: 'community',
+        href: '/community',
+        label: 'Community',
+        icon: '',
+      },
+      {
+        key: 'settings',
+        href: '/profile/settings',
+        label: 'Settings',
+        icon: '',
+      },
+    ],
+  })
 
   <main class="relative z-10 mx-auto max-w-6xl px-5 pb-16 lg:px-10">
     @if(flashMessages.get('success'))
-      <div class="mb-5 rounded-[1.5rem] border border-white/10 bg-white/15 px-5 py-4 text-sm font-bold text-[#EDE7D6] shadow-xl backdrop-blur-2xl">
+      <div class="mb-5 rounded-[1.5rem] border border-white/10 bg-white/15 px-5 py-4 text-sm font-bold text-[#ebe3a7] shadow-xl backdrop-blur-2xl">
         {{ flashMessages.get('success') }}
       </div>
     @endif
@@ -50,19 +60,19 @@
         @if(bannerUrl)
           <img src="{{ bannerUrl }}" alt="" class="absolute inset-0 block h-full max-h-full w-full object-cover">
         @else
-          <div class="absolute inset-0 bg-gradient-to-br from-[#1E3D19] via-[#315F28] to-[#728B6F]"></div>
+          <div class="absolute inset-0 bg-gradient-to-br from-[#113e14] via-[#416543] to-[#416543]"></div>
         @endif
-        <div class="absolute inset-0 bg-gradient-to-t from-[#1E3D19] via-[#1E3D19]/15 to-transparent"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-[#113e14] via-[#113e14]/15 to-transparent"></div>
       </div>
 
       <div class="px-6 pb-8 pt-6 sm:px-8 sm:pt-8">
         <div class="grid gap-6 lg:grid-cols-[180px_1fr_auto] lg:items-center">
           <div class="relative h-32 w-32 sm:h-40 sm:w-40">
-            <div class="absolute -inset-1 rounded-full bg-[#EDE7D6] shadow-[0_18px_55px_rgba(0,0,0,0.28)]"></div>
+            <div class="absolute -inset-1 rounded-full bg-[#ebe3a7] shadow-[0_18px_55px_rgba(0,0,0,0.28)]"></div>
             @if(avatarUrl)
               <img src="{{ avatarUrl }}" alt="" class="relative h-full w-full rounded-full border-4 border-white object-cover">
             @else
-              <div class="relative flex h-full w-full items-center justify-center rounded-full border-4 border-white bg-[#1E3D19] text-5xl font-black text-[#EDE7D6] shadow-inner sm:text-6xl">
+              <div class="relative flex h-full w-full items-center justify-center rounded-full border-4 border-white bg-[#113e14] text-5xl font-black text-[#ebe3a7] shadow-inner sm:text-6xl">
                 {{ avatarInitial }}
               </div>
             @endif
@@ -71,29 +81,33 @@
           <div>
             <div class="flex flex-wrap items-center gap-3">
               <h1 class="text-4xl font-black leading-tight text-white lg:text-5xl">{{ publicDisplayName }}</h1>
-              <span class="rounded-full bg-[#EDE7D6] px-3 py-1.5 text-xs font-black uppercase tracking-[0.16em] text-[#1E3D19]">
+              <span class="rounded-full bg-[#ebe3a7] px-3 py-1.5 text-xs font-black uppercase tracking-[0.16em] text-[#113e14]">
                 {{ user.role }}
               </span>
             </div>
-            <p class="mt-2 text-base font-bold text-[#EDE7D6]">{{ '@' + user.username }}</p>
+            <p class="mt-2 text-base font-bold text-[#ebe3a7]">{{ '@' + user.username }}</p>
             <p class="mt-4 max-w-2xl text-sm font-semibold leading-7 text-white/82">
               {{ profileBio || 'This profile is ready. Add a description from settings to tell the community what you grow, care for, or sell.' }}
             </p>
           </div>
 
-          <div class="grid grid-cols-3 gap-3 rounded-[1.5rem] bg-white/12 p-3 text-center text-white backdrop-blur-xl lg:min-w-80">
+          <div class="grid grid-cols-2 gap-3 rounded-[1.5rem] bg-white/12 p-3 text-center text-white backdrop-blur-xl sm:grid-cols-4 lg:min-w-[26rem]">
             <div>
               <p class="text-2xl font-black">{{ stats.posts }}</p>
-              <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#EDE7D6]">Posts</p>
+              <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#ebe3a7]">Posts</p>
             </div>
-            <div>
+            <button type="button" class="rounded-2xl transition hover:-translate-y-0.5 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-[#ebe3a7]/70" data-relations-open="followers">
               <p class="text-2xl font-black">{{ stats.followers }}</p>
-              <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#EDE7D6]">Followers</p>
-            </div>
-            <div>
-              <p class="text-2xl font-black">{{ stats.following }}</p>
-              <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#EDE7D6]">Following</p>
-            </div>
+              <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#ebe3a7]">Followers</p>
+            </button>
+            <button type="button" class="rounded-2xl transition hover:-translate-y-0.5 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-[#ebe3a7]/70" data-relations-open="following">
+              <p class="text-2xl font-black" data-following-count>{{ stats.following }}</p>
+              <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#ebe3a7]">Following</p>
+            </button>
+            <button type="button" class="rounded-2xl transition hover:-translate-y-0.5 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-[#ebe3a7]/70" data-relations-open="friends">
+              <p class="text-2xl font-black" data-friends-count>{{ stats.friends }}</p>
+              <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#ebe3a7]">Friends</p>
+            </button>
           </div>
         </div>
 
@@ -120,7 +134,7 @@
         <article class="rounded-[2rem] border border-white/10 bg-white/12 p-6 text-white shadow-xl backdrop-blur-2xl">
           <div class="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
             <div>
-              <p class="text-sm font-black uppercase tracking-[0.18em] text-[#EDE7D6]">
+              <p class="text-sm font-black uppercase tracking-[0.18em] text-[#ebe3a7]">
                 {{ roleProfileKind === 'gardener' ? 'Gardener profile' : 'Nursery profile' }}
               </p>
               <h2 class="mt-2 text-3xl font-black">
@@ -128,7 +142,7 @@
               </h2>
             </div>
 
-            <span class="w-fit rounded-full bg-[#EDE7D6] px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-[#1E3D19]">
+            <span class="w-fit rounded-full bg-[#ebe3a7] px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-[#113e14]">
               @if(roleProfileKind === 'gardener')
                 {{ roleProfile?.isAvailable ? 'Available' : 'Paused' }}
               @else
@@ -139,9 +153,9 @@
 
           <div class="mt-6 grid gap-4 sm:grid-cols-3">
             <div class="rounded-2xl bg-white/10 p-4">
-              <p class="text-xs font-black uppercase tracking-[0.14em] text-[#EDE7D6]">Rating</p>
+              <p class="text-xs font-black uppercase tracking-[0.14em] text-[#ebe3a7]">Rating</p>
               <p class="mt-2 text-3xl font-black">{{ profileRating.averageText }}</p>
-              <div class="mt-1 flex gap-1 text-lg text-[#EDE7D6]">
+              <div class="mt-1 flex gap-1 text-lg text-[#ebe3a7]">
                 @each(star in ratingStars)
                   <span class="{{ profileRating.average >= star ? 'opacity-100' : 'opacity-35' }}">&#9733;</span>
                 @end
@@ -150,7 +164,7 @@
             </div>
 
             <div class="rounded-2xl bg-white/10 p-4 sm:col-span-2">
-              <p class="text-xs font-black uppercase tracking-[0.14em] text-[#EDE7D6]">
+              <p class="text-xs font-black uppercase tracking-[0.14em] text-[#ebe3a7]">
                 {{ roleProfileKind === 'gardener' ? 'Service area' : 'Location' }}
               </p>
               <p class="mt-2 text-lg font-black">
@@ -167,15 +181,15 @@
           </div>
         </article>
 
-        <article class="rounded-[2rem] bg-[#EDE7D6]/95 p-6 text-[#1E3D19] shadow-[0_24px_70px_rgba(0,0,0,0.18)]">
+        <article class="rounded-[2rem] bg-[#ebe3a7]/95 p-6 text-[#113e14] shadow-[0_24px_70px_rgba(0,0,0,0.18)]">
           <div class="grid gap-5 md:grid-cols-2">
             <div>
-              <p class="text-sm font-black uppercase tracking-[0.18em] text-[#728B6F]">Services</p>
+              <p class="text-sm font-black uppercase tracking-[0.18em] text-[#416543]">Services</p>
               <div class="mt-4 flex flex-wrap gap-2">
                 @each(service in profileServices)
-                  <span class="rounded-full bg-white px-4 py-2 text-sm font-black text-[#315F28] shadow-sm">{{ service }}</span>
+                  <span class="rounded-full bg-white px-4 py-2 text-sm font-black text-[#416543] shadow-sm">{{ service }}</span>
                 @else
-                  <p class="rounded-2xl border border-dashed border-[#728B6F]/40 bg-white/50 px-4 py-4 text-sm font-bold text-[#5D7459]">
+                  <p class="rounded-2xl border border-dashed border-[#416543]/40 bg-white/50 px-4 py-4 text-sm font-bold text-[#416543]">
                     Services are ready to be added from settings.
                   </p>
                 @end
@@ -183,12 +197,12 @@
             </div>
 
             <div>
-              <p class="text-sm font-black uppercase tracking-[0.18em] text-[#728B6F]">Payment methods</p>
+              <p class="text-sm font-black uppercase tracking-[0.18em] text-[#416543]">Payment methods</p>
               <div class="mt-4 flex flex-wrap gap-2">
                 @each(method in paymentMethods)
-                  <span class="rounded-full bg-[#315F28] px-4 py-2 text-sm font-black text-white">{{ method }}</span>
+                  <span class="rounded-full bg-[#416543] px-4 py-2 text-sm font-black text-white">{{ method }}</span>
                 @else
-                  <p class="rounded-2xl border border-dashed border-[#728B6F]/40 bg-white/50 px-4 py-4 text-sm font-bold text-[#5D7459]">
+                  <p class="rounded-2xl border border-dashed border-[#416543]/40 bg-white/50 px-4 py-4 text-sm font-bold text-[#416543]">
                     Payment options are pending.
                   </p>
                 @end
@@ -198,20 +212,20 @@
 
           <div class="mt-6 grid gap-4 md:grid-cols-2">
             <div class="rounded-2xl bg-white/60 p-4">
-              <p class="text-xs font-black uppercase tracking-[0.14em] text-[#728B6F]">
+              <p class="text-xs font-black uppercase tracking-[0.14em] text-[#416543]">
                 {{ roleProfileKind === 'gardener' ? 'Schedule' : 'Opening hours' }}
               </p>
-              <p class="mt-2 whitespace-pre-line text-sm font-bold leading-6 text-[#315F28]">
+              <p class="mt-2 whitespace-pre-line text-sm font-bold leading-6 text-[#416543]">
                 {{ roleProfileKind === 'gardener' ? (roleProfile?.availabilitySchedule || 'Pending') : (roleProfile?.openingHours || 'Pending') }}
               </p>
             </div>
             <div class="rounded-2xl bg-white/60 p-4">
-              <p class="text-xs font-black uppercase tracking-[0.14em] text-[#728B6F]">Contact</p>
-              <p class="mt-2 text-sm font-bold leading-6 text-[#315F28]">
+              <p class="text-xs font-black uppercase tracking-[0.14em] text-[#416543]">Contact</p>
+              <p class="mt-2 text-sm font-bold leading-6 text-[#416543]">
                 {{ roleProfile?.publicPhone || user.phone || 'Pending phone' }}
               </p>
               @if(roleProfileKind === 'nursery')
-                <p class="mt-1 break-words text-sm font-bold leading-6 text-[#315F28]">
+                <p class="mt-1 break-words text-sm font-bold leading-6 text-[#416543]">
                   {{ roleProfile?.publicEmail || user.email }}
                 </p>
               @endif
@@ -223,10 +237,10 @@
       <section class="mt-6 rounded-[2rem] border border-white/10 bg-white/12 p-6 text-white shadow-xl backdrop-blur-2xl">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p class="text-sm font-black uppercase tracking-[0.18em] text-[#EDE7D6]">Reviews</p>
+            <p class="text-sm font-black uppercase tracking-[0.18em] text-[#ebe3a7]">Reviews</p>
             <h2 class="mt-2 text-2xl font-black">Community trust</h2>
           </div>
-          <span class="rounded-full bg-white/10 px-4 py-2 text-sm font-black text-[#EDE7D6]">
+          <span class="rounded-full bg-white/10 px-4 py-2 text-sm font-black text-[#ebe3a7]">
             {{ profileRating.averageText }} / 5
           </span>
         </div>
@@ -236,7 +250,7 @@
             <article class="rounded-2xl bg-white/10 p-4">
               <div class="flex items-center justify-between gap-3">
                 <p class="font-black">{{ review.reviewerName || 'Plant Bud user' }}</p>
-                <span class="rounded-full bg-[#EDE7D6] px-3 py-1 text-xs font-black text-[#1E3D19]">{{ review.rating }}/5</span>
+                <span class="rounded-full bg-[#ebe3a7] px-3 py-1 text-xs font-black text-[#113e14]">{{ review.rating }}/5</span>
               </div>
               <p class="mt-3 line-clamp-4 text-sm font-semibold leading-6 text-white/75">
                 {{ review.comment || 'No written comment yet.' }}
@@ -254,12 +268,12 @@
     <section class="mt-6 grid gap-6 lg:grid-cols-[0.75fr_1.25fr]">
       <aside class="space-y-6">
         <div class="rounded-[2rem] border border-white/10 bg-white/12 p-6 text-white shadow-xl backdrop-blur-2xl">
-          <p class="text-sm font-black uppercase tracking-[0.18em] text-[#EDE7D6]">Linked accounts</p>
+          <p class="text-sm font-black uppercase tracking-[0.18em] text-[#ebe3a7]">Linked accounts</p>
           <div class="mt-5 space-y-3">
             @each(link in accountLinks)
               <a href="{{ link.url }}" target="_blank" rel="noreferrer" class="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm font-bold transition hover:-translate-y-0.5 hover:bg-white/20">
                 <span>{{ link.label }}</span>
-                <span class="text-xs font-black uppercase tracking-[0.16em] text-[#EDE7D6]">Open</span>
+                <span class="text-xs font-black uppercase tracking-[0.16em] text-[#ebe3a7]">Open</span>
               </a>
             @else
               <p class="rounded-2xl border border-dashed border-white/20 px-4 py-4 text-sm font-semibold text-white/75">
@@ -272,26 +286,26 @@
         <div class="grid grid-cols-3 gap-3 rounded-[2rem] border border-white/10 bg-white/12 p-4 text-center text-white shadow-xl backdrop-blur-2xl">
           <div>
             <p class="text-2xl font-black">{{ stats.likes }}</p>
-            <p class="text-[0.68rem] font-bold uppercase tracking-[0.12em] text-[#EDE7D6]">Likes</p>
+            <p class="text-[0.68rem] font-bold uppercase tracking-[0.12em] text-[#ebe3a7]">Likes</p>
           </div>
           <div>
             <p class="text-2xl font-black">{{ stats.favorites }}</p>
-            <p class="text-[0.68rem] font-bold uppercase tracking-[0.12em] text-[#EDE7D6]">Saved</p>
+            <p class="text-[0.68rem] font-bold uppercase tracking-[0.12em] text-[#ebe3a7]">Saved</p>
           </div>
           <div>
             <p class="text-2xl font-black">{{ stats.comments }}</p>
-            <p class="text-[0.68rem] font-bold uppercase tracking-[0.12em] text-[#EDE7D6]">Comments</p>
+            <p class="text-[0.68rem] font-bold uppercase tracking-[0.12em] text-[#ebe3a7]">Comments</p>
           </div>
         </div>
       </aside>
 
-      <section class="rounded-[2rem] border border-white/10 bg-[#EDE7D6]/95 p-5 shadow-[0_24px_70px_rgba(0,0,0,0.18)]">
+      <section class="rounded-[2rem] border border-white/25 bg-white/82 p-5 text-[#113e14] shadow-[0_24px_70px_rgba(0,0,0,0.16)] backdrop-blur-2xl">
         <div class="flex items-center justify-between gap-4 px-1 pb-5">
           <div>
-            <p class="text-xs font-black uppercase tracking-[0.18em] text-[#728B6F]">Profile feed</p>
-            <h2 class="mt-1 text-2xl font-black text-[#1E3D19]">Posts</h2>
+            <p class="text-xs font-black uppercase tracking-[0.18em] text-[#416543]">Profile feed</p>
+            <h2 class="mt-1 text-2xl font-black text-[#113e14]">Posts</h2>
           </div>
-          <a href="/community" class="rounded-full bg-white px-4 py-2 text-sm font-black text-[#1E3D19] shadow-sm transition hover:bg-[#D5DCD4]">
+          <a href="/community" class="rounded-full bg-[#dca15d] px-4 py-2 text-sm font-black text-[#113e14] shadow-sm transition hover:bg-[#ebe3a7]">
             Community
           </a>
         </div>
@@ -299,27 +313,48 @@
         @if(recentPosts.length)
           <div class="grid grid-cols-2 gap-3 md:grid-cols-3">
             @each(post in recentPosts)
-              <article class="group relative aspect-square overflow-hidden rounded-[1.5rem] bg-[#D5DCD4] shadow-lg">
+              <button
+                type="button"
+                class="group relative aspect-square overflow-hidden rounded-[1.35rem] border border-[#416543]/15 bg-[#ebe3a7]/45 text-left shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[#dca15d]/70 hover:shadow-[0_18px_45px_rgba(17,62,20,0.18)] focus:outline-none focus:ring-2 focus:ring-[#dca15d]/70"
+                data-profile-post-preview
+                data-post-body="{{ post.body }}"
+                data-post-media="{{ post.mediaUrl || '' }}"
+                data-post-created="{{ post.createdAtHuman }}"
+                data-post-author="{{ '@' + user.username }}"
+                data-post-kind="{{ post.kindLabel }}"
+                data-post-likes="{{ post.likes }}"
+                data-post-favorites="{{ post.favorites }}"
+                data-post-comments="{{ post.comments }}"
+                data-post-poll="{{ post.pollJson }}"
+                data-post-delete-action="/community/posts/{{ post.id }}/delete"
+              >
                 @if(post.mediaUrl)
-                  <img src="{{ post.mediaUrl }}" alt="" class="h-full w-full object-cover transition duration-500 group-hover:scale-110">
-                  <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 transition group-hover:opacity-100"></div>
-                  <p class="absolute inset-x-4 bottom-4 line-clamp-3 text-sm font-bold leading-5 text-white opacity-0 transition group-hover:opacity-100">
+                  <img src="{{ post.mediaUrl }}" alt="" class="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]">
+                  <div class="absolute inset-0 bg-gradient-to-t from-[#113e14]/78 via-[#113e14]/10 to-transparent opacity-75 transition group-hover:opacity-95"></div>
+                  <span class="absolute left-4 top-4 rounded-full bg-white/82 px-3 py-1 text-[0.68rem] font-black uppercase tracking-[0.12em] text-[#113e14]">
+                    {{ post.kindLabel }}
+                  </span>
+                  <p class="absolute inset-x-4 bottom-4 line-clamp-3 text-sm font-bold leading-5 text-white">
                     {{ post.body }}
                   </p>
                 @else
-                  <div class="flex h-full w-full items-center justify-center p-5 text-center">
-                    <p class="line-clamp-6 text-sm font-black leading-6 text-[#1E3D19]">{{ post.body }}</p>
+                  <div class="flex h-full w-full flex-col justify-between p-5">
+                    <span class="w-fit rounded-full bg-white/75 px-3 py-1 text-[0.68rem] font-black uppercase tracking-[0.12em] text-[#416543]">
+                      {{ post.kindLabel }}
+                    </span>
+                    <p class="line-clamp-6 text-sm font-black leading-6 text-[#113e14]">{{ post.body }}</p>
+                    <span class="text-xs font-black text-[#416543]">{{ post.likes }} likes - {{ post.comments }} comments</span>
                   </div>
                 @endif
-              </article>
+              </button>
             @end
           </div>
         @else
-          <div class="flex min-h-80 items-center justify-center rounded-[1.5rem] border border-dashed border-[#728B6F]/40 bg-white/45 p-8 text-center">
+          <div class="flex min-h-80 items-center justify-center rounded-[1.5rem] border border-dashed border-[#416543]/40 bg-white/45 p-8 text-center">
             <div class="max-w-sm">
               <img src="/resources/images/homepagee/comunity.png" alt="" class="mx-auto h-24 w-24 object-contain">
-              <h3 class="mt-5 text-2xl font-black text-[#1E3D19]">No posts yet</h3>
-              <p class="mt-2 text-sm font-semibold leading-6 text-[#5D7459]">
+              <h3 class="mt-5 text-2xl font-black text-[#113e14]">No posts yet</h3>
+              <p class="mt-2 text-sm font-semibold leading-6 text-[#416543]">
                 Your future community posts will appear here as a clean profile grid.
               </p>
             </div>
@@ -328,5 +363,84 @@
       </section>
     </section>
   </main>
+
+  @!component('components/profile-relations-modal', {
+    relations: profileRelations,
+    showFriends: true,
+    canManage: true
+  })
+
+  <div class="fixed inset-0 z-50 hidden items-center justify-center bg-[#113e14]/82 p-5 backdrop-blur-xl" data-profile-post-modal aria-hidden="true">
+    <div class="relative grid max-h-[90vh] w-full max-w-3xl overflow-hidden rounded-[2rem] border border-white/20 bg-white text-[#113e14] shadow-[0_30px_90px_rgba(0,0,0,0.35)] md:grid-cols-[0.95fr_1.05fr]">
+      <button type="button" class="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-xl font-black text-[#113e14] shadow-sm transition hover:bg-[#ebe3a7]" data-profile-post-modal-close aria-label="Close post preview">
+        x
+      </button>
+
+      <div class="min-h-72 bg-[#416543]/10">
+        <img src="" alt="" class="hidden h-full max-h-[90vh] w-full object-cover" data-profile-post-modal-image>
+        <div class="flex h-full min-h-72 items-center justify-center p-8 text-center" data-profile-post-modal-empty>
+          <div>
+            <p class="text-xs font-black uppercase tracking-[0.18em] text-[#416543]">Text post</p>
+            <p class="mt-3 text-3xl font-black text-[#113e14]">Plant Bud</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex max-h-[90vh] flex-col overflow-y-auto p-6">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="rounded-full bg-[#ebe3a7] px-3 py-1 text-[0.68rem] font-black uppercase tracking-[0.14em] text-[#113e14]" data-profile-post-modal-kind>Post</span>
+          <span class="text-xs font-black uppercase tracking-[0.16em] text-[#416543]" data-profile-post-modal-meta>Recently</span>
+        </div>
+        <p class="mt-2 text-sm font-black text-[#dca15d]" data-profile-post-modal-author></p>
+
+        <div class="mt-5 grid grid-cols-3 gap-2">
+          <div class="rounded-2xl bg-[#416543]/8 p-3">
+            <p class="text-lg font-black text-[#113e14]" data-profile-post-modal-likes>0</p>
+            <p class="text-[0.65rem] font-black uppercase tracking-[0.12em] text-[#416543]">Likes</p>
+          </div>
+          <div class="rounded-2xl bg-[#416543]/8 p-3">
+            <p class="text-lg font-black text-[#113e14]" data-profile-post-modal-favorites>0</p>
+            <p class="text-[0.65rem] font-black uppercase tracking-[0.12em] text-[#416543]">Saves</p>
+          </div>
+          <div class="rounded-2xl bg-[#416543]/8 p-3">
+            <p class="text-lg font-black text-[#113e14]" data-profile-post-modal-comments>0</p>
+            <p class="text-[0.65rem] font-black uppercase tracking-[0.12em] text-[#416543]">Comments</p>
+          </div>
+        </div>
+
+        <div class="mt-5 hidden rounded-[1.5rem] bg-[#416543]/8 p-4" data-profile-post-modal-poll>
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <p class="text-[0.68rem] font-black uppercase tracking-[0.14em] text-[#416543]">Poll results</p>
+              <h3 class="mt-1 text-lg font-black leading-6 text-[#113e14]" data-profile-post-modal-poll-question></h3>
+            </div>
+            <span class="rounded-full bg-[#ebe3a7] px-3 py-1 text-[0.68rem] font-black uppercase tracking-[0.12em] text-[#113e14]" data-profile-post-modal-poll-total>0 votes</span>
+          </div>
+          <div class="mt-4 space-y-3" data-profile-post-modal-poll-options></div>
+        </div>
+
+        <p class="mt-5 whitespace-pre-line text-base font-bold leading-7 text-[#113e14]" data-profile-post-modal-body></p>
+
+        <form method="POST" action="" class="mt-8 hidden" data-profile-post-delete-form>
+          {{ csrfField() }}
+          <button type="button" class="w-full rounded-full bg-[#dca15d] px-5 py-3 text-sm font-black text-[#113e14] shadow-lg transition hover:bg-[#ebe3a7]" data-profile-post-delete-open>
+            Delete post
+          </button>
+          <div class="mt-4 hidden rounded-[1.5rem] border border-[#dca15d]/40 bg-[#ebe3a7]/55 p-4" data-profile-post-delete-confirm>
+            <p class="text-sm font-black text-[#113e14]">Delete this post?</p>
+            <p class="mt-1 text-xs font-bold leading-5 text-[#416543]">This action removes it from your profile and community feed.</p>
+            <div class="mt-4 flex flex-wrap gap-2">
+              <button type="submit" class="rounded-full bg-[#dca15d] px-4 py-2 text-xs font-black text-[#113e14] shadow-sm transition hover:bg-[#ebe3a7]">
+                Yes, delete
+              </button>
+              <button type="button" class="rounded-full bg-white px-4 py-2 text-xs font-black text-[#113e14] shadow-sm transition hover:bg-[#ebe3a7]" data-profile-post-delete-cancel>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
 @end

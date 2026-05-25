@@ -1,42 +1,29 @@
-<header class="relative z-30 px-5 pt-5 lg:px-10 lg:pt-7">
-  <div class="mx-auto flex max-w-7xl items-center justify-between rounded-full border border-white/10 bg-white/10 px-5 py-4 shadow-[0_18px_55px_rgba(0,0,0,0.18)] backdrop-blur-2xl lg:px-6">
-    <a href="/homepage" class="flex min-w-0 items-center gap-4">
-      <img src="/resources/images/essential/logo.png" alt="" class="h-12 w-12 object-contain drop-shadow-lg transition duration-500 hover:rotate-6">
-      <span class="hidden min-w-0 sm:block">
-        <span class="block text-xl font-black tracking-wide text-white">Plant<span class="text-[#EDE7D6]"> Bud</span></span>
-        <span class="block truncate text-xs font-bold uppercase tracking-[0.16em] text-[#EDE7D6]/85">{{ roleLabel }}</span>
-      </span>
-    </a>
-
-    <div class="hidden flex-1 items-center justify-center px-6 md:flex">
-      <nav class="relative flex items-center gap-1 overflow-hidden rounded-full border border-white/10 bg-white/[0.08] px-2 py-2 shadow-[0_18px_45px_rgba(0,0,0,0.18)] backdrop-blur-2xl">
-        <div class="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white/35 to-transparent"></div>
-        <a href="/scanner" class="group relative flex items-center gap-2 rounded-full px-4 py-2 text-sm font-black text-white/75 transition hover:bg-white/12 hover:text-[#EDE7D6]">
-          <img src="/resources/images/homepagee/scanner.png" alt="" class="h-5 w-5 object-contain transition group-hover:scale-110">
-          Scanner
-        </a>
-        <a href="/designer" class="group relative flex items-center gap-2 rounded-full px-4 py-2 text-sm font-black text-white/75 transition hover:bg-white/12 hover:text-[#EDE7D6]">
-          <img src="/resources/images/homepagee/tulip.png" alt="" class="h-5 w-5 object-contain transition group-hover:scale-110">
-          Designer
-        </a>
-        <a href="/community" class="group relative flex items-center gap-2 rounded-full px-4 py-2 text-sm font-black text-white/75 transition hover:bg-white/12 hover:text-[#EDE7D6]">
-          <img src="/resources/images/homepagee/comunity.png" alt="" class="h-5 w-5 object-contain transition group-hover:scale-110">
-          Community
-        </a>
-      </nav>
-    </div>
-
-    @!component('components/homepage-profile-menu', {
-      avatarUrl: avatarUrl,
-      avatarInitial: avatarInitial,
-      displayName: displayName,
-      roleLabel: roleLabel
-    })
-  </div>
-
-  <nav class="mx-auto mt-3 grid max-w-7xl grid-cols-3 gap-2 md:hidden">
-    <a href="/scanner" class="rounded-full border border-white/10 bg-white/12 px-3 py-2 text-center text-xs font-black text-white shadow-lg backdrop-blur-xl">Scanner</a>
-    <a href="/designer" class="rounded-full border border-white/10 bg-white/12 px-3 py-2 text-center text-xs font-black text-white shadow-lg backdrop-blur-xl">Designer</a>
-    <a href="/community" class="rounded-full border border-white/10 bg-white/12 px-3 py-2 text-center text-xs font-black text-white shadow-lg backdrop-blur-xl">Community</a>
-  </nav>
-</header>
+@!component('components/app-navbar', {
+  section: roleLabel,
+  active: 'homepage',
+  avatarUrl,
+  avatarInitial,
+  displayName,
+  roleLabel,
+  maxWidth: 'max-w-7xl',
+  items: [
+    {
+      key: 'scanner',
+      href: '/scanner',
+      label: 'Scanner',
+      icon: '/resources/images/homepagee/scanner.png',
+    },
+    {
+      key: 'designer',
+      href: '/designer',
+      label: 'Designer',
+      icon: '/resources/images/homepagee/tulip.png',
+    },
+    {
+      key: 'community',
+      href: '/community',
+      label: 'Community',
+      icon: '/resources/images/homepagee/comunity.png',
+    },
+  ],
+})

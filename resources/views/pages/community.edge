@@ -6,281 +6,42 @@
 
 @let(errors = formErrors || {})
 
-<div class="min-h-screen bg-[#6C8E6B] text-[#113E14]" data-community-page>
-  <div class="fixed left-0 top-0 z-50 w-full px-4 py-4 lg:px-8" data-community-navbar>
-    <div class="mx-auto flex max-w-[1240px] items-center justify-between gap-3 rounded-[2rem] border border-white/30 bg-white/24 px-4 py-3 shadow-[0_18px_55px_rgba(17,62,20,0.18)] backdrop-blur-2xl transition-all duration-500 sm:rounded-full sm:px-5" data-community-navbar-shell>
-      <div class="flex min-w-0 flex-1 items-center gap-3 transition-all duration-500" data-community-navbar-left>
-        <a href="/homepage" class="flex flex-none items-center gap-3">
-          <span class="h-11 w-11 rounded-full bg-[#113E14] bg-[url('/resources/images/essential/logo.png')] bg-contain bg-center bg-no-repeat shadow-md transition hover:scale-105"></span>
-          <span class="hidden leading-tight lg:block" data-community-brand-text>
-            <span class="block text-sm font-black text-[#113E14]">Plant Bud</span>
-            <span class="block text-[11px] font-bold uppercase tracking-[0.18em] text-[#315F28]">Community</span>
-          </span>
-        </a>
+<div class="min-h-screen text-[#113e14]" data-community-page>
+  @!component('components/community/top-navbar', {
+    viewer,
+    active: 'community',
+    section: 'Community',
+    dynamic: true,
+    searchError
+  })
 
-        @form({
-          action: '/community/search',
-          method: 'GET',
-          class: 'relative hidden flex-none items-center gap-2 transition-all duration-300 md:flex',
-          'data-community-search-form': true,
-          'data-community-navbar-search': true
-        })
-          <div class="w-[210px] overflow-hidden rounded-full bg-white/78 px-5 py-2 shadow-inner transition-all duration-300" data-community-navbar-search-box>
-            <input name="q" type="text" autocomplete="off" placeholder="Search @profile or #hashtag" class="w-full bg-transparent text-sm font-semibold text-[#113E14] outline-none placeholder:text-[#6B8C6C]/70" data-community-search-input>
-          </div>
-          <button type="submit" class="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-[#113E14] text-white shadow-md transition hover:-translate-y-0.5 hover:bg-[#1b5420]" aria-label="Search community" data-community-navbar-search-button>
-            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m1.85-5.65a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z" />
-            </svg>
-          </button>
-          <div class="absolute left-0 right-0 top-full mt-2 hidden overflow-hidden rounded-3xl border border-white/35 bg-[#F7F3E8]/95 p-2 shadow-2xl backdrop-blur-2xl" data-community-search-results></div>
-        @end
+  <div class="mx-auto grid max-w-[1360px] gap-8 px-4 pb-24 pt-36 lg:px-6 xl:grid-cols-[minmax(0,790px)_26rem] xl:items-start xl:gap-12 2xl:grid-cols-[minmax(0,830px)_27rem] 2xl:gap-14">
+    <main class="min-w-0 space-y-6">
 
-        <div class="flex min-w-0 flex-1 items-center justify-center gap-2 lg:hidden">
-          <div class="h-8 w-8 flex-none bg-[url('/resources/images/icons/plant-badge.png')] bg-contain bg-no-repeat"></div>
-          <span class="truncate text-base font-black text-[#113E14]">Community</span>
-        </div>
-      </div>
-
-      <div class="flex flex-none items-center gap-2 transition-all duration-500" data-community-navbar-right>
-        <nav class="flex items-center gap-2" aria-label="Community navigation">
-          <a href="/community" class="h-10 w-10 rounded-xl bg-[#EDE7D6] bg-[url('/resources/images/community/community.png')] bg-contain bg-center bg-no-repeat shadow-md ring-2 ring-white/35 transition hover:-translate-y-0.5" aria-label="Community feed" title="Community"></a>
-          <a href="/favorites" class="h-10 w-10 rounded-xl bg-white/20 bg-[url('/resources/images/community/saved.png')] bg-contain bg-center bg-no-repeat shadow-sm transition hover:-translate-y-0.5 hover:bg-[#EDE7D6]" aria-label="Saved posts" title="Saved posts"></a>
-          <a href="/notification" class="hidden h-10 w-10 rounded-xl bg-white/20 bg-[url('/resources/images/community/notifications.png')] bg-contain bg-center bg-no-repeat shadow-sm transition hover:-translate-y-0.5 hover:bg-[#EDE7D6] sm:block" aria-label="Notifications" title="Notifications"></a>
-        </nav>
-
-        <details class="group relative">
-          <summary class="list-none">
-            <span class="flex cursor-pointer items-center gap-3 rounded-full bg-white/18 py-1 pl-1 pr-3 transition hover:bg-white/28">
-              @if(viewer.avatarUrl)
-                <img src="{{ viewer.avatarUrl }}" alt="" class="h-10 w-10 flex-none rounded-full object-cover">
-              @else
-                <span class="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-[#113E14] text-sm font-black text-[#EDE7D6]">
-                  {{ viewer.initial }}
-                </span>
-              @endif
-              <span class="hidden min-w-0 lg:block" data-community-profile-text>
-                <span class="block max-w-36 truncate text-sm font-black text-[#113E14]">{{ viewer.displayName }}</span>
-                <span class="block truncate text-xs font-bold text-blue-700">{{ '@' + viewer.username }}</span>
-              </span>
-            </span>
-          </summary>
-          <div class="absolute right-0 mt-3 w-56 overflow-hidden rounded-3xl border border-white/30 bg-[#F7F3E8]/96 p-2 shadow-2xl backdrop-blur-2xl">
-            <a href="/profile" class="block rounded-2xl px-4 py-3 text-sm font-black text-[#113E14] transition hover:bg-white/70">View profile</a>
-            <a href="/profile/settings" class="block rounded-2xl px-4 py-3 text-sm font-black text-[#113E14] transition hover:bg-white/70">Settings</a>
-            @form({ action: '/logout', method: 'POST' })
-              <button type="submit" class="w-full rounded-2xl px-4 py-3 text-left text-sm font-black text-red-900 transition hover:bg-red-100/70">Log out</button>
-            @end
-          </div>
-        </details>
-      </div>
-    </div>
-
-    @if(searchError)
-      <div class="mx-auto mt-3 max-w-[1240px] rounded-2xl border border-red-200/40 bg-red-950/30 px-5 py-3 text-sm font-bold text-red-100 backdrop-blur-xl">
-        {{ searchError }}
-      </div>
-    @endif
-  </div>
-
-  <div class="fixed bottom-5 left-4 z-50 flex items-center gap-2 rounded-2xl border border-white/30 bg-white/24 p-2 shadow-[0_18px_50px_rgba(17,62,20,0.22)] backdrop-blur-2xl sm:left-6" data-community-floating-actions>
-    <button type="button" class="flex h-11 w-11 items-center justify-center rounded-xl bg-[#113E14] text-white shadow-md transition hover:-translate-y-0.5 hover:bg-[#1b5420]" data-community-scroll-top aria-label="Back to top" title="Back to top">
-      <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M12 19V5m0 0-6 6m6-6 6 6" />
-      </svg>
-    </button>
-    <button type="button" class="flex h-11 w-11 items-center justify-center rounded-xl bg-[#EDE7D6] text-[#113E14] shadow-md transition hover:-translate-y-0.5 hover:bg-white" data-community-refresh-feed aria-label="Refresh feed" title="Refresh feed">
-      <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M20 7v5h-5M4 17v-5h5m9.2-3.2A7 7 0 0 0 6.1 7.7M5.8 15.2A7 7 0 0 0 17.9 16.3" />
-      </svg>
-    </button>
-  </div>
-
-  <div class="fixed left-4 top-1/2 z-40 hidden -translate-y-1/2 lg:block">
-    <button type="button" class="pointer-events-auto flex items-center gap-3 rounded-r-[2rem] rounded-l-2xl border border-white/35 bg-[#113E14] py-3 pl-3 pr-5 text-white shadow-[0_18px_50px_rgba(17,62,20,0.28)] backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:bg-[#EDE7D6] hover:text-[#113E14]" data-community-rail-toggle="profile" aria-expanded="false">
-      @if(viewer.avatarUrl)
-        <img src="{{ viewer.avatarUrl }}" alt="" class="h-11 w-11 rounded-full border-2 border-white object-cover">
-      @else
-        <span class="flex h-11 w-11 items-center justify-center rounded-full border-2 border-white bg-[#EDE7D6] text-sm font-black text-[#113E14]">{{ viewer.initial }}</span>
-      @endif
-      <span class="leading-tight text-left">
-        <span class="block text-sm font-black">Profile</span>
-        <span class="block text-[10px] font-black uppercase tracking-[0.14em] opacity-75">Open</span>
-      </span>
-    </button>
-  </div>
-
-  <div class="fixed right-4 top-1/2 z-40 hidden -translate-y-1/2 space-y-3 lg:block">
-    <button type="button" class="pointer-events-auto ml-auto flex items-center gap-3 rounded-l-[2rem] rounded-r-2xl border border-white/35 bg-[#EDE7D6] py-3 pl-5 pr-3 text-[#113E14] shadow-[0_18px_50px_rgba(17,62,20,0.22)] backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:bg-[#113E14] hover:text-white" data-community-rail-toggle="activity" aria-expanded="false">
-      <span class="leading-tight text-right">
-        <span class="block text-sm font-black">Activity</span>
-        <span class="block text-[10px] font-black uppercase tracking-[0.14em] opacity-70">Live</span>
-      </span>
-      <span class="flex h-11 w-11 items-center justify-center rounded-full bg-white/55">
-        <span class="h-7 w-7 bg-[url('/resources/images/community/notifications.png')] bg-contain bg-center bg-no-repeat"></span>
-      </span>
-    </button>
-    <button type="button" class="pointer-events-auto ml-auto flex items-center gap-3 rounded-l-[2rem] rounded-r-2xl border border-white/35 bg-white/30 py-3 pl-5 pr-3 text-[#113E14] shadow-[0_18px_50px_rgba(17,62,20,0.2)] backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:bg-[#113E14] hover:text-white" data-community-rail-toggle="suggestions" aria-expanded="false">
-      <span class="leading-tight text-right">
-        <span class="block text-sm font-black">People</span>
-        <span class="block text-[10px] font-black uppercase tracking-[0.14em] opacity-70">Follow</span>
-      </span>
-      <span class="flex h-11 w-11 items-center justify-center rounded-full bg-[#EDE7D6] text-lg font-black text-[#113E14]">+</span>
-    </button>
-  </div>
-
-  <section class="pointer-events-none fixed left-5 top-36 z-40 w-72 -translate-x-[115%] opacity-0 transition duration-300 lg:block" data-community-rail-panel="profile" data-community-rail-side="left">
-    <div class="pointer-events-auto overflow-hidden rounded-3xl border border-white/30 bg-white/28 p-3 shadow-2xl backdrop-blur-2xl">
-      <div class="mb-3 flex items-center justify-between px-1">
-        <h2 class="text-sm font-black text-[#113E14]">Your profile</h2>
-        <button type="button" class="rounded-full bg-white/45 px-3 py-1 text-xs font-black text-[#113E14] transition hover:bg-[#EDE7D6]" data-community-rail-close>Close</button>
-      </div>
-
-      <div class="relative h-32 overflow-hidden rounded-2xl bg-[#113E14]/15">
-        @if(viewer.bannerUrl)
-          <img src="{{ viewer.bannerUrl }}" alt="" class="h-full w-full object-cover">
-        @else
-          <div class="h-full w-full bg-gradient-to-br from-[#113E14] via-[#315F28] to-[#6C8E6B]"></div>
-        @endif
-        <div class="absolute inset-0 bg-gradient-to-t from-[#113E14]/45 to-transparent"></div>
-      </div>
-
-      <div class="-mt-10 flex justify-center">
-        @if(viewer.avatarUrl)
-          <img src="{{ viewer.avatarUrl }}" alt="" class="relative h-20 w-20 rounded-full border-4 border-white object-cover shadow-lg">
-        @else
-          <span class="relative flex h-20 w-20 items-center justify-center rounded-full border-4 border-white bg-[#113E14] text-2xl font-black text-[#EDE7D6] shadow-lg">
-            {{ viewer.initial }}
-          </span>
-        @endif
-      </div>
-
-      <div class="mt-3 flex flex-col items-center px-2 text-center">
-        <h2 class="max-w-full truncate text-lg font-black text-black">{{ viewer.displayName }}</h2>
-        <p class="max-w-full truncate text-sm font-bold text-black/38">{{ '@' + viewer.username }}</p>
-        <span class="mt-3 rounded-full bg-[#EDE7D6] px-3 py-1 text-[11px] font-black uppercase tracking-[0.12em] text-[#113E14]">
-          {{ viewer.roleLabel }}
-        </span>
-
-        <div class="mt-5 grid w-full grid-cols-3 gap-2 text-center">
-          <div class="rounded-2xl bg-white/30 p-3">
-            <p class="font-black text-black">{{ viewer.stats.posts }}</p>
-            <p class="text-[11px] font-bold text-black/38">Posts</p>
-          </div>
-          <div class="rounded-2xl bg-white/30 p-3">
-            <p class="font-black text-black">{{ viewer.stats.followers }}</p>
-            <p class="text-[11px] font-bold text-black/38">Followers</p>
-          </div>
-          <div class="rounded-2xl bg-white/30 p-3">
-            <p class="font-black text-black">{{ viewer.stats.following }}</p>
-            <p class="text-[11px] font-bold text-black/38">Follows</p>
-          </div>
-        </div>
-
-        <a href="/profile" class="mt-4 w-full rounded-2xl bg-[#113E14] px-5 py-2.5 text-sm font-black text-white shadow-md transition hover:-translate-y-0.5 hover:bg-[#1b5420]">
-          View profile
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <section class="pointer-events-none fixed right-5 top-36 z-40 w-[300px] translate-x-[115%] opacity-0 transition duration-300 lg:block" data-community-rail-panel="activity" data-community-rail-side="right">
-    <div class="pointer-events-auto rounded-3xl border border-white/30 bg-white/28 p-4 shadow-2xl backdrop-blur-2xl">
-      <div class="flex items-center justify-between">
-        <h2 class="text-lg font-black text-black">Activity</h2>
-        <button type="button" class="rounded-full bg-white/45 px-3 py-1 text-xs font-black text-[#113E14] transition hover:bg-[#EDE7D6]" data-community-rail-close>Close</button>
-      </div>
-
-      <div class="mt-4 space-y-3">
-        @each(post in posts.slice(0, 4))
-          <a href="#post-{{ post.id }}" class="flex items-center justify-between gap-3 rounded-2xl bg-white/18 p-2 transition hover:-translate-y-0.5 hover:bg-white/30" data-community-rail-close>
-            <div class="flex min-w-0 items-center gap-2">
-              @if(post.author.avatarUrl)
-                <img src="{{ post.author.avatarUrl }}" alt="" class="h-10 w-10 rounded-full object-cover">
-              @else
-                <span class="flex h-10 w-10 items-center justify-center rounded-full bg-[#113E14] text-xs font-black text-[#EDE7D6]">{{ post.author.initial }}</span>
-              @endif
-              <div class="min-w-0 leading-tight">
-                <p class="truncate text-xs font-black text-black">{{ post.author.displayName }}</p>
-                <p class="truncate text-[11px] font-bold text-black/42">{{ post.author.roleLabel }} - {{ post.createdAtHuman }}</p>
-              </div>
-            </div>
-            @if(post.mediaUrl)
-              <img src="{{ post.mediaUrl }}" alt="" class="h-10 w-10 rounded-xl object-cover">
-            @endif
-          </a>
-        @else
-          <p class="text-xs font-semibold text-black/45">Activity will appear here.</p>
-        @end
-      </div>
-    </div>
-  </section>
-
-  <section class="pointer-events-none fixed right-5 top-36 z-40 w-[300px] translate-x-[115%] opacity-0 transition duration-300 lg:block" data-community-rail-panel="suggestions" data-community-rail-side="right">
-    <div class="pointer-events-auto rounded-3xl border border-white/30 bg-white/28 p-4 shadow-2xl backdrop-blur-2xl">
-      <div class="flex items-center justify-between">
-        <h2 class="text-sm font-black text-black">Suggestions for you</h2>
-        <button type="button" class="rounded-full bg-white/45 px-3 py-1 text-xs font-black text-[#113E14] transition hover:bg-[#EDE7D6]" data-community-rail-close>Close</button>
-      </div>
-
-      <div class="mt-4 space-y-4">
-        @each(user in suggestions)
-          <div class="flex items-center justify-between gap-3">
-            <a href="/users/{{ user.username }}" class="flex min-w-0 items-center gap-3">
-              @if(user.avatarUrl)
-                <img src="{{ user.avatarUrl }}" alt="" class="h-11 w-11 rounded-full object-cover">
-              @else
-                <span class="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-[#113E14] font-black text-[#EDE7D6]">{{ user.initial }}</span>
-              @endif
-
-              <span class="min-w-0 leading-tight">
-                <span class="block truncate text-sm font-black text-black">{{ user.displayName }}</span>
-                <span class="block truncate text-[11px] font-bold text-gray-500">{{ user.roleLabel }} - {{ '@' + user.username }}</span>
-              </span>
-            </a>
-
-            @form({
-              action: '/users/' + user.username + '/follow',
-              method: 'POST',
-              class: 'shrink-0',
-              'data-follow-form': true
-            })
-              <button type="submit" class="rounded-full bg-white/45 px-3 py-1.5 text-xs font-black text-blue-600 transition hover:bg-[#EDE7D6]" data-follow-label>follow</button>
-            @end
-          </div>
-        @else
-          <p class="text-xs font-semibold text-black/45">No suggestions right now.</p>
-        @end
-      </div>
-    </div>
-  </section>
-
-  <div class="px-4 pb-10 pt-40 lg:px-6">
-    <main class="mx-auto min-w-0 max-w-[820px] space-y-6">
       @form({
         action: '/community/search',
         method: 'GET',
-        class: 'relative flex items-center gap-2 md:hidden',
+        class: 'relative z-50 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 xl:hidden',
         'data-community-search-form': true
       })
-        <div class="min-w-0 flex-1 rounded-full bg-white/78 px-5 py-3 shadow-inner">
-          <input name="q" type="text" autocomplete="off" placeholder="Search @profile or #hashtag" class="w-full bg-transparent text-sm font-semibold text-[#113E14] outline-none placeholder:text-[#6B8C6C]/70" data-community-search-input>
+        <div class="min-w-0 flex-1 rounded-full border border-white/18 bg-white/72 px-5 py-3 shadow-inner">
+          <input name="q" type="text" autocomplete="off" placeholder="Search @profile or #hashtag" class="w-full bg-transparent text-sm font-semibold text-[#113e14] outline-none placeholder:text-[#416543]/70" data-community-search-input>
         </div>
-        <button type="submit" class="flex h-11 w-11 items-center justify-center rounded-full bg-[#113E14] text-white shadow-md" aria-label="Search community">
+        <button type="submit" class="flex h-11 w-11 items-center justify-center rounded-full bg-[#113e14] text-[#ebe3a7] shadow-md" aria-label="Search community">
           <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m1.85-5.65a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z" />
           </svg>
         </button>
-        <div class="absolute left-0 right-0 top-full z-20 mt-2 hidden overflow-hidden rounded-3xl border border-white/35 bg-[#F7F3E8]/95 p-2 shadow-2xl backdrop-blur-2xl" data-community-search-results></div>
+        <div class="community-search-results-scroll col-span-2 hidden max-h-[22rem] overflow-y-auto overscroll-contain rounded-3xl border border-white/35 bg-[#ebe3a7]/95 p-2 shadow-2xl backdrop-blur-2xl" data-community-search-results></div>
       @end
 
       @if(activeHashtag)
         <div class="flex flex-wrap items-center justify-between gap-3 rounded-3xl border border-white/30 bg-white/22 p-4 shadow-xl backdrop-blur-xl">
           <div>
-            <p class="text-xs font-black uppercase tracking-[0.18em] text-black/42">Hashtag feed</p>
-            <h1 class="mt-1 text-2xl font-black text-black">#{{ activeHashtag }}</h1>
+            <p class="text-xs font-black uppercase tracking-[0.18em] text-[#416543]">Hashtag feed</p>
+            <h1 class="mt-1 text-2xl font-black text-[#113e14]">#{{ activeHashtag }}</h1>
           </div>
-          <a href="/community" class="rounded-full bg-[#113E14] px-5 py-2 text-sm font-black text-white transition hover:-translate-y-0.5">Clear</a>
+          <a href="/community" class="rounded-full bg-[#113e14] px-5 py-2 text-sm font-black text-[#ebe3a7] transition hover:-translate-y-0.5 hover:bg-[#416543]">Clear</a>
         </div>
       @endif
 
@@ -294,15 +55,15 @@
         })
           <div class="flex items-start gap-4 sm:gap-6">
             @if(viewer.avatarUrl)
-              <img src="{{ viewer.avatarUrl }}" alt="" class="h-12 w-12 rounded-full object-cover">
+              <img src="{{ viewer.avatarUrl }}" alt="" loading="lazy" decoding="async" class="h-12 w-12 rounded-full object-cover">
             @else
-              <span class="flex h-12 w-12 flex-none items-center justify-center rounded-full bg-[#113E14] font-black text-[#EDE7D6]">
+              <span class="flex h-12 w-12 flex-none items-center justify-center rounded-full bg-[#113e14] font-black text-[#ebe3a7]">
                 {{ viewer.initial }}
               </span>
             @endif
 
-            <div class="min-w-0 flex-1 rounded-2xl bg-[#FBFBFB] px-4 py-3 shadow-sm">
-              <textarea name="body" maxlength="2000" rows="2" placeholder="Share a plant update, question, or small win..." class="min-h-16 w-full resize-none bg-transparent text-sm font-semibold text-gray-700 outline-none placeholder:text-gray-500">{{ old.body ?? '' }}</textarea>
+            <div class="min-w-0 flex-1 rounded-2xl border border-white/55 bg-white/78 px-4 py-3 shadow-sm">
+              <textarea name="body" maxlength="2000" rows="2" placeholder="Share a plant update, question, or small win..." class="min-h-16 w-full resize-none bg-transparent text-sm font-semibold text-[#113e14]/78 outline-none placeholder:text-[#416543]/62" data-community-composer-input>{{ old.body ?? '' }}</textarea>
             </div>
           </div>
 
@@ -313,21 +74,21 @@
 
           <div class="grid gap-3 md:grid-cols-[1fr_auto]">
             <label class="block rounded-2xl bg-white/22 px-4 py-3">
-              <span class="text-xs font-black uppercase tracking-[0.12em] text-black/50">Hashtags</span>
-              <input name="hashtags" value="{{ old.hashtags ?? '' }}" maxlength="240" placeholder="plants balcony care" class="mt-2 h-10 w-full bg-transparent text-sm font-semibold text-[#113E14] outline-none placeholder:text-black/35">
+              <span class="text-xs font-black uppercase tracking-[0.12em] text-[#416543]">Hashtags</span>
+              <input name="hashtags" value="{{ old.hashtags ?? '' }}" maxlength="240" placeholder="plants balcony care" class="mt-2 h-10 w-full bg-transparent text-sm font-semibold text-[#113e14] outline-none placeholder:text-[#416543]/55">
             </label>
 
             <div class="flex flex-wrap items-center gap-2 rounded-2xl bg-white/18 px-3 py-3">
               <input type="file" name="image" accept="image/jpeg,image/png,image/webp" class="sr-only" data-community-image-input>
-              <button type="button" class="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-bold text-black/70 transition hover:bg-white/35 hover:text-[#113E14]" data-community-file-trigger>
+              <button type="button" class="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-bold text-[#113e14]/70 transition hover:bg-white/35 hover:text-[#113e14]" data-community-file-trigger>
                 <div class="h-6 w-6 bg-[url('/resources/images/community/image.png')] bg-contain bg-no-repeat"></div>
                 Images
               </button>
-              <button type="button" class="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-bold text-black/70 transition hover:bg-white/35 hover:text-[#113E14]" data-community-poll-trigger>
+              <button type="button" class="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-bold text-[#113e14]/70 transition hover:bg-white/35 hover:text-[#113e14]" data-community-poll-trigger>
                 <div class="h-6 w-6 bg-[url('/resources/images/community/poll.png')] bg-contain bg-no-repeat"></div>
                 Poll
               </button>
-              <span class="hidden max-w-[12rem] truncate rounded-full bg-white/45 px-3 py-1.5 text-xs font-bold text-[#113E14]" data-community-file-name></span>
+              <span class="hidden max-w-[12rem] truncate rounded-full bg-white/45 px-3 py-1.5 text-xs font-bold text-[#113e14]" data-community-file-name></span>
             </div>
           </div>
 
@@ -338,12 +99,12 @@
           <div class="hidden rounded-2xl bg-white/24 p-4" data-community-poll-panel>
             <div class="grid gap-4 md:grid-cols-2">
               <label class="block">
-                <span class="text-xs font-black uppercase tracking-[0.12em] text-black/50">Poll question</span>
-                <input name="poll_question" value="{{ old.poll_question ?? '' }}" maxlength="160" placeholder="Which plant should I choose?" class="mt-2 h-11 w-full rounded-xl bg-white/75 px-3 text-sm font-semibold outline-none" data-community-poll-input>
+                <span class="text-xs font-black uppercase tracking-[0.12em] text-[#416543]">Poll question</span>
+                <input name="poll_question" value="{{ old.poll_question ?? '' }}" maxlength="160" placeholder="Which plant should I choose?" class="mt-2 h-11 w-full rounded-xl bg-white/75 px-3 text-sm font-semibold text-[#113e14] outline-none" data-community-poll-input>
               </label>
               <label class="block">
-                <span class="text-xs font-black uppercase tracking-[0.12em] text-black/50">Poll options</span>
-                <textarea name="poll_options" maxlength="600" rows="3" placeholder="Monstera&#10;Pothos&#10;Snake plant" class="mt-2 w-full resize-none rounded-xl bg-white/75 px-3 py-2 text-sm font-semibold outline-none">{{ old.poll_options ?? '' }}</textarea>
+                <span class="text-xs font-black uppercase tracking-[0.12em] text-[#416543]">Poll options</span>
+                <textarea name="poll_options" maxlength="600" rows="3" placeholder="Monstera&#10;Pothos&#10;Snake plant" class="mt-2 w-full resize-none rounded-xl bg-white/75 px-3 py-2 text-sm font-semibold text-[#113e14] outline-none">{{ old.poll_options ?? '' }}</textarea>
               </label>
             </div>
             @if(errors.poll_options)
@@ -352,7 +113,7 @@
           </div>
 
           <div class="flex justify-end">
-            <button type="submit" class="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-black text-[#113E14] transition hover:bg-[#EDE7D6] hover:shadow-md active:translate-y-0.5">
+            <button type="submit" class="flex items-center gap-2 rounded-full bg-[#dca15d] px-5 py-2.5 text-sm font-black text-[#113e14] shadow-md transition hover:-translate-y-0.5 hover:bg-[#ebe3a7] active:translate-y-0.5">
               <div class="h-6 w-6 bg-[url('/resources/images/community/send.png')] bg-contain bg-no-repeat"></div>
               Publish
             </button>
@@ -362,7 +123,7 @@
 
       <div class="flex items-center justify-between gap-4">
         <div class="h-0.5 flex-1 bg-[url('/resources/images/community/divider-line.png')] bg-cover bg-center"></div>
-        <p class="rounded-full bg-white/18 px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-black/42">Fresh from the community</p>
+        <p class="rounded-full bg-white/18 px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-[#ebe3a7]">Fresh from the community</p>
       </div>
 
       <div class="space-y-4" data-community-feed>
@@ -370,12 +131,204 @@
           @!component('components/community-post-card', { post, viewer })
         @else
           <div class="rounded-3xl border border-white/30 bg-white/22 p-8 text-center shadow-lg backdrop-blur-xl">
-            <h2 class="text-2xl font-black text-black">No posts yet</h2>
-            <p class="mt-2 text-sm font-bold text-black/45">Share the first plant update.</p>
+            <h2 class="text-2xl font-black text-[#113e14]">No posts yet</h2>
+            <p class="mt-2 text-sm font-bold text-[#416543]">Share the first plant update.</p>
           </div>
         @end
       </div>
     </main>
+
+    <aside class="community-sidebar-shell min-w-0 xl:sticky xl:self-start">
+      <div class="community-sidebar-scroll space-y-5 xl:overflow-y-auto xl:overscroll-contain xl:p-1 xl:pb-10 xl:pr-3">
+      <section class="relative z-50 hidden overflow-visible rounded-3xl border border-white/30 bg-white/24 p-4 shadow-xl backdrop-blur-xl xl:block">
+        <div class="flex items-center justify-between gap-3">
+          <div>
+            <p class="text-xs font-black uppercase tracking-[0.18em] text-[#416543]">Find</p>
+            <h2 class="mt-1 text-2xl font-black text-[#113e14]">Search</h2>
+          </div>
+        </div>
+
+        @form({
+          action: '/community/search',
+          method: 'GET',
+          class: 'relative z-50 mt-4 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2',
+          'data-community-search-form': true
+        })
+          <div class="min-w-0 flex-1 rounded-2xl border border-white/18 bg-white/72 px-4 py-3 shadow-inner">
+            <input name="q" type="text" autocomplete="off" placeholder="@profile or #hashtag" class="w-full bg-transparent text-sm font-semibold text-[#113e14] outline-none placeholder:text-[#416543]/70" data-community-search-input>
+          </div>
+          <button type="submit" class="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#113e14] text-[#ebe3a7] shadow-md transition hover:-translate-y-0.5 hover:bg-[#416543]" aria-label="Search community">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m1.85-5.65a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z" />
+            </svg>
+          </button>
+          <div class="community-search-results-scroll col-span-2 hidden max-h-[22rem] overflow-y-auto overscroll-contain rounded-3xl border border-white/35 bg-[#ebe3a7]/98 p-2 shadow-2xl backdrop-blur-2xl" data-community-search-results></div>
+        @end
+      </section>
+
+      <section class="rounded-3xl border border-[#ebe3a7]/18 bg-[#113e14]/88 p-4 text-[#ebe3a7] shadow-xl backdrop-blur-xl">
+        <p class="text-xs font-black uppercase tracking-[0.18em] text-[#a8b841]">Quick access</p>
+        <div class="mt-1 flex items-end justify-between gap-3">
+          <h2 class="text-2xl font-black">Favorite accounts</h2>
+          @if(favoriteAccounts.length)
+            <span class="rounded-full bg-white/12 px-3 py-1 text-xs font-black text-[#a8b841]">{{ favoriteAccounts.length }}</span>
+          @endif
+        </div>
+
+        @if(favoriteAccounts.length)
+          <details class="group mt-5">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-3 rounded-2xl bg-white/10 px-4 py-3 text-sm font-black transition hover:bg-white/16">
+              <span>Saved shortcuts</span>
+              <span class="text-xs uppercase tracking-[0.16em] text-[#a8b841] group-open:hidden">Show</span>
+              <span class="hidden text-xs uppercase tracking-[0.16em] text-[#a8b841] group-open:inline">Hide</span>
+            </summary>
+
+            <div class="community-favorite-accounts-scroll mt-3 max-h-80 space-y-3 overflow-y-auto pr-1">
+              @each(account in favoriteAccounts)
+                <a href="/users/{{ account.username }}" class="flex items-center justify-between gap-3 rounded-2xl bg-white/12 p-3 transition hover:-translate-y-0.5 hover:bg-white/20">
+                  <span class="flex min-w-0 items-center gap-3">
+                    @if(account.avatarUrl)
+                      <img src="{{ account.avatarUrl }}" alt="" loading="lazy" decoding="async" class="h-11 w-11 flex-none rounded-full object-cover">
+                    @else
+                      <span class="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-[#ebe3a7] font-black text-[#113e14]">{{ account.initial }}</span>
+                    @endif
+                    <span class="min-w-0 leading-tight">
+                      <span class="block truncate text-sm font-black">{{ account.displayName }}</span>
+                      <span class="block truncate text-[11px] font-bold text-[#a8b841]">{{ '@' + account.username }}</span>
+                    </span>
+                  </span>
+                  <span class="rounded-full bg-[#ebe3a7] px-3 py-1 text-[10px] font-black uppercase tracking-[0.1em] text-[#113e14]">{{ account.relationLabel }}</span>
+                </a>
+              @end
+            </div>
+          </details>
+        @else
+          <div class="mt-5 rounded-2xl bg-white/12 p-4">
+            <p class="text-sm font-bold leading-6 text-[#a8b841]">Mark gardeners, nurseries, or clients as favorites from their profile to keep them one tap away.</p>
+          </div>
+        @endif
+      </section>
+
+      <section class="rounded-3xl border border-white/30 bg-white/72 p-4 text-[#113e14] shadow-xl backdrop-blur-xl">
+        <div class="flex items-center justify-between gap-3">
+          <div>
+            <p class="text-xs font-black uppercase tracking-[0.18em] text-[#416543]">Discover</p>
+            <h2 class="mt-1 text-2xl font-black text-[#113e14]">Gardeners & nurseries</h2>
+          </div>
+          <a href="/maintenance" class="rounded-full bg-[#dca15d] px-4 py-2 text-xs font-black text-[#113e14] transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]">Services</a>
+        </div>
+
+        <details class="group">
+          <summary class="mt-5 flex cursor-pointer list-none items-center justify-between gap-3 rounded-2xl bg-white/44 px-4 py-3 text-sm font-black text-[#113e14] transition hover:bg-white/70">
+            <span>Service suggestions</span>
+            <span class="text-xs uppercase tracking-[0.16em] text-[#416543] group-open:hidden">Show</span>
+            <span class="hidden text-xs uppercase tracking-[0.16em] text-[#416543] group-open:inline">Hide</span>
+          </summary>
+
+        <div class="mt-3 space-y-3">
+          @each(user in suggestions)
+            <div class="flex items-center justify-between gap-3 rounded-2xl bg-white/48 p-3 transition hover:bg-white/72">
+              <a href="/users/{{ user.username }}" class="flex min-w-0 items-center gap-3">
+                @if(user.avatarUrl)
+                  <img src="{{ user.avatarUrl }}" alt="" loading="lazy" decoding="async" class="h-11 w-11 rounded-full object-cover">
+                @else
+                  <span class="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-[#113e14] font-black text-[#ebe3a7]">{{ user.initial }}</span>
+                @endif
+                <span class="min-w-0 leading-tight">
+                  <span class="block truncate text-sm font-black text-[#113e14]">{{ user.displayName }}</span>
+                  <span class="block truncate text-[11px] font-bold text-[#416543]">{{ user.roleLabel }} - {{ '@' + user.username }}</span>
+                </span>
+              </a>
+
+              @form({
+                action: '/users/' + user.username + '/follow',
+                method: 'POST',
+                class: 'shrink-0',
+                'data-follow-form': true
+              })
+                <button type="submit" class="rounded-full bg-[#dca15d] px-3 py-1.5 text-xs font-black text-[#113e14] transition hover:bg-[#ebe3a7]" data-follow-label>follow</button>
+              @end
+            </div>
+          @else
+            <p class="rounded-2xl bg-white/48 p-4 text-sm font-bold text-[#416543]">No pros or nurseries to suggest right now.</p>
+          @end
+        </div>
+        </details>
+      </section>
+
+      <section class="rounded-3xl border border-white/30 bg-white/24 p-4 shadow-xl backdrop-blur-xl">
+        <div class="flex items-center justify-between gap-3">
+          <div>
+            <p class="text-xs font-black uppercase tracking-[0.18em] text-[#416543]">Friends</p>
+            <h2 class="mt-1 text-2xl font-black text-[#113e14]">Friends list</h2>
+          </div>
+          @if(friendAccounts.length)
+            <span class="rounded-full bg-[#ebe3a7] px-3 py-1 text-xs font-black text-[#113e14]">{{ friendAccounts.length }}</span>
+          @endif
+        </div>
+
+        @if(friendAccounts.length)
+          <details class="group mt-5">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-3 rounded-2xl bg-white/28 px-4 py-3 text-sm font-black text-[#113e14] transition hover:bg-white/42">
+              <span>Mutual friends</span>
+              <span class="text-xs uppercase tracking-[0.16em] text-[#416543] group-open:hidden">Show</span>
+              <span class="hidden text-xs uppercase tracking-[0.16em] text-[#416543] group-open:inline">Hide</span>
+            </summary>
+
+            <div class="mt-3 max-h-80 space-y-3 overflow-y-auto pr-1">
+              @each(account in friendAccounts)
+                <a href="/users/{{ account.username }}" class="flex items-center justify-between gap-3 rounded-2xl bg-white/28 p-3 transition hover:-translate-y-0.5 hover:bg-white/42">
+                  <span class="flex min-w-0 items-center gap-3">
+                    @if(account.avatarUrl)
+                      <img src="{{ account.avatarUrl }}" alt="" loading="lazy" decoding="async" class="h-11 w-11 flex-none rounded-full object-cover">
+                    @else
+                      <span class="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-[#113e14] text-xs font-black text-[#ebe3a7]">{{ account.initial }}</span>
+                    @endif
+                    <span class="min-w-0">
+                      <span class="block truncate text-sm font-black text-[#113e14]">{{ account.displayName }}</span>
+                      <span class="block truncate text-[11px] font-bold text-[#416543]">{{ account.roleLabel }} - {{ '@' + account.username }}</span>
+                    </span>
+                  </span>
+                  <span class="rounded-full bg-[#ebe3a7] px-3 py-1 text-[10px] font-black uppercase tracking-[0.1em] text-[#113e14]">{{ account.relationLabel }}</span>
+                </a>
+              @end
+            </div>
+          </details>
+          @else
+          <div class="mt-4">
+            <p class="rounded-2xl bg-white/28 p-4 text-sm font-bold text-[#416543]">Mutual friends will appear here after you follow each other.</p>
+          </div>
+        @endif
+      </section>
+
+      <section class="rounded-3xl border border-[#dca15d]/28 bg-white/72 p-4 shadow-xl backdrop-blur-xl">
+        <p class="text-xs font-black uppercase tracking-[0.18em] text-[#416543]">Trending tags</p>
+        <div class="mt-4 flex flex-wrap gap-2">
+          @each(tag in trendingHashtags)
+            <a href="/community/hashtags/{{ tag.tag }}" class="rounded-full bg-white/36 px-3 py-2 text-xs font-black text-[#113e14] transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]">
+              #{{ tag.tag }}
+              <span class="ml-1 text-[#416543]">{{ tag.postsCount }}</span>
+            </a>
+          @else
+            <p class="rounded-2xl bg-white/28 p-4 text-sm font-bold text-[#416543]">Tags will appear as people post.</p>
+          @end
+        </div>
+      </section>
+
+      <section class="rounded-3xl border border-white/30 bg-white/24 p-4 shadow-xl backdrop-blur-xl">
+        <p class="text-xs font-black uppercase tracking-[0.18em] text-[#416543]">Useful paths</p>
+        <div class="mt-4 grid grid-cols-2 gap-2">
+          <a href="/ornamental" class="rounded-2xl bg-white/34 px-3 py-4 text-sm font-black text-[#113e14] transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]">Catalog</a>
+          <a href="/nurseries" class="rounded-2xl bg-white/34 px-3 py-4 text-sm font-black text-[#113e14] transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]">Nurseries</a>
+          <a href="/scanner" class="rounded-2xl bg-white/34 px-3 py-4 text-sm font-black text-[#113e14] transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]">Scanner</a>
+          <a href="/designer" class="rounded-2xl bg-white/34 px-3 py-4 text-sm font-black text-[#113e14] transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]">Designer</a>
+          <a href="/favorites" class="rounded-2xl bg-white/34 px-3 py-4 text-sm font-black text-[#113e14] transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]">Saved</a>
+          <a href="/notification" class="rounded-2xl bg-white/34 px-3 py-4 text-sm font-black text-[#113e14] transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]">Alerts</a>
+        </div>
+      </section>
+
+      </div>
+    </aside>
   </div>
 </div>
 

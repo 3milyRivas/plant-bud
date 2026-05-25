@@ -1,15 +1,16 @@
 @layout()
 
 @slot('title')
-<title>horticultural</title>
+<title>Succulent</title>
 @endslot
 @vite(['resources/js/categories.js'])
 
 <div class="relative overflow-x-hidden">
     @!component('components/header-plants', {
-    title: "Discover ornamental plants",
-    text: "Explore elegant tropical species,connect with gardeners and create beautiful green spaces.",
-    imageBg:'resources/images/h2.jpg'
+    title: "Discover Succulent Plants",
+    text: "Explore elegant tropical species, connect with gardeners and create beautiful green spaces.",
+    imageBg:'resources/images/suc-4.jpg',
+    careHref: '/care3',
     })
 
     <div class="flex justify-center mt-4">
@@ -19,29 +20,29 @@
 
                 <div class="px-5 py-2 rounded-full bg-[#6b8c6b]/50 shadow-md">
 
-                    <button onclick="showCategory(event, 'amaryllidaceae')"
+                    <button onclick="showCategory(event, 'cactaceae')"
                         class="category-btn px-5 py-2 rounded-full bg-[#113e14] text-white font-medium shadow-md inline-block transition-all duration-300">
-                        Amaryllidaceae
+                        Cactaceae
                     </button>
 
-                    <button onclick="showCategory(event, 'brassicaceae')"
+                    <button onclick="showCategory(event, 'euphorbiaceae')"
                         class="category-btn px-5 py-2 rounded-full text-[#2D2B2B] hover:bg-white/50 transition-all duration-300">
-                        Brassicaceae
+                        Euphorbiaceae
                     </button>
 
-                    <button onclick="showCategory(event, 'apiaceae')"
+                    <button onclick="showCategory(event, 'asparagaceae')"
                         class="category-btn px-5 py-2 rounded-full text-[#2D2B2B] hover:bg-white/50 transition-all duration-300">
-                        Apiaceae
+                        Asparagaceae
                     </button>
 
-                    <button onclick="showCategory(event, 'cucurbitaceae')"
+                    <button onclick="showCategory(event, 'crassulaceae')"
                         class="category-btn px-5 py-2 rounded-full text-[#2D2B2B] hover:bg-white/50 transition-all duration-300">
-                        Cucurbitaceae
+                        Crassulaceae
                     </button>
 
-                    <button onclick="showCategory(event, 'solanaceae')"
+                    <button onclick="showCategory(event, 'asphodelaceae')"
                         class="category-btn px-5 py-2 rounded-full text-[#2D2B2B] hover:bg-white/50 transition-all duration-300">
-                        Solanaceae
+                        Asphodelaceae
                     </button>
 
                 </div>
@@ -57,28 +58,29 @@
 
         <div
             class="sticky top-[95px] shrink-0 w-[105px] h-[400px] rounded-[50px] bg-[#D3DCD3] backdrop-blur-xl border border-white/30 shadow-[#48AE4D] flex flex-col items-center justify-around">
-            <a href="/araceae"
+            <a href="/ornamental"
                 class="group w-20 h-20 rounded-full bg-white/50 backdrop-blur-md flex items-center justify-center transition-all duration-500 hover:scale-110 hover:bg-[#D3DCCB]">
 
                 <img loading="lazy" decoding="async" src="/plants/icon.flower.png"
                     class="w-10 h-10 transition-all duration-500 group-hover:scale-110" />
             </a>
 
-            <a href="/amaryllidaceae"
-                class="group w-20 h-20 rounded-full bg-[#6C8E6B] flex items-center justify-center transition-all duration-500 hover:scale-110 hover:rotate-6">
+            <a href="/horticultural"
+                class="group w-20 h-20 rounded-full bg-white/50 backdrop-blur-md flex items-center justify-center transition-all duration-500 hover:scale-110 hover:bg-[#D3DCCB]">
                 <img loading="lazy" decoding="async" src="/plants/icon.vegetables.png"
                     class="w-10 h-10 transition-all duration-500 group-hover:scale-110" />
             </a>
 
-            <a href="/cactaceae"
-                class="group w-20 h-20 rounded-full bg-white/50 backdrop-blur-md flex items-center justify-center transition-all duration-500 hover:scale-110 hover:bg-[#D3DCCB]">
+            <a href="/succulent"
+                class="group w-20 h-20 rounded-full bg-[#6C8E6B] flex items-center justify-center transition-all duration-500 hover:scale-110 hover:rotate-6">
                 <img loading="lazy" decoding="async" src="/plants/icon.plant.png"
                     class="w-10 h-10 transition-all duration-500 group-hover:scale-110" />
             </a>
         </div>
 
 
-        @each((plants, familyName, index) in horticulturalPlants)
+
+        @each((plants, familyName, index) in succulentPlants)
         <div id="{{ familyName }}" class="category-section grid grid-cols-3 gap-12 {{ index != 0 ? 'hidden' : '' }}">
             @each((plant, plantIndex) in plants)
             <div id="plant-{{ familyName }}-{{ plantIndex }}" class="plant-catalog-anchor scroll-mt-32 rounded-[42px] transition-all duration-500" data-plant-card>

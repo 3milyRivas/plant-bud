@@ -16,9 +16,9 @@ const ProfilesController = () => import('#controllers/profiles_controller')
 /* general views */
 router.on('/').render('pages/welcome').as('home')
 router.on('/register').render('pages/register')
-router.on('/araceae').render('pages/araceae', { ornamentalPlants })
-router.on('/amaryllidaceae').render('pages/amaryllidaceae', { horticulturalPlants })
-router.on('/cactaceae').render('pages/cactaceae', { succulentPlants })
+router.on('/ornamental').render('pages/ornamental', { ornamentalPlants })
+router.on('/horticultural').render('pages/horticultural', { horticulturalPlants })
+router.on('/succulent').render('pages/succulent', { succulentPlants })
 
 router.on('/requested').render('pages/requested')
 
@@ -50,6 +50,9 @@ router
     router.get('/community', [CommunityController, 'index']).as('community.index')
     router.post('/community/posts', [CommunityController, 'store']).as('community.posts.store')
     router
+      .post('/community/posts/:id/delete', [CommunityController, 'destroy'])
+      .as('community.posts.destroy')
+    router
       .post('/community/posts/:id/reactions/:type', [CommunityController, 'toggleReaction'])
       .as('community.posts.reactions.toggle')
     router
@@ -76,6 +79,9 @@ router
     router
       .post('/users/:username/follow', [CommunityController, 'toggleFollow'])
       .as('community.users.follow')
+    router
+      .post('/users/:username/favorite', [CommunityController, 'toggleFavoriteAccount'])
+      .as('community.users.favorite')
     router
       .post('/users/:username/reviews', [CommunityController, 'storeReview'])
       .as('community.users.reviews.store')

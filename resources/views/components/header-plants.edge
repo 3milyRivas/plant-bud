@@ -1,45 +1,16 @@
+@let(careHref = $props.get('careHref') ?? '/care1')
+
 <div class="relative z-[99999] px-4 pt-6 sm:px-8 lg:px-10">
   <img decoding="async" src="/resources/images/welcome/header3.png" class="absolute inset-0 -z-20 h-full w-full object-cover" alt="">
   <div class="absolute inset-0 -z-10 bg-black/40"></div>
   <div class="absolute inset-0 -z-10 bg-gradient-to-b from-[#1E3D19]/10 via-[#728B6F]/10 to-[#6B8C6C]"></div>
 
-  <div class="mx-auto max-w-[1500px]">
-    <nav class="relative z-[100000] flex items-center gap-3 overflow-visible rounded-full border border-white/30 bg-white/20 px-4 py-3 shadow-lg backdrop-blur-xl sm:gap-5 sm:px-6">
-      <a href="{{ auth.user ? '/homepage' : '/' }}" class="group flex min-w-0 shrink-0 items-center gap-4 rounded-full px-1 py-1 transition duration-300 hover:-translate-y-0.5" aria-label="Go to homepage">
-        <span class="flex items-center justify-center rounded-full transition duration-500 group-hover:rotate-6">
-          <img decoding="async" src="/resources/images/essential/logo.png" alt="" class="h-12 w-12 object-contain">
-        </span>
-        <span class="hidden min-w-0 lg:block">
-          <span class="block text-xl font-black tracking-wide text-white drop-shadow">Plant<span class="text-[#EDE7D6]"> Bud</span></span>
-          <span class="block truncate text-xs font-bold uppercase tracking-[0.16em] text-[#EDE7D6]/85">Plant catalog</span>
-        </span>
-      </a>
-
-      <form class="relative mx-auto flex w-full max-w-[560px] items-center" data-plant-search autocomplete="off">
-        <label for="plantCatalogSearch" class="sr-only">Search plants</label>
-        <div class="relative flex h-14 w-full items-center rounded-full border border-white/50 bg-white/75 px-5 shadow-inner shadow-[#48AE4D]/20 transition focus-within:bg-white/90 focus-within:ring-2 focus-within:ring-[#EDE7D6]/80">
-          <input id="plantCatalogSearch" type="search" placeholder="Search plants" class="w-full bg-transparent pr-12 text-sm font-semibold text-[#113E14] outline-none placeholder:text-[#6B8C6C]/75 sm:text-base" data-plant-search-input aria-autocomplete="list" aria-expanded="false" aria-controls="plantCatalogSearchResults">
-          <button type="submit" class="absolute right-2 flex h-10 w-10 items-center justify-center rounded-full bg-[#113E14] text-white shadow-[0_8px_18px_rgba(17,62,20,0.22)] transition hover:-translate-y-0.5 hover:bg-[#14591d]" aria-label="Search plants">
-            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m1.85-5.65a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z" />
-            </svg>
-          </button>
-        </div>
-
-        <div id="plantCatalogSearchResults" class="absolute left-0 right-0 top-[calc(100%+0.65rem)] z-[100000] hidden overflow-hidden rounded-[1.5rem] border border-white/45 bg-[#F7F4E8]/95 p-2 shadow-2xl shadow-[#113E14]/25 backdrop-blur-2xl" data-plant-search-results role="listbox"></div>
-      </form>
-
-      <a href="{{ auth.user ? '/profile' : '/login' }}" class="group flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-white/70 bg-[#1E3D19] text-lg font-black text-[#EDE7D6] shadow-md transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_18px_rgba(237,231,214,0.55)]" aria-label="{{ auth.user ? 'Open profile' : 'Log in' }}">
-        @if(auth.user && auth.user.profilePicture)
-          <img decoding="async" src="{{ auth.user.profilePicture }}" alt="" class="h-full w-full object-cover">
-        @elseif(auth.user)
-          <span>{{ auth.user.initials || 'P' }}</span>
-        @else
-          <img decoding="async" src="/resources/images/logo-perfil.png" alt="" class="h-full w-full object-cover opacity-95 transition duration-300 group-hover:scale-105">
-        @endif
-      </a>
-    </nav>
-  </div>
+  @!component('components/app-navbar', {
+    section: 'Plant catalog',
+    catalogSearch: true,
+    maxWidth: 'max-w-[1500px]',
+    showProfileText: false,
+  })
 
   <section class="relative z-0 mx-auto mt-8 max-w-[1500px] pb-8">
     <div class="relative overflow-hidden rounded-[40px] shadow-2xl">
@@ -48,7 +19,7 @@
 
       <div class="absolute inset-0 px-8 pt-10 sm:px-16 sm:pt-16">
         <div class="flex justify-end">
-          <button onclick="window.location.href='/care1'" class="rounded-full bg-[#113E14] px-12 py-2 font-abril text-2xl text-[#D3DCD3] shadow-[0_10px_30px_rgba(0,0,0,0.12)] transition-all duration-300 hover:-translate-y-1 hover:scale-105 hover:bg-[#D3DCD3] hover:text-[#113E14] sm:px-24 sm:text-3xl">
+          <button onclick="window.location.href='{{ careHref }}'" class="rounded-full bg-[#113E14] px-12 py-2 font-abril text-2xl text-[#D3DCD3] shadow-[0_10px_30px_rgba(0,0,0,0.12)] transition-all duration-300 hover:-translate-y-1 hover:scale-105 hover:bg-[#D3DCD3] hover:text-[#113E14] sm:px-24 sm:text-3xl">
             Care
           </button>
         </div>

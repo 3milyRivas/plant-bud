@@ -1,0 +1,38 @@
+@let(viewer = $props.get('viewer'))
+@let(active = $props.get('active') ?? 'community')
+@let(section = $props.get('section') ?? 'Community')
+@let(searchError = $props.get('searchError') ?? null)
+@let(dynamic = $props.get('dynamic') ?? false)
+
+@!component('components/app-navbar', {
+  section,
+  active,
+  searchError,
+  dynamic,
+  avatarUrl: viewer.avatarUrl,
+  avatarInitial: viewer.initial,
+  displayName: viewer.displayName ?? 'Profile',
+  roleLabel: viewer.username ? '@' + viewer.username : 'settings',
+  maxWidth: 'max-w-[min(1500px,calc(100vw-2rem))]',
+  showProfileText: true,
+  items: [
+    {
+      key: 'community',
+      href: '/community',
+      label: 'Community',
+      icon: '/resources/images/community/community.png',
+    },
+    {
+      key: 'favorites',
+      href: '/favorites',
+      label: 'Saved',
+      icon: '/resources/images/community/saved.png',
+    },
+    {
+      key: 'notification',
+      href: '/notification',
+      label: 'Alerts',
+      icon: '/resources/images/community/notifications.png',
+    },
+  ],
+})

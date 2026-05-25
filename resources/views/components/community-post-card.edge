@@ -1,47 +1,52 @@
-<article id="post-{{ post.id }}" data-community-post="{{ post.id }}" class="max-w-full rounded-3xl border border-white/30 bg-white/24 p-4 shadow-xl backdrop-blur-xl transition duration-300 hover:-translate-y-0.5 hover:bg-white/28 sm:p-5">
+@let(surface = $props.get('surface') || 'feed')
+@let(isProfileSurface = surface === 'profile')
+@let(profileTone = 'border-white/30 bg-white/24 shadow-xl hover:bg-white/28')
+@let(feedTone = 'border-white/30 bg-white/24 shadow-xl hover:bg-white/28')
+
+<article id="post-{{ post.id }}" data-community-post="{{ post.id }}" class="{{ isProfileSurface ? profileTone : feedTone }} max-w-full rounded-3xl border p-4 backdrop-blur-xl transition duration-300 hover:-translate-y-0.5 sm:p-5">
   <div class="flex items-start justify-between gap-4">
     <a href="/users/{{ post.author.username }}" class="flex min-w-0 items-center gap-3">
       @if(post.author.avatarUrl)
-        <img src="{{ post.author.avatarUrl }}" alt="" class="h-12 w-12 flex-none rounded-full object-cover shadow-sm">
+        <img src="{{ post.author.avatarUrl }}" alt="" loading="lazy" decoding="async" class="h-12 w-12 flex-none rounded-full object-cover shadow-sm">
       @else
-        <span class="flex h-12 w-12 flex-none items-center justify-center rounded-full bg-[#113E14] font-black text-[#EDE7D6] shadow-sm">
+        <span class="flex h-12 w-12 flex-none items-center justify-center rounded-full bg-[#113e14] font-black text-[#ebe3a7] shadow-sm">
           {{ post.author.initial }}
         </span>
       @endif
       <span class="min-w-0">
-        <span class="block truncate text-sm font-black text-black">{{ post.author.displayName }}</span>
-        <span class="block truncate text-xs font-bold text-black/42">{{ '@' + post.author.username }} - {{ post.createdAtHuman }}</span>
+        <span class="block truncate text-sm font-black text-[#113e14]">{{ post.author.displayName }}</span>
+        <span class="block truncate text-xs font-bold text-[#416543]">{{ '@' + post.author.username }} - {{ post.createdAtHuman }}</span>
       </span>
     </a>
 
     <div class="flex flex-none flex-wrap items-center justify-end gap-2">
-      <span class="rounded-full bg-[#EDE7D6] px-3 py-1 text-[11px] font-black uppercase tracking-[0.12em] text-[#113E14]">
+      <span class="rounded-full bg-[#ebe3a7] px-3 py-1 text-[11px] font-black uppercase tracking-[0.12em] text-[#113e14]">
         {{ post.author.roleLabel }}
       </span>
     </div>
   </div>
 
   @if(post.body)
-    <p class="mt-4 whitespace-pre-line text-sm font-semibold leading-7 text-black/78">{{ post.body }}</p>
+    <p class="mt-4 whitespace-pre-line text-sm font-semibold leading-7 text-[#113e14]/80">{{ post.body }}</p>
   @endif
 
   @if(post.hashtags.length)
     <div class="mt-3 flex flex-wrap gap-2">
       @each(tag in post.hashtags)
-        <a href="/community/hashtags/{{ tag }}" class="rounded-full bg-white/40 px-3 py-1 text-sm font-black text-blue-600 transition hover:-translate-y-0.5 hover:bg-[#EDE7D6]">#{{ tag }}</a>
+        <a href="/community/hashtags/{{ tag }}" class="rounded-full bg-white/40 px-3 py-1 text-sm font-black text-[#416543] transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]">#{{ tag }}</a>
       @end
     </div>
   @endif
 
   @if(post.mediaUrl)
-    <div class="mt-4 overflow-hidden rounded-2xl border border-white/35 bg-[#113E14]/10">
-      <img src="{{ post.mediaUrl }}" alt="" class="mx-auto block max-h-[38rem] w-full object-contain">
+    <div class="{{ isProfileSurface ? 'border-[#416543]/15 bg-white/45' : 'border-white/35 bg-[#113e14]/10' }} mt-4 overflow-hidden rounded-2xl border">
+      <img src="{{ post.mediaUrl }}" alt="" loading="lazy" decoding="async" fetchpriority="low" class="community-lazy-media mx-auto block max-h-[38rem] w-full object-contain" data-community-lazy-image>
     </div>
   @endif
 
   @if(post.poll)
-    <div class="mt-4 space-y-3 rounded-2xl border border-white/35 bg-white/50 p-4" data-poll="{{ post.poll.id }}">
-      <p class="text-sm font-black text-[#113E14]">{{ post.poll.question }}</p>
+    <div class="{{ isProfileSurface ? 'border-[#416543]/12 bg-white/56' : 'border-white/35 bg-white/50' }} mt-4 space-y-3 rounded-2xl border p-4" data-poll="{{ post.poll.id }}">
+      <p class="text-sm font-black text-[#113e14]">{{ post.poll.question }}</p>
 
       @each(option in post.poll.options)
         @form({
@@ -50,23 +55,23 @@
           'data-poll-form': true,
           'data-poll-id': post.poll.id
         })
-          <button type="submit" class="{{ option.selected ? 'bg-[#113E14]/10' : 'bg-white/70' }} w-full rounded-xl px-3 py-2 text-left shadow-sm transition hover:-translate-y-0.5 hover:bg-white">
+          <button type="submit" class="{{ option.selected ? 'bg-[#113e14]/10' : 'bg-white/70' }} w-full rounded-xl px-3 py-2 text-left shadow-sm transition hover:-translate-y-0.5 hover:bg-white">
             <span class="flex items-center justify-between gap-4">
-              <span class="text-sm font-bold text-black">{{ option.label }}</span>
-              <span class="text-xs font-black text-black/42" data-poll-percent="{{ option.id }}">{{ option.percent }}%</span>
+              <span class="text-sm font-bold text-[#113e14]">{{ option.label }}</span>
+              <span class="text-xs font-black text-[#416543]" data-poll-percent="{{ option.id }}">{{ option.percent }}%</span>
             </span>
-            <span class="mt-2 block h-2 overflow-hidden rounded-full bg-[#D5DCD4]">
-              <span class="{{ option.selected ? 'bg-[#113E14]' : 'bg-[#6C8E6B]' }} block h-full rounded-full transition-all" style="width: {{ option.percent }}%" data-poll-bar="{{ option.id }}"></span>
+            <span class="mt-2 block h-2 overflow-hidden rounded-full bg-[#a8b841]/30">
+              <span class="{{ option.selected ? 'bg-[#113e14]' : 'bg-[#a8b841]' }} block h-full rounded-full transition-all" style="width: {{ option.percent }}%" data-poll-bar="{{ option.id }}"></span>
             </span>
           </button>
         @end
       @end
 
-      <p class="text-xs font-black text-black/42"><span data-poll-votes>{{ post.poll.totalVotes }}</span> votes</p>
+      <p class="text-xs font-black text-[#416543]"><span data-poll-votes>{{ post.poll.totalVotes }}</span> votes</p>
     </div>
   @endif
 
-  <div class="mt-4 flex items-center justify-between gap-4 border-t border-white/25 pt-3">
+  <div class="{{ isProfileSurface ? 'border-[#416543]/12' : 'border-white/25' }} mt-4 flex items-center justify-between gap-4 border-t pt-3">
     <div class="flex flex-wrap items-center gap-5">
       @form({
         action: '/community/posts/' + post.id + '/reactions/like',
@@ -74,15 +79,16 @@
         'data-reaction-form': true,
         'data-reaction-type': 'like'
       })
-        <button type="submit" class="group flex items-center gap-2 rounded-full px-1 py-1 transition hover:bg-white/22 {{ post.liked ? 'text-[#113E14]' : '' }}">
+        <button type="submit" class="group flex items-center gap-2 rounded-full px-1 py-1 transition hover:bg-white/22 {{ post.liked ? 'text-[#113e14]' : '' }}">
           <div class="h-8 w-8 bg-cover bg-center transition group-hover:scale-110 {{ post.liked ? 'scale-110' : '' }}" style="background-image: url('{{ post.liked ? '/resources/images/community/liked.png' : '/resources/images/community/like.png' }}')" data-reaction-icon="like"></div>
-          <span class="text-sm font-black {{ post.liked ? 'text-[#113E14]' : 'text-black/35' }}" data-reaction-count="like">{{ post.counts.likes }}</span>
+          <span class="text-sm font-black {{ post.liked ? 'text-[#113e14]' : 'text-[#416543]/70' }}" data-reaction-count="like">{{ post.counts.likes }}</span>
         </button>
       @end
 
-      <button type="button" class="flex items-center gap-2 rounded-full px-1 py-1 transition hover:bg-white/22" data-comment-focus>
+      <button type="button" class="flex items-center gap-2 rounded-full px-1 py-1 transition hover:bg-white/22" data-comment-toggle aria-expanded="false">
         <div class="h-5 w-5 bg-[url('/resources/images/community/community.png')] bg-cover bg-center"></div>
-        <span class="text-sm font-black text-black/35" data-comment-count>{{ post.counts.comments }}</span>
+        <span class="text-sm font-black text-[#416543]/70" data-comment-count>{{ post.counts.comments }}</span>
+        <span class="hidden text-xs font-black text-[#416543]/70 sm:inline" data-comment-toggle-label>Comments</span>
       </button>
 
       @form({
@@ -93,7 +99,7 @@
       })
         <button type="submit" class="flex items-center gap-2 rounded-full px-1 py-1 transition hover:bg-white/22">
           <div class="h-5 w-5 bg-cover bg-center" style="background-image: url('{{ post.favorited ? '/resources/images/community/saved-active.png' : '/resources/images/community/save.png' }}')" data-reaction-icon="favorite"></div>
-          <span class="text-sm font-black {{ post.favorited ? 'text-[#113E14]' : 'text-black/35' }}" data-reaction-count="favorite">{{ post.counts.favorites }}</span>
+          <span class="text-sm font-black {{ post.favorited ? 'text-[#113e14]' : 'text-[#416543]/70' }}" data-reaction-count="favorite">{{ post.counts.favorites }}</span>
         </button>
       @end
     </div>
@@ -103,28 +109,30 @@
     </button>
   </div>
 
-  <div class="mt-3 space-y-2" data-comments-list>
-    @each(comment in post.comments)
-      <div class="rounded-2xl bg-white/45 px-4 py-2">
-        <a href="/users/{{ comment.author.username }}" class="text-xs font-black text-[#113E14]">{{ '@' + comment.author.username }}</a>
-        <p class="text-sm font-semibold leading-6 text-black/70">{{ comment.body }}</p>
-      </div>
+  <div class="{{ isProfileSurface ? 'border-[#416543]/12 bg-white/42' : 'border-white/25 bg-white/18' }} community-comments-panel mt-3 hidden rounded-3xl border p-3" data-comments-panel>
+    <div class="space-y-2" data-comments-list>
+      @each(comment in post.comments)
+        <div class="rounded-2xl bg-white/45 px-4 py-2">
+          <a href="/users/{{ comment.author.username }}" class="text-xs font-black text-[#113e14]">{{ '@' + comment.author.username }}</a>
+          <p class="text-sm font-semibold leading-6 text-[#113e14]/70">{{ comment.body }}</p>
+        </div>
+      @end
+    </div>
+
+    @form({
+      action: '/community/posts/' + post.id + '/comments',
+      method: 'POST',
+      class: 'mt-3 flex items-center gap-3',
+      'data-comment-form': true
+    })
+      @if(viewer.avatarUrl)
+        <img src="{{ viewer.avatarUrl }}" alt="" loading="lazy" decoding="async" class="h-11 w-11 flex-none rounded-full object-cover">
+      @else
+        <span class="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-[#113e14] font-black text-[#ebe3a7]">
+          {{ viewer.initial }}
+        </span>
+      @endif
+      <input name="body" maxlength="500" type="text" placeholder="Write your comment..." class="h-11 min-w-0 flex-1 rounded-full bg-white/72 px-4 text-sm font-semibold text-[#113e14] outline-none placeholder:text-[#416543]/55" data-comment-input>
     @end
   </div>
-
-  @form({
-    action: '/community/posts/' + post.id + '/comments',
-    method: 'POST',
-    class: 'mt-3 flex items-center gap-3',
-    'data-comment-form': true
-  })
-    @if(viewer.avatarUrl)
-      <img src="{{ viewer.avatarUrl }}" alt="" class="h-11 w-11 flex-none rounded-full object-cover">
-    @else
-      <span class="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-[#113E14] font-black text-[#EDE7D6]">
-        {{ viewer.initial }}
-      </span>
-    @endif
-    <input name="body" maxlength="500" type="text" placeholder="Write your comment..." class="h-11 min-w-0 flex-1 rounded-full bg-white/72 px-4 text-sm font-semibold outline-none placeholder:text-black/35" data-comment-input>
-  @end
 </article>

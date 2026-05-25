@@ -72,6 +72,21 @@ export class CommunityPostSchema extends BaseModel {
   declare visibility: string
 }
 
+export class FavoriteAccountSchema extends BaseModel {
+  static $columns = ['createdAt', 'favoriteUserId', 'id', 'updatedAt', 'userId'] as const
+  $columns = FavoriteAccountSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column()
+  declare favoriteUserId: number
+  @column({ isPrimary: true })
+  declare id: number
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare userId: number
+}
+
 export class FollowSchema extends BaseModel {
   static $columns = ['createdAt', 'followerId', 'followingId', 'id', 'updatedAt'] as const
   $columns = FollowSchema.$columns
