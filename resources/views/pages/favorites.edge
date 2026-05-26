@@ -1,7 +1,6 @@
 @layout()
-
 @slot('title')
-<title>Saved Posts</title>
+<title>Plant Bud</title>
 @endslot
 
 <div class="min-h-screen text-[#113e14]" data-community-page data-favorites-page>
@@ -26,7 +25,7 @@
         </div>
       </div>
 
-      <div class="space-y-5" data-community-feed>
+      <div class="space-y-6" data-community-feed>
         @each(post in posts)
           @!component('components/community-post-card', { post, viewer })
         @else

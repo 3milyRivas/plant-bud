@@ -319,6 +319,8 @@ export default class CommunityController {
               displayName: author.displayName,
               avatarUrl: author.avatarUrl,
               initial: author.initial,
+              role: author.role,
+              roleLabel: author.roleLabel,
             },
           },
           count: await this.countRows('post_comments', 'community_post_id', post.id),
@@ -698,7 +700,6 @@ export default class CommunityController {
           .preload('comments', (commentQuery) => {
             commentQuery
               .orderBy('createdAt', 'asc')
-              .limit(6)
               .preload('user', (userQuery) => userQuery.preload('accountProfile'))
           })
           .preload('poll', (pollQuery) => {
@@ -734,7 +735,6 @@ export default class CommunityController {
       .preload('comments', (commentQuery) => {
         commentQuery
           .orderBy('createdAt', 'asc')
-          .limit(6)
           .preload('user', (userQuery) => userQuery.preload('accountProfile'))
       })
       .preload('poll', (pollQuery) => {

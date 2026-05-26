@@ -1,6 +1,6 @@
 @layout()
 @slot('title')
-<title>Plant Scanner</title>
+<title>Plant Bud - Scanner</title>
 @endslot
 
 <div class="relative min-h-screen overflow-hidden">
@@ -13,7 +13,7 @@
     @!component('components/app-navbar', {
         section: 'Plant scanner',
         toolMode: 'scanner',
-        maxWidth: 'max-w-7xl',
+        maxWidth: 'max-w-[min(1500px,calc(100vw-2rem))]',
     })
     <input id="plantUpload" type="file" accept="image/*" class="hidden">
 

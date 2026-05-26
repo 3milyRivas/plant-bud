@@ -1,7 +1,6 @@
 @layout()
-
 @slot('title')
-<title>Community</title>
+<title>Plant Bud - Community</title>
 @endslot
 
 @let(errors = formErrors || {})
@@ -39,7 +38,7 @@
         <div class="flex flex-wrap items-center justify-between gap-3 rounded-3xl border border-white/30 bg-white/22 p-4 shadow-xl backdrop-blur-xl">
           <div>
             <p class="text-xs font-black uppercase tracking-[0.18em] text-[#416543]">Hashtag feed</p>
-            <h1 class="mt-1 text-2xl font-black text-[#113e14]">#{{ activeHashtag }}</h1>
+            <h1 class="mt-1 text-2xl font-black text-[#dca15d]">#{{ activeHashtag }}</h1>
           </div>
           <a href="/community" class="rounded-full bg-[#113e14] px-5 py-2 text-sm font-black text-[#ebe3a7] transition hover:-translate-y-0.5 hover:bg-[#416543]">Clear</a>
         </div>
@@ -126,7 +125,7 @@
         <p class="rounded-full bg-white/18 px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-[#ebe3a7]">Fresh from the community</p>
       </div>
 
-      <div class="space-y-4" data-community-feed>
+      <div class="space-y-6" data-community-feed>
         @each(post in posts)
           @!component('components/community-post-card', { post, viewer })
         @else
@@ -305,7 +304,7 @@
         <p class="text-xs font-black uppercase tracking-[0.18em] text-[#416543]">Trending tags</p>
         <div class="mt-4 flex flex-wrap gap-2">
           @each(tag in trendingHashtags)
-            <a href="/community/hashtags/{{ tag.tag }}" class="rounded-full bg-white/36 px-3 py-2 text-xs font-black text-[#113e14] transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]">
+            <a href="/community/hashtags/{{ tag.tag }}" class="rounded-full border border-[#dca15d]/25 bg-white/52 px-3 py-2 text-xs font-black text-[#b77738] shadow-sm transition hover:-translate-y-0.5 hover:border-[#dca15d]/45 hover:bg-[#ebe3a7]/58 hover:text-[#9b622f]">
               #{{ tag.tag }}
               <span class="ml-1 text-[#416543]">{{ tag.postsCount }}</span>
             </a>
