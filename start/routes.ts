@@ -16,7 +16,7 @@ const ProfilesController = () => import('#controllers/profiles_controller')
 /* general views */
 router.on('/').render('pages/welcome').as('home')
 router.on('/register').render('pages/register')
-router.on('/araceae').render('pages/araceae', { ornamentalPlants })
+import ornamentalPlants from '#data/ornamentalPlants'
 router.on('/amaryllidaceae').render('pages/amaryllidaceae', { horticulturalPlants })
 router.on('/cactaceae').render('pages/cactaceae', { succulentPlants })
 
