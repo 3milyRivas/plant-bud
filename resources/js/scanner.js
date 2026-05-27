@@ -1,3 +1,5 @@
+import { initPhoneUpload } from './phone_upload.js'
+
 const input=document.getElementById('plantUpload')
 const preview=document.getElementById('previewImage')
 const dropText=document.getElementById('dropText')
@@ -5,9 +7,11 @@ const scanBtn=document.getElementById('scanBtn')
 const loadingState=document.getElementById('loadingState')
 const resultsBox=document.getElementById('resultsBox')
 const emptyState=document.getElementById('emptyState')
+let selectedPlantFile=null
 
 function setFile(file){
 if(!file)return
+selectedPlantFile=file
 const r=new FileReader()
 r.onload=e=>{
 preview.src=e.target.result
@@ -21,6 +25,7 @@ input.files=dt.files
 }
 
 input.addEventListener('change',e=>setFile(e.target.files[0]))
+initPhoneUpload({ input, onFile: setFile, tool: 'scanner' })
 document.getElementById('previewBox').addEventListener('dragover',e=>e.preventDefault())
 document.getElementById('previewBox').addEventListener('drop',e=>{
 e.preventDefault()
@@ -28,7 +33,7 @@ setFile(e.dataTransfer.files[0])
 })
 
 scanBtn.addEventListener('click',async()=>{
-const file=input.files[0]
+const file=selectedPlantFile||input.files[0]
 if(!file)return
 
 loadingState.classList.remove('hidden')

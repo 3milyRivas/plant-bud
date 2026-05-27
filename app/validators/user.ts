@@ -19,7 +19,7 @@ export const signupValidator = vine.compile(
 
     last_name: vine.string().trim().minLength(2).maxLength(50).optional(),
 
-    nursery_name: vine.string().trim().minLength(3).maxLength(80).optional(),
+    nursery_name: vine.string().trim().minLength(3).maxLength(30).optional(),
 
     owner_name: vine.string().trim().minLength(2).maxLength(100).optional(),
 

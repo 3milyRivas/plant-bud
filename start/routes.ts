@@ -7,6 +7,7 @@ import succulentPlants from '#data/succulentPlants'
 import nurseries from '#data/nurseries'
 
 const GardenDesignerController = () => import('#controllers/garden_designers_controller')
+const PhoneUploadsController = () => import('#controllers/phone_uploads_controller')
 const CommunityController = () => import('#controllers/community_controller')
 const HomepagesController = () => import('#controllers/homepages_controller')
 const NewAccountController = () => import('#controllers/new_account_controller')
@@ -37,6 +38,15 @@ router
   .as('garden_designer.remove_background')
 router.on('/scanner').render('pages/scanner/scanner')
 router.post('/plants/scan', [PlantsController, 'scan']).as('plants.scan')
+router.post('/phone-upload/sessions', [PhoneUploadsController, 'create']).as('phone_uploads.create')
+router
+  .get('/phone-upload/sessions/:token', [PhoneUploadsController, 'status'])
+  .as('phone_uploads.status')
+router
+  .get('/phone-upload/sessions/:token/image', [PhoneUploadsController, 'image'])
+  .as('phone_uploads.image')
+router.get('/phone-upload/:token', [PhoneUploadsController, 'show']).as('phone_uploads.show')
+router.post('/phone-upload/:token', [PhoneUploadsController, 'upload']).as('phone_uploads.upload')
 /* clients views */
 /*router
   .group(() => {

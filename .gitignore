@@ -7,6 +7,7 @@ tmp/*
 storage/*.log
 storage/profile_uploads
 storage/community_uploads
+storage/phone_uploads
 
 # Secrets
 .env
