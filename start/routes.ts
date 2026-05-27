@@ -1,12 +1,13 @@
 import { middleware } from '#start/kernel'
 import { controllers } from '#generated/controllers'
 import router from '@adonisjs/core/services/router'
-import ornamentalPlants from '#data/ornamental_plants'
+import ornamentalPlants from '#data/ornamentalPlants'
 import horticulturalPlants from '#data/horticulturalPlants'
 import succulentPlants from '#data/succulentPlants'
 import nurseries from '#data/nurseries'
 
 const GardenDesignerController = () => import('#controllers/garden_designers_controller')
+const PhoneUploadsController = () => import('#controllers/phone_uploads_controller')
 const CommunityController = () => import('#controllers/community_controller')
 const HomepagesController = () => import('#controllers/homepages_controller')
 const NewAccountController = () => import('#controllers/new_account_controller')
@@ -16,9 +17,9 @@ const ProfilesController = () => import('#controllers/profiles_controller')
 /* general views */
 router.on('/').render('pages/welcome').as('home')
 router.on('/register').render('pages/register')
-import ornamentalPlants from '#data/ornamentalPlants'
-router.on('/amaryllidaceae').render('pages/amaryllidaceae', { horticulturalPlants })
-router.on('/cactaceae').render('pages/cactaceae', { succulentPlants })
+router.on('/ornamental').render('pages/ornamental', { ornamentalPlants })
+router.on('/horticultural').render('pages/horticultural', { horticulturalPlants })
+router.on('/succulent').render('pages/succulent', { succulentPlants })
 
 router.on('/requested').render('pages/requested')
 
@@ -37,6 +38,15 @@ router
   .as('garden_designer.remove_background')
 router.on('/scanner').render('pages/scanner/scanner')
 router.post('/plants/scan', [PlantsController, 'scan']).as('plants.scan')
+router.post('/phone-upload/sessions', [PhoneUploadsController, 'create']).as('phone_uploads.create')
+router
+  .get('/phone-upload/sessions/:token', [PhoneUploadsController, 'status'])
+  .as('phone_uploads.status')
+router
+  .get('/phone-upload/sessions/:token/image', [PhoneUploadsController, 'image'])
+  .as('phone_uploads.image')
+router.get('/phone-upload/:token', [PhoneUploadsController, 'show']).as('phone_uploads.show')
+router.post('/phone-upload/:token', [PhoneUploadsController, 'upload']).as('phone_uploads.upload')
 /* clients views */
 /*router
   .group(() => {
@@ -49,6 +59,9 @@ router
     router.get('/homepage', [HomepagesController, 'index']).as('homepage')
     router.get('/community', [CommunityController, 'index']).as('community.index')
     router.post('/community/posts', [CommunityController, 'store']).as('community.posts.store')
+    router
+      .post('/community/posts/:id/delete', [CommunityController, 'destroy'])
+      .as('community.posts.destroy')
     router
       .post('/community/posts/:id/reactions/:type', [CommunityController, 'toggleReaction'])
       .as('community.posts.reactions.toggle')
@@ -76,6 +89,9 @@ router
     router
       .post('/users/:username/follow', [CommunityController, 'toggleFollow'])
       .as('community.users.follow')
+    router
+      .post('/users/:username/favorite', [CommunityController, 'toggleFavoriteAccount'])
+      .as('community.users.favorite')
     router
       .post('/users/:username/reviews', [CommunityController, 'storeReview'])
       .as('community.users.reviews.store')

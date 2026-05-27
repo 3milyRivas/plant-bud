@@ -1,65 +1,57 @@
 @layout()
 @slot('title')
-<title>Plant Scanner</title>
+<title>Plant Bud - Scanner</title>
 @endslot
 
-<div class="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#1E3D19] via-[#728B6F] to-[#6B8C6C]">
+<div class="relative min-h-screen overflow-hidden">
     <img src="/resources/images/welcome/header3.png"
-        class="absolute inset-0 w-full h-full object-cover pointer-events-none select-none">
-    <div class="absolute inset-0 bg-black/45"></div>
-    <div class="absolute inset-0 bg-gradient-to-br from-[#1E3D19]/70 via-[#728B6F]/55 to-[#6B8C6C]/70"></div>
+        class="absolute inset-0 h-full w-full object-cover opacity-24 mix-blend-soft-light pointer-events-none select-none"
+        alt="">
+    <div class="absolute inset-0 bg-[#113e14]/34 pointer-events-none"></div>
+    <div class="absolute inset-0 bg-gradient-to-br from-[#416543]/28 via-transparent to-[#113e14]/42 pointer-events-none"></div>
 
-    <header class="w-full z-50 px-6 lg:px-10 pt-6">
-        <div
-            class="max-w-7xl mx-auto bg-white/10 backdrop-blur-xl border border-white/10 rounded-full px-6 py-4 flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <img src="/resources/images/essential/logo.png" class="w-14">
-                <div>
-                    <h1 class="text-2xl font-black text-white">Plant <span class="text-[#EDE7D6]">Bud</span></h1>
-                    <p class="text-xs font-bold tracking-[0.25em] uppercase text-white/60">Plant Scanner</p>
-                </div>
-            </div>
-
-            <div class="flex gap-3">
-                <a href="/homepage"
-                    class="bg-white/10 text-white font-bold px-5 py-3 rounded-full border border-white/10">Exit</a>
-                <label for="plantUpload"
-                    class="cursor-pointer bg-white/10 text-white font-bold px-5 py-3 rounded-full border border-white/10">Upload</label>
-                <input id="plantUpload" type="file" accept="image/*" class="hidden">
-                <button id="scanBtn"
-                    class="bg-[#EDE7D6] text-[#1E3D19] font-black px-6 py-3 rounded-full">Analyze</button>
-            </div>
-        </div>
-    </header>
+    @!component('components/app-navbar', {
+        section: 'Plant scanner',
+        toolMode: 'scanner',
+        maxWidth: 'max-w-[min(1500px,calc(100vw-2rem))]',
+    })
+    <input id="plantUpload" type="file" accept="image/*" class="hidden">
 
     <main class="relative z-10 pt-10 pb-10 px-6 lg:px-10">
         <div class="max-w-7xl mx-auto grid grid-cols-1 xl:grid-cols-[360px_1fr] gap-8 min-h-[calc(100vh-11rem)]">
 
             <aside class="relative">
                 <div class="absolute -inset-2 bg-white/10 blur-2xl rounded-[2.5rem]"></div>
-                <div class="relative h-full bg-white/10 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-6">
+                <div class="relative h-full overflow-hidden bg-white/12 backdrop-blur-2xl border border-white/18 rounded-[2.5rem] p-6 shadow-[0_30px_80px_rgba(0,0,0,0.16)]">
+                    <div class="absolute inset-x-6 top-0 h-1 rounded-b-full bg-[#a8b841]/60"></div>
 
-                    <h2 class="text-white text-xl font-black">Scan Panel</h2>
-                    <div class="w-14 h-1 bg-[#EDE7D6] rounded-full mt-3 mb-6"></div>
+                    <p class="text-xs font-black uppercase tracking-[0.22em] text-[#ebe3a7]">Step 1</p>
+                    <h2 class="mt-2 text-white text-xl font-black">Plant health scan</h2>
+                    <p class="mt-2 text-sm font-semibold leading-6 text-white/66">Upload or drop one image. After it appears here, press Analyze in the navbar.</p>
+                    <div class="w-14 h-1 bg-[#dca15d] rounded-full mt-4 mb-6"></div>
 
                     <div id="previewBox"
-                        class="relative w-full min-h-[240px] bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center overflow-hidden">
-                        <p id="dropText" class="absolute text-white/60 text-sm">Drag & drop image or upload</p>
+                        class="relative w-full min-h-[240px] bg-white/10 border border-white/14 rounded-2xl flex items-center justify-center overflow-hidden shadow-inner shadow-[#113e14]/16">
+                        <div class="absolute left-5 top-5 h-3 w-3 rounded-full bg-[#a8b841] shadow-[0_0_18px_rgba(168,184,65,0.45)]"></div>
+                        <div id="dropText" class="absolute px-5 text-center">
+                            <p class="text-[#ebe3a7] text-sm font-black">Drop plant image here</p>
+                            <p class="mt-2 text-white/58 text-xs font-semibold">Leaves, stem, and affected areas help the scan.</p>
+                        </div>
                         <img id="previewImage" class="hidden max-w-full max-h-[420px] object-contain">
                     </div>
 
                     <div class="mt-6 space-y-4">
-                        <div class="p-4 bg-white/5 border border-white/10 rounded-2xl">
-                            <p class="text-white/60 text-sm">Status</p>
+                        <div class="p-4 bg-white/10 border border-white/14 rounded-2xl">
+                            <p class="text-white/60 text-sm">Step 2 - Status</p>
                             <p id="statusText" class="text-white font-bold">Waiting</p>
                         </div>
 
-                        <div class="p-4 bg-white/5 border border-white/10 rounded-2xl">
+                        <div class="p-4 bg-white/10 border border-white/14 rounded-2xl">
                             <p class="text-white/60 text-sm">Confidence</p>
-                            <p id="confidenceText" class="text-[#EDE7D6] font-bold">-</p>
+                            <p id="confidenceText" class="text-[#ebe3a7] font-bold">-</p>
                         </div>
 
-                        <div class="p-4 bg-white/5 border border-white/10 rounded-2xl">
+                        <div class="p-4 bg-white/10 border border-white/14 rounded-2xl">
                             <p class="text-white/60 text-sm">Reliability</p>
                             <p id="reliabilityText" class="text-white font-black">-</p>
                         </div>
@@ -72,57 +64,61 @@
                 <div class="absolute -inset-2 bg-white/10 blur-2xl rounded-[3rem]"></div>
 
                 <div
-                    class="relative h-full bg-white/10 backdrop-blur-2xl border border-white/10 rounded-[3rem] p-6 lg:p-10">
+                    class="relative h-full overflow-hidden bg-white/92 backdrop-blur-2xl border border-white/55 rounded-[3rem] p-6 text-[#113e14] shadow-[0_30px_80px_rgba(17,62,20,0.18)] lg:p-10">
+                    <div class="absolute right-0 top-0 h-full w-1 bg-[#dca15d]/55"></div>
+                    <div class="absolute left-0 top-0 h-28 w-full bg-gradient-to-b from-[#ebe3a7]/34 to-transparent pointer-events-none"></div>
 
                     <div class="mb-6">
-                        <h2 class="text-3xl font-black text-white">Plant Intelligence</h2>
-                        <p class="text-white/70 font-semibold mt-2">AI identification + botanical insights</p>
+                        <p class="text-sm font-black uppercase tracking-[0.22em] text-[#416543]">Plant Bud Lens</p>
+                        <h2 class="mt-2 text-3xl font-black text-[#113e14]">Plant Intelligence</h2>
+                        <p class="text-[#416543] font-semibold mt-2">This area stays empty until a scan finishes. Results are grouped from quick summary to deeper care details.</p>
                     </div>
 
                     <div id="loadingState" class="hidden text-center py-16">
                         <div
-                            class="w-14 h-14 mx-auto border-4 border-white/20 border-t-[#EDE7D6] rounded-full animate-spin">
+                            class="w-14 h-14 mx-auto border-4 border-[#416543]/14 border-t-[#dca15d] rounded-full animate-spin">
                         </div>
-                        <p class="text-white/70 mt-4">Analyzing plant...</p>
+                        <p class="text-[#416543] mt-4 font-semibold">Analyzing plant...</p>
                     </div>
 
-                    <div id="emptyState" class="text-center py-20 text-white/60">
-                        <p>No scan yet</p>
-                        <p class="text-sm mt-2">Upload a plant image to begin</p>
+                    <div id="emptyState" class="text-center py-20 text-[#416543]">
+                        <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#ebe3a7] text-2xl font-black text-[#113e14]">PB</div>
+                        <p class="mt-5 text-2xl font-black text-[#113e14]">No scan yet</p>
+                        <p class="text-sm mt-2 font-semibold">Upload a plant image, then choose Analyze in the navbar.</p>
                     </div>
 
                     <div id="resultsBox" class="hidden space-y-6">
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
-                                <p class="text-white/60 text-sm">Species</p>
-                                <p id="species" class="text-[#EDE7D6] text-2xl font-black mt-2">-</p>
+                            <div class="bg-[#416543]/8 border border-[#416543]/12 rounded-2xl p-6 shadow-sm">
+                                <p class="text-[#416543] text-sm font-bold">Species</p>
+                                <p id="species" class="text-[#113e14] text-2xl font-black mt-2">-</p>
                             </div>
 
-                            <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
-                                <p class="text-white/60 text-sm">Health</p>
-                                <p id="health" class="text-white text-2xl font-black mt-2">-</p>
+                            <div class="bg-[#ebe3a7]/45 border border-[#416543]/12 rounded-2xl p-6 shadow-sm">
+                                <p class="text-[#416543] text-sm font-bold">Health</p>
+                                <p id="health" class="text-[#113e14] text-2xl font-black mt-2">-</p>
                             </div>
                         </div>
 
-                        <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
-                            <p class="text-white/60 text-sm mb-3">AI Matches</p>
+                        <div class="bg-[#416543]/8 border border-[#416543]/12 rounded-2xl p-6 shadow-sm">
+                            <p class="text-[#416543] text-sm font-black mb-3">AI Matches</p>
                             <div id="matches" class="grid grid-cols-2 md:grid-cols-3 gap-4"></div>
                         </div>
 
-                        <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
-                            <p class="text-white/60 text-sm mb-3">Causes</p>
-                            <ul id="causes" class="text-white/80 list-disc ml-5 space-y-1"></ul>
+                        <div class="bg-white border border-[#416543]/12 rounded-2xl p-6 shadow-sm">
+                            <p class="text-[#416543] text-sm font-black mb-3">Possible causes</p>
+                            <ul id="causes" class="text-[#113e14]/78 list-disc ml-5 space-y-1"></ul>
                         </div>
 
-                        <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
-                            <p class="text-[#EDE7D6] font-semibold mb-3">Plant Education</p>
-                            <div id="education" class="text-white/80 space-y-3 text-sm"></div>
+                        <div class="bg-[#ebe3a7]/42 border border-[#416543]/12 rounded-2xl p-6 shadow-sm">
+                            <p class="text-[#113e14] font-black mb-3">Plant Education</p>
+                            <div id="education" class="text-[#113e14]/78 space-y-3 text-sm"></div>
                         </div>
 
-                        <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
-                            <p class="text-[#EDE7D6] font-semibold mb-3">Care Guide</p>
-                            <ul id="tips" class="text-[#EDE7D6] list-disc ml-5 space-y-1"></ul>
+                        <div class="bg-[#416543]/8 border border-[#416543]/12 rounded-2xl p-6 shadow-sm">
+                            <p class="text-[#113e14] font-black mb-3">Care Guide</p>
+                            <ul id="tips" class="text-[#416543] list-disc ml-5 space-y-1"></ul>
                         </div>
 
                     </div>
@@ -133,5 +129,6 @@
         </div>
     </main>
 </div>
+@!component('components/phone-upload-modal')
 @vite(['resources/js/scanner.js'])
 @end

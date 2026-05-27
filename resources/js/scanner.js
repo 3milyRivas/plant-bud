@@ -1,3 +1,5 @@
+import { initPhoneUpload } from './phone_upload.js'
+
 const input=document.getElementById('plantUpload')
 const preview=document.getElementById('previewImage')
 const dropText=document.getElementById('dropText')
@@ -5,9 +7,11 @@ const scanBtn=document.getElementById('scanBtn')
 const loadingState=document.getElementById('loadingState')
 const resultsBox=document.getElementById('resultsBox')
 const emptyState=document.getElementById('emptyState')
+let selectedPlantFile=null
 
 function setFile(file){
 if(!file)return
+selectedPlantFile=file
 const r=new FileReader()
 r.onload=e=>{
 preview.src=e.target.result
@@ -21,6 +25,7 @@ input.files=dt.files
 }
 
 input.addEventListener('change',e=>setFile(e.target.files[0]))
+initPhoneUpload({ input, onFile: setFile, tool: 'scanner' })
 document.getElementById('previewBox').addEventListener('dragover',e=>e.preventDefault())
 document.getElementById('previewBox').addEventListener('drop',e=>{
 e.preventDefault()
@@ -28,7 +33,7 @@ setFile(e.dataTransfer.files[0])
 })
 
 scanBtn.addEventListener('click',async()=>{
-const file=input.files[0]
+const file=selectedPlantFile||input.files[0]
 if(!file)return
 
 loadingState.classList.remove('hidden')
@@ -64,11 +69,11 @@ document.getElementById('education').innerHTML=`
 document.getElementById('tips').innerHTML=(data.plant_education?.care_guide?.general||[]).map(t=>`<li>${t}</li>`).join('')
 
 document.getElementById('matches').innerHTML=(data.matches||[]).map(m=>
-`<div onclick="window.open('${m.google_search}','_blank')" class="cursor-pointer hover:scale-105 transition bg-white/5 border border-white/10 rounded-xl overflow-hidden">
+`<div onclick="window.open('${m.google_search}','_blank')" class="cursor-pointer hover:scale-105 transition bg-white border border-[#416543]/12 rounded-xl overflow-hidden shadow-sm">
 <img src="${m.image||''}" class="w-full h-28 object-cover">
 <div class="p-2">
-<p class="text-white text-sm font-bold">${m.name}</p>
-<p class="text-[#EDE7D6] text-xs">${m.confidence}%</p>
+<p class="text-[#113e14] text-sm font-bold">${m.name}</p>
+<p class="text-[#dca15d] text-xs font-black">${m.confidence}%</p>
 </div>
 </div>`
 ).join('')

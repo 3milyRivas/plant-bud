@@ -1,3 +1,5 @@
+import { initPhoneUpload } from './phone_upload.js'
+
 const upload = document.getElementById('upload')
 const baseImage = document.getElementById('baseImage')
 const container = document.getElementById('canvas-container')
@@ -32,22 +34,24 @@ fileInput.addEventListener("change", (e) => {
     if (file) handleFile(file)
 })
 
+initPhoneUpload({ input: fileInput, onFile: handleFile, tool: 'designer' })
+
 canvas.addEventListener("dragover", (e) => {
     if (hasBaseImage) return
     e.preventDefault()
-    canvas.classList.add("ring-4", "ring-[#EDE7D6]")
+    canvas.classList.add("ring-4", "ring-[#dca15d]")
 })
 
 canvas.addEventListener("dragleave", () => {
     if (hasBaseImage) return
-    canvas.classList.remove("ring-4", "ring-[#EDE7D6]")
+    canvas.classList.remove("ring-4", "ring-[#dca15d]")
 })
 
 canvas.addEventListener("drop", (e) => {
     if (hasBaseImage) return
 
     e.preventDefault()
-    canvas.classList.remove("ring-4", "ring-[#EDE7D6]")
+    canvas.classList.remove("ring-4", "ring-[#dca15d]")
 
     const file = e.dataTransfer.files[0]
     if (file) handleFile(file)
@@ -255,7 +259,7 @@ async function searchPexels() {
 
   const query = optimizeSearchQuery(raw)
 
-  searchResults.innerHTML = `<div class="col-span-full text-center text-white/60">Searching...</div>`
+  searchResults.innerHTML = `<div class="col-span-full text-center text-[#ebe3a7]/70 font-semibold">Searching...</div>`
   openSearchModal()
 
   try {
@@ -273,13 +277,13 @@ async function searchPexels() {
       const preview = p.src.medium
 
       return `
-        <button onclick="selectSearchResult('${url}')" class="rounded-2xl overflow-hidden bg-white/10 hover:scale-105 transition">
+        <button onclick="selectSearchResult('${url}')" class="rounded-2xl overflow-hidden bg-white/10 border border-white/12 hover:scale-105 transition">
           <img src="${preview}" class="w-full h-44 object-cover pointer-events-none">
         </button>
       `
     }).join('')
   } catch {
-    searchResults.innerHTML = `<div class="col-span-full text-center text-white/60">Search failed</div>`
+    searchResults.innerHTML = `<div class="col-span-full text-center text-[#ebe3a7]/70 font-semibold">Search failed</div>`
   }
 }
 
@@ -325,7 +329,7 @@ function saveToInventory(src) {
 
 function renderInventory() {
   inventoryContainer.innerHTML = inventory.map(src => `
-    <button onclick="loadFromInventory('${src}')" class="rounded-xl overflow-hidden border border-white/20">
+    <button onclick="loadFromInventory('${src}')" class="rounded-xl overflow-hidden border border-white/16">
       <img src="${src}" class="w-full h-20 object-contain bg-white/10">
     </button>
   `).join('')
@@ -393,7 +397,7 @@ function makeInteractive(el) {
 function select(el) {
   clearSelection()
   selected = el
-  el.classList.add('ring-4','ring-[#EDE7D6]')
+  el.classList.add('ring-4','ring-[#dca15d]')
   showControls(el)
 }
 
@@ -406,7 +410,7 @@ function showControls(target) {
   deleteBtn.className = 'absolute z-[999] w-6 h-6 bg-red-500 text-white rounded-full'
 
   resizer = document.createElement('div')
-  resizer.className = 'absolute z-[999] w-3 h-3 bg-[#EDE7D6]'
+  resizer.className = 'absolute z-[999] w-3 h-3 bg-[#dca15d]'
 
   deleteBtn.onclick = e => {
     e.stopPropagation()

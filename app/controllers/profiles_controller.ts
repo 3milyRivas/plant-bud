@@ -1,10 +1,12 @@
 import AccountLink from '#models/account_link'
 import AccountProfile from '#models/account_profile'
 import CommunityPost from '#models/community_post'
+import Follow from '#models/follow'
 import GardenerProfile from '#models/gardener_profile'
 import GardenerService from '#models/gardener_service'
 import NurseryProfile from '#models/nursery_profile'
 import ProfileReview from '#models/profile_review'
+import User from '#models/user'
 import { profileValidator } from '#validators/profile'
 import {
   redirectBackWithFormErrors,
@@ -100,23 +102,28 @@ export default class ProfilesController {
     const accountLinks = await AccountLink.query()
       .where('userId', user.id)
       .orderBy('sortOrder', 'asc')
-    const recentPosts = await CommunityPost.query()
+    const recentPostRows = await CommunityPost.query()
       .where('userId', user.id)
       .orderBy('createdAt', 'desc')
       .limit(9)
     const roleDetails = await this.getRoleProfileDetails(user)
+    const [stats, profileRelations] = await Promise.all([
+      this.getProfileStats(user.id, accountProfile, {
+        phone: user.phone,
+        socialLinks: accountLinks.length,
+      }),
+      this.getProfileRelations(user.id),
+    ])
 
     return view.render('pages/profile', {
       user,
       accountProfile,
       accountLinks,
-      recentPosts,
+      recentPosts: await this.getProfilePostPreviews(recentPostRows),
       ...roleDetails,
       avatarInitial: this.getProfileInitial(accountProfile, user),
-      stats: await this.getProfileStats(user.id, accountProfile, {
-        phone: user.phone,
-        socialLinks: accountLinks.length,
-      }),
+      stats,
+      profileRelations,
     })
   }
 
@@ -1022,10 +1029,11 @@ export default class ProfilesController {
     accountProfile: AccountProfile,
     options: { phone?: string | null; socialLinks?: number } = {}
   ) {
-    const [posts, followers, following, likes, favorites, comments] = await Promise.all([
+    const [posts, followers, following, friends, likes, favorites, comments] = await Promise.all([
       this.countRows('community_posts', 'user_id', userId),
       this.countRows('follows', 'following_id', userId),
       this.countRows('follows', 'follower_id', userId),
+      this.countMutualFriends(userId),
       this.countRows('post_reactions', 'user_id', userId, { type: 'like' }),
       this.countRows('post_reactions', 'user_id', userId, { type: 'favorite' }),
       this.countRows('post_comments', 'user_id', userId),
@@ -1045,11 +1053,195 @@ export default class ProfilesController {
       posts,
       followers,
       following,
+      friends,
       likes,
       favorites,
       comments,
       reliability: Math.round((reliabilitySignals / 7) * 100),
     }
+  }
+
+  private async getProfilePostPreviews(posts: CommunityPost[]) {
+    if (!posts.length) return []
+
+    const postIds = posts.map((post) => post.id)
+    const [reactionRows, commentRows, pollRows] = await Promise.all([
+      db
+        .from('post_reactions')
+        .whereIn('community_post_id', postIds)
+        .groupBy('community_post_id', 'type')
+        .select('community_post_id', 'type')
+        .count('* as total'),
+      db
+        .from('post_comments')
+        .whereIn('community_post_id', postIds)
+        .groupBy('community_post_id')
+        .select('community_post_id')
+        .count('* as total'),
+      db.from('post_polls').whereIn('community_post_id', postIds).select('id', 'community_post_id', 'question'),
+    ])
+    const statsByPost = new Map<number, { likes: number; favorites: number; comments: number }>()
+    const pollIds = pollRows.map((row) => Number(row.id))
+    const pollPostIds = new Set(pollRows.map((row) => Number(row.community_post_id)))
+    const pollByPost = new Map<number, { question: string; totalVotes: number; options: { label: string; votes: number; percent: number }[] }>()
+
+    postIds.forEach((postId) => statsByPost.set(postId, { likes: 0, favorites: 0, comments: 0 }))
+
+    reactionRows.forEach((row) => {
+      const postId = Number(row.community_post_id)
+      const stats = statsByPost.get(postId)
+
+      if (!stats) return
+
+      if (row.type === 'like') stats.likes = Number(row.total || 0)
+      if (row.type === 'favorite') stats.favorites = Number(row.total || 0)
+    })
+
+    commentRows.forEach((row) => {
+      const stats = statsByPost.get(Number(row.community_post_id))
+
+      if (stats) stats.comments = Number(row.total || 0)
+    })
+
+    if (pollIds.length) {
+      const [optionRows, voteRows] = await Promise.all([
+        db
+          .from('post_poll_options')
+          .whereIn('post_poll_id', pollIds)
+          .orderBy('sort_order', 'asc')
+          .select('id', 'post_poll_id', 'label'),
+        db
+          .from('post_poll_votes')
+          .whereIn('post_poll_id', pollIds)
+          .groupBy('post_poll_id', 'post_poll_option_id')
+          .select('post_poll_id', 'post_poll_option_id')
+          .count('* as total'),
+      ])
+      const votesByOption = new Map<number, number>()
+
+      voteRows.forEach((row) => {
+        votesByOption.set(Number(row.post_poll_option_id), Number(row.total || 0))
+      })
+
+      pollRows.forEach((poll) => {
+        const pollId = Number(poll.id)
+        const options = optionRows.filter((option) => Number(option.post_poll_id) === pollId)
+        const totalVotes = options.reduce(
+          (total, option) => total + (votesByOption.get(Number(option.id)) || 0),
+          0
+        )
+
+        pollByPost.set(Number(poll.community_post_id), {
+          question: String(poll.question || ''),
+          totalVotes,
+          options: options.map((option) => {
+            const votes = votesByOption.get(Number(option.id)) || 0
+
+            return {
+              label: String(option.label || ''),
+              votes,
+              percent: totalVotes ? Math.round((votes / totalVotes) * 100) : 0,
+            }
+          }),
+        })
+      })
+    }
+
+    return posts.map((post) => {
+      const kind = pollPostIds.has(post.id) ? 'poll' : post.mediaUrl ? 'image' : 'text'
+      const stats = statsByPost.get(post.id) || { likes: 0, favorites: 0, comments: 0 }
+
+      return {
+        id: post.id,
+        body: post.body,
+        mediaUrl: post.mediaUrl,
+        kind,
+        kindLabel: kind === 'poll' ? 'Poll' : kind === 'image' ? 'Image' : 'Text',
+        createdAtHuman: post.createdAt?.toRelative() || 'Recently',
+        poll: pollByPost.get(post.id) || null,
+        pollJson: pollByPost.has(post.id) ? JSON.stringify(pollByPost.get(post.id)) : '',
+        ...stats,
+      }
+    })
+  }
+
+  private async getProfileRelations(userId: number) {
+    const [followers, following, friendIds] = await Promise.all([
+      Follow.query()
+        .where('followingId', userId)
+        .preload('follower', (query) => query.preload('accountProfile'))
+        .orderBy('createdAt', 'desc')
+        .limit(80),
+      Follow.query()
+        .where('followerId', userId)
+        .preload('following', (query) => query.preload('accountProfile'))
+        .orderBy('createdAt', 'desc')
+        .limit(80),
+      this.getFriendIds(userId),
+    ])
+    const friendSet = new Set(friendIds)
+
+    return {
+      followers: followers.map((follow) =>
+        this.formatRelationUser(follow.follower, userId, friendSet)
+      ),
+      following: following.map((follow) =>
+        this.formatRelationUser(follow.following, userId, friendSet)
+      ),
+      friends: following
+        .filter((follow) => friendSet.has(follow.followingId))
+        .map((follow) => this.formatRelationUser(follow.following, userId, friendSet)),
+    }
+  }
+
+  private formatRelationUser(user: User, currentUserId: number, friendIds: Set<number>) {
+    const profile = user.accountProfile || null
+    const displayName = profile?.displayName || user.fullName || user.username
+    const initial = Array.from((displayName || user.username || 'P').trim())[0] || 'P'
+
+    return {
+      id: user.id,
+      username: user.username,
+      displayName,
+      role: user.role,
+      roleLabel: this.roleLabel(user.role),
+      avatarUrl: this.profileMediaUrl(user.id, profile?.avatarUrl || user.profilePicture),
+      initial: initial.toLocaleUpperCase('en'),
+      relationLabel: user.id === currentUserId ? 'You' : friendIds.has(user.id) ? 'Friend' : null,
+    }
+  }
+
+  private async getFriendIds(userId: number) {
+    const [followingRows, followerRows] = await Promise.all([
+      Follow.query().where('followerId', userId).select('followingId'),
+      Follow.query().where('followingId', userId).select('followerId'),
+    ])
+    const followerIds = new Set(followerRows.map((row) => row.followerId))
+
+    return followingRows.map((row) => row.followingId).filter((id) => followerIds.has(id))
+  }
+
+  private async countMutualFriends(userId: number) {
+    return (await this.getFriendIds(userId)).length
+  }
+
+  private profileMediaUrl(userId: number, url?: string | null) {
+    if (!url) return null
+
+    const legacySecureUrl = url.match(/^\/profile\/media\/(avatar|banner)\/([^/]+)$/)
+
+    if (legacySecureUrl) {
+      return `/profile/media/${userId}/${legacySecureUrl[1]}/${legacySecureUrl[2]}`
+    }
+
+    return url
+  }
+
+  private roleLabel(role: string) {
+    if (role === 'gardener') return 'Gardener'
+    if (role === 'nursery') return 'Nursery'
+
+    return 'Client'
   }
 
   private async countRows(

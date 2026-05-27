@@ -19,7 +19,7 @@ if (hasVenvPython && !isSupportedPython(venvCandidate)) {
   console.error('The existing .venv uses an unsupported Python version.')
   console.error('Plant Bud AI dependencies require Python 3.10, 3.11, or 3.12.')
   console.error('Delete .venv, install Python 3.12, and rerun:')
-  console.error('npm run setup')
+  console.error('npm run setup:python')
   process.exit(1)
 }
 
@@ -73,8 +73,8 @@ const python = findPython()
 if (!python) {
   console.error('Python 3.10, 3.11, or 3.12 was not found.')
   console.error('Install Python 3.12 from https://www.python.org/downloads/ and rerun:')
-  console.error('npm run setup')
-  console.error('If .venv already exists with another Python version, delete .venv and rerun setup.')
+  console.error('npm run setup:python')
+  console.error('If .venv already exists with another Python version, delete .venv and rerun setup:python.')
   process.exit(1)
 }
 
