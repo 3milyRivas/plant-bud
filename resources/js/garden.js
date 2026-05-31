@@ -1,3 +1,5 @@
+import { initPhoneUpload } from './phone_upload.js'
+
 const upload = document.getElementById('upload')
 const baseImage = document.getElementById('baseImage')
 const container = document.getElementById('canvas-container')
@@ -31,6 +33,8 @@ fileInput.addEventListener("change", (e) => {
     const file = e.target.files[0]
     if (file) handleFile(file)
 })
+
+initPhoneUpload({ input: fileInput, onFile: handleFile, tool: 'designer' })
 
 canvas.addEventListener("dragover", (e) => {
     if (hasBaseImage) return

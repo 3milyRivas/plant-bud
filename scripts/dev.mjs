@@ -20,7 +20,7 @@ function findPython() {
     if (isUsablePython(venvCandidate)) return venvCandidate
 
     console.warn('[designer-ai] Existing .venv uses an unsupported Python version.')
-    console.warn('[designer-ai] Delete .venv, install Python 3.12, and run "npm run setup".')
+    console.warn('[designer-ai] Delete .venv, install Python 3.12, and run "npm run setup:python".')
     return null
   }
 
@@ -66,7 +66,7 @@ function start(name, command, args) {
   child.on('error', (error) => {
     console.warn(`[${name}] ${error.message}`)
     if (name === 'designer-ai') {
-      console.warn('[designer-ai] Run "npm run setup" before using the garden designer.')
+      console.warn('[designer-ai] Run "npm run setup:python" before using the garden designer.')
     }
   })
 
@@ -75,7 +75,7 @@ function start(name, command, args) {
 
     if (name === 'designer-ai') {
       console.warn(`[designer-ai] stopped with code ${code}. The web app will keep running.`)
-      console.warn('[designer-ai] Run "npm run setup" if background removal is unavailable.')
+      console.warn('[designer-ai] Run "npm run setup:python" if background removal is unavailable.')
       return
     }
 
@@ -102,7 +102,7 @@ if (python) {
   start('designer-ai', python.command, [...python.prefix, 'resources/py/garden.py'])
 } else {
   console.warn('[designer-ai] Python 3.10, 3.11, or 3.12 was not found.')
-  console.warn('[designer-ai] Install Python 3.12 and run "npm run setup" before using background removal.')
+  console.warn('[designer-ai] Install Python 3.12 and run "npm run setup:python" before using background removal.')
 }
 
 start('web', process.execPath, ['ace', 'serve', '--hmr'])

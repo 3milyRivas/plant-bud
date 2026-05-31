@@ -1,7 +1,6 @@
 @layout()
-
 @slot('title')
-<title>{{ '@' + profileUser.username }}</title>
+<title>Plant Bud - {{ '@' + profileUser.username }}</title>
 @endslot
 @let(hasProfileSidebar = accountLinks.length || publicRoleDetails.kind !== 'client' || isOwnProfile)
 

@@ -1317,7 +1317,20 @@ function updateCommunityReaction(form, payload) {
   if (count && payload.counts?.[countKey] !== undefined) {
     count.textContent = payload.counts[countKey]
     count.classList.toggle('text-[#113e14]', payload.active)
-    count.classList.toggle('text-black/30', !payload.active)
+    count.classList.toggle('text-[#416543]', !payload.active)
+  }
+
+  const button = form.querySelector('button')
+
+  button?.classList.toggle('is-active', payload.active)
+  button?.classList.toggle('border-[#dca15d]/35', payload.active)
+  button?.classList.toggle('bg-[#ebe3a7]/66', payload.active)
+
+  if (button) {
+    button.classList.remove('is-burst')
+    void button.offsetWidth
+    button.classList.add('is-burst')
+    window.setTimeout(() => button.classList.remove('is-burst'), 820)
   }
 
   if (type === 'like') {
@@ -1343,34 +1356,64 @@ function updateCommunityReaction(form, payload) {
 }
 
 function appendCommunityComment(form, payload) {
-  const post = form.closest('[data-community-post]')
-  const panel = post?.querySelector('[data-comments-panel]')
+  const post = getCommunityCommentPost(form)
+  const panel = getCommunityCommentsPanel(post)
   const toggle = post?.querySelector('[data-comment-toggle]')
-  const list = post?.querySelector('[data-comments-list]')
+  const list = panel?.querySelector('[data-comments-list]')
   const count = post?.querySelector('[data-comment-count]')
   const comment = payload.comment
 
   if (!list || !comment) return
 
-  const item = document.createElement('div')
-  const link = document.createElement('a')
-  const body = document.createElement('p')
+  list.querySelector('[data-comments-empty]')?.remove()
 
-  item.className = 'rounded-2xl bg-white/45 px-4 py-2'
-  link.className = 'text-xs font-bold text-[#113e14]'
+  const item = document.createElement('div')
+  const row = document.createElement('div')
+  const avatarLink = document.createElement('a')
+  const text = document.createElement('div')
+  const meta = document.createElement('div')
+  const link = document.createElement('a')
+  const role = document.createElement('span')
+  const body = document.createElement('p')
+  const avatar = document.createElement(comment.author.avatarUrl ? 'img' : 'span')
+
+  item.className = 'rounded-2xl border border-[#416543]/10 bg-white/72 px-4 py-3 shadow-sm'
+  row.className = 'flex items-start gap-3'
+  avatarLink.className = 'flex-none'
+  avatarLink.href = `/users/${encodeURIComponent(comment.author.username)}`
+  text.className = 'min-w-0 flex-1'
+  meta.className = 'flex flex-wrap items-center gap-2'
+  link.className = 'text-xs font-black text-[#113e14]'
   link.href = `/users/${encodeURIComponent(comment.author.username)}`
   link.textContent = `@${comment.author.username}`
-  body.className = 'text-sm font-semibold leading-6 text-black/70'
+  role.className = 'rounded-full bg-[#ebe3a7] px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.1em] text-[#113e14]'
+  role.textContent = comment.author.roleLabel || 'Member'
+  body.className = 'mt-1 text-sm font-semibold leading-6 text-[#113e14]/74'
   body.textContent = comment.body
 
-  item.append(link, body)
+  if (comment.author.avatarUrl) {
+    avatar.src = comment.author.avatarUrl
+    avatar.alt = ''
+    avatar.loading = 'lazy'
+    avatar.decoding = 'async'
+    avatar.className = 'h-10 w-10 rounded-full object-cover'
+  } else {
+    avatar.className = 'flex h-10 w-10 items-center justify-center rounded-full bg-[#113e14] text-sm font-black text-[#ebe3a7]'
+    avatar.textContent = comment.author.initial || 'P'
+  }
+
+  avatarLink.append(avatar)
+  meta.append(link, role)
+  text.append(meta, body)
+  row.append(avatarLink, text)
+  item.append(row)
   list.append(item)
 
   if (count && payload.count !== undefined) {
     count.textContent = payload.count
   }
 
-  panel?.classList.remove('hidden')
+  openCommunityComments(post)
   toggle?.setAttribute('aria-expanded', 'true')
   updateCommunityCommentsLabel(post)
 }
@@ -1381,13 +1424,18 @@ function bindCommunityCommentsToggle(button) {
   button.dataset.communityCommentsToggleReady = 'true'
   button.addEventListener('click', () => {
     const post = button.closest('[data-community-post]')
-    const panel = post?.querySelector('[data-comments-panel]')
+    const panel = getCommunityCommentsPanel(post)
 
     if (!panel || !post) return
 
     const willOpen = panel.classList.contains('hidden')
 
-    panel.classList.toggle('hidden', !willOpen)
+    if (willOpen) {
+      openCommunityComments(post)
+    } else {
+      closeCommunityComments(post)
+    }
+
     button.setAttribute('aria-expanded', willOpen ? 'true' : 'false')
     updateCommunityCommentsLabel(post)
 
@@ -1396,18 +1444,78 @@ function bindCommunityCommentsToggle(button) {
     }
   })
 
+  const post = button.closest('[data-community-post]')
+  const panel = getCommunityCommentsPanel(post)
+
+  panel?.querySelectorAll('[data-comments-close]').forEach((closeButton) => {
+    if (closeButton.dataset.communityCommentsCloseReady === 'true') return
+
+    closeButton.dataset.communityCommentsCloseReady = 'true'
+    closeButton.addEventListener('click', () => closeCommunityComments(post))
+  })
+
+  if (panel && panel.dataset.communityCommentsOverlayReady !== 'true') {
+    panel.dataset.communityCommentsOverlayReady = 'true'
+    panel.addEventListener('click', (event) => {
+      if (event.target === panel) closeCommunityComments(post)
+    })
+  }
+
   updateCommunityCommentsLabel(button.closest('[data-community-post]'))
+}
+
+function openCommunityComments(post) {
+  const panel = getCommunityCommentsPanel(post)
+  const toggle = post?.querySelector('[data-comment-toggle]')
+
+  if (!panel) return
+
+  if (panel.parentElement !== document.body) {
+    document.body.append(panel)
+  }
+
+  panel.classList.remove('hidden')
+  panel.classList.add('flex')
+  toggle?.setAttribute('aria-expanded', 'true')
+  document.body.classList.add('overflow-hidden')
+  updateCommunityCommentsLabel(post)
+}
+
+function closeCommunityComments(post) {
+  const panel = getCommunityCommentsPanel(post)
+  const toggle = post?.querySelector('[data-comment-toggle]')
+
+  if (!panel) return
+
+  panel.classList.add('hidden')
+  panel.classList.remove('flex')
+  toggle?.setAttribute('aria-expanded', 'false')
+  document.body.classList.remove('overflow-hidden')
+  updateCommunityCommentsLabel(post)
 }
 
 function updateCommunityCommentsLabel(post) {
   if (!post) return
 
-  const panel = post.querySelector('[data-comments-panel]')
+  const panel = getCommunityCommentsPanel(post)
   const label = post.querySelector('[data-comment-toggle-label]')
 
   if (!panel || !label) return
 
   label.textContent = panel.classList.contains('hidden') ? 'Comments' : 'Hide'
+}
+
+function getCommunityCommentPost(form) {
+  const directPost = form.closest('[data-community-post]')
+  const postId = form.getAttribute('data-comment-post-id')
+
+  return directPost || (postId ? document.querySelector(`[data-community-post="${postId}"]`) : null)
+}
+
+function getCommunityCommentsPanel(post) {
+  const postId = post?.getAttribute('data-community-post')
+
+  return post?.querySelector('[data-comments-panel]') || (postId ? document.querySelector(`[data-comments-panel][data-comments-post-id="${postId}"]`) : null)
 }
 
 function bindCommunityLazyImage(image) {
@@ -1456,10 +1564,14 @@ function updateCommunityPoll(form, payload) {
     const button = percent?.closest('button')
 
     if (percent) percent.textContent = `${option.percent}%`
+    if (percent) {
+      percent.classList.toggle('text-[#dca15d]', option.selected)
+      percent.classList.toggle('text-[#416543]', !option.selected)
+    }
     if (bar) {
       bar.style.width = `${option.percent}%`
       bar.classList.toggle('bg-[#113e14]', option.selected)
-      bar.classList.toggle('bg-[#416543]', !option.selected)
+      bar.classList.toggle('bg-[#a8b841]', !option.selected)
     }
     if (button) {
       button.classList.toggle('bg-[#113e14]/10', option.selected)
