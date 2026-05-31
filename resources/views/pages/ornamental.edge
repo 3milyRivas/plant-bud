@@ -54,66 +54,27 @@
 <div class="flex justify-center pt-12 pb-20">
   <div class="flex justify-center gap-20 max-w-[1500px] w-full px-10">
 
-    <!-- Sidebar -->
     <div
-      class="sticky top-[95px] shrink-0 w-[110px] h-[420px]
-      rounded-[55px]
-      bg-[#113E14]/95
-      border border-[#A8B841]/30
-      shadow-2xl shadow-[#113E14]/40
-      backdrop-blur-xl
-      flex flex-col items-center justify-around">
-
-      <!-- Active -->
+      class="sticky top-[95px] shrink-0 w-[105px] h-[400px] rounded-[50px] bg-[#D3DCD3] backdrop-blur-xl border border-white/30 shadow-[#48AE4D] flex flex-col items-center justify-around">
       <a href="/ornamental"
-        class="group w-20 h-20 rounded-full
-        bg-[#A8B841]
-        flex items-center justify-center
-        transition-all duration-500
-        hover:scale-110 hover:-translate-y-1
-        hover:bg-[#EB7D00]
-        shadow-lg shadow-black/20">
-
-        <img
-          loading="lazy"
-          decoding="async"
-          src="/plants/icon.flower.png"
+        class="group w-20 h-20 rounded-full bg-[#6C8E6B] flex items-center justify-center transition-all duration-500 hover:scale-110 hover:rotate-6">
+        <img loading="lazy" decoding="async" src="/plants/icon.flower.png"
           class="w-10 h-10 transition-all duration-500 group-hover:scale-110" />
       </a>
 
-      <!-- Item -->
       <a href="/horticultural"
-        class="group w-20 h-20 rounded-full
-        bg-[#EBE3A7]
-        flex items-center justify-center
-        transition-all duration-500
-        hover:scale-110 hover:bg-[#A8B841]
-        shadow-md">
-
-        <img
-          loading="lazy"
-          decoding="async"
-          src="/plants/icon.vegetables.png"
+        class="group w-20 h-20 rounded-full bg-white/50 backdrop-blur-md flex items-center justify-center transition-all duration-500 hover:scale-110 hover:bg-[#D3DCCB]">
+        <img loading="lazy" decoding="async" src="/plants/icon.vegetables.png"
           class="w-10 h-10 transition-all duration-500 group-hover:scale-110" />
       </a>
 
-      <!-- Item -->
       <a href="/succulent"
-        class="group w-20 h-20 rounded-full
-        bg-[#EBE3A7]
-        flex items-center justify-center
-        transition-all duration-500
-        hover:scale-110 hover:bg-[#8B8410]
-        shadow-md">
-
-        <img
-          loading="lazy"
-          decoding="async"
-          src="/plants/icon.plant.png"
+        class="group w-20 h-20 rounded-full bg-white/50 backdrop-blur-md flex items-center justify-center transition-all duration-500 hover:scale-110 hover:bg-[#D3DCCB]">
+        <img loading="lazy" decoding="async" src="/plants/icon.plant.png"
           class="w-10 h-10 transition-all duration-500 group-hover:scale-110" />
       </a>
-
     </div>
+
 
 
     @each((plants, familyName, index) in ornamentalPlants)
