@@ -40,71 +40,34 @@
         <p class="text-sm font-black uppercase tracking-[0.18em] text-[#6B8C6C]">Available providers</p>
         <h2 class="mt-2 text-3xl font-black">Maintenance specialists</h2>
       </div>
-      <a href="/request" class="inline-flex rounded-full bg-[#113E14] px-6 py-3 text-sm font-black text-white shadow-md transition hover:-translate-y-0.5 hover:bg-[#1B5420]">
-        Request a service
+      <a href="#gardeners" class="inline-flex rounded-full bg-[#113E14] px-6 py-3 text-sm font-black text-white shadow-md transition hover:-translate-y-0.5 hover:bg-[#1B5420]">
+        Choose a gardener
       </a>
     </div>
 
-    <section class="grid gap-6">
-      @!component('components/services/provider-card', {
-        name: 'Ana Isabel Perez Vasquez',
-        photo: '/resources/images/services/Ana-Isabel.png',
-        specialty: 'Lawn care',
-        experience: '6 years of experience',
-        rating: '4.8',
-        reviews: '36',
-        location: 'Santa Tecla',
-        phone: '+503 7678-7645',
-        email: 'ana.isabel@gmail.com',
-        services: ['Lawn mowing', 'Organic fertilization', 'Pest control'],
-        schedule: 'Available Monday to Friday',
-        hours: '8:00 AM - 6:00 PM'
-      })
-
-      @!component('components/services/provider-card', {
-        name: 'Laura Valentina Diaz Morales',
-        photo: '/resources/images/services/profile2.png',
-        specialty: 'Garden restoration',
-        experience: '5 years of experience',
-        rating: '4.1',
-        reviews: '32',
-        location: 'Santa Tecla',
-        phone: '+503 7099-7876',
-        email: 'laura.morales@gmail.com',
-        services: ['Bush trimming', 'Leaf removal', 'Pest control'],
-        schedule: 'Available Monday to Friday',
-        hours: '6:00 AM - 5:00 PM'
-      })
-
-      @!component('components/services/provider-card', {
-        name: 'Daniela Alejandra Perez Romero',
-        photo: '/resources/images/services/profile3.png',
-        specialty: 'Irrigation systems',
-        experience: '3 years of experience',
-        rating: '4.2',
-        reviews: '23',
-        location: 'Santa Tecla',
-        phone: '+503 9754-2806',
-        email: 'daniela.perez@gmail.com',
-        services: ['Tree planting', 'Leaf removal', 'Vertical garden setup'],
-        schedule: 'Available Monday to Friday',
-        hours: '9:00 AM - 8:00 PM'
-      })
-
-      @!component('components/services/provider-card', {
-        name: 'Valeria Beatriz Campos Herrera',
-        photo: '/resources/images/services/profile4.png',
-        specialty: 'Lawn care',
-        experience: '7 years of experience',
-        rating: '5.0',
-        reviews: '40',
-        location: 'Santa Tecla',
-        phone: '+503 7544-0876',
-        email: 'beatriz.campos@gmail.com',
-        services: ['Soil amendment', 'Tree planting', 'Organic fertilization'],
-        schedule: 'Available Monday to Friday',
-        hours: '6:00 AM - 5:00 PM'
-      })
+    <section id="gardeners" class="grid gap-6">
+      @each(gardener in gardeners)
+        @!component('components/services/provider-card', {
+          name: gardener.name,
+          photo: gardener.photo,
+          specialty: gardener.specialty,
+          experience: gardener.experience,
+          rating: gardener.rating,
+          reviews: gardener.reviews,
+          location: gardener.location,
+          phone: gardener.phone,
+          email: gardener.email,
+          services: gardener.services,
+          schedule: gardener.schedule,
+          hours: gardener.hours,
+          href: `/request/${gardener.id}`
+        })
+      @else
+        <div class="rounded-[28px] border border-white/45 bg-white/78 p-8 text-center shadow-xl backdrop-blur-2xl">
+          <h2 class="text-2xl font-black">No gardeners available yet</h2>
+          <p class="mt-2 text-sm font-semibold text-[#456143]">Run the gardener seed to fill this catalog.</p>
+        </div>
+      @end
     </section>
   </main>
 </div>

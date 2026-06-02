@@ -14,6 +14,7 @@ export const controllers = {
   Plants: () => import('#controllers/plants_controller'),
   PlantsSearch: () => import('#controllers/plants_search_controller'),
   Profiles: () => import('#controllers/profiles_controller'),
+  Services: () => import('#controllers/services_controller'),
   Session: () => import('#controllers/session_controller'),
   Users: () => import('#controllers/users_controller'),
 }

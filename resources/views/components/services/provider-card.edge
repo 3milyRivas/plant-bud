@@ -10,6 +10,7 @@
 @let(services = $props.get('services') ?? [])
 @let(schedule = $props.get('schedule'))
 @let(hours = $props.get('hours'))
+@let(href = $props.get('href') ?? '/request')
 
 <article class="grid gap-6 rounded-[28px] border border-white/45 bg-white/78 p-6 text-[#113E14] shadow-xl backdrop-blur-2xl transition duration-300 hover:-translate-y-1 hover:shadow-2xl lg:grid-cols-[220px_1fr]">
   <img loading="lazy" decoding="async" src="{{ photo }}" alt="{{ name }}" class="h-56 w-full rounded-[24px] object-cover shadow-lg lg:h-full">
@@ -70,7 +71,7 @@
         </div>
       </div>
 
-      <a href="/request" class="mt-5 inline-flex rounded-full bg-[#113E14] px-8 py-3 text-sm font-black text-white shadow-md transition hover:-translate-y-0.5 hover:bg-[#1B5420]">
+      <a href="{{ href }}" class="mt-5 inline-flex rounded-full bg-[#113E14] px-8 py-3 text-sm font-black text-white shadow-md transition hover:-translate-y-0.5 hover:bg-[#1B5420]">
         Contact
       </a>
     </div>
