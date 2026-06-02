@@ -6,6 +6,8 @@ export type ScannedRoutes = {
   ALL: {
     'home': { paramsTuple?: []; params?: {} }
     'maintenance': { paramsTuple?: []; params?: {} }
+    'request.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'request.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'request': { paramsTuple?: []; params?: {} }
     'plans.index': { paramsTuple?: []; params?: {} }
     'plans.buy': { paramsTuple?: []; params?: {} }
@@ -52,6 +54,7 @@ export type ScannedRoutes = {
   GET: {
     'home': { paramsTuple?: []; params?: {} }
     'maintenance': { paramsTuple?: []; params?: {} }
+    'request.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'request': { paramsTuple?: []; params?: {} }
     'plans.index': { paramsTuple?: []; params?: {} }
     'garden_designer.show': { paramsTuple?: []; params?: {} }
@@ -81,6 +84,7 @@ export type ScannedRoutes = {
   HEAD: {
     'home': { paramsTuple?: []; params?: {} }
     'maintenance': { paramsTuple?: []; params?: {} }
+    'request.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'request': { paramsTuple?: []; params?: {} }
     'plans.index': { paramsTuple?: []; params?: {} }
     'garden_designer.show': { paramsTuple?: []; params?: {} }
@@ -108,6 +112,7 @@ export type ScannedRoutes = {
     'signup.nursery': { paramsTuple?: []; params?: {} }
   }
   POST: {
+    'request.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'plans.buy': { paramsTuple?: []; params?: {} }
     'garden_designer.remove_background': { paramsTuple?: []; params?: {} }
     'plants.scan': { paramsTuple?: []; params?: {} }

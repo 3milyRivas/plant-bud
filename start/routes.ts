@@ -14,6 +14,7 @@ const NewAccountController = () => import('#controllers/new_account_controller')
 const PlantsController = () => import('#controllers/plants_controller')
 const PlansController = () => import('#controllers/plans_controller')
 const ProfilesController = () => import('#controllers/profiles_controller')
+const ServicesController = () => import('#controllers/services_controller')
 
 /* general views */
 router.on('/').render('pages/welcome').as('home')
@@ -24,8 +25,10 @@ router.on('/succulent').render('pages/succulent', { succulentPlants })
 
 router.on('/requested').render('pages/requested')
 
-router.on('/maintenance').render('pages/services/maintenance').as('maintenance')
-router.on('/request').render('pages/services/request').as('request')
+router.get('/maintenance', [ServicesController, 'index']).as('maintenance')
+router.get('/request/:id', [ServicesController, 'show']).as('request.show')
+router.post('/request/:id', [ServicesController, 'store']).as('request.store').use(middleware.auth())
+router.get('/request', ({ response }) => response.redirect('/maintenance')).as('request')
 router.on('/care3').render('pages/client/Plants/care3')
 router.on('/care1').render('pages/client/Plants/care1')
 router.on('/care2').render('pages/client/Plants/care2')

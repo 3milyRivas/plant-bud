@@ -6,26 +6,35 @@
 <main class="relative z-10 min-h-screen px-6 py-10 text-[#113E14]">
   <section class="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.95fr_1.05fr]">
     <aside class="overflow-hidden rounded-[38px] bg-[#113E14] text-white shadow-2xl">
-      <div class="h-72 bg-[url('/resources/images/services/gardener-card.jpg')] bg-cover bg-center"></div>
+      <img src="{{ gardener.photo }}" alt="{{ gardener.name }}" class="h-72 w-full object-cover">
       <div class="p-8">
-        <p class="text-sm font-black uppercase tracking-[0.2em] text-[#EDE7D6]">Service request</p>
-        <h1 class="mt-4 font-abril text-5xl leading-tight">Tell the expert what your plants need.</h1>
+        <p class="text-sm font-black uppercase tracking-[0.2em] text-[#EDE7D6]">Gardener profile</p>
+        <h1 class="mt-4 font-abril text-5xl leading-tight">{{ gardener.name }}</h1>
         <p class="mt-5 text-base font-semibold leading-7 text-white/75">
-          Share your location, budget, date, and the problem you want solved. This screen is ready to later connect with real service request records.
+          {{ gardener.bio }}
         </p>
 
         <div class="mt-8 rounded-3xl bg-white/10 p-5">
-          <h2 class="text-xl font-black">Laura Valentina Diaz Morales</h2>
-          <p class="mt-2 text-sm font-semibold text-white/70">Garden restoration - 5 years of experience</p>
-          <p class="mt-4 text-sm font-bold text-[#EDE7D6]">4.8 rating - Santa Tecla - Mon-Fri</p>
+          <h2 class="text-xl font-black">{{ gardener.specialty }}</h2>
+          <p class="mt-2 text-sm font-semibold text-white/70">{{ gardener.experience }}</p>
+          <p class="mt-4 text-sm font-bold text-[#EDE7D6]">{{ gardener.rating }} rating - {{ gardener.location }} - {{ gardener.schedule }}</p>
+        </div>
+
+        <div class="mt-5 grid gap-2 text-sm font-bold text-white/80">
+          <span>{{ gardener.phone }}</span>
+          <span>{{ gardener.email }}</span>
         </div>
       </div>
     </aside>
 
-    <form action="/requested" method="GET" class="rounded-[38px] border border-white/40 bg-white/76 p-6 shadow-2xl backdrop-blur-2xl sm:p-8">
+    @form({
+      action: `/request/${gardener.id}`,
+      method: 'POST',
+      class: 'rounded-[38px] border border-white/40 bg-white/76 p-6 shadow-2xl backdrop-blur-2xl sm:p-8'
+    })
       <div class="mb-8">
         <p class="text-sm font-black uppercase tracking-[0.18em] text-[#6B8C6C]">Details</p>
-        <h2 class="mt-2 text-4xl font-black">Request your service</h2>
+        <h2 class="mt-2 text-4xl font-black">Request this gardener</h2>
       </div>
 
       <div class="grid gap-5 sm:grid-cols-2">
@@ -33,7 +42,7 @@
           <span class="text-sm font-black text-[#456143]">Budget</span>
           <span class="mt-2 flex items-center gap-3 rounded-2xl border border-[#D5DCD4] bg-white/70 px-4 py-3">
             <img src="/resources/images/services/payment.png" alt="" class="h-5 w-5 object-contain">
-            <input name="budget" type="text" placeholder="$75" class="w-full bg-transparent text-sm font-semibold outline-none">
+            <input name="budget" type="text" value="{{ old.budget ?? '' }}" placeholder="$75" class="w-full bg-transparent text-sm font-semibold outline-none">
           </span>
         </label>
 
@@ -41,30 +50,36 @@
           <span class="text-sm font-black text-[#456143]">Location</span>
           <span class="mt-2 flex items-center gap-3 rounded-2xl border border-[#D5DCD4] bg-white/70 px-4 py-3">
             <img src="/resources/images/services/location.png" alt="" class="h-5 w-5 object-contain">
-            <input name="location" type="text" placeholder="Santa Tecla" class="w-full bg-transparent text-sm font-semibold outline-none">
+            <input name="location" type="text" value="{{ old.location ?? '' }}" placeholder="{{ gardener.location }}" class="w-full bg-transparent text-sm font-semibold outline-none">
           </span>
         </label>
 
         <label class="block">
           <span class="text-sm font-black text-[#456143]">Preferred date</span>
-          <input name="scheduled_for" type="date" class="mt-2 w-full rounded-2xl border border-[#D5DCD4] bg-white/70 px-4 py-3 text-sm font-semibold outline-none">
+          <input name="scheduled_for" value="{{ old.scheduled_for ?? '' }}" type="date" class="mt-2 w-full rounded-2xl border border-[#D5DCD4] bg-white/70 px-4 py-3 text-sm font-semibold outline-none">
         </label>
 
         <label class="block">
           <span class="text-sm font-black text-[#456143]">Service type</span>
           <select name="service_type" class="mt-2 w-full rounded-2xl border border-[#D5DCD4] bg-white/70 px-4 py-3 text-sm font-semibold outline-none">
-            <option>Garden restoration</option>
-            <option>Lawn care</option>
-            <option>Irrigation system</option>
-            <option>Plant diagnosis</option>
-            <option>Delivery</option>
+            <option value="maintenance" @if(gardener.serviceType === 'maintenance') selected @endif>Maintenance</option>
+            <option value="garden_design" @if(gardener.serviceType === 'garden_design') selected @endif>Garden design</option>
+            <option value="consultation" @if(gardener.serviceType === 'consultation') selected @endif>Consultation</option>
+            <option value="delivery" @if(gardener.serviceType === 'delivery') selected @endif>Delivery</option>
+            <option value="other">Other</option>
           </select>
         </label>
       </div>
 
+      <div class="mt-5 flex flex-wrap gap-2">
+        @each(service in gardener.services)
+          <span class="rounded-full bg-[#D5DCD4]/80 px-4 py-2 text-xs font-black text-[#456143]">{{ service }}</span>
+        @end
+      </div>
+
       <label class="mt-5 block">
         <span class="text-sm font-black text-[#456143]">What do you need?</span>
-        <textarea name="notes" rows="7" placeholder="Describe the problem, plants involved, space size, urgency, or special notes." class="mt-2 w-full resize-none rounded-[24px] border border-[#D5DCD4] bg-white/70 px-5 py-4 text-sm font-semibold leading-6 outline-none"></textarea>
+        <textarea name="notes" rows="7" placeholder="Describe the problem, plants involved, space size, urgency, or special notes." class="mt-2 w-full resize-none rounded-[24px] border border-[#D5DCD4] bg-white/70 px-5 py-4 text-sm font-semibold leading-6 outline-none">{{ old.notes ?? '' }}</textarea>
       </label>
 
       <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-end">
@@ -75,7 +90,7 @@
           Send request
         </button>
       </div>
-    </form>
+    @end
   </section>
 </main>
 @end

@@ -16,4 +16,5 @@ export const controllers = {
   Profiles: () => import('#controllers/profiles_controller'),
   Session: () => import('#controllers/session_controller'),
   Users: () => import('#controllers/users_controller'),
+  Services: () => import('#controllers/services_controller'),
 }
