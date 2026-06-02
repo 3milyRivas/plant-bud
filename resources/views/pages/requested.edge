@@ -33,74 +33,60 @@
 
         <div class="mt-8 grid grid-cols-3 gap-3">
           <div class="rounded-2xl bg-white/10 p-4">
-            <p class="text-3xl font-black">3</p>
+            <p class="text-3xl font-black">{{ stats.pending }}</p>
             <p class="text-xs font-bold uppercase tracking-[0.14em] text-white/60">Pending</p>
           </div>
           <div class="rounded-2xl bg-white/10 p-4">
-            <p class="text-3xl font-black">2</p>
+            <p class="text-3xl font-black">{{ stats.scheduled }}</p>
             <p class="text-xs font-bold uppercase tracking-[0.14em] text-white/60">Scheduled</p>
           </div>
           <div class="rounded-2xl bg-white/10 p-4">
-            <p class="text-3xl font-black">5</p>
+            <p class="text-3xl font-black">{{ stats.thisWeek }}</p>
             <p class="text-xs font-bold uppercase tracking-[0.14em] text-white/60">This week</p>
           </div>
         </div>
       </div>
 
       <div class="grid gap-5">
-        <article class="rounded-[28px] border border-white/40 bg-white/75 p-6 shadow-xl backdrop-blur-2xl">
-          <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-            <div>
-              <p class="text-sm font-black uppercase tracking-[0.18em] text-[#6B8C6C]">Garden restoration</p>
-              <h2 class="mt-2 text-2xl font-black">Laura needs a small patio refresh</h2>
-              <p class="mt-3 max-w-2xl text-sm font-semibold leading-6 text-[#456143]">
-                Wants soil cleanup, new ornamental plants, and irrigation recommendations for a shaded patio.
-              </p>
+        @each(serviceRequest in requests)
+          <article class="rounded-[28px] border border-white/40 bg-white/75 p-6 shadow-xl backdrop-blur-2xl">
+            <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+              <div>
+                <p class="text-sm font-black uppercase tracking-[0.18em] text-[#6B8C6C]">{{ serviceRequest.serviceTypeLabel }}</p>
+                <h2 class="mt-2 text-2xl font-black">{{ serviceRequest.clientName }} scheduled you</h2>
+                <p class="mt-3 max-w-2xl text-sm font-semibold leading-6 text-[#456143]">
+                  {{ serviceRequest.notes }}
+                </p>
+              </div>
+              <span class="{{ serviceRequest.status === 'scheduled' ? 'bg-[#113E14] text-white' : 'bg-[#EDE7D6] text-[#113E14]' }} rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.14em]">
+                {{ serviceRequest.statusLabel }}
+              </span>
             </div>
-            <span class="rounded-full bg-[#EDE7D6] px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-[#113E14]">Pending</span>
-          </div>
-          <div class="mt-5 grid gap-3 text-sm font-bold text-[#456143] sm:grid-cols-3">
-            <span>Budget: $85</span>
-            <span>Santa Tecla</span>
-            <span>Tomorrow, 9:00 AM</span>
-          </div>
-        </article>
 
-        <article class="rounded-[28px] border border-white/40 bg-white/75 p-6 shadow-xl backdrop-blur-2xl">
-          <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-            <div>
-              <p class="text-sm font-black uppercase tracking-[0.18em] text-[#6B8C6C]">Plant health</p>
-              <h2 class="mt-2 text-2xl font-black">Monstera leaves turning yellow</h2>
-              <p class="mt-3 max-w-2xl text-sm font-semibold leading-6 text-[#456143]">
-                Client attached scan results and needs a diagnosis before buying replacement soil.
-              </p>
+            <div class="mt-5 grid gap-3 text-sm font-bold text-[#456143] sm:grid-cols-3">
+              <span>Budget: {{ serviceRequest.budget }}</span>
+              <span>{{ serviceRequest.address }}</span>
+              <span>{{ serviceRequest.scheduledFor }}</span>
             </div>
-            <span class="rounded-full bg-[#113E14] px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-white">Scheduled</span>
-          </div>
-          <div class="mt-5 grid gap-3 text-sm font-bold text-[#456143] sm:grid-cols-3">
-            <span>Budget: $40</span>
-            <span>Antiguo Cuscatlán</span>
-            <span>Friday, 2:30 PM</span>
-          </div>
-        </article>
 
-        <article class="rounded-[28px] border border-white/40 bg-white/75 p-6 shadow-xl backdrop-blur-2xl">
-          <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-            <div>
-              <p class="text-sm font-black uppercase tracking-[0.18em] text-[#6B8C6C]">Nursery delivery</p>
-              <h2 class="mt-2 text-2xl font-black">Succulent set for office desk</h2>
-              <p class="mt-3 max-w-2xl text-sm font-semibold leading-6 text-[#456143]">
-                Request includes three low-maintenance plants and care instructions for a new workspace.
-              </p>
+            <div class="mt-5 grid gap-3 rounded-2xl bg-white/60 p-4 text-sm font-semibold text-[#456143] sm:grid-cols-3">
+              <span>Client: {{ serviceRequest.clientName }}</span>
+              <span>{{ serviceRequest.clientPhone }}</span>
+              <span>{{ serviceRequest.clientEmail }}</span>
             </div>
-            <span class="rounded-full bg-[#EDE7D6] px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-[#113E14]">Pending</span>
-          </div>
-          <div class="mt-5 grid gap-3 text-sm font-bold text-[#456143] sm:grid-cols-3">
-            <span>Budget: $55</span>
-            <span>San Salvador</span>
-            <span>Monday, 11:00 AM</span>
-          </div>
-        </article>
+
+            <p class="mt-4 text-xs font-bold uppercase tracking-[0.14em] text-[#6B8C6C]">
+              Requested {{ serviceRequest.createdAt }}
+            </p>
+          </article>
+        @else
+          <article class="rounded-[28px] border border-white/40 bg-white/75 p-8 text-center shadow-xl backdrop-blur-2xl">
+            <h2 class="text-2xl font-black">No requests yet</h2>
+            <p class="mt-3 text-sm font-semibold leading-6 text-[#456143]">
+              When a client sends a request from your gardener profile, it will appear here with their contact details.
+            </p>
+          </article>
+        @end
       </div>
     </section>
   </main>

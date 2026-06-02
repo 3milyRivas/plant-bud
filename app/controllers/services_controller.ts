@@ -36,6 +36,34 @@ export default class ServicesController {
     })
   }
 
+  async requested({ auth, view }: HttpContext) {
+    const user = auth.user!
+    const gardener = await GardenerProfile.query().where('userId', user.id).first()
+
+    if (!gardener) {
+      return view.render('pages/requested', {
+        requests: [],
+        stats: { pending: 0, scheduled: 0, thisWeek: 0 },
+      })
+    }
+
+    const serviceRequests = await ServiceRequest.query()
+      .where('gardenerProfileId', gardener.id)
+      .preload('client')
+      .orderBy('createdAt', 'desc')
+
+    const requests = serviceRequests.map((serviceRequest) => this.formatServiceRequest(serviceRequest))
+
+    return view.render('pages/requested', {
+      requests,
+      stats: {
+        pending: requests.filter((item) => item.status === 'pending').length,
+        scheduled: requests.filter((item) => item.status === 'scheduled').length,
+        thisWeek: requests.filter((item) => item.isThisWeek).length,
+      },
+    })
+  }
+
   async store({ auth, params, request, response, session }: HttpContext) {
     const user = auth.user!
     const gardener = await GardenerProfile.find(params.id)
@@ -60,7 +88,7 @@ export default class ServicesController {
     })
 
     session.flash('success', 'Your request was sent to the gardener.')
-    return response.redirect('/requested')
+    return response.redirect('/maintenance')
   }
 
   private formatGardener(gardener: GardenerProfile) {
@@ -116,5 +144,33 @@ export default class ServicesController {
     if (normalized.includes('irrigation')) return 'consultation'
     if (normalized.includes('delivery')) return 'delivery'
     return 'maintenance'
+  }
+
+  private formatServiceRequest(serviceRequest: ServiceRequest) {
+    const scheduledFor = serviceRequest.scheduledFor
+    const serviceTypeLabels: Record<ServiceType, string> = {
+      maintenance: 'Maintenance',
+      garden_design: 'Garden design',
+      consultation: 'Consultation',
+      delivery: 'Delivery',
+      other: 'Other',
+    }
+
+    return {
+      id: serviceRequest.id,
+      clientName: serviceRequest.client.fullName,
+      clientEmail: serviceRequest.client.email,
+      clientPhone: serviceRequest.client.phone || 'No phone provided',
+      serviceType: serviceRequest.serviceType,
+      serviceTypeLabel: serviceTypeLabels[serviceRequest.serviceType],
+      status: serviceRequest.status,
+      statusLabel: serviceRequest.status.charAt(0).toUpperCase() + serviceRequest.status.slice(1),
+      scheduledFor: scheduledFor ? scheduledFor.toFormat('DD, h:mm a') : 'No date selected',
+      address: serviceRequest.address || 'No location provided',
+      notes: serviceRequest.notes || 'No notes provided.',
+      budget: serviceRequest.budget ? `$${Number(serviceRequest.budget).toFixed(2)}` : 'No budget',
+      createdAt: serviceRequest.createdAt.toFormat('DD, h:mm a'),
+      isThisWeek: scheduledFor ? scheduledFor.hasSame(DateTime.now(), 'week') : false,
+    }
   }
 }

@@ -23,7 +23,10 @@ router.on('/ornamental').render('pages/ornamental', { ornamentalPlants })
 router.on('/horticultural').render('pages/horticultural', { horticulturalPlants })
 router.on('/succulent').render('pages/succulent', { succulentPlants })
 
-router.on('/requested').render('pages/requested')
+router
+  .get('/requested', [ServicesController, 'requested'])
+  .as('services.requested')
+  .use([middleware.auth(), middleware.role(['gardener'])])
 
 router.get('/maintenance', [ServicesController, 'index']).as('maintenance')
 router.get('/request/:id', [ServicesController, 'show']).as('request.show')

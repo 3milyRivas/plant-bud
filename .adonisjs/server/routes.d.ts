@@ -5,6 +5,7 @@ type ParamValue = string | number | bigint | boolean
 export type ScannedRoutes = {
   ALL: {
     'home': { paramsTuple?: []; params?: {} }
+    'services.requested': { paramsTuple?: []; params?: {} }
     'maintenance': { paramsTuple?: []; params?: {} }
     'request.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'request.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -53,6 +54,7 @@ export type ScannedRoutes = {
   }
   GET: {
     'home': { paramsTuple?: []; params?: {} }
+    'services.requested': { paramsTuple?: []; params?: {} }
     'maintenance': { paramsTuple?: []; params?: {} }
     'request.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'request': { paramsTuple?: []; params?: {} }
@@ -83,6 +85,7 @@ export type ScannedRoutes = {
   }
   HEAD: {
     'home': { paramsTuple?: []; params?: {} }
+    'services.requested': { paramsTuple?: []; params?: {} }
     'maintenance': { paramsTuple?: []; params?: {} }
     'request.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'request': { paramsTuple?: []; params?: {} }
