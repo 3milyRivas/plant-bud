@@ -7,6 +7,7 @@ import GardenerService from '#models/gardener_service'
 import NurseryProfile from '#models/nursery_profile'
 import ProfileReview from '#models/profile_review'
 import User from '#models/user'
+import { FREE_SCANNER_MONTHLY_LIMIT } from '#services/subscription_service'
 import { profileValidator } from '#validators/profile'
 import {
   redirectBackWithFormErrors,
@@ -498,6 +499,9 @@ export default class ProfilesController {
     return AccountProfile.create({
       userId: user.id,
       displayName: user.fullName || user.username,
+      subscriptionPlan: 'free',
+      rewardPoints: 0,
+      scannerMonthlyLimit: FREE_SCANNER_MONTHLY_LIMIT,
     })
   }
 
@@ -1205,6 +1209,8 @@ export default class ProfilesController {
       displayName,
       role: user.role,
       roleLabel: this.roleLabel(user.role),
+      isPremium: profile?.isPremium || false,
+      planLabel: profile?.planLabel || 'Free',
       avatarUrl: this.profileMediaUrl(user.id, profile?.avatarUrl || user.profilePicture),
       initial: initial.toLocaleUpperCase('en'),
       relationLabel: user.id === currentUserId ? 'You' : friendIds.has(user.id) ? 'Friend' : null,

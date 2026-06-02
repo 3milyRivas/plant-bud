@@ -10,6 +10,7 @@ export const controllers = {
   Homepages: () => import('#controllers/homepages_controller'),
   NewAccount: () => import('#controllers/new_account_controller'),
   PhoneUploads: () => import('#controllers/phone_uploads_controller'),
+  Plans: () => import('#controllers/plans_controller'),
   Plants: () => import('#controllers/plants_controller'),
   PlantsSearch: () => import('#controllers/plants_search_controller'),
   Profiles: () => import('#controllers/profiles_controller'),

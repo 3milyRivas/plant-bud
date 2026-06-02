@@ -2,6 +2,7 @@ import User from '#models/user'
 import AccountProfile from '#models/account_profile'
 import GardenerProfile from '#models/gardener_profile'
 import NurseryProfile from '#models/nursery_profile'
+import { FREE_SCANNER_MONTHLY_LIMIT } from '#services/subscription_service'
 
 import { signupValidator } from '#validators/user'
 import {
@@ -104,6 +105,9 @@ export default class NewAccountController {
           {
             userId: user.id,
             displayName: normalized.displayName,
+            subscriptionPlan: 'free',
+            rewardPoints: 0,
+            scannerMonthlyLimit: FREE_SCANNER_MONTHLY_LIMIT,
           },
           { client: trx }
         )

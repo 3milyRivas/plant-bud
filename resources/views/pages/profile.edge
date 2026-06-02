@@ -26,6 +26,7 @@
     avatarInitial,
     displayName: publicDisplayName,
     roleLabel: user.role,
+    planLabel: accountProfile.planLabel,
     items: [
       {
         key: 'homepage',
@@ -84,6 +85,11 @@
               <span class="rounded-full bg-[#ebe3a7] px-3 py-1.5 text-xs font-black uppercase tracking-[0.16em] text-[#113e14]">
                 {{ user.role }}
               </span>
+              @if(accountProfile?.isPremium)
+                <span class="rounded-full border border-[#dca15d]/55 bg-[#dca15d] px-3 py-1.5 text-xs font-black uppercase tracking-[0.16em] text-[#113e14] shadow-lg">
+                  Premium
+                </span>
+              @endif
             </div>
             <p class="mt-2 text-base font-bold text-[#ebe3a7]">{{ '@' + user.username }}</p>
             <p class="mt-4 max-w-2xl text-sm font-semibold leading-7 text-white/82">

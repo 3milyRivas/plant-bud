@@ -3,6 +3,11 @@
 <title>Plant Bud - Scanner</title>
 @endslot
 
+@let(scannerUsage = subscription.scannerUsage)
+@let(freeScannerMonthlyLimit = subscription.freeScannerMonthlyLimit || 5)
+@let(isPremium = subscription.isPremium)
+@let(recentScans = subscription.recentScans)
+
 <div class="relative min-h-screen overflow-hidden">
     <img src="/resources/images/welcome/header3.png"
         class="absolute inset-0 h-full w-full object-cover opacity-24 mix-blend-soft-light pointer-events-none select-none"
@@ -14,10 +19,22 @@
         section: 'Plant scanner',
         toolMode: 'scanner',
         maxWidth: 'max-w-[min(1500px,calc(100vw-2rem))]',
+        planLabel: subscription.planLabel,
+        scannerUsage,
     })
     <input id="plantUpload" type="file" accept="image/*" class="hidden">
 
     <main class="relative z-10 pt-10 pb-10 px-6 lg:px-10">
+        <div id="scannerLimitBox" class="mx-auto mb-6 hidden max-w-7xl rounded-[1.5rem] border border-[#dca15d]/35 bg-[#113e14]/74 px-5 py-4 text-[#ebe3a7] shadow-xl backdrop-blur-2xl">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                    <p class="text-sm font-black uppercase tracking-[0.18em]">Scanner limit reached</p>
+                    <p class="mt-1 text-sm font-semibold text-[#ebe3a7]/78">Free accounts include {{ freeScannerMonthlyLimit }} scans per month. Premium removes this limit.</p>
+                </div>
+                <a href="/plans" class="inline-flex rounded-full bg-[#dca15d] px-5 py-2.5 text-sm font-black text-[#113e14] transition hover:bg-[#ebe3a7]">Upgrade</a>
+            </div>
+        </div>
+
         <div class="max-w-7xl mx-auto grid grid-cols-1 xl:grid-cols-[360px_1fr] gap-8 min-h-[calc(100vh-11rem)]">
 
             <aside class="relative">
@@ -55,6 +72,28 @@
                             <p class="text-white/60 text-sm">Reliability</p>
                             <p id="reliabilityText" class="text-white font-black">-</p>
                         </div>
+
+                        <div class="p-4 bg-[#ebe3a7]/14 border border-[#ebe3a7]/18 rounded-2xl">
+                            <p class="text-white/60 text-sm">Plan</p>
+                            <p class="text-[#ebe3a7] font-black">{{ subscription.planLabel }}</p>
+                            <p id="usageText" class="mt-1 text-xs font-bold text-white/66">
+                                {{ scannerUsage.unlimited ? 'Unlimited scans this month' : scannerUsage.remaining + ' of ' + scannerUsage.limit + ' scans left this month' }}
+                            </p>
+                        </div>
+
+                        @if(isPremium && recentScans.length)
+                            <div class="p-4 bg-white/10 border border-white/14 rounded-2xl">
+                                <p class="text-white/60 text-sm">Recent premium history</p>
+                                <div class="mt-3 space-y-2">
+                                    @each(scan in recentScans.slice(0, 3))
+                                        <div class="rounded-xl bg-white/10 px-3 py-2">
+                                            <p class="truncate text-sm font-black text-white">{{ scan.species }}</p>
+                                            <p class="text-xs font-bold text-[#ebe3a7]/78">{{ scan.healthStatus || 'unknown' }} · {{ scan.confidence }}%</p>
+                                        </div>
+                                    @end
+                                </div>
+                            </div>
+                        @endif
                     </div>
 
                 </div>
@@ -120,6 +159,36 @@
                             <p class="text-[#113e14] font-black mb-3">Care Guide</p>
                             <ul id="tips" class="text-[#416543] list-disc ml-5 space-y-1"></ul>
                         </div>
+
+                        <div id="premiumInsightsBox" class="hidden bg-[#113e14] border border-[#416543]/12 rounded-2xl p-6 text-white shadow-sm">
+                            <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                                <div>
+                                    <p class="text-sm font-black uppercase tracking-[0.18em] text-[#ebe3a7]">Premium dashboard</p>
+                                    <h3 class="mt-2 text-2xl font-black">Saved scan intelligence</h3>
+                                </div>
+                                <span id="careScore" class="rounded-full bg-[#ebe3a7] px-4 py-2 text-sm font-black text-[#113e14]">-</span>
+                            </div>
+                            <div id="premiumDashboard" class="mt-5 grid gap-3 md:grid-cols-3"></div>
+                            <div class="mt-5 grid gap-5 md:grid-cols-2">
+                                <div class="rounded-2xl bg-white/10 p-4">
+                                    <p class="font-black text-[#ebe3a7]">Comparisons</p>
+                                    <div id="premiumComparisons" class="mt-3 space-y-2 text-sm font-semibold text-white/75"></div>
+                                </div>
+                                <div class="rounded-2xl bg-white/10 p-4">
+                                    <p class="font-black text-[#ebe3a7]">Tracking</p>
+                                    <ul id="premiumTracking" class="mt-3 list-disc space-y-1 pl-5 text-sm font-semibold text-white/75"></ul>
+                                    <p id="premiumFollowUp" class="mt-4 text-sm font-black text-white"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        @if(!isPremium)
+                            <div id="freeUpgradeBox" class="bg-[#113e14] border border-[#416543]/12 rounded-2xl p-6 text-white shadow-sm">
+                                <p class="text-sm font-black uppercase tracking-[0.18em] text-[#ebe3a7]">Premium scanner</p>
+                                <p class="mt-2 text-sm font-semibold leading-6 text-white/72">Upgrade to save scanner history by profile, compare possible matches, and unlock unlimited monthly scans.</p>
+                                <a href="/plans" class="mt-4 inline-flex rounded-full bg-[#dca15d] px-5 py-2.5 text-sm font-black text-[#113e14] transition hover:bg-[#ebe3a7]">See plans</a>
+                            </div>
+                        @endif
 
                     </div>
 

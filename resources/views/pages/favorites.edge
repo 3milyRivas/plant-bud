@@ -78,7 +78,7 @@
                 @endif
                 <span class="min-w-0">
                   <span class="block truncate text-sm font-black">{{ user.displayName }}</span>
-                  <span class="block truncate text-xs font-bold text-[#416543]">{{ user.roleLabel }} - {{ '@' + user.username }}</span>
+                  <span class="block truncate text-xs font-bold text-[#416543]">{{ user.roleLabel }} - {{ '@' + user.username }}{{ user.isPremium ? ' - Premium' : '' }}</span>
                 </span>
               </a>
             @else

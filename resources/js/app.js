@@ -1009,8 +1009,10 @@ function createCommunityUserResult(user) {
   const link = document.createElement('a')
   const avatar = document.createElement(user.avatarUrl ? 'img' : 'span')
   const text = document.createElement('span')
+  const nameRow = document.createElement('span')
   const name = document.createElement('span')
   const meta = document.createElement('span')
+  const premium = document.createElement('span')
 
   link.href = `/users/${encodeURIComponent(user.username)}`
   link.className = 'flex items-center gap-3 rounded-2xl px-3 py-2 transition hover:bg-white/70 focus:bg-white/70 focus:outline-none focus:ring-2 focus:ring-[#48AE4D]/35'
@@ -1027,12 +1029,22 @@ function createCommunityUserResult(user) {
   }
 
   text.className = 'min-w-0 leading-tight'
+  nameRow.className = 'flex min-w-0 items-center gap-2'
   name.className = 'block truncate text-sm font-black text-[#113e14]'
   name.textContent = user.displayName || user.username
   meta.className = 'block truncate text-xs font-bold text-[#416543]/70'
   meta.textContent = `${user.roleLabel || 'Member'} - @${user.username}`
 
-  text.append(name, meta)
+  nameRow.append(name)
+
+  if (user.isPremium) {
+    premium.className =
+      'shrink-0 rounded-full bg-[#dca15d] px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.1em] text-[#113e14]'
+    premium.textContent = 'Premium'
+    nameRow.append(premium)
+  }
+
+  text.append(nameRow, meta)
   link.append(avatar, text)
 
   return link
@@ -1374,6 +1386,7 @@ function appendCommunityComment(form, payload) {
   const meta = document.createElement('div')
   const link = document.createElement('a')
   const role = document.createElement('span')
+  const premium = document.createElement('span')
   const body = document.createElement('p')
   const avatar = document.createElement(comment.author.avatarUrl ? 'img' : 'span')
 
@@ -1388,6 +1401,8 @@ function appendCommunityComment(form, payload) {
   link.textContent = `@${comment.author.username}`
   role.className = 'rounded-full bg-[#ebe3a7] px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.1em] text-[#113e14]'
   role.textContent = comment.author.roleLabel || 'Member'
+  premium.className = 'rounded-full bg-[#dca15d] px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.1em] text-[#113e14]'
+  premium.textContent = 'Premium'
   body.className = 'mt-1 text-sm font-semibold leading-6 text-[#113e14]/74'
   body.textContent = comment.body
 
@@ -1404,6 +1419,9 @@ function appendCommunityComment(form, payload) {
 
   avatarLink.append(avatar)
   meta.append(link, role)
+  if (comment.author.isPremium) {
+    meta.append(premium)
+  }
   text.append(meta, body)
   row.append(avatarLink, text)
   item.append(row)

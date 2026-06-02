@@ -55,9 +55,22 @@ function isUsablePython(candidate) {
   return result.status === 0
 }
 
-function start(name, command, args) {
+function nodeEnvWithSystemCa() {
+  const currentOptions = process.env.NODE_OPTIONS || ''
+  const nextOptions = currentOptions.includes('--use-system-ca')
+    ? currentOptions
+    : `${currentOptions} --use-system-ca`.trim()
+
+  return {
+    ...process.env,
+    NODE_OPTIONS: nextOptions,
+  }
+}
+
+function start(name, command, args, options = {}) {
   const child = spawn(command, args, {
     cwd: root,
+    env: options.env || process.env,
     stdio: 'inherit',
   })
 
@@ -105,4 +118,6 @@ if (python) {
   console.warn('[designer-ai] Install Python 3.12 and run "npm run setup:python" before using background removal.')
 }
 
-start('web', process.execPath, ['ace', 'serve', '--hmr'])
+start('web', process.execPath, ['ace', 'serve', '--hmr'], {
+  env: nodeEnvWithSystemCa(),
+})

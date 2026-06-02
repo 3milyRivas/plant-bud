@@ -1,6 +1,6 @@
 @layout()
 @slot('title')
-<title>Plant Bud - Designer</title>
+<title>Plant Bud - 2D Designer</title>
 @endslot
 
 <div class="relative min-h-screen overflow-hidden">
@@ -11,9 +11,10 @@
     <div class="absolute inset-0 bg-gradient-to-br from-[#416543]/28 via-transparent to-[#113e14]/42 pointer-events-none"></div>
 
     @!component('components/app-navbar', {
-        section: 'Garden designer',
+        section: '2D Garden designer',
         toolMode: 'designer',
         maxWidth: 'max-w-[min(1500px,calc(100vw-2rem))]',
+        planLabel: subscription?.planLabel ?? 'Premium',
     })
     <input id="upload" type="file" accept="image/*" class="hidden">
 
@@ -141,7 +142,7 @@
 
                         <div class="flex items-center justify-between gap-4 mb-6">
                             <div>
-                                <p class="text-sm font-black uppercase tracking-[0.22em] text-[#416543]">Plant Bud Studio</p>
+                                <p class="text-sm font-black uppercase tracking-[0.22em] text-[#416543]">Plant Bud 2D Studio</p>
                                 <h2 class="mt-2 text-3xl md:text-4xl font-black text-[#113e14]">
                                     Garden Workspace
                                 </h2>
