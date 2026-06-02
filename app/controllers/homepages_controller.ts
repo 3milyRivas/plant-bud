@@ -78,6 +78,7 @@ export default class HomepagesController {
       displayName,
       avatarUrl,
       avatarInitial: initial.toLocaleUpperCase('en'),
+      planLabel: accountProfile?.planLabel || 'Free',
     }
   }
 

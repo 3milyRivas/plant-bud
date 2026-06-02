@@ -12,6 +12,7 @@ const CommunityController = () => import('#controllers/community_controller')
 const HomepagesController = () => import('#controllers/homepages_controller')
 const NewAccountController = () => import('#controllers/new_account_controller')
 const PlantsController = () => import('#controllers/plants_controller')
+const PlansController = () => import('#controllers/plans_controller')
 const ProfilesController = () => import('#controllers/profiles_controller')
 
 /* general views */
@@ -29,15 +30,21 @@ router.on('/care3').render('pages/client/Plants/care3')
 router.on('/care1').render('pages/client/Plants/care1')
 router.on('/care2').render('pages/client/Plants/care2')
 router.on('/catalog').render('pages/client/Plants/nurcata')
-router.on('/designer').render('pages/garden/designer')
 router
-  .get('/designer/search-assets', [GardenDesignerController, 'searchAssets'])
-  .as('garden_designer.search_assets')
-router
-  .post('/designer/remove-background', [GardenDesignerController, 'removeBackground'])
-  .as('garden_designer.remove_background')
-router.on('/scanner').render('pages/scanner/scanner')
-router.post('/plants/scan', [PlantsController, 'scan']).as('plants.scan')
+  .group(() => {
+    router.get('/plans', [PlansController, 'index']).as('plans.index')
+    router.post('/plans/premium', [PlansController, 'buyPremium']).as('plans.buy')
+    router.get('/designer', [GardenDesignerController, 'show']).as('garden_designer.show')
+    router
+      .get('/designer/search-assets', [GardenDesignerController, 'searchAssets'])
+      .as('garden_designer.search_assets')
+    router
+      .post('/designer/remove-background', [GardenDesignerController, 'removeBackground'])
+      .as('garden_designer.remove_background')
+    router.get('/scanner', [PlantsController, 'showScanner']).as('scanner.show')
+    router.post('/plants/scan', [PlantsController, 'scan']).as('plants.scan')
+  })
+  .use(middleware.auth())
 router.post('/phone-upload/sessions', [PhoneUploadsController, 'create']).as('phone_uploads.create')
 router
   .get('/phone-upload/sessions/:token', [PhoneUploadsController, 'status'])

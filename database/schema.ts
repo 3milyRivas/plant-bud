@@ -27,7 +27,7 @@ export class AccountLinkSchema extends BaseModel {
 }
 
 export class AccountProfileSchema extends BaseModel {
-  static $columns = ['avatarUrl', 'bannerUrl', 'bio', 'createdAt', 'displayName', 'id', 'location', 'updatedAt', 'userId', 'websiteUrl'] as const
+  static $columns = ['avatarUrl', 'bannerUrl', 'bio', 'createdAt', 'displayName', 'id', 'location', 'premiumRenewsAt', 'premiumStartedAt', 'rewardPoints', 'scannerMonthlyLimit', 'subscriptionPlan', 'updatedAt', 'userId', 'websiteUrl'] as const
   $columns = AccountProfileSchema.$columns
   @column()
   declare avatarUrl: string | null
@@ -43,6 +43,16 @@ export class AccountProfileSchema extends BaseModel {
   declare id: number
   @column()
   declare location: string | null
+  @column.dateTime()
+  declare premiumRenewsAt: DateTime | null
+  @column.dateTime()
+  declare premiumStartedAt: DateTime | null
+  @column()
+  declare rewardPoints: number
+  @column()
+  declare scannerMonthlyLimit: number
+  @column()
+  declare subscriptionPlan: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
   @column()
@@ -230,6 +240,41 @@ export class NurseryProfileSchema extends BaseModel {
   declare ratingCount: number
   @column()
   declare servicesOffered: string | null
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare userId: number
+}
+
+export class PlantScanSchema extends BaseModel {
+  static $columns = ['accountProfileId', 'causes', 'confidence', 'createdAt', 'healthStatus', 'id', 'imageHash', 'matches', 'premiumInsights', 'reliabilityLevel', 'scanSummary', 'species', 'subscriptionPlan', 'updatedAt', 'userId'] as const
+  $columns = PlantScanSchema.$columns
+  @column()
+  declare accountProfileId: number | null
+  @column()
+  declare causes: string | null
+  @column()
+  declare confidence: number
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column()
+  declare healthStatus: string | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare imageHash: string | null
+  @column()
+  declare matches: string | null
+  @column()
+  declare premiumInsights: string | null
+  @column()
+  declare reliabilityLevel: string | null
+  @column()
+  declare scanSummary: string | null
+  @column()
+  declare species: string
+  @column()
+  declare subscriptionPlan: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
   @column()

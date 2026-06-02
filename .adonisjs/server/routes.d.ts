@@ -7,8 +7,12 @@ export type ScannedRoutes = {
     'home': { paramsTuple?: []; params?: {} }
     'maintenance': { paramsTuple?: []; params?: {} }
     'request': { paramsTuple?: []; params?: {} }
+    'plans.index': { paramsTuple?: []; params?: {} }
+    'plans.buy': { paramsTuple?: []; params?: {} }
+    'garden_designer.show': { paramsTuple?: []; params?: {} }
     'garden_designer.search_assets': { paramsTuple?: []; params?: {} }
     'garden_designer.remove_background': { paramsTuple?: []; params?: {} }
+    'scanner.show': { paramsTuple?: []; params?: {} }
     'plants.scan': { paramsTuple?: []; params?: {} }
     'phone_uploads.create': { paramsTuple?: []; params?: {} }
     'phone_uploads.status': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
@@ -49,7 +53,10 @@ export type ScannedRoutes = {
     'home': { paramsTuple?: []; params?: {} }
     'maintenance': { paramsTuple?: []; params?: {} }
     'request': { paramsTuple?: []; params?: {} }
+    'plans.index': { paramsTuple?: []; params?: {} }
+    'garden_designer.show': { paramsTuple?: []; params?: {} }
     'garden_designer.search_assets': { paramsTuple?: []; params?: {} }
+    'scanner.show': { paramsTuple?: []; params?: {} }
     'phone_uploads.status': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'phone_uploads.image': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'phone_uploads.show': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
@@ -75,7 +82,10 @@ export type ScannedRoutes = {
     'home': { paramsTuple?: []; params?: {} }
     'maintenance': { paramsTuple?: []; params?: {} }
     'request': { paramsTuple?: []; params?: {} }
+    'plans.index': { paramsTuple?: []; params?: {} }
+    'garden_designer.show': { paramsTuple?: []; params?: {} }
     'garden_designer.search_assets': { paramsTuple?: []; params?: {} }
+    'scanner.show': { paramsTuple?: []; params?: {} }
     'phone_uploads.status': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'phone_uploads.image': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'phone_uploads.show': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
@@ -98,6 +108,7 @@ export type ScannedRoutes = {
     'signup.nursery': { paramsTuple?: []; params?: {} }
   }
   POST: {
+    'plans.buy': { paramsTuple?: []; params?: {} }
     'garden_designer.remove_background': { paramsTuple?: []; params?: {} }
     'plants.scan': { paramsTuple?: []; params?: {} }
     'phone_uploads.create': { paramsTuple?: []; params?: {} }

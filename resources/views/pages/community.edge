@@ -193,7 +193,7 @@
                     @endif
                     <span class="min-w-0 leading-tight">
                       <span class="block truncate text-sm font-black">{{ account.displayName }}</span>
-                      <span class="block truncate text-[11px] font-bold text-[#a8b841]">{{ '@' + account.username }}</span>
+                      <span class="block truncate text-[11px] font-bold text-[#a8b841]">{{ '@' + account.username }}{{ account.isPremium ? ' - Premium' : '' }}</span>
                     </span>
                   </span>
                   <span class="rounded-full bg-[#ebe3a7] px-3 py-1 text-[10px] font-black uppercase tracking-[0.1em] text-[#113e14]">{{ account.relationLabel }}</span>
@@ -235,7 +235,7 @@
                 @endif
                 <span class="min-w-0 leading-tight">
                   <span class="block truncate text-sm font-black text-[#113e14]">{{ user.displayName }}</span>
-                  <span class="block truncate text-[11px] font-bold text-[#416543]">{{ user.roleLabel }} - {{ '@' + user.username }}</span>
+                  <span class="block truncate text-[11px] font-bold text-[#416543]">{{ user.roleLabel }} - {{ '@' + user.username }}{{ user.isPremium ? ' - Premium' : '' }}</span>
                 </span>
               </a>
 
@@ -285,7 +285,7 @@
                     @endif
                     <span class="min-w-0">
                       <span class="block truncate text-sm font-black text-[#113e14]">{{ account.displayName }}</span>
-                      <span class="block truncate text-[11px] font-bold text-[#416543]">{{ account.roleLabel }} - {{ '@' + account.username }}</span>
+                      <span class="block truncate text-[11px] font-bold text-[#416543]">{{ account.roleLabel }} - {{ '@' + account.username }}{{ account.isPremium ? ' - Premium' : '' }}</span>
                     </span>
                   </span>
                   <span class="rounded-full bg-[#ebe3a7] px-3 py-1 text-[10px] font-black uppercase tracking-[0.1em] text-[#113e14]">{{ account.relationLabel }}</span>

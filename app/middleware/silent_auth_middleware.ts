@@ -11,6 +11,10 @@ export default class SilentAuthMiddleware {
   async handle(ctx: HttpContext, next: NextFn) {
     await ctx.auth.check()
 
+    if (ctx.auth.user) {
+      await ctx.auth.user.load('accountProfile')
+    }
+
     return next()
   }
 }

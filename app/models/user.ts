@@ -8,6 +8,7 @@ import CommunityPost from '#models/community_post'
 import Follow from '#models/follow'
 import GardenerProfile from '#models/gardener_profile'
 import NurseryProfile from '#models/nursery_profile'
+import PlantScan from '#models/plant_scan'
 import ServiceRequest from '#models/service_request'
 import type { HasMany, HasOne } from '@adonisjs/lucid/types/relations'
 
@@ -80,6 +81,9 @@ export default class User extends withAuthFinder(hash, {
     foreignKey: 'clientUserId',
   })
   declare serviceRequests: HasMany<typeof ServiceRequest>
+
+  @hasMany(() => PlantScan)
+  declare plantScans: HasMany<typeof PlantScan>
 
   get fullName() {
     return `${this.first_name} ${this.last_name}`.trim()

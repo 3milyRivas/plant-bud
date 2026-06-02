@@ -1,0 +1,280 @@
+@layout()
+@slot('title')
+<title>Plant Bud - Plans</title>
+@endslot
+
+@let(displayName = accountProfile?.displayName || user.fullName || user.username)
+@let(avatarUrl = accountProfile?.avatarUrl || user.profilePicture)
+@let(avatarInitial = displayName ? Array.from(displayName)[0].toLocaleUpperCase('en') : 'P')
+@let(isPremium = subscription.isPremium)
+@let(scannerUsage = subscription.scannerUsage)
+@let(freeScannerLimit = subscription.freeScannerMonthlyLimit || 5)
+@let(premiumPrice = '$3.99')
+
+<div class="relative z-10 min-h-dvh overflow-hidden bg-[#173f25] text-[#113e14]">
+  <div class="fixed inset-0 pointer-events-none">
+    <img src="/resources/images/welcome/header3.png" alt="" class="h-full w-full object-cover opacity-30">
+    <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(17,62,20,0.92)_0%,rgba(33,78,48,0.86)_48%,rgba(235,227,167,0.96)_100%)]"></div>
+  </div>
+
+  @!component('components/app-navbar', {
+    section: 'Plans',
+    active: 'plans',
+    maxWidth: 'max-w-[min(1500px,calc(100vw-2rem))]',
+    avatarUrl,
+    avatarInitial,
+    displayName,
+    roleLabel: user.role,
+    planLabel: subscription.planLabel,
+    items: [
+      {
+        key: 'homepage',
+        href: '/homepage',
+        label: 'Home',
+        icon: '',
+      },
+      {
+        key: 'scanner',
+        href: '/scanner',
+        label: 'Scanner',
+        icon: '',
+      },
+      {
+        key: 'community',
+        href: '/community',
+        label: 'Community',
+        icon: '',
+      },
+    ],
+  })
+
+  <main class="relative z-10 mx-auto max-w-7xl px-5 pb-16 pt-4 lg:px-10">
+    @if(flashMessages.get('success'))
+      <div class="mb-5 rounded-[1.35rem] border border-[#ebe3a7]/35 bg-[#ebe3a7]/18 px-5 py-4 text-sm font-black text-[#fff7bd] shadow-xl backdrop-blur-2xl">
+        {{ flashMessages.get('success') }}
+      </div>
+    @endif
+
+    @if(flashMessages.get('error'))
+      <div class="mb-5 rounded-[1.35rem] border border-[#dca15d]/45 bg-[#dca15d]/18 px-5 py-4 text-sm font-black text-[#fff7bd] shadow-xl backdrop-blur-2xl">
+        {{ flashMessages.get('error') }}
+      </div>
+    @endif
+
+    <section class="grid gap-8 py-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-end">
+      <div class="text-white">
+        <p class="text-sm font-black uppercase tracking-[0.24em] text-[#ebe3a7]">Plant Bud Plans</p>
+        <h1 class="mt-4 max-w-3xl font-abril text-5xl leading-tight md:text-6xl">
+          Choose the care level that fits your garden.
+        </h1>
+        <p class="mt-5 max-w-2xl text-base font-semibold leading-7 text-white/78">
+          Keep the essentials open with Free, or unlock unlimited scanning, saved plant intelligence, rewards, and the 2D Garden Designer with Premium for {{ premiumPrice }} per month.
+        </p>
+      </div>
+
+      <div class="grid gap-3 rounded-[1.75rem] border border-white/16 bg-white/14 p-4 text-white shadow-xl backdrop-blur-2xl sm:grid-cols-3">
+        <div class="border-b border-white/14 pb-3 sm:border-b-0 sm:border-r sm:pb-0 sm:pr-4">
+          <p class="text-xs font-black uppercase tracking-[0.16em] text-[#ebe3a7]">Current plan</p>
+          <p class="mt-2 text-2xl font-black">{{ subscription.planLabel }}</p>
+        </div>
+        <div class="border-b border-white/14 pb-3 sm:border-b-0 sm:border-r sm:pb-0 sm:pr-4">
+          <p class="text-xs font-black uppercase tracking-[0.16em] text-[#ebe3a7]">Scanner</p>
+          <p class="mt-2 text-2xl font-black">{{ scannerUsage.unlimited ? 'Unlimited' : scannerUsage.remaining + ' left' }}</p>
+        </div>
+        <div>
+          <p class="text-xs font-black uppercase tracking-[0.16em] text-[#ebe3a7]">Reward points</p>
+          <p class="mt-2 text-2xl font-black">{{ subscription.rewardPoints }}</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid items-stretch gap-7 lg:grid-cols-[0.9fr_1.1fr]">
+      <article class="relative flex flex-col overflow-hidden rounded-[2rem] border border-[#416543]/20 bg-[#f7f1c6] shadow-[0_26px_70px_rgba(17,62,20,0.18)]">
+        <div class="relative h-44 overflow-hidden">
+          <img src="/resources/images/homepagee/escaneo-1.jpg" alt="" class="h-full w-full object-cover">
+          <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(17,62,20,0.08),rgba(247,241,198,0.96))]"></div>
+          <span class="absolute left-5 top-5 rounded-full border border-white/45 bg-white/78 px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-[#416543] shadow-sm">
+            {{ isPremium ? 'Included' : 'Current plan' }}
+          </span>
+        </div>
+
+        <div class="flex flex-1 flex-col p-6 md:p-7">
+          <div class="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p class="text-sm font-black uppercase tracking-[0.2em] text-[#416543]">Free</p>
+              <h2 class="mt-2 text-4xl font-black">Plant Bud Free</h2>
+              <p class="mt-3 max-w-xl text-sm font-bold leading-6 text-[#416543]">
+                The everyday Plant Bud experience for community, catalog browsing, and light plant checks.
+              </p>
+            </div>
+            <div class="shrink-0">
+              <p class="text-6xl font-black leading-none text-[#113e14]">{{ freeScannerLimit }}</p>
+              <p class="mt-1 text-xs font-black uppercase tracking-[0.16em] text-[#416543]">scans/month</p>
+            </div>
+          </div>
+
+          <div class="mt-7 space-y-4 border-y border-[#416543]/16 py-6">
+            <div class="flex gap-3">
+              <span class="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-[#a8b841]"></span>
+              <p class="text-sm font-bold leading-6 text-[#224f2d]">Free access to the Plant Bud community and plant catalog.</p>
+            </div>
+            <div class="flex gap-3">
+              <span class="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-[#a8b841]"></span>
+              <p class="text-sm font-bold leading-6 text-[#224f2d]">Direct connection with gardeners and nurseries.</p>
+            </div>
+            <div class="flex gap-3">
+              <span class="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-[#dca15d]"></span>
+              <p class="text-sm font-bold leading-6 text-[#224f2d]">{{ freeScannerLimit }} Plant Scanner uses per month with basic identification and health summary.</p>
+            </div>
+          </div>
+
+          <div class="mt-auto pt-6">
+            <a href="/homepage" class="inline-flex w-fit items-center justify-center rounded-full bg-[#113e14] px-6 py-3 text-sm font-black text-[#ebe3a7] shadow-lg transition hover:-translate-y-0.5 hover:bg-[#416543]">
+              Continue with Free
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <article class="relative flex flex-col overflow-hidden rounded-[2rem] border-2 border-[#dca15d] bg-[#113e14] text-white shadow-[0_34px_100px_rgba(17,62,20,0.42)]">
+        <img src="/resources/images/homepagee/escaneo-3.jpg" alt="" class="absolute inset-0 h-full w-full object-cover opacity-24">
+        <div class="absolute inset-0 bg-[linear-gradient(135deg,rgba(17,62,20,0.98)_0%,rgba(17,62,20,0.88)_48%,rgba(65,101,67,0.76)_100%)]"></div>
+        <div class="absolute inset-x-0 top-0 h-2 bg-[linear-gradient(90deg,#dca15d,#ebe3a7,#a8b841)]"></div>
+
+        <div class="relative z-10 flex flex-1 flex-col p-6 md:p-8">
+          <div class="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <div class="flex flex-wrap items-center gap-3">
+                <p class="text-sm font-black uppercase tracking-[0.2em] text-[#ebe3a7]">Premium</p>
+                <span class="rounded-full bg-[#dca15d] px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-[#113e14] shadow-md">
+                  {{ isPremium ? 'Active' : 'Recommended' }}
+                </span>
+              </div>
+              <h2 class="mt-4 max-w-xl text-4xl font-black leading-tight md:text-5xl">Plant Bud Premium</h2>
+              <p class="mt-4 max-w-2xl text-sm font-semibold leading-6 text-white/76">
+                For frequent scans, plant progress tracking, richer insights, garden planning, and rewards.
+              </p>
+            </div>
+
+            <div class="shrink-0 rounded-[1.4rem] border border-[#ebe3a7]/36 bg-[#ebe3a7]/16 px-5 py-4 text-left shadow-[0_18px_50px_rgba(0,0,0,0.18)] backdrop-blur-xl">
+              <p class="text-xs font-black uppercase tracking-[0.16em] text-[#ebe3a7]">Premium plan</p>
+              <p class="mt-2 text-4xl font-black leading-none">{{ premiumPrice }}</p>
+              <p class="mt-1 text-xs font-black uppercase tracking-[0.14em] text-white/62">per month</p>
+            </div>
+          </div>
+
+          <div class="mt-8 grid gap-4 sm:grid-cols-4">
+            <div class="rounded-[1.2rem] border border-white/14 bg-white/12 p-4 shadow-[0_14px_42px_rgba(0,0,0,0.16)] backdrop-blur-xl">
+              <p class="text-2xl font-black text-[#ebe3a7]">All</p>
+              <p class="mt-1 text-xs font-bold uppercase tracking-[0.14em] text-white/62">Free features</p>
+            </div>
+            <div class="rounded-[1.2rem] border border-white/14 bg-white/12 p-4 shadow-[0_14px_42px_rgba(0,0,0,0.16)] backdrop-blur-xl">
+              <p class="text-2xl font-black text-[#ebe3a7]">2D</p>
+              <p class="mt-1 text-xs font-bold uppercase tracking-[0.14em] text-white/62">Garden Designer</p>
+            </div>
+            <div class="rounded-[1.2rem] border border-white/14 bg-white/12 p-4 shadow-[0_14px_42px_rgba(0,0,0,0.16)] backdrop-blur-xl">
+              <p class="text-2xl font-black text-[#ebe3a7]">History</p>
+              <p class="mt-1 text-xs font-bold uppercase tracking-[0.14em] text-white/62">Saved by profile</p>
+            </div>
+            <div class="rounded-[1.2rem] border border-white/14 bg-white/12 p-4 shadow-[0_14px_42px_rgba(0,0,0,0.16)] backdrop-blur-xl">
+              <p class="text-2xl font-black text-[#ebe3a7]">150</p>
+              <p class="mt-1 text-xs font-bold uppercase tracking-[0.14em] text-white/62">Starter points</p>
+            </div>
+          </div>
+
+          <div class="mt-5 grid gap-4 md:grid-cols-3">
+            <div class="rounded-[1.35rem] border border-[#ebe3a7]/18 bg-[#113e14]/64 p-5 shadow-[0_18px_50px_rgba(0,0,0,0.18)] backdrop-blur-xl">
+              <p class="text-xs font-black uppercase tracking-[0.17em] text-[#ebe3a7]">Scanner power</p>
+              <ul class="mt-3 space-y-3 text-sm font-semibold leading-6 text-white/78">
+                <li>Unlimited Plant Scanner use.</li>
+                <li>Enhanced identification and health details.</li>
+                <li>Care direction after each scan.</li>
+              </ul>
+            </div>
+
+            <div class="rounded-[1.35rem] border border-[#ebe3a7]/18 bg-[#113e14]/64 p-5 shadow-[0_18px_50px_rgba(0,0,0,0.18)] backdrop-blur-xl">
+              <p class="text-xs font-black uppercase tracking-[0.17em] text-[#ebe3a7]">Tracking</p>
+              <ul class="mt-3 space-y-3 text-sm font-semibold leading-6 text-white/78">
+                <li>Saved scan history by profile.</li>
+                <li>Premium dashboard for recent scans.</li>
+                <li>Comparisons and follow-up notes.</li>
+              </ul>
+            </div>
+
+            <div class="rounded-[1.35rem] border border-[#ebe3a7]/18 bg-[#113e14]/64 p-5 shadow-[0_18px_50px_rgba(0,0,0,0.18)] backdrop-blur-xl">
+              <p class="text-xs font-black uppercase tracking-[0.17em] text-[#ebe3a7]">Designer and rewards</p>
+              <ul class="mt-3 space-y-3 text-sm font-semibold leading-6 text-white/78">
+                <li>Full access to the 2D Garden Designer.</li>
+                <li>Reward points from every payment.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="mt-auto flex flex-col gap-4 pt-8 sm:flex-row sm:items-center sm:justify-between">
+            <p class="max-w-xl text-sm font-bold leading-6 text-[#ebe3a7]">
+              Premium removes the scanner cap and turns every scan into a profile record you can track over time.
+            </p>
+
+            @if(isPremium)
+              <a href="/scanner" class="inline-flex shrink-0 items-center justify-center rounded-full bg-[#dca15d] px-6 py-3 text-sm font-black text-[#113e14] shadow-lg transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]">
+                Open Premium Scanner
+              </a>
+            @else
+              @form({ route: 'plans.buy', method: 'POST' })
+                <button type="submit" class="inline-flex shrink-0 items-center justify-center rounded-full bg-[#dca15d] px-7 py-3 text-sm font-black text-[#113e14] shadow-lg transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]">
+                  Upgrade to Premium - {{ premiumPrice }}
+                </button>
+              @end
+            @endif
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="pt-8">
+      <div class="grid gap-5 rounded-[2rem] border border-[#416543]/16 bg-[#fffaf0]/92 p-5 shadow-[0_24px_70px_rgba(17,62,20,0.16)] backdrop-blur-xl md:grid-cols-3">
+        <div class="rounded-[1.25rem] bg-white/78 p-5 shadow-sm">
+          <p class="text-xs font-black uppercase tracking-[0.18em] text-[#416543]">Free keeps</p>
+          <p class="mt-2 text-sm font-bold leading-6 text-[#224f2d]">Community, catalog, plant discovery, and nursery connections open to every account.</p>
+        </div>
+        <div class="rounded-[1.25rem] bg-[#113e14] p-5 text-white shadow-sm">
+          <p class="text-xs font-black uppercase tracking-[0.18em] text-[#ebe3a7]">Premium adds</p>
+          <p class="mt-2 text-sm font-bold leading-6 text-white/76">{{ premiumPrice }} per month for unlimited scanning, saved plant intelligence, dashboards, and the 2D planning workspace.</p>
+        </div>
+        <div class="rounded-[1.25rem] bg-[#ebe3a7]/80 p-5 shadow-sm">
+          <p class="text-xs font-black uppercase tracking-[0.18em] text-[#416543]">Your status</p>
+          <p class="mt-2 text-sm font-bold leading-6 text-[#224f2d]">
+            {{ isPremium ? 'Premium is active on your account.' : scannerUsage.remaining + ' free scanner uses remain this month.' }}
+          </p>
+        </div>
+      </div>
+    </section>
+
+    @if(subscription.recentScans.length)
+      <section class="pt-10">
+        <div class="rounded-[2rem] border border-white/12 bg-white/12 p-6 text-white shadow-xl backdrop-blur-2xl">
+          <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p class="text-sm font-black uppercase tracking-[0.2em] text-[#ebe3a7]">Scanner history</p>
+              <h2 class="mt-2 text-3xl font-black">Recent profile scans</h2>
+            </div>
+            <span class="rounded-full bg-[#ebe3a7] px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-[#113e14]">
+              {{ subscription.recentScans.length }} saved
+            </span>
+          </div>
+
+          <div class="mt-6 grid gap-3 md:grid-cols-3">
+            @each(scan in subscription.recentScans)
+              <div class="rounded-2xl bg-white/12 p-4">
+                <p class="truncate text-base font-black">{{ scan.species }}</p>
+                <p class="mt-1 text-sm font-semibold text-white/65">{{ scan.healthStatus || 'unknown' }} - {{ scan.confidence }}%</p>
+                <p class="mt-3 text-xs font-bold uppercase tracking-[0.12em] text-[#ebe3a7]">{{ scan.createdAtLabel }}</p>
+              </div>
+            @end
+          </div>
+        </div>
+      </section>
+    @endif
+  </main>
+</div>
+@end

@@ -6,8 +6,10 @@ import type { HttpContext } from '@adonisjs/core/http'
 import axios from 'axios'
 import env from '#start/env'
 import app from '@adonisjs/core/services/app'
+import SubscriptionService from '#services/subscription_service'
 
 export default class GardenDesignerController {
+  private subscriptions = new SubscriptionService()
   private pexelsUrl = 'https://api.pexels.com/v1/search'
   private pythonServerUrl = 'http://127.0.0.1:5000/remove-background'
   private pythonVersionCheck =
@@ -75,7 +77,31 @@ export default class GardenDesignerController {
     },
   ]
 
-  async searchAssets({ request, response }: HttpContext) {
+  async show({ auth, response, session, view }: HttpContext) {
+    const user = auth.user!
+    const subscription = await this.subscriptions.getSubscriptionSummary(user)
+
+    if (!subscription.isPremium) {
+      session.flash('error', 'The 2D Garden Designer is included with Plant Bud Premium.')
+
+      return response.redirect().toRoute('plans.index')
+    }
+
+    return view.render('pages/garden/designer', {
+      user,
+      accountProfile: subscription.profile,
+      subscription,
+    })
+  }
+
+  async searchAssets(ctx: HttpContext) {
+    const { request, response } = ctx
+    const premiumAccess = await this.requirePremiumAccess(ctx)
+
+    if (!premiumAccess.allowed) {
+      return response.status(402).json(premiumAccess.payload)
+    }
+
     const query = request.input('query')?.toString().trim()
     const perPage = Number(request.input('per_page') ?? 15)
     const safePerPage = Number.isFinite(perPage) ? Math.min(Math.max(perPage, 1), 30) : 15
@@ -136,7 +162,14 @@ export default class GardenDesignerController {
     }
   }
 
-  async removeBackground({ request, response }: HttpContext) {
+  async removeBackground(ctx: HttpContext) {
+    const { request, response } = ctx
+    const premiumAccess = await this.requirePremiumAccess(ctx)
+
+    if (!premiumAccess.allowed) {
+      return response.status(402).json(premiumAccess.payload)
+    }
+
     const imageInput = request.input('image')?.toString()
     const imageUrl = request.input('imageUrl')?.toString()
     let image: string | null
@@ -370,6 +403,23 @@ export default class GardenDesignerController {
     const contentType = this.getContentType(filePath)
 
     return `data:${contentType};base64,${buffer.toString('base64')}`
+  }
+
+  private async requirePremiumAccess({ auth }: HttpContext) {
+    const user = auth.user!
+    const profile = await this.subscriptions.ensureAccountProfile(user)
+    const allowed = this.subscriptions.isPremium(profile)
+
+    return {
+      allowed,
+      payload: allowed
+        ? null
+        : {
+            error: 'Premium plan required',
+            upgrade_url: '/plans',
+            feature: '2D Garden Designer',
+          },
+    }
   }
 
   private getContentType(filePath: string) {
