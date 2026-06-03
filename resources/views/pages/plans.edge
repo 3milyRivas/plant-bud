@@ -9,7 +9,7 @@
 @let(isPremium = subscription.isPremium)
 @let(scannerUsage = subscription.scannerUsage)
 @let(freeScannerLimit = subscription.freeScannerMonthlyLimit || 5)
-@let(premiumPrice = '$3.99')
+@let(premiumPrice = '$-.--')
 
 <div class="relative z-10 min-h-dvh overflow-hidden bg-[#173f25] text-[#113e14]">
   <div class="fixed inset-0 pointer-events-none">
@@ -68,7 +68,7 @@
           Choose the care level that fits your garden.
         </h1>
         <p class="mt-5 max-w-2xl text-base font-semibold leading-7 text-white/78">
-          Keep the essentials open with Free, or unlock unlimited scanning, saved plant intelligence, rewards, and the 2D Garden Designer with Premium for {{ premiumPrice }} per month.
+          Keep the essentials open with Free, or unlock unlimited scanning, saved plant intelligence, rewards, and the 2D Garden Designer with Premium.
         </p>
       </div>
 
@@ -159,7 +159,7 @@
             <div class="shrink-0 rounded-[1.4rem] border border-[#ebe3a7]/36 bg-[#ebe3a7]/16 px-5 py-4 text-left shadow-[0_18px_50px_rgba(0,0,0,0.18)] backdrop-blur-xl">
               <p class="text-xs font-black uppercase tracking-[0.16em] text-[#ebe3a7]">Premium plan</p>
               <p class="mt-2 text-4xl font-black leading-none">{{ premiumPrice }}</p>
-              <p class="mt-1 text-xs font-black uppercase tracking-[0.14em] text-white/62">per month</p>
+              <p class="mt-1 text-xs font-black uppercase tracking-[0.14em] text-white/62">price hidden</p>
             </div>
           </div>
 
@@ -205,7 +205,7 @@
               <p class="text-xs font-black uppercase tracking-[0.17em] text-[#ebe3a7]">Designer and rewards</p>
               <ul class="mt-3 space-y-3 text-sm font-semibold leading-6 text-white/78">
                 <li>Full access to the 2D Garden Designer.</li>
-                <li>Reward points from every payment.</li>
+                <li>Starter reward points when Premium is activated.</li>
               </ul>
             </div>
           </div>
@@ -222,7 +222,7 @@
             @else
               @form({ route: 'plans.buy', method: 'POST' })
                 <button type="submit" class="inline-flex shrink-0 items-center justify-center rounded-full bg-[#dca15d] px-7 py-3 text-sm font-black text-[#113e14] shadow-lg transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]">
-                  Upgrade to Premium - {{ premiumPrice }}
+                  Upgrade to Premium
                 </button>
               @end
             @endif
@@ -239,7 +239,7 @@
         </div>
         <div class="rounded-[1.25rem] bg-[#113e14] p-5 text-white shadow-sm">
           <p class="text-xs font-black uppercase tracking-[0.18em] text-[#ebe3a7]">Premium adds</p>
-          <p class="mt-2 text-sm font-bold leading-6 text-white/76">{{ premiumPrice }} per month for unlimited scanning, saved plant intelligence, dashboards, and the 2D planning workspace.</p>
+          <p class="mt-2 text-sm font-bold leading-6 text-white/76">Premium unlocks unlimited scanning, saved plant intelligence, dashboards, and the 2D planning workspace.</p>
         </div>
         <div class="rounded-[1.25rem] bg-[#ebe3a7]/80 p-5 shadow-sm">
           <p class="text-xs font-black uppercase tracking-[0.18em] text-[#416543]">Your status</p>

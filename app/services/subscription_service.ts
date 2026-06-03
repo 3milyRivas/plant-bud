@@ -96,6 +96,21 @@ export default class SubscriptionService {
     return profile
   }
 
+  async downgradeToFree(user: User) {
+    const profile = await this.ensureAccountProfile(user)
+
+    profile.merge({
+      subscriptionPlan: 'free',
+      premiumStartedAt: null,
+      premiumRenewsAt: null,
+      scannerMonthlyLimit: FREE_SCANNER_MONTHLY_LIMIT,
+    })
+
+    await profile.save()
+
+    return profile
+  }
+
   async recordScan(input: {
     user: User
     profile: AccountProfile
@@ -116,10 +131,14 @@ export default class SubscriptionService {
       imageHash,
       scanSummary: this.stringify({
         species: result.species,
+        common_name: result.common_name,
+        scientific_name: result.scientific_name,
         confidence: result.confidence,
         health: result.health,
         reliability: result.reliability,
         plant_info: result.plant_info,
+        plant_education: result.plant_education,
+        action_plan: result.action_plan,
       }),
       matches: this.stringify(result.matches || []),
       causes: this.stringify(result.causes || []),

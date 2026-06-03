@@ -312,6 +312,88 @@ details[open] .app-navbar-profile-menu {
   position: relative;
 }
 
+.profile-badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.profile-badge-row--inline {
+  margin-top: 0;
+}
+
+.profile-badge-row--compact {
+  gap: 0.35rem;
+  margin-top: 0.35rem;
+}
+
+.profile-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  width: fit-content;
+  border-radius: 999px;
+  padding: 0.42rem 0.72rem;
+  border: 1px solid rgb(255 255 255 / 0.28);
+  background: rgb(255 255 255 / 0.14);
+  color: #ebe3a7;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.16),
+    0 10px 26px rgb(17 62 20 / 0.14);
+  font-size: 0.72rem;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  backdrop-filter: blur(16px);
+}
+
+.profile-badge--compact {
+  padding: 0.28rem 0.55rem;
+  font-size: 0.62rem;
+  letter-spacing: 0.07em;
+}
+
+.profile-badge--role {
+  background: rgb(235 227 167 / 0.92);
+  border-color: rgb(235 227 167 / 0.45);
+  color: #113e14;
+}
+
+.profile-badge--premium {
+  background: linear-gradient(135deg, rgb(235 227 167 / 0.96), rgb(220 161 93 / 0.88));
+  border-color: rgb(255 255 255 / 0.44);
+  color: #113e14;
+}
+
+.profile-badge--premium::before {
+  content: '';
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 999px;
+  background: #113e14;
+  box-shadow: 0 0 0 3px rgb(17 62 20 / 0.1);
+}
+
+.profile-badge--friend {
+  background: rgb(255 255 255 / 0.16);
+  border-color: rgb(235 227 167 / 0.4);
+  color: #ebe3a7;
+}
+
+.profile-badge--dark {
+  background: rgb(17 62 20 / 0.92);
+  border-color: rgb(17 62 20 / 0.2);
+  color: #ebe3a7;
+}
+
+.profile-badge.hidden {
+  display: none;
+}
+
 .community-post-hashtag {
   background: rgb(65 101 67 / 0.34);
   border: 1px solid rgb(17 62 20 / 0.18);
@@ -712,6 +794,21 @@ details[open] .app-navbar-profile-menu {
 
 .auth-card.is-alive::after {
   animation: authAmbientLine 8.5s ease-in-out infinite;
+}
+
+[data-auth-page] {
+  overscroll-behavior: none;
+}
+
+.auth-signup-visual {
+  contain: paint;
+  isolation: isolate;
+  touch-action: none;
+}
+
+.auth-signup-image {
+  -webkit-user-drag: none;
+  user-drag: none;
 }
 
 .auth-choice {

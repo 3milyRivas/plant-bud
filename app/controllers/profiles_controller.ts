@@ -63,6 +63,7 @@ const socialLinkConfigs = [
     message: 'Facebook can use letters, numbers, and periods',
   },
 ] as const
+const allowedPaymentMethods = ['Cash', 'Paypal', 'Card'] as const
 
 type SocialLinkConfig = (typeof socialLinkConfigs)[number]
 type SocialKey = SocialLinkConfig['key']
@@ -342,7 +343,7 @@ export default class ProfilesController {
     if (user.role === 'gardener') {
       const roleProfile = await this.ensureGardenerProfile(user)
       const profileServices = this.normalizeList(payload.services_offered, 12, 90)
-      const paymentMethods = this.normalizeList(payload.payment_methods, 8, 60)
+      const paymentMethods = this.normalizePaymentMethods(payload.payment_methods)
       const publicPhone = this.normalizePhone(payload.public_phone) || privatePhone
 
       roleProfile.merge({
@@ -363,7 +364,7 @@ export default class ProfilesController {
     if (user.role === 'nursery') {
       const roleProfile = await this.ensureNurseryProfile(user)
       const profileServices = this.normalizeList(payload.services_offered, 16, 90)
-      const paymentMethods = this.normalizeList(payload.payment_methods, 8, 60)
+      const paymentMethods = this.normalizePaymentMethods(payload.payment_methods)
       const publicPhone = this.normalizePhone(payload.public_phone) || privatePhone
 
       roleProfile.merge({
@@ -987,6 +988,12 @@ export default class ProfilesController {
     }
 
     return Array.from(uniqueItems.values()).slice(0, maxItems)
+  }
+
+  private normalizePaymentMethods(value?: string | null) {
+    const selected = new Set(this.splitStoredList(value).map((item) => item.toLowerCase()))
+
+    return allowedPaymentMethods.filter((method) => selected.has(method.toLowerCase()))
   }
 
   private splitStoredList(value?: string | null) {

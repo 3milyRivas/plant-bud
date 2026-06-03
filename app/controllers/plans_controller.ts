@@ -28,4 +28,13 @@ export default class PlansController {
 
     return response.redirect().toRoute('plans.index')
   }
+
+  async cancelPremium({ auth, response, session }: HttpContext) {
+    const user = auth.user!
+
+    await this.subscriptions.downgradeToFree(user)
+    session.flash('success', 'Premium was canceled. Your account is now on Free.')
+
+    return response.redirect().back()
+  }
 }

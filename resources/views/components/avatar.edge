@@ -1,4 +1,5 @@
 @let(nameInitials = $props.get('initials'))
+@let(firstInitial = nameInitials ? Array.from(nameInitials.toString().trim())[0] : null)
 @let(classes = [])
 
 @if($props.get('src'))
@@ -6,9 +7,9 @@
   .except(['initials', 'name'])
   .merge({ class: classes })
   .toAttrs() }}>
-@elseif(nameInitials)
+@elseif(firstInitial)
   <span {{ $props
   .except(['initials', 'name', 'src'])
   .merge({ class: classes })
-  .toAttrs() }}> {{ nameInitials.toUpperCase() }} </span>
+  .toAttrs() }}> {{ firstInitial.toUpperCase() }} </span>
 @end

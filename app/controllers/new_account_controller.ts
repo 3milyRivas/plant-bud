@@ -18,6 +18,7 @@ import db from '@adonisjs/lucid/services/db'
 type SignupRole = 'client' | 'gardener' | 'nursery'
 
 const NURSERY_USERNAME_PREFIX = 'nursery_'
+const SIGNUP_USERNAME_MAX_LENGTH = 15
 const RESERVED_HANDLE_KEYS = new Set([
   'admin',
   'administrator',
@@ -28,7 +29,7 @@ const RESERVED_HANDLE_KEYS = new Set([
   'signup',
   'support',
 ])
-const nurseryNamePattern = /^[\p{L}\p{N}][\p{L}\p{N} .&'-]{1,78}[\p{L}\p{N}]$/u
+const nurseryNamePattern = /^[\p{L}\p{N}][\p{L}\p{N} .&'-]{1,20}[\p{L}\p{N}]$/u
 
 type SignupPayload = {
   username?: string
@@ -303,7 +304,7 @@ export default class NewAccountController {
   }
 
   private normalizeUsername(value?: string | null) {
-    return this.cleanOptional(value)?.toLowerCase() || ''
+    return this.cleanOptional(value)?.toLowerCase().slice(0, SIGNUP_USERNAME_MAX_LENGTH) || ''
   }
 
   private normalizeSlug(value?: string | null) {
@@ -330,13 +331,14 @@ export default class NewAccountController {
   }
 
   private async uniqueUsername(base: string) {
-    const fallback = this.normalizeSlug(base).replace(/-/g, '_').slice(0, 30) || 'user'
-    let username = fallback.slice(0, 30)
+    const fallback =
+      this.normalizeSlug(base).replace(/-/g, '_').slice(0, SIGNUP_USERNAME_MAX_LENGTH) || 'user'
+    let username = fallback.slice(0, SIGNUP_USERNAME_MAX_LENGTH)
     let counter = 1
 
     while (await User.findBy('username', username)) {
       const suffix = `_${counter}`
-      username = `${fallback.slice(0, 30 - suffix.length)}${suffix}`
+      username = `${fallback.slice(0, SIGNUP_USERNAME_MAX_LENGTH - suffix.length)}${suffix}`
       counter += 1
     }
 

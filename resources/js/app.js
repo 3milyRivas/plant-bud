@@ -111,6 +111,7 @@ function initProfilePage() {
 
   page.querySelectorAll('[data-phone-input]').forEach(bindPhoneInput)
   page.querySelectorAll('[data-social-handle]').forEach(bindSocialHandleInput)
+  initPaymentMethodControls(page)
 
   page.querySelectorAll('[data-profile-file-input]').forEach((input) => {
     input.addEventListener('change', () => {
@@ -132,6 +133,28 @@ function initProfilePage() {
   })
 
   initAvatarCropper(page)
+}
+
+function initPaymentMethodControls(page) {
+  page.querySelectorAll('[data-payment-methods]').forEach((group) => {
+    if (group.dataset.paymentMethodsReady === 'true') return
+
+    const valueInput = group.querySelector('[data-payment-methods-value]')
+    const checkboxes = Array.from(group.querySelectorAll('[data-payment-method-checkbox]'))
+
+    if (!valueInput || !checkboxes.length) return
+
+    const syncValue = () => {
+      valueInput.value = checkboxes
+        .filter((checkbox) => checkbox.checked)
+        .map((checkbox) => checkbox.value)
+        .join('\n')
+    }
+
+    group.dataset.paymentMethodsReady = 'true'
+    checkboxes.forEach((checkbox) => checkbox.addEventListener('change', syncValue))
+    syncValue()
+  })
 }
 
 function initProfileRelationsModal() {
@@ -674,7 +697,7 @@ function validateAuthForm(form) {
     if (input.matches('[data-username-input]') && !isValidUsername(value)) {
       showClientError(
         input,
-        'Use 3-30 letters, numbers, periods, or underscores. No ending period or double periods.'
+        'Use 3-15 letters, numbers, periods, or underscores. No ending period or double periods.'
       )
       firstInvalidInput ||= input
       continue
@@ -683,7 +706,7 @@ function validateAuthForm(form) {
     if (input.matches('[data-nursery-name-input]') && !isValidNurseryName(value)) {
       showClientError(
         input,
-        'Use 3-80 letters, numbers, spaces, periods, apostrophes, hyphens, or &.'
+        'Use 3-22 letters, numbers, spaces, periods, apostrophes, hyphens, or &.'
       )
       firstInvalidInput ||= input
       continue
@@ -719,11 +742,11 @@ function clearClientErrors(form) {
 }
 
 function isValidUsername(value) {
-  return /^(?!.*\.\.)(?!.*\.$)[a-z0-9][a-z0-9._]{2,29}$/.test(value)
+  return /^(?!.*\.\.)(?!.*\.$)[a-z0-9][a-z0-9._]{2,14}$/.test(value)
 }
 
 function isValidNurseryName(value) {
-  return /^[\p{L}\p{N}][\p{L}\p{N} .&'-]{1,78}[\p{L}\p{N}]$/u.test(value)
+  return /^[\p{L}\p{N}][\p{L}\p{N} .&'-]{1,20}[\p{L}\p{N}]$/u.test(value)
 }
 
 function formatNumberMask(value, maxDigits, splitAt) {
@@ -1005,6 +1028,10 @@ function createCommunitySearchHeading(label) {
   return heading
 }
 
+function getFirstInitial(value) {
+  return Array.from(String(value || 'P').trim())[0]?.toUpperCase() || 'P'
+}
+
 function createCommunityUserResult(user) {
   const link = document.createElement('a')
   const avatar = document.createElement(user.avatarUrl ? 'img' : 'span')
@@ -1025,7 +1052,7 @@ function createCommunityUserResult(user) {
     avatar.decoding = 'async'
   } else {
     avatar.className = 'flex h-10 w-10 flex-none items-center justify-center rounded-full bg-[#113e14] text-sm font-black text-[#ebe3a7]'
-    avatar.textContent = user.initial || 'P'
+    avatar.textContent = getFirstInitial(user.initial)
   }
 
   text.className = 'min-w-0 leading-tight'
@@ -1039,7 +1066,7 @@ function createCommunityUserResult(user) {
 
   if (user.isPremium) {
     premium.className =
-      'shrink-0 rounded-full bg-[#dca15d] px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.1em] text-[#113e14]'
+      'profile-badge profile-badge--premium profile-badge--compact shrink-0'
     premium.textContent = 'Premium'
     nameRow.append(premium)
   }
@@ -1399,9 +1426,9 @@ function appendCommunityComment(form, payload) {
   link.className = 'text-xs font-black text-[#113e14]'
   link.href = `/users/${encodeURIComponent(comment.author.username)}`
   link.textContent = `@${comment.author.username}`
-  role.className = 'rounded-full bg-[#ebe3a7] px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.1em] text-[#113e14]'
+  role.className = 'profile-badge profile-badge--role profile-badge--compact'
   role.textContent = comment.author.roleLabel || 'Member'
-  premium.className = 'rounded-full bg-[#dca15d] px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.1em] text-[#113e14]'
+  premium.className = 'profile-badge profile-badge--premium profile-badge--compact'
   premium.textContent = 'Premium'
   body.className = 'mt-1 text-sm font-semibold leading-6 text-[#113e14]/74'
   body.textContent = comment.body
@@ -1414,7 +1441,7 @@ function appendCommunityComment(form, payload) {
     avatar.className = 'h-10 w-10 rounded-full object-cover'
   } else {
     avatar.className = 'flex h-10 w-10 items-center justify-center rounded-full bg-[#113e14] text-sm font-black text-[#ebe3a7]'
-    avatar.textContent = comment.author.initial || 'P'
+    avatar.textContent = getFirstInitial(comment.author.initial)
   }
 
   avatarLink.append(avatar)

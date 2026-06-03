@@ -90,13 +90,7 @@ export default class User extends withAuthFinder(hash, {
   }
 
   get initials() {
-    return this.fullName
-      .split(/\s+/)
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((part) => part[0])
-      .join('')
-      .toUpperCase()
+    return (Array.from((this.fullName || this.username || 'P').trim())[0] || 'P').toUpperCase()
   }
 
   @beforeSave()

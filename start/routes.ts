@@ -40,6 +40,7 @@ router
   .group(() => {
     router.get('/plans', [PlansController, 'index']).as('plans.index')
     router.post('/plans/premium', [PlansController, 'buyPremium']).as('plans.buy')
+    router.post('/plans/cancel', [PlansController, 'cancelPremium']).as('plans.cancel')
     router.get('/designer', [GardenDesignerController, 'show']).as('garden_designer.show')
     router
       .get('/designer/search-assets', [GardenDesignerController, 'searchAssets'])
@@ -49,6 +50,7 @@ router
       .as('garden_designer.remove_background')
     router.get('/scanner', [PlantsController, 'showScanner']).as('scanner.show')
     router.post('/plants/scan', [PlantsController, 'scan']).as('plants.scan')
+    router.post('/scanner/scans/:id/delete', [PlantsController, 'deleteScan']).as('scanner.scans.delete')
   })
   .use(middleware.auth())
 router.post('/phone-upload/sessions', [PhoneUploadsController, 'create']).as('phone_uploads.create')

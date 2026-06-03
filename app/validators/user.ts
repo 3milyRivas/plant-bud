@@ -1,6 +1,6 @@
 import vine from '@vinejs/vine'
 
-const usernamePattern = /^(?!.*\.\.)(?!.*\.$)[a-z0-9][a-z0-9._]{2,29}$/
+const usernamePattern = /^(?!.*\.\.)(?!.*\.$)[a-z0-9][a-z0-9._]{2,14}$/
 
 export const signupValidator = vine.compile(
   vine.object({
@@ -9,19 +9,19 @@ export const signupValidator = vine.compile(
       .trim()
       .toLowerCase()
       .minLength(3)
-      .maxLength(30)
+      .maxLength(15)
       .regex(usernamePattern)
       .optional(),
 
-    display_name: vine.string().trim().minLength(2).maxLength(100).optional(),
+    display_name: vine.string().trim().minLength(2).maxLength(22).optional(),
 
     first_name: vine.string().trim().minLength(2).maxLength(50).optional(),
 
     last_name: vine.string().trim().minLength(2).maxLength(50).optional(),
 
-    nursery_name: vine.string().trim().minLength(3).maxLength(30).optional(),
+    nursery_name: vine.string().trim().minLength(3).maxLength(22).optional(),
 
-    owner_name: vine.string().trim().minLength(2).maxLength(100).optional(),
+    owner_name: vine.string().trim().minLength(2).maxLength(22).optional(),
 
     email: vine.string().trim().email(),
 

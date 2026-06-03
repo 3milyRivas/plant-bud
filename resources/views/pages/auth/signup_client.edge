@@ -5,8 +5,8 @@
 
 <div class="relative z-10 h-dvh overflow-hidden" data-auth-page>
     <div class="relative h-dvh grid lg:grid-cols-2">
-        <div class="hidden lg:block relative">
-            <img src="/resources/images/signup/register-client.png" alt="Signup Image" class="absolute inset-0 w-full h-full object-cover">
+        <div class="auth-signup-visual hidden min-h-0 overflow-hidden lg:block relative">
+            <img src="/resources/images/signup/register-client.png" alt="Signup Image" draggable="false" class="auth-signup-image pointer-events-none absolute inset-0 h-full w-full select-none object-cover">
             <div class="absolute inset-0 bg-gradient-to-br from-[#113e14]/82 via-[#416543]/36 to-transparent"></div>
             <div class="absolute inset-0 bg-black/20"></div>
 
@@ -31,7 +31,7 @@
             </div>
         </div>
 
-        <div class="relative h-dvh overflow-y-auto px-6 py-10 lg:px-10 xl:px-14">
+        <div class="relative h-dvh overflow-y-auto overscroll-contain px-6 py-10 lg:px-10 xl:px-14">
             <div class="flex min-h-full items-start justify-center pt-16 lg:items-center lg:pt-0">
             <a href="/register" class="absolute top-6 left-6 inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-white/10 backdrop-blur-xl border border-white/10 text-[#ebe3a7] font-bold text-sm shadow-lg hover:bg-[#ebe3a7] hover:text-[#113e14] transition-all duration-300">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
@@ -76,7 +76,7 @@
                                     name: 'username',
                                     placeholder: 'Choose a username',
                                     value: flashMessages.get('old')?.username,
-                                    maxlength: 30,
+                                    maxlength: 15,
                                     minlength: 3,
                                     'data-required-message': 'Username is required',
                                     'data-username-input': true,
@@ -92,7 +92,7 @@
                                 @!input.control({
                                     placeholder: 'Name shown in your profile',
                                     value: flashMessages.get('old')?.display_name,
-                                    maxlength: 100,
+                                    maxlength: 22,
                                     minlength: 2,
                                     'data-required-message': 'Display name is required',
                                     class: 'w-full h-12 px-4 rounded-2xl bg-[#ebe3a7]/95 text-[#113e14] placeholder:text-[#416543]/70 font-semibold border border-transparent focus:outline-none focus:ring-2 focus:ring-[#a8b841] shadow-sm'

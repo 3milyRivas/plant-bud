@@ -42,19 +42,19 @@
             @endif
           </div>
 
-          <div class="text-white">
-            <div class="flex flex-wrap items-center gap-3">
-              <h1 class="text-4xl font-black leading-tight lg:text-5xl">{{ profileUser.displayName }}</h1>
-              <span class="rounded-full bg-[#ebe3a7] px-3 py-1.5 text-xs font-black uppercase tracking-[0.16em] text-[#113e14]">
+          <div class="min-w-0 text-white">
+            <h1 class="break-words text-4xl font-black leading-tight lg:text-5xl">{{ profileUser.displayName }}</h1>
+            <div class="profile-badge-row">
+              <span class="profile-badge profile-badge--role">
                 {{ profileUser.roleLabel }}
               </span>
               @if(profileUser.isPremium)
-                <span class="rounded-full border border-[#dca15d]/55 bg-[#dca15d] px-3 py-1.5 text-xs font-black uppercase tracking-[0.16em] text-[#113e14] shadow-lg">
+                <span class="profile-badge profile-badge--premium">
                   Premium
                 </span>
               @endif
               @if(!isOwnProfile)
-                <span class="{{ isFriend ? '' : 'hidden' }} rounded-full border border-[#ebe3a7]/50 bg-white/16 px-3 py-1.5 text-xs font-black uppercase tracking-[0.16em] text-[#ebe3a7] shadow-lg backdrop-blur-xl" data-friend-badge>
+                <span class="{{ isFriend ? '' : 'hidden' }} profile-badge profile-badge--friend" data-friend-badge>
                   Friend
                 </span>
               @endif

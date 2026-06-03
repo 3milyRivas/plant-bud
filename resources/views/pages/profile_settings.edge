@@ -16,12 +16,15 @@
 @let(publicEmailValue = old.public_email ?? roleProfile?.publicEmail ?? user.email ?? '')
 @let(servicesValue = old.services_offered ?? profileServicesText ?? '')
 @let(paymentMethodsValue = old.payment_methods ?? paymentMethodsText ?? '')
+@let(paymentMethodsLower = paymentMethodsValue.toLowerCase())
 @let(headlineValue = old.headline ?? roleProfile?.headline ?? '')
 @let(serviceAreaValue = old.service_area ?? roleProfile?.serviceArea ?? accountProfile?.location ?? '')
 @let(availabilityValue = old.availability_schedule ?? roleProfile?.availabilitySchedule ?? '')
 @let(openingHoursValue = old.opening_hours ?? roleProfile?.openingHours ?? '')
 @let(addressValue = old.address ?? roleProfile?.address ?? '')
 @let(cityValue = old.city ?? roleProfile?.city ?? accountProfile?.location ?? '')
+@let(gardenerStatusValue = old.is_available ?? (roleProfile?.isAvailable ? '1' : '0'))
+@let(nurseryStatusValue = old.is_active ?? (roleProfile?.isActive ? '1' : '0'))
 
 <div class="relative z-10 min-h-dvh overflow-hidden bg-[#416543] text-[#113e14]" data-profile-page>
   <div class="fixed inset-0 pointer-events-none">
@@ -134,6 +137,24 @@
               <span class="font-bold text-white/65">Role</span>
               <span class="font-semibold">{{ user.role }}</span>
             </div>
+
+            <div class="rounded-2xl border border-white/10 bg-white/10 p-4">
+              <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <span class="block font-bold text-white/65">Plan</span>
+                  <span class="mt-1 block text-lg font-black text-[#ebe3a7]">{{ accountProfile.planLabel }}</span>
+                </div>
+                @if(accountProfile.isPremium)
+                  <button type="submit" formaction="/plans/cancel" formmethod="POST" formenctype="application/x-www-form-urlencoded" formnovalidate class="inline-flex items-center justify-center rounded-full border border-[#ebe3a7]/45 bg-[#ebe3a7] px-5 py-2.5 text-sm font-black text-[#113e14] shadow-sm transition hover:-translate-y-0.5 hover:bg-white">
+                    Cancel Premium
+                  </button>
+                @else
+                  <a href="/plans" class="inline-flex items-center justify-center rounded-full bg-[#dca15d] px-5 py-2.5 text-sm font-black text-[#113e14] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]">
+                    Upgrade
+                  </a>
+                @endif
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -198,13 +219,23 @@
                 @endif
               </label>
 
-              <label class="block">
-                <span class="text-sm font-black text-[#416543]">Availability status</span>
-                <select name="is_available" class="mt-2 h-12 w-full rounded-2xl border border-[#a8b841] bg-white/70 px-4 text-sm font-bold text-[#113e14] outline-none transition focus:border-[#416543] focus:bg-white">
-                  <option value="1" {{ (old.is_available ?? (roleProfile?.isAvailable ? '1' : '0')) === '1' ? 'selected' : '' }}>Available</option>
-                  <option value="0" {{ (old.is_available ?? (roleProfile?.isAvailable ? '1' : '0')) === '0' ? 'selected' : '' }}>Paused</option>
-                </select>
-              </label>
+              <fieldset class="block">
+                <legend class="text-sm font-black text-[#416543]">Availability status</legend>
+                <div class="mt-2 grid gap-2 sm:grid-cols-2">
+                  <label class="cursor-pointer">
+                    <input type="radio" name="is_available" value="1" class="peer sr-only" {{ gardenerStatusValue === '1' ? 'checked' : '' }}>
+                    <span class="flex min-h-12 items-center justify-center rounded-2xl border border-[#a8b841] bg-white/70 px-4 text-center text-sm font-black text-[#113e14] transition peer-checked:border-[#113e14] peer-checked:bg-[#113e14] peer-checked:text-[#ebe3a7] peer-focus-visible:ring-2 peer-focus-visible:ring-[#dca15d]">
+                      Available
+                    </span>
+                  </label>
+                  <label class="cursor-pointer">
+                    <input type="radio" name="is_available" value="0" class="peer sr-only" {{ gardenerStatusValue === '0' ? 'checked' : '' }}>
+                    <span class="flex min-h-12 items-center justify-center rounded-2xl border border-[#a8b841] bg-white/70 px-4 text-center text-sm font-black text-[#113e14] transition peer-checked:border-[#113e14] peer-checked:bg-[#113e14] peer-checked:text-[#ebe3a7] peer-focus-visible:ring-2 peer-focus-visible:ring-[#dca15d]">
+                      Not available
+                    </span>
+                  </label>
+                </div>
+              </fieldset>
 
               <label class="block">
                 <span class="text-sm font-black text-[#416543]">Service area</span>
@@ -240,13 +271,27 @@
                 @endif
               </label>
 
-              <label class="block">
+              <div class="block" data-payment-methods>
                 <span class="text-sm font-black text-[#416543]">Payment methods</span>
-                <textarea name="payment_methods" maxlength="600" rows="4" placeholder="Cash&#10;Bank transfer&#10;Card" class="mt-2 w-full resize-none rounded-2xl border border-[#a8b841] bg-white/70 px-4 py-3 text-sm font-bold leading-6 text-[#113e14] outline-none transition focus:border-[#416543] focus:bg-white">{{ paymentMethodsValue }}</textarea>
+                <input type="hidden" name="payment_methods" value="{{ paymentMethodsValue }}" data-payment-methods-value>
+                <div class="mt-2 grid gap-2 sm:grid-cols-3">
+                  <label class="cursor-pointer">
+                    <input type="checkbox" value="Cash" class="peer sr-only" data-payment-method-checkbox {{ paymentMethodsLower.includes('cash') ? 'checked' : '' }}>
+                    <span class="flex min-h-12 items-center justify-center rounded-2xl border border-[#a8b841] bg-white/70 px-4 text-center text-sm font-black text-[#113e14] transition peer-checked:border-[#113e14] peer-checked:bg-[#113e14] peer-checked:text-[#ebe3a7] peer-focus-visible:ring-2 peer-focus-visible:ring-[#dca15d]">Cash</span>
+                  </label>
+                  <label class="cursor-pointer">
+                    <input type="checkbox" value="Paypal" class="peer sr-only" data-payment-method-checkbox {{ paymentMethodsLower.includes('paypal') ? 'checked' : '' }}>
+                    <span class="flex min-h-12 items-center justify-center rounded-2xl border border-[#a8b841] bg-white/70 px-4 text-center text-sm font-black text-[#113e14] transition peer-checked:border-[#113e14] peer-checked:bg-[#113e14] peer-checked:text-[#ebe3a7] peer-focus-visible:ring-2 peer-focus-visible:ring-[#dca15d]">Paypal</span>
+                  </label>
+                  <label class="cursor-pointer">
+                    <input type="checkbox" value="Card" class="peer sr-only" data-payment-method-checkbox {{ paymentMethodsLower.includes('card') ? 'checked' : '' }}>
+                    <span class="flex min-h-12 items-center justify-center rounded-2xl border border-[#a8b841] bg-white/70 px-4 text-center text-sm font-black text-[#113e14] transition peer-checked:border-[#113e14] peer-checked:bg-[#113e14] peer-checked:text-[#ebe3a7] peer-focus-visible:ring-2 peer-focus-visible:ring-[#dca15d]">Card</span>
+                  </label>
+                </div>
                 @if(errors.payment_methods)
                   <span class="mt-2 block text-xs font-bold text-red-700">{{ errors.payment_methods[0] }}</span>
                 @endif
-              </label>
+              </div>
             </div>
           </div>
         @endif
@@ -264,13 +309,23 @@
             </div>
 
             <div class="mt-7 grid gap-5 md:grid-cols-2">
-              <label class="block">
-                <span class="text-sm font-black text-[#416543]">Profile status</span>
-                <select name="is_active" class="mt-2 h-12 w-full rounded-2xl border border-[#a8b841] bg-white/70 px-4 text-sm font-bold text-[#113e14] outline-none transition focus:border-[#416543] focus:bg-white">
-                  <option value="1" {{ (old.is_active ?? (roleProfile?.isActive ? '1' : '0')) === '1' ? 'selected' : '' }}>Active</option>
-                  <option value="0" {{ (old.is_active ?? (roleProfile?.isActive ? '1' : '0')) === '0' ? 'selected' : '' }}>Paused</option>
-                </select>
-              </label>
+              <fieldset class="block">
+                <legend class="text-sm font-black text-[#416543]">Profile status</legend>
+                <div class="mt-2 grid gap-2 sm:grid-cols-2">
+                  <label class="cursor-pointer">
+                    <input type="radio" name="is_active" value="1" class="peer sr-only" {{ nurseryStatusValue === '1' ? 'checked' : '' }}>
+                    <span class="flex min-h-12 items-center justify-center rounded-2xl border border-[#a8b841] bg-white/70 px-4 text-center text-sm font-black text-[#113e14] transition peer-checked:border-[#113e14] peer-checked:bg-[#113e14] peer-checked:text-[#ebe3a7] peer-focus-visible:ring-2 peer-focus-visible:ring-[#dca15d]">
+                      Active
+                    </span>
+                  </label>
+                  <label class="cursor-pointer">
+                    <input type="radio" name="is_active" value="0" class="peer sr-only" {{ nurseryStatusValue === '0' ? 'checked' : '' }}>
+                    <span class="flex min-h-12 items-center justify-center rounded-2xl border border-[#a8b841] bg-white/70 px-4 text-center text-sm font-black text-[#113e14] transition peer-checked:border-[#113e14] peer-checked:bg-[#113e14] peer-checked:text-[#ebe3a7] peer-focus-visible:ring-2 peer-focus-visible:ring-[#dca15d]">
+                      Not active
+                    </span>
+                  </label>
+                </div>
+              </fieldset>
 
               <label class="block">
                 <span class="text-sm font-black text-[#416543]">Public phone</span>
@@ -323,13 +378,27 @@
               </label>
             </div>
 
-            <label class="mt-5 block">
+            <div class="mt-5 block" data-payment-methods>
               <span class="text-sm font-black text-[#416543]">Payment methods</span>
-              <textarea name="payment_methods" maxlength="600" rows="4" placeholder="Cash&#10;Card&#10;Bank transfer" class="mt-2 w-full resize-none rounded-2xl border border-[#a8b841] bg-white/70 px-4 py-3 text-sm font-bold leading-6 text-[#113e14] outline-none transition focus:border-[#416543] focus:bg-white">{{ paymentMethodsValue }}</textarea>
+              <input type="hidden" name="payment_methods" value="{{ paymentMethodsValue }}" data-payment-methods-value>
+              <div class="mt-2 grid gap-2 sm:grid-cols-3">
+                <label class="cursor-pointer">
+                  <input type="checkbox" value="Cash" class="peer sr-only" data-payment-method-checkbox {{ paymentMethodsLower.includes('cash') ? 'checked' : '' }}>
+                  <span class="flex min-h-12 items-center justify-center rounded-2xl border border-[#a8b841] bg-white/70 px-4 text-center text-sm font-black text-[#113e14] transition peer-checked:border-[#113e14] peer-checked:bg-[#113e14] peer-checked:text-[#ebe3a7] peer-focus-visible:ring-2 peer-focus-visible:ring-[#dca15d]">Cash</span>
+                </label>
+                <label class="cursor-pointer">
+                  <input type="checkbox" value="Paypal" class="peer sr-only" data-payment-method-checkbox {{ paymentMethodsLower.includes('paypal') ? 'checked' : '' }}>
+                  <span class="flex min-h-12 items-center justify-center rounded-2xl border border-[#a8b841] bg-white/70 px-4 text-center text-sm font-black text-[#113e14] transition peer-checked:border-[#113e14] peer-checked:bg-[#113e14] peer-checked:text-[#ebe3a7] peer-focus-visible:ring-2 peer-focus-visible:ring-[#dca15d]">Paypal</span>
+                </label>
+                <label class="cursor-pointer">
+                  <input type="checkbox" value="Card" class="peer sr-only" data-payment-method-checkbox {{ paymentMethodsLower.includes('card') ? 'checked' : '' }}>
+                  <span class="flex min-h-12 items-center justify-center rounded-2xl border border-[#a8b841] bg-white/70 px-4 text-center text-sm font-black text-[#113e14] transition peer-checked:border-[#113e14] peer-checked:bg-[#113e14] peer-checked:text-[#ebe3a7] peer-focus-visible:ring-2 peer-focus-visible:ring-[#dca15d]">Card</span>
+                </label>
+              </div>
               @if(errors.payment_methods)
                 <span class="mt-2 block text-xs font-bold text-red-700">{{ errors.payment_methods[0] }}</span>
               @endif
-            </label>
+            </div>
           </div>
         @endif
 
