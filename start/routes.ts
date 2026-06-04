@@ -6,6 +6,7 @@ import horticulturalPlants from '#data/horticulturalPlants'
 import succulentPlants from '#data/succulentPlants'
 import nurseries from '#data/nurseries'
 
+
 const GardenDesignerController = () => import('#controllers/garden_designers_controller')
 const PhoneUploadsController = () => import('#controllers/phone_uploads_controller')
 const CommunityController = () => import('#controllers/community_controller')
