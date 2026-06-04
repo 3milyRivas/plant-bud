@@ -708,6 +708,21 @@ details[open] .app-navbar-profile-menu {
   }
 }
 
+@keyframes authDemoPulse {
+  0%,
+  100% {
+    box-shadow:
+      0 24px 70px rgb(0 0 0 / 0.28),
+      0 0 0 1px rgb(235 227 167 / 0.08);
+  }
+
+  50% {
+    box-shadow:
+      0 28px 82px rgb(0 0 0 / 0.34),
+      0 0 0 5px rgb(235 227 167 / 0.12);
+  }
+}
+
 @keyframes welcomeGradientFlow {
   0% {
     background-position: 0% 50%;
@@ -823,6 +838,10 @@ details[open] .app-navbar-profile-menu {
   box-shadow:
     0 22px 58px rgb(0 0 0 / 0.2),
     0 0 0 1px rgb(235 227 167 / 0.14);
+}
+
+.auth-demo-choice {
+  animation: authDemoPulse 3.2s ease-in-out infinite;
 }
 
 .welcome-gradient-text {
@@ -992,6 +1011,7 @@ details[open] .app-navbar-profile-menu {
   .auth-soft-float,
   .auth-card,
   .auth-card::after,
+  .auth-demo-choice,
   .auth-choice,
   .welcome-gradient-text,
   .welcome-soft-card,

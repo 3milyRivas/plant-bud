@@ -144,6 +144,7 @@ router
     router.get('/signup/gardener', [NewAccountController, 'createGardener']).as('signup.gardener')
     router.get('/signup/nursery', [NewAccountController, 'createNursery']).as('signup.nursery')
     router.post('/signup', [NewAccountController, 'store']).as('new_account.store')
+    router.post('/demo/guest', [NewAccountController, 'createDemoGuest']).as('new_account.demo_guest')
   })
   .use(middleware.guest())
 
