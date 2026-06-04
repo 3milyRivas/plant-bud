@@ -341,7 +341,6 @@ function renderProfilePostPoll(rawPoll, elements) {
 
   question.textContent = poll.question || 'Poll'
   total.textContent = `${poll.totalVotes || 0} ${poll.totalVotes === 1 ? 'vote' : 'votes'}`
-
   ;(poll.options || []).forEach((option) => {
     const item = document.createElement('div')
     const row = document.createElement('div')
@@ -369,6 +368,72 @@ function renderProfilePostPoll(rawPoll, elements) {
 }
 
 function initAppNavbarMenus() {
+  const closeNavMenus = (exceptMenu = null) => {
+    document.querySelectorAll('[data-app-nav-menu][open]').forEach((menu) => {
+      if (menu === exceptMenu) return
+
+      menu.removeAttribute('open')
+    })
+  }
+
+  document.querySelectorAll('[data-app-nav-menu]').forEach((menu) => {
+    if (menu.dataset.appNavMenuReady === 'true') return
+
+    const panel = menu.querySelector('.app-nav-menu-panel')
+    menu.dataset.appNavMenuReady = 'true'
+    menu.addEventListener('mouseenter', () => {
+      closeNavMenus(menu)
+      menu.setAttribute('open', '')
+    })
+    menu.addEventListener('toggle', () => {
+      if (!menu.open || !panel) return
+
+      closeNavMenus(menu)
+      panel.classList.remove('is-entering')
+      void panel.offsetWidth
+      panel.classList.add('is-entering')
+    })
+  })
+
+  document.querySelectorAll('[data-catalog-navbar-switcher]').forEach((switcher) => {
+    if (switcher.dataset.catalogNavbarSwitcherReady === 'true') return
+
+    const searchPanel = switcher.querySelector('[data-catalog-search-panel]')
+    const menuPanel = switcher.querySelector('[data-catalog-menu-panel]')
+    const toggle = switcher.querySelector('[data-catalog-navbar-toggle]')
+    const label = switcher.querySelector('[data-catalog-navbar-toggle-label]')
+    let isSearchMode = false
+    const animatePanel = (panel) => {
+      panel?.classList.remove('app-navbar-switch-panel-in')
+      void panel?.offsetWidth
+      panel?.classList.add('app-navbar-switch-panel-in')
+    }
+    const renderMode = () => {
+      searchPanel?.classList.toggle('hidden', !isSearchMode)
+      searchPanel?.classList.toggle('flex', isSearchMode)
+      menuPanel?.classList.toggle('hidden', isSearchMode)
+      menuPanel?.classList.toggle('flex', !isSearchMode)
+      toggle?.setAttribute('aria-pressed', isSearchMode ? 'true' : 'false')
+
+      if (label) {
+        label.textContent = isSearchMode ? 'Menu' : 'Search'
+      }
+
+      if (isSearchMode) {
+        closeNavMenus()
+      }
+
+      animatePanel(isSearchMode ? searchPanel : menuPanel)
+    }
+
+    switcher.dataset.catalogNavbarSwitcherReady = 'true'
+    renderMode()
+    toggle?.addEventListener('click', () => {
+      isSearchMode = !isSearchMode
+      renderMode()
+    })
+  })
+
   document.querySelectorAll('[data-app-profile-menu]').forEach((menu) => {
     if (menu.dataset.appProfileMenuReady === 'true') return
 
@@ -392,6 +457,12 @@ function initAppNavbarMenus() {
 
     if (!(target instanceof Element)) return
 
+    document.querySelectorAll('[data-app-nav-menu][open]').forEach((menu) => {
+      if (menu.contains(target)) return
+
+      menu.removeAttribute('open')
+    })
+
     document.querySelectorAll('[data-app-profile-menu][open]').forEach((menu) => {
       if (menu.contains(target)) return
 
@@ -400,6 +471,10 @@ function initAppNavbarMenus() {
   })
   document.addEventListener('keydown', (event) => {
     if (event.key !== 'Escape') return
+
+    document.querySelectorAll('[data-app-nav-menu][open]').forEach((menu) => {
+      menu.removeAttribute('open')
+    })
 
     document.querySelectorAll('[data-app-profile-menu][open]').forEach((menu) => {
       menu.removeAttribute('open')
@@ -455,7 +530,9 @@ function removeRelationRows(userId, wasFriend) {
   if (!wasFriend) return
 
   document
-    .querySelectorAll(`[data-profile-relations-panel="followers"] [data-relation-user-id="${CSS.escape(userId)}"] [data-relation-label]`)
+    .querySelectorAll(
+      `[data-profile-relations-panel="followers"] [data-relation-user-id="${CSS.escape(userId)}"] [data-relation-label]`
+    )
     .forEach((label) => label.remove())
 }
 
@@ -1022,7 +1099,8 @@ function renderCommunitySearchResults(results, payload) {
 function createCommunitySearchHeading(label) {
   const heading = document.createElement('p')
 
-  heading.className = 'px-3 pb-1 pt-2 text-[11px] font-black uppercase tracking-[0.14em] text-[#416543]/70'
+  heading.className =
+    'px-3 pb-1 pt-2 text-[11px] font-black uppercase tracking-[0.14em] text-[#416543]/70'
   heading.textContent = label
 
   return heading
@@ -1042,7 +1120,8 @@ function createCommunityUserResult(user) {
   const premium = document.createElement('span')
 
   link.href = `/users/${encodeURIComponent(user.username)}`
-  link.className = 'flex items-center gap-3 rounded-2xl px-3 py-2 transition hover:bg-white/70 focus:bg-white/70 focus:outline-none focus:ring-2 focus:ring-[#48AE4D]/35'
+  link.className =
+    'flex items-center gap-3 rounded-2xl px-3 py-2 transition hover:bg-white/70 focus:bg-white/70 focus:outline-none focus:ring-2 focus:ring-[#48AE4D]/35'
 
   if (user.avatarUrl) {
     avatar.src = user.avatarUrl
@@ -1051,7 +1130,8 @@ function createCommunityUserResult(user) {
     avatar.loading = 'lazy'
     avatar.decoding = 'async'
   } else {
-    avatar.className = 'flex h-10 w-10 flex-none items-center justify-center rounded-full bg-[#113e14] text-sm font-black text-[#ebe3a7]'
+    avatar.className =
+      'flex h-10 w-10 flex-none items-center justify-center rounded-full bg-[#113e14] text-sm font-black text-[#ebe3a7]'
     avatar.textContent = getFirstInitial(user.initial)
   }
 
@@ -1065,8 +1145,7 @@ function createCommunityUserResult(user) {
   nameRow.append(name)
 
   if (user.isPremium) {
-    premium.className =
-      'profile-badge profile-badge--premium profile-badge--compact shrink-0'
+    premium.className = 'profile-badge profile-badge--premium profile-badge--compact shrink-0'
     premium.textContent = 'Premium'
     nameRow.append(premium)
   }
@@ -1085,8 +1164,10 @@ function createCommunityHashtagResult(hashtag) {
   const count = document.createElement('span')
 
   link.href = `/community/hashtags/${encodeURIComponent(hashtag.tag)}`
-  link.className = 'flex items-center gap-3 rounded-2xl px-3 py-2 transition hover:bg-white/70 focus:bg-white/70 focus:outline-none focus:ring-2 focus:ring-[#48AE4D]/35'
-  icon.className = 'flex h-10 w-10 flex-none items-center justify-center rounded-full bg-[#ebe3a7] text-lg font-black text-[#113e14]'
+  link.className =
+    'flex items-center gap-3 rounded-2xl px-3 py-2 transition hover:bg-white/70 focus:bg-white/70 focus:outline-none focus:ring-2 focus:ring-[#48AE4D]/35'
+  icon.className =
+    'flex h-10 w-10 flex-none items-center justify-center rounded-full bg-[#ebe3a7] text-lg font-black text-[#113e14]'
   icon.textContent = '#'
   text.className = 'min-w-0 leading-tight'
   tag.className = 'block truncate text-sm font-black text-[#113e14]'
@@ -1244,7 +1325,7 @@ async function submitCommunityForm(form, formData) {
     body: formData,
     credentials: 'same-origin',
     headers: {
-      Accept: 'application/json',
+      'Accept': 'application/json',
       'X-Requested-With': 'XMLHttpRequest',
     },
   })
@@ -1327,9 +1408,7 @@ function clearCommunityPollFields(form) {
 function showCommunityFormError(form, payload) {
   const errorTarget = form.querySelector('[data-community-form-error]')
   const errors = payload.errors || {}
-  const firstMessage = Object.values(errors)
-    .flat()
-    .find(Boolean)
+  const firstMessage = Object.values(errors).flat().find(Boolean)
 
   if (!errorTarget || !firstMessage) return
 
@@ -1440,7 +1519,8 @@ function appendCommunityComment(form, payload) {
     avatar.decoding = 'async'
     avatar.className = 'h-10 w-10 rounded-full object-cover'
   } else {
-    avatar.className = 'flex h-10 w-10 items-center justify-center rounded-full bg-[#113e14] text-sm font-black text-[#ebe3a7]'
+    avatar.className =
+      'flex h-10 w-10 items-center justify-center rounded-full bg-[#113e14] text-sm font-black text-[#ebe3a7]'
     avatar.textContent = getFirstInitial(comment.author.initial)
   }
 
@@ -1560,7 +1640,12 @@ function getCommunityCommentPost(form) {
 function getCommunityCommentsPanel(post) {
   const postId = post?.getAttribute('data-community-post')
 
-  return post?.querySelector('[data-comments-panel]') || (postId ? document.querySelector(`[data-comments-panel][data-comments-post-id="${postId}"]`) : null)
+  return (
+    post?.querySelector('[data-comments-panel]') ||
+    (postId
+      ? document.querySelector(`[data-comments-panel][data-comments-post-id="${postId}"]`)
+      : null)
+  )
 }
 
 function bindCommunityLazyImage(image) {
@@ -1717,7 +1802,10 @@ function initPlantCatalogSearch() {
 
         const payload = await response.json()
         const results = Array.isArray(payload) ? payload : payload.results || []
-        renderPlantSearchResults(resultsBox, results.length > 0 ? results : getLocalPlantSearchResults(query))
+        renderPlantSearchResults(
+          resultsBox,
+          results.length > 0 ? results : getLocalPlantSearchResults(query)
+        )
         openResults()
       } catch (error) {
         if (error.name === 'AbortError') return
@@ -1791,7 +1879,10 @@ function renderPlantSearchResults(resultsBox, results) {
   resultsBox.replaceChildren()
 
   if (results.length === 0) {
-    renderPlantSearchStatus(resultsBox, 'No matches yet. Try a plant name, scientific name, or family.')
+    renderPlantSearchStatus(
+      resultsBox,
+      'No matches yet. Try a plant name, scientific name, or family.'
+    )
     return
   }
 
@@ -1805,7 +1896,8 @@ function renderPlantSearchResults(resultsBox, results) {
 
     link.href = plant.href
     link.dataset.plantSearchResult = 'true'
-    link.className = 'flex items-center gap-3 rounded-[1rem] px-3 py-2 text-left transition hover:bg-white/80 focus:bg-white/80 focus:outline-none focus:ring-2 focus:ring-[#48AE4D]/45'
+    link.className =
+      'flex items-center gap-3 rounded-[1rem] px-3 py-2 text-left transition hover:bg-white/80 focus:bg-white/80 focus:outline-none focus:ring-2 focus:ring-[#48AE4D]/45'
     link.setAttribute('role', 'option')
 
     image.src = plant.imageUrl || `/${plant.image}`
@@ -1821,7 +1913,8 @@ function renderPlantSearchResults(resultsBox, results) {
     meta.className = 'block truncate text-xs font-semibold text-[#113e14]/60'
     meta.textContent = `${plant.scientificName} - ${plant.family}`
 
-    badge.className = 'hidden rounded-full bg-[#113e14]/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-[#113e14] sm:inline-flex'
+    badge.className =
+      'hidden rounded-full bg-[#113e14]/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-[#113e14] sm:inline-flex'
     badge.textContent = plant.catalog
 
     content.append(name, meta)
@@ -1839,9 +1932,10 @@ function getLocalPlantSearchResults(query) {
     .map((card) => {
       const section = card.closest('.category-section')
       const name = card.querySelector('h3')?.textContent?.trim() || ''
-      const scientificName = Array.from(card.querySelectorAll('p'))
-        .map((item) => item.textContent?.trim() || '')
-        .find((text) => text && !text.toLowerCase().includes('scientific name')) || ''
+      const scientificName =
+        Array.from(card.querySelectorAll('p'))
+          .map((item) => item.textContent?.trim() || '')
+          .find((text) => text && !text.toLowerCase().includes('scientific name')) || ''
       const image = card.querySelector('img')?.getAttribute('src') || ''
       const family = section?.id || ''
       const searchable = normalizePlantSearchValue(`${name} ${scientificName} ${family}`)
@@ -1874,7 +1968,10 @@ function navigateToPlant(href, event) {
 
   const targetUrl = new URL(href, window.location.origin)
 
-  if (targetUrl.origin === window.location.origin && targetUrl.pathname === window.location.pathname) {
+  if (
+    targetUrl.origin === window.location.origin &&
+    targetUrl.pathname === window.location.pathname
+  ) {
     event.preventDefault()
     window.history.pushState({}, '', `${targetUrl.pathname}${targetUrl.hash}`)
     highlightPlantFromHash()
@@ -1923,7 +2020,8 @@ function revealPlantCategory(section) {
   })
 
   document.querySelectorAll('.category-btn').forEach((button) => {
-    const target = button.dataset.categoryTarget || button.getAttribute('onclick')?.match(/'([^']+)'/)?.[1]
+    const target =
+      button.dataset.categoryTarget || button.getAttribute('onclick')?.match(/'([^']+)'/)?.[1]
     const isActive = target === section.id
 
     button.classList.toggle('bg-[#113e14]', isActive)

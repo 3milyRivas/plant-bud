@@ -9,22 +9,79 @@
   maxWidth: 'max-w-[min(1500px,calc(100vw-2rem))]',
   items: [
     {
-      key: 'scanner',
+      key: 'tools',
       href: '/scanner',
-      label: 'Scanner',
-      icon: '/resources/images/homepagee/scanner.png',
+      label: 'Tools',
+      icon: '',
+      eyebrow: 'Create and diagnose',
+      activeKeys: ['scanner', 'designer'],
+      children: [
+        {
+          href: '/scanner',
+          label: 'Scanner',
+          description: 'Identify plants and care needs.',
+        },
+        {
+          href: '/designer',
+          label: 'Designer',
+          description: 'Plan a garden layout in 2D.',
+        },
+        {
+          href: '/ornamental',
+          label: 'Catalog',
+          description: 'Explore plant collections and care guides.',
+        },
+      ],
     },
     {
-      key: 'designer',
-      href: '/designer',
-      label: 'Designer',
-      icon: '/resources/images/homepagee/tulip.png',
+      key: 'services',
+      href: '/maintenance',
+      label: 'Services',
+      icon: '',
+      eyebrow: 'Gardeners and nurseries',
+      activeKeys: ['services', 'requested', 'nurseries'],
+      children: [
+        {
+          href: '/maintenance',
+          label: 'Gardeners',
+          description: 'Find and request gardener services.',
+        },
+        {
+          href: '/requested',
+          label: 'Requested',
+          description: 'Track services you sent or received.',
+        },
+        {
+          href: '/nurseries',
+          label: 'Nurseries',
+          description: 'Browse plant sellers and catalogs.',
+        },
+      ],
     },
     {
       key: 'community',
       href: '/community',
       label: 'Community',
-      icon: '/resources/images/homepagee/comunity.png',
+      icon: '',
+      eyebrow: 'People and activity',
+      activeKeys: ['community', 'favorites', 'notification'],
+      children: [
+        {
+          href: '/community',
+          label: 'Feed',
+          description: 'Posts, polls, and profiles.',
+        },
+        {
+          href: '/favorites',
+          label: 'Saved',
+          description: 'Your saved community posts.',
+        },
+        {
+          href: '/notification',
+          label: 'Alerts',
+          description: 'Recent follows and interactions.',
+        },
+      ],
     },
   ],
 })

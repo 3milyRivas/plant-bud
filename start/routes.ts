@@ -6,7 +6,6 @@ import horticulturalPlants from '#data/horticulturalPlants'
 import succulentPlants from '#data/succulentPlants'
 import nurseries from '#data/nurseries'
 
-
 const GardenDesignerController = () => import('#controllers/garden_designers_controller')
 const PhoneUploadsController = () => import('#controllers/phone_uploads_controller')
 const CommunityController = () => import('#controllers/community_controller')
@@ -27,11 +26,14 @@ router.on('/succulent').render('pages/succulent', { succulentPlants })
 router
   .get('/requested', [ServicesController, 'requested'])
   .as('services.requested')
-  .use([middleware.auth(), middleware.role(['gardener'])])
+  .use(middleware.auth())
 
 router.get('/maintenance', [ServicesController, 'index']).as('maintenance')
 router.get('/request/:id', [ServicesController, 'show']).as('request.show')
-router.post('/request/:id', [ServicesController, 'store']).as('request.store').use(middleware.auth())
+router
+  .post('/request/:id', [ServicesController, 'store'])
+  .as('request.store')
+  .use(middleware.auth())
 router.get('/request', ({ response }) => response.redirect('/maintenance')).as('request')
 router.on('/care3').render('pages/client/Plants/care3')
 router.on('/care1').render('pages/client/Plants/care1')
@@ -51,7 +53,9 @@ router
       .as('garden_designer.remove_background')
     router.get('/scanner', [PlantsController, 'showScanner']).as('scanner.show')
     router.post('/plants/scan', [PlantsController, 'scan']).as('plants.scan')
-    router.post('/scanner/scans/:id/delete', [PlantsController, 'deleteScan']).as('scanner.scans.delete')
+    router
+      .post('/scanner/scans/:id/delete', [PlantsController, 'deleteScan'])
+      .as('scanner.scans.delete')
   })
   .use(middleware.auth())
 router.post('/phone-upload/sessions', [PhoneUploadsController, 'create']).as('phone_uploads.create')
@@ -63,6 +67,9 @@ router
   .as('phone_uploads.image')
 router.get('/phone-upload/:token', [PhoneUploadsController, 'show']).as('phone_uploads.show')
 router.post('/phone-upload/:token', [PhoneUploadsController, 'upload']).as('phone_uploads.upload')
+router
+  .get('/profile/media/:userId/:kind/:fileName', [ProfilesController, 'media'])
+  .as('profile.media.public')
 /* clients views */
 /*router
   .group(() => {
@@ -113,13 +120,10 @@ router
       .as('community.users.reviews.store')
     router.get('/profile', [ProfilesController, 'show']).as('profile')
     router.get('/profile/settings', [ProfilesController, 'settings']).as('profile.settings')
-    router
-      .get('/profile/media/:userId/:kind/:fileName', [ProfilesController, 'media'])
-      .as('profile.media.owner')
     router.get('/profile/media/:kind/:fileName', [ProfilesController, 'media']).as('profile.media')
     router.post('/profile', [ProfilesController, 'update']).as('profile.update')
   })
-    .use(middleware.auth())
+  .use(middleware.auth())
 
 router.on('/nurseries').render('pages/client/nurseries', { nurseries })
 /* gardeners views */
@@ -144,7 +148,9 @@ router
     router.get('/signup/gardener', [NewAccountController, 'createGardener']).as('signup.gardener')
     router.get('/signup/nursery', [NewAccountController, 'createNursery']).as('signup.nursery')
     router.post('/signup', [NewAccountController, 'store']).as('new_account.store')
-    router.post('/demo/guest', [NewAccountController, 'createDemoGuest']).as('new_account.demo_guest')
+    router
+      .post('/demo/guest', [NewAccountController, 'createDemoGuest'])
+      .as('new_account.demo_guest')
   })
   .use(middleware.guest())
 
