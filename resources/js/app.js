@@ -112,6 +112,7 @@ function initProfilePage() {
   page.querySelectorAll('[data-phone-input]').forEach(bindPhoneInput)
   page.querySelectorAll('[data-social-handle]').forEach(bindSocialHandleInput)
   initPaymentMethodControls(page)
+  initWeeklyScheduleControls(page)
 
   page.querySelectorAll('[data-profile-file-input]').forEach((input) => {
     input.addEventListener('change', () => {
@@ -155,6 +156,270 @@ function initPaymentMethodControls(page) {
     checkboxes.forEach((checkbox) => checkbox.addEventListener('change', syncValue))
     syncValue()
   })
+}
+
+function initWeeklyScheduleControls(page) {
+  page.querySelectorAll('[data-weekly-schedule]').forEach((schedule) => {
+    if (schedule.dataset.weeklyScheduleReady === 'true') return
+
+    const valueInput = schedule.querySelector('[data-weekly-schedule-value]')
+    const preview = schedule.querySelector('[data-weekly-schedule-preview]')
+    const mainBlock = schedule.querySelector('[data-weekly-schedule-main]')
+    const weekendBlock = schedule.querySelector('[data-weekly-schedule-weekend]')
+    const toggleWeekend = schedule.querySelector('[data-weekly-schedule-toggle-weekend]')
+    const removeWeekend = schedule.querySelector('[data-weekly-schedule-remove-weekend]')
+
+    if (!valueInput || !preview || !mainBlock || !weekendBlock) return
+
+    const initialValue = valueInput.value.trim()
+    let hasUserChanges = false
+
+    const sync = () => {
+      const mainLine = buildWeeklyScheduleLine(mainBlock)
+      const weekendLine = weekendBlock.classList.contains('hidden')
+        ? ''
+        : buildWeeklyScheduleLine(weekendBlock)
+      const nextValue = [mainLine, weekendLine].filter(Boolean).join('\n')
+
+      if (hasUserChanges) {
+        valueInput.value = nextValue.slice(0, Number(valueInput.getAttribute('maxlength')) || 500)
+      }
+
+      preview.textContent = (hasUserChanges ? valueInput.value : initialValue) || 'Pendiente'
+    }
+
+    const markChanged = () => {
+      hasUserChanges = true
+      sync()
+    }
+
+    schedule.dataset.weeklyScheduleReady = 'true'
+    hydrateWeeklyScheduleFromText(schedule, initialValue)
+    preview.textContent = initialValue || 'Pendiente'
+
+    schedule.querySelectorAll('[data-weekly-schedule-day], [data-weekly-schedule-start], [data-weekly-schedule-end]').forEach((control) => {
+      control.addEventListener('change', markChanged)
+      control.addEventListener('input', markChanged)
+    })
+
+    schedule.querySelectorAll('[data-weekly-schedule-preset]').forEach((button) => {
+      button.addEventListener('click', () => {
+        applyWeeklySchedulePreset(mainBlock, button.dataset.weeklySchedulePreset)
+        markChanged()
+      })
+    })
+
+    toggleWeekend?.addEventListener('click', () => {
+      weekendBlock.classList.remove('hidden')
+      toggleWeekend.classList.add('hidden')
+      markChanged()
+    })
+
+    removeWeekend?.addEventListener('click', () => {
+      weekendBlock.classList.add('hidden')
+      toggleWeekend?.classList.remove('hidden')
+      markChanged()
+    })
+  })
+}
+
+function hydrateWeeklyScheduleFromText(schedule, value) {
+  if (!value) return
+
+  const mainBlock = schedule.querySelector('[data-weekly-schedule-main]')
+  const weekendBlock = schedule.querySelector('[data-weekly-schedule-weekend]')
+  const toggleWeekend = schedule.querySelector('[data-weekly-schedule-toggle-weekend]')
+  const parsedLines = value
+    .split(/\n+/)
+    .map((line) => parseWeeklyScheduleLine(line))
+    .filter(Boolean)
+
+  if (!mainBlock || !weekendBlock || !parsedLines.length) return
+
+  const weekendLine = parsedLines.find((line) => isWeekendOnlySchedule(line.days))
+  const mainLine = parsedLines.find((line) => !isWeekendOnlySchedule(line.days)) || parsedLines[0]
+
+  applyParsedWeeklySchedule(mainBlock, mainLine)
+
+  if (weekendLine && weekendLine !== mainLine) {
+    weekendBlock.classList.remove('hidden')
+    toggleWeekend?.classList.add('hidden')
+    applyParsedWeeklySchedule(weekendBlock, weekendLine)
+  }
+}
+
+function parseWeeklyScheduleLine(line) {
+  const days = parseScheduleDays(line)
+  const times = parseScheduleTimes(line)
+
+  if (!days.length && !times.length) return null
+
+  return { days, start: times[0] || '', end: times[1] || '' }
+}
+
+function applyParsedWeeklySchedule(block, parsed) {
+  if (!parsed) return
+
+  if (parsed.days.length) {
+    block.querySelectorAll('[data-weekly-schedule-day]').forEach((checkbox) => {
+      checkbox.checked = parsed.days.includes(checkbox.value)
+    })
+  }
+
+  const startInput = block.querySelector('[data-weekly-schedule-start]')
+  const endInput = block.querySelector('[data-weekly-schedule-end]')
+
+  if (parsed.start && startInput) startInput.value = parsed.start
+  if (parsed.end && endInput) endInput.value = parsed.end
+}
+
+function parseScheduleDays(value) {
+  const text = normalizeScheduleText(value)
+  const dayOrder = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
+  const aliases = [
+    ['mon', ['lunes', 'monday', 'mon', 'lun']],
+    ['tue', ['martes', 'tuesday', 'tue', 'mar']],
+    ['wed', ['miercoles', 'wednesday', 'wed', 'mie']],
+    ['thu', ['jueves', 'thursday', 'thu', 'jue']],
+    ['fri', ['viernes', 'friday', 'fri', 'vie']],
+    ['sat', ['sabado', 'saturday', 'sat', 'sab']],
+    ['sun', ['domingo', 'sunday', 'sun', 'dom']],
+  ]
+
+  if (/\b(toda la semana|every day|daily|all week)\b/.test(text)) return dayOrder
+  if (/\b(fin de semana|weekend)\b/.test(text)) return ['sat', 'sun']
+  if (/\b(lunes a viernes|lun-vie|mon-fri|monday to friday)\b/.test(text)) {
+    return ['mon', 'tue', 'wed', 'thu', 'fri']
+  }
+
+  const found = aliases
+    .filter(([, names]) => names.some((name) => new RegExp(`\\b${name}\\b`).test(text)))
+    .map(([key]) => key)
+
+  if (found.length >= 2 && /\b(a|to|-)\b/.test(text)) {
+    const firstIndex = dayOrder.indexOf(found[0])
+    const lastIndex = dayOrder.indexOf(found[found.length - 1])
+
+    if (firstIndex >= 0 && lastIndex > firstIndex) {
+      return dayOrder.slice(firstIndex, lastIndex + 1)
+    }
+  }
+
+  return found
+}
+
+function parseScheduleTimes(value) {
+  const matches = Array.from(
+    String(value || '').matchAll(/\b(\d{1,2})(?::(\d{2}))?\s*(am|pm)?\b/gi)
+  )
+    .map((match) => parseScheduleTimeMatch(match))
+    .filter(Boolean)
+
+  return matches.slice(0, 2)
+}
+
+function parseScheduleTimeMatch(match) {
+  let hours = Number(match[1])
+  const minutes = match[2] || '00'
+  const period = match[3]?.toLowerCase()
+
+  if (!Number.isInteger(hours) || hours < 0 || hours > 23) return ''
+
+  if (period === 'pm' && hours < 12) hours += 12
+  if (period === 'am' && hours === 12) hours = 0
+
+  return `${String(hours).padStart(2, '0')}:${minutes}`
+}
+
+function isWeekendOnlySchedule(days) {
+  return days.length === 2 && days.includes('sat') && days.includes('sun')
+}
+
+function normalizeScheduleText(value) {
+  return String(value || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+}
+
+function applyWeeklySchedulePreset(block, preset) {
+  const selectedDays =
+    preset === 'all'
+      ? ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
+      : preset === 'weekend'
+        ? ['sat', 'sun']
+        : ['mon', 'tue', 'wed', 'thu', 'fri']
+
+  block.querySelectorAll('[data-weekly-schedule-day]').forEach((checkbox) => {
+    checkbox.checked = selectedDays.includes(checkbox.value)
+  })
+}
+
+function buildWeeklyScheduleLine(block) {
+  const selectedDays = Array.from(block.querySelectorAll('[data-weekly-schedule-day]'))
+    .filter((checkbox) => checkbox.checked)
+    .map((checkbox) => checkbox.value)
+  const start = block.querySelector('[data-weekly-schedule-start]')?.value
+  const end = block.querySelector('[data-weekly-schedule-end]')?.value
+  const dayText = formatWeeklyScheduleDays(selectedDays)
+  const startText = formatScheduleTime(start)
+  const endText = formatScheduleTime(end)
+
+  if (!dayText || !startText || !endText) return ''
+
+  const prefix = dayText === 'fin de semana' ? 'Fin de semana' : `De ${dayText}`
+
+  return `${prefix}, de ${startText} a ${endText}`
+}
+
+function formatWeeklyScheduleDays(days) {
+  const dayOrder = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
+  const dayNames = {
+    mon: 'lunes',
+    tue: 'martes',
+    wed: 'miercoles',
+    thu: 'jueves',
+    fri: 'viernes',
+    sat: 'sabado',
+    sun: 'domingo',
+  }
+  const indexes = [...new Set(days)]
+    .map((day) => dayOrder.indexOf(day))
+    .filter((index) => index >= 0)
+    .sort((a, b) => a - b)
+
+  if (!indexes.length) return ''
+  if (indexes.length === 7) return 'toda la semana'
+  if (indexes.join(',') === '0,1,2,3,4') return 'lunes a viernes'
+  if (indexes.join(',') === '5,6') return 'fin de semana'
+
+  const isContiguous = indexes.every((index, position) => position === 0 || index === indexes[position - 1] + 1)
+
+  if (isContiguous && indexes.length > 1) {
+    return `${dayNames[dayOrder[indexes[0]]]} a ${dayNames[dayOrder[indexes[indexes.length - 1]]]}`
+  }
+
+  return joinScheduleList(indexes.map((index) => dayNames[dayOrder[index]]))
+}
+
+function joinScheduleList(items) {
+  if (items.length <= 1) return items[0] || ''
+  if (items.length === 2) return `${items[0]} y ${items[1]}`
+
+  return `${items.slice(0, -1).join(', ')} y ${items[items.length - 1]}`
+}
+
+function formatScheduleTime(value) {
+  const match = String(value || '').match(/^(\d{2}):(\d{2})$/)
+
+  if (!match) return ''
+
+  const hours = Number(match[1])
+  const minutes = match[2]
+  const period = hours >= 12 ? 'PM' : 'AM'
+  const displayHours = hours % 12 || 12
+
+  return `${displayHours}:${minutes} ${period}`
 }
 
 function initProfileRelationsModal() {
