@@ -1,5 +1,5 @@
 @!component('components/app-navbar', {
-  section: roleLabel,
+  section: 'Home',
   active: 'homepage',
   avatarUrl,
   avatarInitial,
@@ -12,7 +12,7 @@
       key: 'tools',
       href: '/scanner',
       label: 'Tools',
-      icon: '',
+      icon: '/resources/images/homepagee/scanner.png',
       eyebrow: 'Create and diagnose',
       activeKeys: ['scanner', 'designer'],
       children: [
@@ -37,9 +37,9 @@
       key: 'services',
       href: '/maintenance',
       label: 'Services',
-      icon: '',
+      icon: '/resources/images/homepagee/tulip.png',
       eyebrow: 'Gardeners and nurseries',
-      activeKeys: ['services', 'requested', 'nurseries'],
+      activeKeys: ['services', 'requested', 'nurseries', 'nursery'],
       children: [
         {
           href: '/maintenance',
@@ -62,7 +62,7 @@
       key: 'community',
       href: '/community',
       label: 'Community',
-      icon: '',
+      icon: '/resources/images/homepagee/comunity.png',
       eyebrow: 'People and activity',
       activeKeys: ['community', 'favorites', 'notification'],
       children: [

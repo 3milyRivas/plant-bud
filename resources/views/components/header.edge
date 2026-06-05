@@ -1,10 +1,12 @@
 @let(catalogHref = $props.get('catalogHref') ?? '/ornamental')
 @let(careHref = $props.get('careHref') ?? '/care1')
+@let(navSection = $props.get('section') ?? 'Care guide')
+@let(navActive = $props.get('active') ?? '')
 
 @!component('components/app-navbar', {
-  section: 'Care guide',
+  section: navSection,
+  active: navActive,
   dynamic: true,
-  maxWidth: 'max-w-[min(1500px,calc(100vw-2rem))]',
 })
 
 <div class="relative h-[620px] w-full bg-cover bg-center {{ imageBg }}">

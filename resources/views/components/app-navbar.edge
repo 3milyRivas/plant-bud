@@ -2,18 +2,12 @@
 @let(homeHref = $props.get('homeHref') ?? (auth.user ? '/homepage' : '/'))
 @let(defaultItems = [
   {
-    key: 'homepage',
-    href: homeHref,
-    label: 'Home',
-    icon: '',
-  },
-  {
     key: 'tools',
     href: '/scanner',
     label: 'Tools',
-    icon: '',
+    icon: '/resources/images/homepagee/scanner.png',
     eyebrow: 'Create and diagnose',
-    activeKeys: ['scanner', 'designer'],
+    activeKeys: ['scanner', 'designer', 'ornamental', 'horticultural', 'succulent'],
     children: [
       {
         href: '/scanner',
@@ -36,9 +30,9 @@
     key: 'services',
     href: '/maintenance',
     label: 'Services',
-    icon: '',
+    icon: '/resources/images/homepagee/tulip.png',
     eyebrow: 'Gardeners and nurseries',
-    activeKeys: ['services', 'requested', 'nurseries'],
+    activeKeys: ['services', 'requested', 'nurseries', 'nursery'],
     children: [
       {
         href: '/maintenance',
@@ -48,12 +42,12 @@
       {
         href: '/requested',
         label: 'Requested',
-        description: 'Track services you sent or received.',
+        description: 'Track service requests.',
       },
       {
         href: '/nurseries',
         label: 'Nurseries',
-        description: 'Browse plant sellers and catalogs.',
+        description: 'Browse plant sellers.',
       },
     ],
   },
@@ -61,7 +55,7 @@
     key: 'community',
     href: '/community',
     label: 'Community',
-    icon: '',
+    icon: '/resources/images/homepagee/comunity.png',
     eyebrow: 'People and activity',
     activeKeys: ['community', 'favorites', 'notification'],
     children: [
@@ -78,7 +72,7 @@
       {
         href: '/notification',
         label: 'Alerts',
-        description: 'Recent follows and interactions.',
+        description: 'Recent interactions.',
       },
     ],
   },
@@ -89,79 +83,108 @@
 @let(toolMode = $props.get('toolMode') ?? '')
 @let(searchError = $props.get('searchError') ?? null)
 @let(dynamic = $props.get('dynamic') ?? false)
-@let(maxWidth = $props.get('maxWidth') ?? 'max-w-[min(1500px,calc(100vw-2rem))]')
+@let(maxWidth = $props.get('maxWidth') ?? 'max-w-[min(1320px,calc(100vw-2rem))]')
 @let(profileHref = auth.user ? '/profile' : '/login')
 @let(avatarUrl = $props.get('avatarUrl') ?? auth.user?.accountProfile?.avatarUrl ?? auth.user?.profilePicture)
 @let(avatarInitial = $props.get('avatarInitial') ?? auth.user?.initials ?? 'P')
 @let(displayName = $props.get('displayName') ?? auth.user?.fullName ?? 'Profile')
 @let(roleLabel = $props.get('roleLabel') ?? auth.user?.role ?? 'account')
-@let(showProfileText = $props.get('showProfileText') ?? true)
 @let(planLabel = $props.get('planLabel') ?? auth.user?.accountProfile?.planLabel ?? 'Free')
 @let(scannerUsage = $props.get('scannerUsage') ?? null)
 @let(scannerUsageLabel = scannerUsage ? scannerUsage.label : 'Uses left: --')
 
 @let(headerClass = dynamic
-  ? 'pointer-events-none fixed left-0 top-0 z-[100000] w-full transform-gpu px-3 pb-4 pt-4 transition-all duration-500 ease-[cubic-bezier(.2,.8,.2,1)] sm:px-5 lg:px-8'
-  : 'relative z-[100000] px-3 pb-5 pt-4 sm:px-5 lg:px-8')
-
-@let(shellClass = 'pointer-events-auto mx-auto grid ' + maxWidth + ' grid-cols-[auto_minmax(0,1fr)_auto] transform-gpu items-center gap-2 overflow-visible rounded-[1.35rem] border border-white/30 bg-white/20 px-3 py-2.5 shadow-lg backdrop-blur-xl transition-all duration-500 ease-[cubic-bezier(.2,.8,.2,1)] sm:gap-3 sm:rounded-full sm:px-4 lg:px-5')
+  ? 'pointer-events-none fixed left-0 top-0 z-[100000] w-full transform-gpu px-4 pb-4 pt-4 transition-all duration-500 ease-[cubic-bezier(.2,.8,.2,1)] sm:px-6 lg:px-8'
+  : 'relative z-[100000] px-4 pb-5 pt-4 sm:px-6 lg:px-8')
 
 <header class="{{ headerClass }}" data-community-navbar="{{ dynamic ? 'true' : 'false' }}" data-community-navbar-dynamic="{{ dynamic ? 'true' : 'false' }}">
-  <div class="{{ shellClass }}" data-community-navbar-shell>
-    <a href="{{ homeHref }}" class="group flex min-w-0 max-w-[13rem] items-center gap-2 justify-self-start lg:max-w-[15rem]" aria-label="Go to homepage">
+  <div class="pointer-events-auto mx-auto grid {{ maxWidth }} items-center overflow-visible rounded-[1.35rem] border border-white/30 bg-white/20 shadow-lg backdrop-blur-xl sm:rounded-full" data-community-navbar-shell data-pb-navbar-shell>
+    <a href="{{ homeHref }}" class="group flex h-12 min-w-0 items-center gap-3" data-pb-navbar-brand aria-label="Go to homepage">
       <span class="flex h-12 w-12 flex-none items-center justify-center rounded-full transition duration-500 group-hover:rotate-6">
         <img decoding="async" src="/resources/images/essential/logo.png" alt="" class="h-12 w-12 object-contain drop-shadow-lg">
       </span>
-      <span class="hidden min-w-0 sm:block" data-community-brand-text>
-        <span class="block truncate text-xl font-black tracking-wide text-white drop-shadow">Plant<span class="text-[#ebe3a7]"> Bud</span></span>
-        <span class="block truncate text-xs font-bold uppercase tracking-[0.16em] text-[#ebe3a7]/85">{{ section }}</span>
-      </span>
+      <div class="flex h-12 min-w-0 items-center" data-pb-navbar-brand-text>
+        <p class="pb-navbar-title-text">{{ section }}</p>
+      </div>
     </a>
 
-    @if(catalogSearch)
-      <div class="relative mx-auto flex w-full max-w-[760px] items-center justify-center justify-self-center" data-catalog-navbar-switcher>
-        <div class="hidden w-full justify-center px-16 sm:px-20" data-catalog-search-panel>
-          <form class="relative flex w-full max-w-[520px] items-center" data-plant-search autocomplete="off">
+    <div class="min-w-0" data-pb-navbar-center>
+      @if(catalogSearch)
+        <div class="mx-auto flex w-full max-w-[40rem] items-center justify-center gap-2">
+          @if(active !== 'homepage')
+            <a href="{{ homeHref }}" class="pb-navbar-menu-button bg-white/10 text-white/84 hover:bg-white/18 hover:text-[#ebe3a7]">Home</a>
+          @endif
+          <form class="relative flex min-w-0 flex-1 items-center" data-plant-search autocomplete="off">
             <label for="plantCatalogSearch" class="sr-only">Search plants</label>
             <div class="relative flex h-11 w-full items-center rounded-full border border-[#ebe3a7]/45 bg-white px-4 shadow-inner shadow-[#113e14]/15 transition">
               <input id="plantCatalogSearch" type="search" placeholder="Search plants" class="w-full bg-transparent pr-10 text-sm font-semibold text-[#113e14] outline-none placeholder:text-[#416543]/75" data-plant-search-input aria-autocomplete="list" aria-expanded="false" aria-controls="plantCatalogSearchResults">
-              <button type="submit" class="absolute right-1.5 flex h-8 w-8 items-center justify-center rounded-full bg-[#113e14] text-white shadow-[0_8px_18px_rgba(17,62,20,0.22)] transition hover:-translate-y-0.5 hover:bg-[#416543]" aria-label="Search plants">
+              <button type="submit" class="absolute right-1.5 flex h-8 w-8 items-center justify-center rounded-full bg-[#113e14] text-white shadow-[0_8px_18px_rgba(17,62,20,0.22)] transition hover:bg-[#416543]" aria-label="Search plants">
                 <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m1.85-5.65a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z" />
                 </svg>
               </button>
             </div>
-
             <div id="plantCatalogSearchResults" class="absolute left-0 right-0 top-[calc(100%+0.65rem)] z-[100000] hidden overflow-hidden rounded-[1.5rem] border border-white/45 bg-[#ebe3a7]/95 p-2 shadow-2xl shadow-[#113e14]/25 backdrop-blur-2xl" data-plant-search-results role="listbox"></div>
           </form>
         </div>
-
-        <nav class="flex min-w-0 max-w-full items-center justify-center gap-2 overflow-visible px-16 sm:px-20" aria-label="{{ section }} navigation" data-catalog-menu-panel>
+      @elseif(toolMode === 'scanner')
+        <div class="flex min-w-0 flex-wrap items-center justify-center gap-2 overflow-visible" data-tool-navbar-actions data-pb-navbar-actions>
+          <span class="hidden h-10 items-center rounded-full border border-[#ebe3a7]/14 bg-[#113e14]/28 px-4 text-xs font-black uppercase tracking-[0.12em] text-[#ebe3a7] backdrop-blur-xl lg:flex">
+            <span data-scanner-usage-label>{{ scannerUsageLabel }}</span>
+          </span>
+          <a href="{{ homeHref }}" class="pb-navbar-action">Home</a>
+          <div class="relative flex-none overflow-visible" data-phone-upload-menu>
+            <button type="button" class="pb-navbar-action text-white" data-phone-upload-menu-button>
+              Upload
+            </button>
+            <div class="absolute left-1/2 top-[calc(100%+0.55rem)] z-[100002] hidden w-56 -translate-x-1/2 overflow-hidden rounded-[1.25rem] border border-white/45 bg-white/94 p-2 text-[#113e14] shadow-2xl backdrop-blur-xl" data-phone-upload-menu-panel>
+              <label for="plantUpload" class="block w-full cursor-pointer rounded-2xl px-4 py-3 text-left text-sm font-black text-[#113e14] transition hover:bg-[#416543]/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a8b841]" data-phone-upload-computer>Upload from computer</label>
+              <button type="button" class="block w-full cursor-pointer rounded-2xl px-4 py-3 text-left text-sm font-black text-[#113e14] transition hover:bg-[#416543]/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a8b841]" style="font-weight: 900;" data-phone-upload-trigger data-phone-upload-input="#plantUpload" data-phone-upload-tool="scanner" data-phone-upload-tool-label="Plant scanner">Upload from phone</button>
+            </div>
+          </div>
+          <button id="scanBtn" type="button" class="pb-navbar-primary">Analyze</button>
+        </div>
+      @elseif(toolMode === 'designer')
+        <div class="flex min-w-0 flex-wrap items-center justify-center gap-2 overflow-visible" data-tool-navbar-actions data-pb-navbar-actions>
+          <span class="hidden h-10 items-center rounded-full border border-[#ebe3a7]/14 bg-[#113e14]/28 px-4 text-xs font-black uppercase tracking-[0.12em] text-[#ebe3a7] backdrop-blur-xl lg:flex">
+            2D Garden Designer
+          </span>
+          <a href="{{ homeHref }}" class="pb-navbar-action">Home</a>
+          <div class="relative flex-none overflow-visible" data-phone-upload-menu>
+            <button type="button" class="pb-navbar-action text-white" data-phone-upload-menu-button>
+              Upload
+            </button>
+            <div class="absolute left-1/2 top-[calc(100%+0.55rem)] z-[100002] hidden w-56 -translate-x-1/2 overflow-hidden rounded-[1.25rem] border border-white/45 bg-white/94 p-2 text-[#113e14] shadow-2xl backdrop-blur-xl" data-phone-upload-menu-panel>
+              <label for="upload" class="block w-full cursor-pointer rounded-2xl px-4 py-3 text-left text-sm font-black text-[#113e14] transition hover:bg-[#416543]/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a8b841]" data-phone-upload-computer>Upload from computer</label>
+              <button type="button" class="block w-full cursor-pointer rounded-2xl px-4 py-3 text-left text-sm font-black text-[#113e14] transition hover:bg-[#416543]/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a8b841]" style="font-weight: 900;" data-phone-upload-trigger data-phone-upload-input="#upload" data-phone-upload-tool="designer" data-phone-upload-tool-label="Garden designer">Upload from phone</button>
+            </div>
+          </div>
+          <button type="button" onclick="sendToBackend()" class="pb-navbar-primary">Download</button>
+        </div>
+      @else
+        <nav class="flex min-w-0 max-w-full items-center justify-center gap-2 overflow-visible" aria-label="{{ section }} navigation" data-community-navbar-nav data-pb-navbar-nav>
+          @if(active !== 'homepage')
+            <a href="{{ homeHref }}" class="pb-navbar-menu-button bg-white/10 text-white/84 hover:bg-white/18 hover:text-[#ebe3a7]" aria-label="Home" title="Home">
+              <span>Home</span>
+            </a>
+          @endif
           @each(item in items)
             @let(isActive = active === item.key || (item.activeKeys && item.activeKeys.includes(active)))
-            @let(isHome = item.key === 'homepage')
-            @let(isCommunity = item.key === 'community')
-            @let(linkClass = isActive ? 'bg-[#ebe3a7] text-[#113e14] ring-2 ring-white/35 shadow-[0_12px_28px_rgba(235,227,167,0.22)]' : (isCommunity ? 'bg-[#dca15d]/28 text-[#ffe5bd] hover:bg-[#dca15d]/38 hover:text-white' : (isHome ? 'bg-white/16 text-[#ebe3a7] hover:bg-white/24 hover:text-white' : 'bg-white/10 text-white/84 hover:bg-white/18 hover:text-[#ebe3a7]')))
+            @let(linkClass = isActive ? 'bg-[#ebe3a7] text-[#113e14] ring-2 ring-white/35 shadow-[0_12px_28px_rgba(235,227,167,0.22)]' : 'bg-white/10 text-white/84 hover:bg-white/18 hover:text-[#ebe3a7]')
             @if(item.children && item.children.length)
               <details class="app-nav-menu group/menu relative flex-none" data-app-nav-menu>
-                <summary class="{{ linkClass }} app-nav-menu-button flex h-10 min-w-10 cursor-pointer list-none items-center justify-center gap-2 rounded-full px-4 text-sm font-black transition hover:-translate-y-0.5">
+                <summary class="{{ linkClass }} pb-navbar-menu-button app-nav-menu-button">
                   @if(item.icon)
-                    <span class="h-5 w-5 bg-contain bg-center bg-no-repeat transition group-hover/menu:scale-110" style="background-image: url('{{ item.icon }}')"></span>
+                    <span class="h-5 w-5 bg-contain bg-center bg-no-repeat" style="background-image: url('{{ item.icon }}')"></span>
                   @endif
                   <span>{{ item.label }}</span>
                   <span class="app-nav-menu-chevron text-xs transition group-open/menu:rotate-180">v</span>
                 </summary>
-                <div class="app-nav-menu-panel fixed left-1/2 top-[4.95rem] z-[100002] w-[min(21rem,calc(100vw-2rem))] -translate-x-1/2 px-2 pt-4 text-[#113e14]">
+                <div class="app-nav-menu-panel fixed left-1/2 top-[5.15rem] z-[100002] w-[min(21rem,calc(100vw-2rem))] -translate-x-1/2 px-2 pt-4 text-[#113e14]">
                   <div class="rounded-[1.35rem] border border-white/70 bg-white/95 p-3 shadow-[0_24px_70px_rgba(17,62,20,0.24)] backdrop-blur-2xl">
                     <div class="rounded-[1.1rem] bg-[#ebe3a7]/46 px-4 py-3">
                       <p class="text-[11px] font-black uppercase tracking-[0.16em] text-[#416543]">{{ item.eyebrow || item.label }}</p>
-                      @if(item.key === 'tools')
-                        <p class="mt-1 text-lg font-black leading-tight text-[#113e14]">Choose a tool</p>
-                      @elseif(item.key === 'services')
-                        <p class="mt-1 text-lg font-black leading-tight text-[#113e14]">Choose a service</p>
-                      @else
-                        <a href="{{ item.href }}" class="mt-1 block text-lg font-black leading-tight text-[#113e14] transition hover:text-[#416543]">Open {{ item.label }}</a>
-                      @endif
+                      <p class="mt-1 text-lg font-black leading-tight text-[#113e14]">{{ item.label }}</p>
                     </div>
                     @each(child in item.children)
                       <a href="{{ child.href }}" class="mt-2 block rounded-[1rem] px-4 py-3 transition hover:bg-[#416543]/10">
@@ -175,112 +198,25 @@
                 </div>
               </details>
             @else
-              <a href="{{ item.href }}" class="{{ linkClass }} group flex h-10 min-w-10 flex-none items-center justify-center gap-2 rounded-full px-4 text-sm font-black transition hover:-translate-y-0.5" aria-label="{{ item.label }}" title="{{ item.label }}">
+              <a href="{{ item.href }}" class="{{ linkClass }} pb-navbar-menu-button" aria-label="{{ item.label }}" title="{{ item.label }}">
                 @if(item.icon)
                   <span class="h-5 w-5 bg-contain bg-center bg-no-repeat transition group-hover:scale-110" style="background-image: url('{{ item.icon }}')"></span>
                 @endif
-                <span class="{{ item.icon ? 'hidden md:inline' : '' }}">{{ item.label }}</span>
+                <span>{{ item.label }}</span>
               </a>
             @endif
           @end
         </nav>
-
-        <button type="button" class="absolute right-0 top-1/2 flex h-11 -translate-y-1/2 items-center justify-center rounded-full border border-[#ebe3a7]/34 bg-[#113e14]/58 px-4 text-sm font-black text-[#ebe3a7] shadow-sm backdrop-blur-xl transition hover:-translate-y-[calc(50%+2px)] hover:bg-[#ebe3a7] hover:text-[#113e14]" data-catalog-navbar-toggle aria-pressed="false">
-          <span data-catalog-navbar-toggle-label>Search</span>
-        </button>
-      </div>
-    @elseif(toolMode === 'scanner')
-      <div class="flex min-w-0 items-center justify-center gap-2 justify-self-center" data-tool-navbar-actions>
-        <span class="hidden h-10 items-center rounded-full border border-[#ebe3a7]/14 bg-[#113e14]/28 px-4 text-xs font-black uppercase tracking-[0.12em] text-[#ebe3a7] backdrop-blur-xl lg:flex">
-          <span data-scanner-usage-label>{{ scannerUsageLabel }}</span>
-        </span>
-        <a href="{{ homeHref }}" class="flex h-10 items-center justify-center rounded-full border border-[#ebe3a7]/18 bg-white/16 px-4 text-sm font-black text-[#ebe3a7] shadow-sm transition hover:-translate-y-0.5 hover:bg-white/24 hover:text-white">Home</a>
-        <div class="relative" data-phone-upload-menu>
-          <button type="button" class="flex h-10 items-center justify-center rounded-full border border-[#ebe3a7]/12 bg-[#416543]/24 px-4 text-sm font-black text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#416543]/36 hover:text-[#ebe3a7]" data-phone-upload-menu-button>
-            Upload
-          </button>
-          <div class="absolute left-1/2 top-[calc(100%+0.6rem)] z-[100002] hidden w-56 -translate-x-1/2 overflow-hidden rounded-[1.25rem] border border-white/45 bg-white/94 p-2 text-[#113e14] shadow-2xl backdrop-blur-xl" data-phone-upload-menu-panel>
-            <label for="plantUpload" class="block cursor-pointer rounded-2xl px-4 py-3 text-sm font-black transition hover:bg-[#416543]/10" data-phone-upload-computer>Upload from computer</label>
-            <button type="button" class="block w-full rounded-2xl px-4 py-3 text-left text-sm font-black transition hover:bg-[#dca15d]/18" data-phone-upload-trigger data-phone-upload-input="#plantUpload" data-phone-upload-tool="scanner" data-phone-upload-tool-label="Plant scanner">Upload from phone</button>
-          </div>
-        </div>
-        <button id="scanBtn" type="button" class="flex h-10 items-center justify-center rounded-xl bg-[#dca15d] px-4 text-sm font-black text-[#113e14] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]">Analyze</button>
-      </div>
-    @elseif(toolMode === 'designer')
-      <div class="flex min-w-0 items-center justify-center gap-2 justify-self-center" data-tool-navbar-actions>
-        <span class="hidden h-10 items-center rounded-full border border-[#ebe3a7]/14 bg-[#113e14]/28 px-4 text-xs font-black uppercase tracking-[0.12em] text-[#ebe3a7] backdrop-blur-xl lg:flex">
-          2D Garden Designer
-        </span>
-        <a href="{{ homeHref }}" class="flex h-10 items-center justify-center rounded-full border border-[#ebe3a7]/18 bg-white/16 px-4 text-sm font-black text-[#ebe3a7] shadow-sm transition hover:-translate-y-0.5 hover:bg-white/24 hover:text-white">Home</a>
-        <div class="relative" data-phone-upload-menu>
-          <button type="button" class="flex h-10 items-center justify-center rounded-full border border-[#ebe3a7]/12 bg-[#416543]/24 px-4 text-sm font-black text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#416543]/36 hover:text-[#ebe3a7]" data-phone-upload-menu-button>
-            Upload
-          </button>
-          <div class="absolute left-1/2 top-[calc(100%+0.6rem)] z-[100002] hidden w-56 -translate-x-1/2 overflow-hidden rounded-[1.25rem] border border-white/45 bg-white/94 p-2 text-[#113e14] shadow-2xl backdrop-blur-xl" data-phone-upload-menu-panel>
-            <label for="upload" class="block cursor-pointer rounded-2xl px-4 py-3 text-sm font-black transition hover:bg-[#416543]/10" data-phone-upload-computer>Upload from computer</label>
-            <button type="button" class="block w-full rounded-2xl px-4 py-3 text-left text-sm font-black transition hover:bg-[#dca15d]/18" data-phone-upload-trigger data-phone-upload-input="#upload" data-phone-upload-tool="designer" data-phone-upload-tool-label="Garden designer">Upload from phone</button>
-          </div>
-        </div>
-        <button type="button" onclick="sendToBackend()" class="flex h-10 items-center justify-center rounded-xl bg-[#dca15d] px-4 text-sm font-black text-[#113e14] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]">Download</button>
-      </div>
-    @else
-      <nav class="flex min-w-0 max-w-full items-center justify-center gap-2 overflow-x-auto overflow-y-visible justify-self-center px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label="{{ section }} navigation" data-community-navbar-nav>
-        @each(item in items)
-          @let(isActive = active === item.key || (item.activeKeys && item.activeKeys.includes(active)))
-          @let(isHome = item.key === 'homepage')
-          @let(isCommunity = item.key === 'community')
-          @let(linkClass = isActive ? 'bg-[#ebe3a7] text-[#113e14] ring-2 ring-white/35 shadow-[0_12px_28px_rgba(235,227,167,0.22)]' : (isCommunity ? 'bg-[#dca15d]/28 text-[#ffe5bd] hover:bg-[#dca15d]/38 hover:text-white' : (isHome ? 'bg-white/16 text-[#ebe3a7] hover:bg-white/24 hover:text-white' : 'bg-white/10 text-white/84 hover:bg-white/18 hover:text-[#ebe3a7]')))
-          @if(item.children && item.children.length)
-            <details class="app-nav-menu group/menu relative flex-none" data-app-nav-menu>
-              <summary class="{{ linkClass }} app-nav-menu-button flex h-10 min-w-10 cursor-pointer list-none items-center justify-center gap-2 rounded-full px-4 text-sm font-black transition hover:-translate-y-0.5">
-                @if(item.icon)
-                  <span class="h-5 w-5 bg-contain bg-center bg-no-repeat transition group-hover/menu:scale-110" style="background-image: url('{{ item.icon }}')"></span>
-                @endif
-                <span>{{ item.label }}</span>
-                <span class="app-nav-menu-chevron text-xs transition group-open/menu:rotate-180">v</span>
-              </summary>
-              <div class="app-nav-menu-panel fixed left-1/2 top-[4.95rem] z-[100002] w-[min(21rem,calc(100vw-2rem))] -translate-x-1/2 px-2 pt-4 text-[#113e14]">
-                <div class="rounded-[1.35rem] border border-white/70 bg-white/95 p-3 shadow-[0_24px_70px_rgba(17,62,20,0.24)] backdrop-blur-2xl">
-                <div class="rounded-[1.1rem] bg-[#ebe3a7]/46 px-4 py-3">
-                  <p class="text-[11px] font-black uppercase tracking-[0.16em] text-[#416543]">{{ item.eyebrow || item.label }}</p>
-                  @if(item.key === 'tools')
-                    <p class="mt-1 text-lg font-black leading-tight text-[#113e14]">Choose a tool</p>
-                  @elseif(item.key === 'services')
-                    <p class="mt-1 text-lg font-black leading-tight text-[#113e14]">Choose a service</p>
-                  @else
-                    <a href="{{ item.href }}" class="mt-1 block text-lg font-black leading-tight text-[#113e14] transition hover:text-[#416543]">Open {{ item.label }}</a>
-                  @endif
-                </div>
-                @each(child in item.children)
-                  <a href="{{ child.href }}" class="mt-2 block rounded-[1rem] px-4 py-3 transition hover:bg-[#416543]/10">
-                    <span class="block text-sm font-black text-[#113e14]">{{ child.label }}</span>
-                    @if(child.description)
-                      <span class="mt-0.5 block text-xs font-bold leading-5 text-[#416543]">{{ child.description }}</span>
-                    @endif
-                  </a>
-                @end
-                </div>
-              </div>
-            </details>
-          @else
-            <a href="{{ item.href }}" class="{{ linkClass }} group flex h-10 min-w-10 flex-none items-center justify-center gap-2 rounded-full px-4 text-sm font-black transition hover:-translate-y-0.5" aria-label="{{ item.label }}" title="{{ item.label }}">
-              @if(item.icon)
-                <span class="h-5 w-5 bg-contain bg-center bg-no-repeat transition group-hover:scale-110" style="background-image: url('{{ item.icon }}')"></span>
-              @endif
-              <span class="{{ item.icon ? 'hidden md:inline' : '' }}">{{ item.label }}</span>
-            </a>
-          @endif
-        @end
-      </nav>
-    @endif
+      @endif
+    </div>
 
     <details class="group relative justify-self-end" data-app-profile-menu>
       <summary class="list-none">
-        <span class="flex h-12 w-12 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 border-white/70 bg-[#113e14] text-sm font-black text-[#ebe3a7] shadow-lg transition hover:-translate-y-0.5 hover:shadow-[0_0_18px_rgba(235,227,167,0.55)]">
+        <span class="flex h-12 w-12 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 border-white/70 bg-[#113e14] text-sm font-black leading-none text-[#ebe3a7] shadow-lg transition hover:shadow-[0_0_18px_rgba(235,227,167,0.55)]">
           @if(avatarUrl)
             <img src="{{ avatarUrl }}" alt="" class="h-full w-full object-cover">
           @else
-            <span>
+            <span class="block leading-none">
               {{ avatarInitial }}
             </span>
           @endif
@@ -293,7 +229,7 @@
               @if(avatarUrl)
                 <img src="{{ avatarUrl }}" alt="" class="h-11 w-11 flex-none rounded-full border-2 border-white object-cover shadow-md">
               @else
-                <span class="flex h-11 w-11 flex-none items-center justify-center rounded-full border-2 border-white bg-[#113e14] text-sm font-black text-[#ebe3a7] shadow-md">
+                <span class="flex h-11 w-11 flex-none items-center justify-center rounded-full border-2 border-white bg-[#113e14] text-sm font-black leading-none text-[#ebe3a7] shadow-md">
                   {{ avatarInitial }}
                 </span>
               @endif
@@ -310,7 +246,7 @@
                 <p class="text-[11px] font-black uppercase tracking-[0.16em] text-[#416543]">Plan</p>
                 <p class="mt-1 text-sm font-black text-[#113e14]">{{ planLabel }}</p>
               </div>
-            <a href="/plans" class="rounded-full bg-[#dca15d] px-4 py-2 text-xs font-black text-[#113e14] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]">
+              <a href="/plans" class="rounded-full bg-[#dca15d] px-4 py-2 text-xs font-black text-[#113e14] shadow-sm transition hover:bg-[#ebe3a7]">
                 {{ planLabel === 'Premium' ? 'Plans' : 'Upgrade' }}
               </a>
             </div>

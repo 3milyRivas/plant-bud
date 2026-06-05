@@ -39,7 +39,16 @@ function bindUploadMenus() {
 
     panel?.addEventListener('click', (event) => event.stopPropagation())
     menu.querySelectorAll('[data-phone-upload-computer]').forEach((item) => {
-      item.addEventListener('click', closeUploadMenus)
+      item.addEventListener('click', (event) => {
+        event.preventDefault()
+        closeUploadMenus()
+
+        const selector =
+          item.getAttribute('for') || item.dataset.phoneUploadInput?.replace(/^#/, '')
+        const input = selector ? document.getElementById(selector) : null
+
+        input?.click()
+      })
     })
   })
 
