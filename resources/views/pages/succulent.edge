@@ -15,12 +15,14 @@
     careHref: '/care3',
     })
 
-    @!component('components/plants/catalog-search')
+    @!component('components/plants/catalog-search', {
+    careHref: '/care3',
+    })
 
     <div class="flex justify-center mt-4">
         <div class="flex justify-center mt-8 px-5">
-            <div
-                class="relative flex w-[min(46rem,calc(100vw-2rem))] items-center justify-center gap-3 rounded-[1.4rem] border border-[#416543]/12 bg-white/72 px-3 py-3 shadow-[0_18px_55px_rgba(17,62,20,0.14)] backdrop-blur-2xl">
+            <div data-catalog-switch-bar
+                class="relative flex w-[min(58rem,calc(100vw-2rem))] items-center justify-center gap-3 rounded-[1.4rem] border border-[#416543]/12 bg-white/72 px-3 py-3 shadow-[0_18px_55px_rgba(17,62,20,0.14)] backdrop-blur-2xl">
 
                 <button onclick="toggleMenu()" data-catalog-section-toggle
                     class="relative z-50 flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-[#416543]/12 bg-[#f5f2df] shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#ebe3a7]">

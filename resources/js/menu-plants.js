@@ -16,13 +16,14 @@ function hideCatalogPanel(panel) {
   window.setTimeout(() => {
     panel.classList.add('hidden')
     panel.classList.remove('flex', 'catalog-switch-out')
-  }, 180)
+  }, 100)
 }
 
 function toggleMenu() {
   const sectionMenu = document.querySelector('[data-catalog-section-menu]')
   const familyPanel = document.querySelector('[data-catalog-family-panel]')
   const toggle = document.querySelector('[data-catalog-section-toggle]')
+  const switchBar = toggle?.closest('[data-catalog-switch-bar]')
 
   if (!sectionMenu || !familyPanel) return
 
@@ -30,14 +31,16 @@ function toggleMenu() {
 
   if (showingSections) {
     hideCatalogPanel(sectionMenu)
-    window.setTimeout(() => showCatalogPanel(familyPanel), 70)
+    window.setTimeout(() => showCatalogPanel(familyPanel), 35)
     toggle?.classList.remove('is-section-mode')
+    switchBar?.classList.remove('is-section-mode')
     return
   }
 
   hideCatalogPanel(familyPanel)
-  window.setTimeout(() => showCatalogPanel(sectionMenu), 70)
+  window.setTimeout(() => showCatalogPanel(sectionMenu), 35)
   toggle?.classList.add('is-section-mode')
+  switchBar?.classList.add('is-section-mode')
 }
 
 window.toggleMenu = toggleMenu
