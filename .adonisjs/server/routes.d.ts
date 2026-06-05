@@ -24,6 +24,7 @@ export type ScannedRoutes = {
     'phone_uploads.image': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'phone_uploads.show': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'phone_uploads.upload': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
+    'profile.media.public': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'userId': ParamValue,'kind': ParamValue,'fileName': ParamValue} }
     'homepage': { paramsTuple?: []; params?: {} }
     'community.index': { paramsTuple?: []; params?: {} }
     'community.posts.store': { paramsTuple?: []; params?: {} }
@@ -43,7 +44,6 @@ export type ScannedRoutes = {
     'community.users.reviews.store': { paramsTuple: [ParamValue]; params: {'username': ParamValue} }
     'profile': { paramsTuple?: []; params?: {} }
     'profile.settings': { paramsTuple?: []; params?: {} }
-    'profile.media.owner': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'userId': ParamValue,'kind': ParamValue,'fileName': ParamValue} }
     'profile.media': { paramsTuple: [ParamValue,ParamValue]; params: {'kind': ParamValue,'fileName': ParamValue} }
     'profile.update': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
@@ -52,6 +52,7 @@ export type ScannedRoutes = {
     'signup.gardener': { paramsTuple?: []; params?: {} }
     'signup.nursery': { paramsTuple?: []; params?: {} }
     'new_account.store': { paramsTuple?: []; params?: {} }
+    'new_account.demo_guest': { paramsTuple?: []; params?: {} }
     'session.destroy': { paramsTuple?: []; params?: {} }
   }
   GET: {
@@ -67,6 +68,7 @@ export type ScannedRoutes = {
     'phone_uploads.status': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'phone_uploads.image': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'phone_uploads.show': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
+    'profile.media.public': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'userId': ParamValue,'kind': ParamValue,'fileName': ParamValue} }
     'homepage': { paramsTuple?: []; params?: {} }
     'community.index': { paramsTuple?: []; params?: {} }
     'community.search.suggestions': { paramsTuple?: []; params?: {} }
@@ -78,7 +80,6 @@ export type ScannedRoutes = {
     'community.users.show': { paramsTuple: [ParamValue]; params: {'username': ParamValue} }
     'profile': { paramsTuple?: []; params?: {} }
     'profile.settings': { paramsTuple?: []; params?: {} }
-    'profile.media.owner': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'userId': ParamValue,'kind': ParamValue,'fileName': ParamValue} }
     'profile.media': { paramsTuple: [ParamValue,ParamValue]; params: {'kind': ParamValue,'fileName': ParamValue} }
     'session.create': { paramsTuple?: []; params?: {} }
     'signup.client': { paramsTuple?: []; params?: {} }
@@ -98,6 +99,7 @@ export type ScannedRoutes = {
     'phone_uploads.status': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'phone_uploads.image': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'phone_uploads.show': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
+    'profile.media.public': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'userId': ParamValue,'kind': ParamValue,'fileName': ParamValue} }
     'homepage': { paramsTuple?: []; params?: {} }
     'community.index': { paramsTuple?: []; params?: {} }
     'community.search.suggestions': { paramsTuple?: []; params?: {} }
@@ -109,7 +111,6 @@ export type ScannedRoutes = {
     'community.users.show': { paramsTuple: [ParamValue]; params: {'username': ParamValue} }
     'profile': { paramsTuple?: []; params?: {} }
     'profile.settings': { paramsTuple?: []; params?: {} }
-    'profile.media.owner': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'userId': ParamValue,'kind': ParamValue,'fileName': ParamValue} }
     'profile.media': { paramsTuple: [ParamValue,ParamValue]; params: {'kind': ParamValue,'fileName': ParamValue} }
     'session.create': { paramsTuple?: []; params?: {} }
     'signup.client': { paramsTuple?: []; params?: {} }
@@ -136,6 +137,7 @@ export type ScannedRoutes = {
     'profile.update': { paramsTuple?: []; params?: {} }
     'session.store': { paramsTuple?: []; params?: {} }
     'new_account.store': { paramsTuple?: []; params?: {} }
+    'new_account.demo_guest': { paramsTuple?: []; params?: {} }
     'session.destroy': { paramsTuple?: []; params?: {} }
   }
 }

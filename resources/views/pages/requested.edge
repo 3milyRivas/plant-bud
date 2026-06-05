@@ -3,32 +3,40 @@
 <title>Service Requests</title>
 @endslot
 
-<div class="relative z-10 min-h-screen px-6 py-8 text-[#113E14]">
-  <header class="mx-auto flex max-w-7xl flex-col gap-6 rounded-[34px] border border-white/40 bg-white/24 p-6 shadow-2xl backdrop-blur-2xl md:flex-row md:items-center md:justify-between">
-    <a href="/homepage" class="flex items-center gap-4">
-      <span class="flex h-14 w-14 items-center justify-center rounded-full bg-white/80 shadow-lg">
-        <img src="/resources/images/essential/logo.png" alt="" class="h-10 w-10 object-contain">
-      </span>
-      <span>
-        <span class="block text-2xl font-black text-white">Plant Bud</span>
-        <span class="block text-xs font-black uppercase tracking-[0.18em] text-[#EDE7D6]">Requests</span>
-      </span>
-    </a>
+@let(viewerProfile = auth.user?.accountProfile)
+@let(displayName = viewerProfile?.displayName || auth.user?.fullName || auth.user?.username || 'Profile')
+@let(avatarUrl = viewerProfile?.avatarUrl || auth.user?.profilePicture)
+@let(avatarInitial = displayName ? Array.from(displayName)[0].toLocaleUpperCase('en') : 'P')
+@let(isSentMode = mode === 'sent')
 
-    <nav class="flex flex-wrap gap-3">
-      <a href="/homepage" class="rounded-full bg-white/18 px-5 py-2.5 text-sm font-black text-white transition hover:bg-white/28">Home</a>
-      <a href="/community" class="rounded-full bg-white/18 px-5 py-2.5 text-sm font-black text-white transition hover:bg-white/28">Community</a>
-      <a href="/profile" class="rounded-full bg-[#EDE7D6] px-5 py-2.5 text-sm font-black text-[#113E14] transition hover:-translate-y-0.5">Profile</a>
-    </nav>
-  </header>
+<div class="relative z-10 min-h-dvh overflow-hidden bg-[#173f25] text-[#113e14]">
+  <div class="fixed inset-0 pointer-events-none">
+    <img src="/resources/images/welcome/header3.png" alt="" class="h-full w-full object-cover opacity-24">
+    <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(17,62,20,0.94)_0%,rgba(65,101,67,0.86)_44%,rgba(245,242,223,0.98)_100%)]"></div>
+  </div>
 
-  <main class="mx-auto max-w-7xl py-10">
-    <section class="grid gap-8 lg:grid-cols-[0.85fr_1.15fr]">
-      <div class="rounded-[38px] bg-[#113E14] p-8 text-white shadow-2xl">
-        <p class="text-sm font-black uppercase tracking-[0.2em] text-[#EDE7D6]">Today</p>
-        <h1 class="mt-4 font-abril text-5xl leading-tight">Service request board</h1>
+  @!component('components/app-navbar', {
+    section: 'Requests',
+    active: 'services',
+    maxWidth: 'max-w-[min(1500px,calc(100vw-2rem))]',
+    avatarUrl,
+    avatarInitial,
+    displayName,
+    roleLabel: auth.user?.role || 'account',
+    planLabel: viewerProfile?.planLabel || 'Free',
+  })
+
+  <main class="relative z-10 mx-auto max-w-7xl px-5 pb-24 pt-12 lg:px-10">
+    <section class="grid gap-8 py-10 lg:grid-cols-[0.85fr_1.15fr]">
+      <div class="rounded-[1.5rem] border border-[#ebe3a7]/18 bg-[#113e14]/86 p-8 text-white shadow-2xl backdrop-blur-2xl">
+        <p class="text-sm font-black uppercase tracking-[0.2em] text-[#ebe3a7]">
+          {{ isSentMode ? 'Requested by you' : 'Client requests' }}
+        </p>
+        <h1 class="mt-4 font-abril text-5xl leading-tight">
+          {{ isSentMode ? 'Your service requests' : 'Service request board' }}
+        </h1>
         <p class="mt-5 text-base font-semibold leading-7 text-white/76">
-          Keep client requests visible, organized, and ready for follow-up before the next appointment.
+          {{ isSentMode ? 'Review the gardeners you contacted and the details you sent.' : 'Keep client requests visible, organized, and ready for follow-up.' }}
         </p>
 
         <div class="mt-8 grid grid-cols-3 gap-3">
@@ -45,45 +53,65 @@
             <p class="text-xs font-bold uppercase tracking-[0.14em] text-white/60">This week</p>
           </div>
         </div>
+
+        <a href="/maintenance" class="mt-8 inline-flex rounded-full bg-[#dca15d] px-6 py-3 text-sm font-black text-[#113e14] shadow-lg transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]">
+          Browse gardeners
+        </a>
       </div>
 
       <div class="grid gap-5">
         @each(serviceRequest in requests)
-          <article class="rounded-[28px] border border-white/40 bg-white/75 p-6 shadow-xl backdrop-blur-2xl">
+          <article class="rounded-[1.25rem] border border-[#416543]/12 bg-white/86 p-6 shadow-xl backdrop-blur-2xl">
             <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-              <div>
-                <p class="text-sm font-black uppercase tracking-[0.18em] text-[#6B8C6C]">{{ serviceRequest.serviceTypeLabel }}</p>
-                <h2 class="mt-2 text-2xl font-black">{{ serviceRequest.clientName }} scheduled you</h2>
-                <p class="mt-3 max-w-2xl text-sm font-semibold leading-6 text-[#456143]">
+              <div class="min-w-0">
+                <p class="text-sm font-black uppercase tracking-[0.18em] text-[#416543]">{{ serviceRequest.serviceTypeLabel }}</p>
+                @if(isSentMode)
+                  <div class="mt-3 flex items-center gap-4">
+                    @if(serviceRequest.gardenerPhoto)
+                      <img src="{{ serviceRequest.gardenerPhoto }}" alt="" class="h-14 w-14 rounded-2xl object-cover shadow-md">
+                    @else
+                      <span class="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#113e14] text-sm font-black text-[#ebe3a7] shadow-md">PB</span>
+                    @endif
+                    <div class="min-w-0">
+                      <h2 class="truncate text-2xl font-black">{{ serviceRequest.gardenerName }}</h2>
+                      <p class="mt-1 truncate text-sm font-bold text-[#416543]">{{ serviceRequest.gardenerSpecialty }}</p>
+                    </div>
+                  </div>
+                @else
+                  <h2 class="mt-2 text-2xl font-black">{{ serviceRequest.clientName }} scheduled you</h2>
+                @endif
+                <p class="mt-4 max-w-2xl text-sm font-semibold leading-6 text-[#416543]">
                   {{ serviceRequest.notes }}
                 </p>
               </div>
-              <span class="{{ serviceRequest.status === 'scheduled' ? 'bg-[#113E14] text-white' : 'bg-[#EDE7D6] text-[#113E14]' }} rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.14em]">
+              <span class="{{ serviceRequest.status === 'scheduled' ? 'bg-[#113e14] text-[#ebe3a7]' : 'bg-[#ebe3a7] text-[#113e14]' }} rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.14em]">
                 {{ serviceRequest.statusLabel }}
               </span>
             </div>
 
-            <div class="mt-5 grid gap-3 text-sm font-bold text-[#456143] sm:grid-cols-3">
+            <div class="mt-5 grid gap-3 text-sm font-bold text-[#416543] sm:grid-cols-3">
               <span>Budget: {{ serviceRequest.budget }}</span>
               <span>{{ serviceRequest.address }}</span>
               <span>{{ serviceRequest.scheduledFor }}</span>
             </div>
 
-            <div class="mt-5 grid gap-3 rounded-2xl bg-white/60 p-4 text-sm font-semibold text-[#456143] sm:grid-cols-3">
-              <span>Client: {{ serviceRequest.clientName }}</span>
-              <span>{{ serviceRequest.clientPhone }}</span>
-              <span>{{ serviceRequest.clientEmail }}</span>
-            </div>
+            @if(!isSentMode)
+              <div class="mt-5 grid gap-3 rounded-2xl bg-[#f5f2df]/80 p-4 text-sm font-semibold text-[#416543] sm:grid-cols-3">
+                <span>Client: {{ serviceRequest.clientName }}</span>
+                <span>{{ serviceRequest.clientPhone }}</span>
+                <span>{{ serviceRequest.clientEmail }}</span>
+              </div>
+            @endif
 
-            <p class="mt-4 text-xs font-bold uppercase tracking-[0.14em] text-[#6B8C6C]">
+            <p class="mt-4 text-xs font-bold uppercase tracking-[0.14em] text-[#416543]">
               Requested {{ serviceRequest.createdAt }}
             </p>
           </article>
         @else
-          <article class="rounded-[28px] border border-white/40 bg-white/75 p-8 text-center shadow-xl backdrop-blur-2xl">
+          <article class="rounded-[1.25rem] border border-[#416543]/12 bg-white/86 p-8 text-center shadow-xl backdrop-blur-2xl">
             <h2 class="text-2xl font-black">No requests yet</h2>
-            <p class="mt-3 text-sm font-semibold leading-6 text-[#456143]">
-              When a client sends a request from your gardener profile, it will appear here with their contact details.
+            <p class="mt-3 text-sm font-semibold leading-6 text-[#416543]">
+              {{ isSentMode ? 'Requests you send from gardener profiles will appear here.' : 'When a client sends a request from your gardener profile, it will appear here.' }}
             </p>
           </article>
         @end

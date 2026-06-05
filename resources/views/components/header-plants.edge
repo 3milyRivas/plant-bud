@@ -7,7 +7,6 @@
 
   @!component('components/app-navbar', {
     section: 'Plant catalog',
-    catalogSearch: true,
     maxWidth: 'max-w-[min(1500px,calc(100vw-2rem))]',
     showProfileText: false,
   })
@@ -15,23 +14,28 @@
   <section class="relative z-0 mx-auto mt-8 max-w-[1500px] pb-8">
     <div class="relative overflow-hidden rounded-[40px] shadow-2xl">
       <img decoding="async" src="/{{ imageBg }}" alt="hero" class="h-[420px] w-full object-cover">
-      <div class="absolute inset-0 bg-gradient-to-r from-[#416543] to-transparent"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent"></div>
 
 
 
-      <div class="absolute inset-0 px-8 pt-10 sm:px-16 sm:pt-16">
-        <div class="flex justify-end">
-          <button onclick="window.location.href='{{ careHref }}'" class="rounded-full bg-[#ebe3a7] px-12 py-2 font-abril text-2xl text-[#113E14] shadow-[0_10px_30px_rgba(0,0,0,0.12)] transition-all duration-300 hover:-translate-y-1 hover:scale-105 hover:bg-[#113E14] hover:text-white sm:px-24 sm:text-3xl">
-            Care
-          </button>
-        </div>
-
-        <div class="mt-12 max-w-xl">
+      <div class="absolute inset-0 flex items-center px-8 sm:px-16">
+        <div class="max-w-xl">
           <h1 class="font-abril text-5xl leading-none text-[#f7f5f0] sm:text-6xl">{{ title }}</h1>
 
           <p class="mt-6 max-w-md text-lg leading-relaxed text-white/80">
             {{ text }}
           </p>
+
+          <a href="{{ careHref }}" class="mt-8 inline-flex items-center gap-3 rounded-full border border-[#ebe3a7]/55 bg-[#ebe3a7]/88 px-7 py-3.5 text-sm font-black text-[#113e14] shadow-[0_16px_40px_rgba(17,62,20,0.22)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:bg-white">
+            <span class="flex h-9 w-9 items-center justify-center rounded-full bg-[#a8b841]/24">
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path d="M12 3v18"></path>
+                <path d="M5 10c4 0 7-3 7-7 0 4 3 7 7 7"></path>
+                <path d="M6 17c3.5 0 6-2.5 6-6 0 3.5 2.5 6 6 6"></path>
+              </svg>
+            </span>
+            Care guide
+          </a>
         </div>
       </div>
     </div>

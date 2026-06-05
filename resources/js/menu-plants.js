@@ -1,17 +1,43 @@
-function toggleMenu() {
-    const menu = document.getElementById("menu");
-    menu.classList.toggle("hidden");
+function animateCatalogPanel(panel, animationClass) {
+  panel?.classList.remove('catalog-switch-in', 'catalog-switch-out')
+  void panel?.offsetWidth
+  panel?.classList.add(animationClass)
 }
 
-window.toggleMenu = toggleMenu;
-document.addEventListener("click", function (event) {
+function showCatalogPanel(panel) {
+  panel.classList.remove('hidden')
+  panel.classList.add('flex')
+  animateCatalogPanel(panel, 'catalog-switch-in')
+}
 
-    const menu = document.getElementById("menu");
-    const button = event.target.closest("button");
-    const menuClicked = event.target.closest("#menu");
+function hideCatalogPanel(panel) {
+  animateCatalogPanel(panel, 'catalog-switch-out')
 
-    if (!menuClicked && !button) {
-        menu.classList.add("hidden");
-    }
+  window.setTimeout(() => {
+    panel.classList.add('hidden')
+    panel.classList.remove('flex', 'catalog-switch-out')
+  }, 180)
+}
 
-});
+function toggleMenu() {
+  const sectionMenu = document.querySelector('[data-catalog-section-menu]')
+  const familyPanel = document.querySelector('[data-catalog-family-panel]')
+  const toggle = document.querySelector('[data-catalog-section-toggle]')
+
+  if (!sectionMenu || !familyPanel) return
+
+  const showingSections = !sectionMenu.classList.contains('hidden')
+
+  if (showingSections) {
+    hideCatalogPanel(sectionMenu)
+    window.setTimeout(() => showCatalogPanel(familyPanel), 70)
+    toggle?.classList.remove('is-section-mode')
+    return
+  }
+
+  hideCatalogPanel(familyPanel)
+  window.setTimeout(() => showCatalogPanel(sectionMenu), 70)
+  toggle?.classList.add('is-section-mode')
+}
+
+window.toggleMenu = toggleMenu

@@ -1,0 +1,17 @@
+<section class="relative z-20 mx-auto mt-10 flex max-w-4xl justify-center px-5">
+  <div class="w-full rounded-[1.5rem] border border-white/45 bg-white/58 p-3 shadow-[0_22px_70px_rgba(17,62,20,0.14)] backdrop-blur-2xl">
+    <form class="relative flex w-full items-center" data-plant-search autocomplete="off">
+      <label for="plantCatalogSearch" class="sr-only">Search plants</label>
+      <div class="relative flex h-14 w-full items-center rounded-[1.1rem] border border-[#416543]/12 bg-white px-5 shadow-inner shadow-[#113e14]/10 transition focus-within:border-[#a8b841]/70 focus-within:ring-4 focus-within:ring-[#a8b841]/16">
+        <input id="plantCatalogSearch" type="search" placeholder="Search plants by name, family, or species" class="w-full bg-transparent pr-12 text-sm font-bold text-[#113e14] outline-none placeholder:text-[#416543]/68 md:text-base" data-plant-search-input aria-autocomplete="list" aria-expanded="false" aria-controls="plantCatalogSearchResults">
+        <button type="submit" class="absolute right-2 flex h-10 w-10 items-center justify-center rounded-full bg-[#113e14] text-white shadow-[0_10px_24px_rgba(17,62,20,0.24)] transition hover:-translate-y-0.5 hover:bg-[#416543]" aria-label="Search plants">
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m1.85-5.65a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z" />
+          </svg>
+        </button>
+      </div>
+
+      <div id="plantCatalogSearchResults" class="absolute left-0 right-0 top-[calc(100%+0.75rem)] z-[100000] hidden overflow-hidden rounded-[1.5rem] border border-white/55 bg-[#ebe3a7]/96 p-2 shadow-2xl shadow-[#113e14]/25 backdrop-blur-2xl" data-plant-search-results role="listbox"></div>
+    </form>
+  </div>
+</section>

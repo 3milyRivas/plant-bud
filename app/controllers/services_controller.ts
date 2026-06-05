@@ -1,27 +1,64 @@
 import GardenerProfile from '#models/gardener_profile'
 import ServiceRequest from '#models/service_request'
 import type { HttpContext } from '@adonisjs/core/http'
+import db from '@adonisjs/lucid/services/db'
 import { DateTime } from 'luxon'
 
 type ServiceType = 'maintenance' | 'garden_design' | 'consultation' | 'delivery' | 'other'
+type FormattedGardener = {
+  name: string
+  username: string
+  specialty: string
+  location: string
+  bio: string
+  services: string[]
+}
 
 export default class ServicesController {
-  async index({ view }: HttpContext) {
+  async index({ auth, request, view }: HttpContext) {
+    const user = auth.user
+    const search = String(request.input('q') || '').trim()
     const gardeners = await GardenerProfile.query()
       .where('isAvailable', true)
-      .preload('user')
+      .preload('user', (query) => query.preload('accountProfile'))
       .preload('services', (query) => query.where('isActive', true).orderBy('id', 'asc'))
       .orderBy('ratingAverage', 'desc')
 
+    const favoriteGardenerUserIds = user
+      ? await this.getFavoriteGardenerUserIds(user.id)
+      : new Set<number>()
+    const formattedGardeners = gardeners.map((gardener) =>
+      this.formatGardener(gardener, {
+        isFavorite: favoriteGardenerUserIds.has(gardener.userId),
+      })
+    )
+    const filteredGardeners = this.filterGardeners(formattedGardeners, search)
+    const favoriteGardeners = formattedGardeners
+      .filter((gardener) => gardener.isFavorite)
+      .slice(0, 4)
+    const featuredGardeners = formattedGardeners
+      .filter((gardener) => gardener.ratingScore >= 4 || gardener.reviewCount > 0)
+      .slice(0, 4)
+
     return view.render('pages/services/maintenance', {
-      gardeners: gardeners.map((gardener) => this.formatGardener(gardener)),
+      gardeners: filteredGardeners,
+      favoriteGardeners,
+      featuredGardeners: featuredGardeners.length
+        ? featuredGardeners
+        : formattedGardeners.slice(0, 4),
+      search,
+      stats: {
+        available: formattedGardeners.length,
+        featured: featuredGardeners.length || Math.min(formattedGardeners.length, 4),
+        favorites: favoriteGardeners.length,
+      },
     })
   }
 
   async show({ params, response, view, session }: HttpContext) {
     const gardener = await GardenerProfile.query()
       .where('id', params.id)
-      .preload('user')
+      .preload('user', (query) => query.preload('accountProfile'))
       .preload('services', (query) => query.where('isActive', true).orderBy('id', 'asc'))
       .first()
 
@@ -41,9 +78,24 @@ export default class ServicesController {
     const gardener = await GardenerProfile.query().where('userId', user.id).first()
 
     if (!gardener) {
+      const serviceRequests = await ServiceRequest.query()
+        .where('clientUserId', user.id)
+        .preload('gardenerProfile', (query) => {
+          query.preload('user', (userQuery) => userQuery.preload('accountProfile'))
+        })
+        .orderBy('createdAt', 'desc')
+      const requests = serviceRequests.map((serviceRequest) =>
+        this.formatSentServiceRequest(serviceRequest)
+      )
+
       return view.render('pages/requested', {
-        requests: [],
-        stats: { pending: 0, scheduled: 0, thisWeek: 0 },
+        requests,
+        mode: 'sent',
+        stats: {
+          pending: requests.filter((item) => item.status === 'pending').length,
+          scheduled: requests.filter((item) => item.status === 'scheduled').length,
+          thisWeek: requests.filter((item) => item.isThisWeek).length,
+        },
       })
     }
 
@@ -52,10 +104,13 @@ export default class ServicesController {
       .preload('client')
       .orderBy('createdAt', 'desc')
 
-    const requests = serviceRequests.map((serviceRequest) => this.formatServiceRequest(serviceRequest))
+    const requests = serviceRequests.map((serviceRequest) =>
+      this.formatServiceRequest(serviceRequest)
+    )
 
     return view.render('pages/requested', {
       requests,
+      mode: 'received',
       stats: {
         pending: requests.filter((item) => item.status === 'pending').length,
         scheduled: requests.filter((item) => item.status === 'scheduled').length,
@@ -91,18 +146,28 @@ export default class ServicesController {
     return response.redirect('/maintenance')
   }
 
-  private formatGardener(gardener: GardenerProfile) {
+  private formatGardener(gardener: GardenerProfile, options: { isFavorite?: boolean } = {}) {
     const services = gardener.services.map((service) => service.name)
     const firstService = gardener.services[0]
+    const profile = gardener.user.accountProfile || null
+    const displayName = profile?.displayName || gardener.user.fullName || gardener.user.username
+    const ratingScore = Number(gardener.ratingAverage || 0)
+    const reviewCount = Number(gardener.ratingCount || 0)
 
     return {
       id: gardener.id,
-      name: gardener.user.fullName,
-      photo: gardener.user.profilePicture || '/resources/images/services/profile2.png',
+      userId: gardener.userId,
+      username: gardener.user.username,
+      name: displayName,
+      photo:
+        this.profileMediaUrl(gardener.userId, profile?.avatarUrl || gardener.user.profilePicture) ||
+        '/resources/images/services/profile2.png',
       specialty: gardener.headline || firstService?.name || 'Plant maintenance',
       experience: `${gardener.experienceYears || 0} years of experience`,
-      rating: Number(gardener.ratingAverage || 0).toFixed(1),
-      reviews: String(gardener.ratingCount || 0),
+      rating: ratingScore.toFixed(1),
+      ratingScore,
+      reviews: String(reviewCount),
+      reviewCount,
       location: gardener.serviceArea || 'San Salvador',
       phone: gardener.publicPhone || gardener.user.phone || 'Not available',
       email: gardener.user.email,
@@ -111,7 +176,53 @@ export default class ServicesController {
       hours: gardener.paymentMethods || 'Payment details on request',
       bio: gardener.bio || 'Ready to help with practical plant care and garden maintenance.',
       serviceType: this.serviceTypeFor(gardener.headline || firstService?.name || ''),
+      profileHref: `/users/${gardener.user.username}`,
+      isFavorite: Boolean(options.isFavorite),
+      isPremium: profile?.isPremium || false,
     }
+  }
+
+  private filterGardeners(gardeners: FormattedGardener[], search: string) {
+    const normalized = search.toLowerCase()
+
+    if (!normalized) return gardeners
+
+    return gardeners.filter((gardener) =>
+      [
+        gardener.name,
+        gardener.username,
+        gardener.specialty,
+        gardener.location,
+        gardener.bio,
+        gardener.services.join(' '),
+      ]
+        .join(' ')
+        .toLowerCase()
+        .includes(normalized)
+    )
+  }
+
+  private async getFavoriteGardenerUserIds(userId: number) {
+    const rows = await db
+      .from('favorite_accounts')
+      .join('users', 'users.id', 'favorite_accounts.favorite_user_id')
+      .where('favorite_accounts.user_id', userId)
+      .where('users.role', 'gardener')
+      .select('favorite_accounts.favorite_user_id')
+
+    return new Set(rows.map((row) => Number(row.favorite_user_id)).filter(Boolean))
+  }
+
+  private profileMediaUrl(userId: number, url?: string | null) {
+    if (!url) return null
+
+    const legacySecureUrl = url.match(/^\/profile\/media\/(avatar|banner)\/([^/]+)$/)
+
+    if (legacySecureUrl) {
+      return `/profile/media/${userId}/${legacySecureUrl[1]}/${legacySecureUrl[2]}`
+    }
+
+    return url
   }
 
   private parseBudget(value: unknown) {
@@ -134,7 +245,13 @@ export default class ServicesController {
 
   private normalizeServiceType(value: unknown): ServiceType {
     const normalized = String(value || '').trim()
-    const allowed: ServiceType[] = ['maintenance', 'garden_design', 'consultation', 'delivery', 'other']
+    const allowed: ServiceType[] = [
+      'maintenance',
+      'garden_design',
+      'consultation',
+      'delivery',
+      'other',
+    ]
     return allowed.includes(normalized as ServiceType) ? (normalized as ServiceType) : 'maintenance'
   }
 
@@ -171,6 +288,45 @@ export default class ServicesController {
       budget: serviceRequest.budget ? `$${Number(serviceRequest.budget).toFixed(2)}` : 'No budget',
       createdAt: serviceRequest.createdAt.toFormat('DD, h:mm a'),
       isThisWeek: scheduledFor ? scheduledFor.hasSame(DateTime.now(), 'week') : false,
+    }
+  }
+
+  private formatSentServiceRequest(serviceRequest: ServiceRequest) {
+    const scheduledFor = serviceRequest.scheduledFor
+    const serviceTypeLabels: Record<ServiceType, string> = {
+      maintenance: 'Maintenance',
+      garden_design: 'Garden design',
+      consultation: 'Consultation',
+      delivery: 'Delivery',
+      other: 'Other',
+    }
+    const gardener = serviceRequest.gardenerProfile
+    const profile = gardener?.user?.accountProfile || null
+    const gardenerName =
+      profile?.displayName || gardener?.user?.fullName || gardener?.user?.username || 'Gardener'
+
+    return {
+      id: serviceRequest.id,
+      serviceType: serviceRequest.serviceType,
+      serviceTypeLabel: serviceTypeLabels[serviceRequest.serviceType],
+      status: serviceRequest.status,
+      statusLabel: serviceRequest.status.charAt(0).toUpperCase() + serviceRequest.status.slice(1),
+      scheduledFor: scheduledFor ? scheduledFor.toFormat('DD, h:mm a') : 'No date selected',
+      address: serviceRequest.address || 'No location provided',
+      notes: serviceRequest.notes || 'No notes provided.',
+      budget: serviceRequest.budget ? `$${Number(serviceRequest.budget).toFixed(2)}` : 'No budget',
+      createdAt: serviceRequest.createdAt.toFormat('DD, h:mm a'),
+      isThisWeek: scheduledFor ? scheduledFor.hasSame(DateTime.now(), 'week') : false,
+      gardenerName,
+      gardenerUsername: gardener?.user?.username || null,
+      gardenerPhoto:
+        gardener && gardener.user
+          ? this.profileMediaUrl(
+              gardener.userId,
+              profile?.avatarUrl || gardener.user.profilePicture
+            )
+          : null,
+      gardenerSpecialty: gardener?.headline || 'Plant maintenance',
     }
   }
 }

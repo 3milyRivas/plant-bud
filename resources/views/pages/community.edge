@@ -14,8 +14,8 @@
     searchError
   })
 
-  <div class="mx-auto grid max-w-[1360px] gap-8 px-4 pb-24 pt-36 lg:px-6 xl:grid-cols-[minmax(0,790px)_26rem] xl:items-start xl:gap-12 2xl:grid-cols-[minmax(0,830px)_27rem] 2xl:gap-14">
-    <main class="min-w-0 space-y-6">
+  <div class="mx-auto grid max-w-[1360px] gap-8 px-4 pb-24 pt-36 lg:px-6 xl:grid-cols-[minmax(0,790px)_26rem] xl:items-start xl:gap-12 2xl:grid-cols-[minmax(0,830px)_27rem] 2xl:gap-14" data-community-layout>
+    <main class="min-w-0 space-y-6" data-community-main>
 
       @form({
         action: '/community/search',
@@ -137,7 +137,7 @@
       </div>
     </main>
 
-    <aside class="community-sidebar-shell min-w-0 xl:sticky xl:self-start">
+    <aside class="community-sidebar-shell min-w-0 xl:sticky xl:self-start" data-community-sidebar>
       <div class="community-sidebar-scroll space-y-5 xl:overflow-y-auto xl:overscroll-contain xl:p-1 xl:pb-10 xl:pr-3">
       <section class="relative z-50 hidden overflow-visible rounded-3xl border border-white/30 bg-white/24 p-4 shadow-xl backdrop-blur-xl xl:block">
         <div class="flex items-center justify-between gap-3">

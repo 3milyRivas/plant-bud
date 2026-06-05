@@ -3,29 +3,8 @@
 
 @!component('components/app-navbar', {
   section: 'Care guide',
-  active: 'care',
   dynamic: true,
   maxWidth: 'max-w-[min(1500px,calc(100vw-2rem))]',
-  items: [
-    {
-      key: 'homepage',
-      href: '/homepage',
-      label: 'Home',
-      icon: '',
-    },
-    {
-      key: 'catalog',
-      href: catalogHref,
-      label: 'Catalog',
-      icon: '',
-    },
-    {
-      key: 'community',
-      href: '/community',
-      label: 'Community',
-      icon: '',
-    },
-  ],
 })
 
 <div class="relative h-[620px] w-full bg-cover bg-center {{ imageBg }}">

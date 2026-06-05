@@ -23,6 +23,49 @@
     <div class="auth-card is-alive auth-panel-in relative bg-white/10 backdrop-blur-3xl border border-white/10 rounded-[1.5rem] px-6 py-7 md:px-8 md:py-8 shadow-[0_35px_120px_rgba(0,0,0,0.35)] overflow-hidden">
       <div class="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-[#ebe3a7]/45 to-transparent"></div>
 
+      <form method="POST" action="/demo/guest" class="relative z-10 mb-7">
+        {{ csrfField() }}
+
+        <button type="submit" class="auth-demo-choice group relative flex w-full overflow-hidden rounded-[1.35rem] border border-[#ebe3a7]/55 bg-[#ebe3a7] px-5 py-5 text-left text-[#113e14] shadow-[0_24px_70px_rgba(0,0,0,0.28)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_30px_90px_rgba(0,0,0,0.34)] md:px-6">
+          <span class="absolute -right-8 -top-10 h-32 w-32 rounded-full bg-white/55 blur-2xl transition duration-500 group-hover:scale-125"></span>
+          <span class="absolute bottom-0 left-0 h-px w-full bg-gradient-to-r from-transparent via-white/75 to-transparent"></span>
+
+          <span class="relative flex w-full flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <span class="flex min-w-0 items-center gap-4">
+              <span class="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-[#113e14] text-[#ebe3a7] shadow-[0_16px_38px_rgba(17,62,20,0.28)] transition duration-300 group-hover:scale-105">
+                <svg class="h-8 w-8" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                  <path d="M12 3l8 4.5v6.8c0 3.2-3.4 5.8-8 7.2-4.6-1.4-8-4-8-7.2V7.5L12 3z"></path>
+                  <path d="M9 12l2 2 4-4"></path>
+                </svg>
+              </span>
+
+              <span class="min-w-0">
+                <span class="inline-flex items-center rounded-full bg-[#113e14]/10 px-3 py-1 text-[11px] font-black uppercase tracking-[0.16em] text-[#416543]">
+                  Premium Demo
+                </span>
+
+                <span class="mt-2 block text-2xl font-black leading-tight md:text-3xl">
+                  Try a Demo as a Guest
+                </span>
+
+                <span class="mt-1 block text-sm font-bold leading-relaxed text-[#416543]">
+                  Instant guest access with Premium active.
+                </span>
+              </span>
+            </span>
+
+            <span class="inline-flex shrink-0 items-center justify-center gap-2 rounded-2xl bg-[#113e14] px-5 py-3 text-sm font-black text-[#ebe3a7] shadow-[0_14px_34px_rgba(17,62,20,0.26)] transition duration-300 group-hover:bg-[#416543]">
+              Start Demo
+
+              <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M5 12h14"></path>
+                <path d="M13 5l7 7-7 7"></path>
+              </svg>
+            </span>
+          </span>
+        </button>
+      </form>
+
       <div class="relative z-10 grid lg:grid-cols-[0.95fr_1.05fr] gap-8 items-center">
         <div class="text-center lg:text-left">
           <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/10 backdrop-blur-xl border border-white/10 shadow-lg mb-5">

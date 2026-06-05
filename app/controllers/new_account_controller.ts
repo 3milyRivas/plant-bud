@@ -14,6 +14,8 @@ import {
 
 import type { HttpContext } from '@adonisjs/core/http'
 import db from '@adonisjs/lucid/services/db'
+import { DateTime } from 'luxon'
+import { randomBytes } from 'node:crypto'
 
 type SignupRole = 'client' | 'gardener' | 'nursery'
 
@@ -162,6 +164,59 @@ export default class NewAccountController {
       })
 
       session.flash('old', safeOldInput(request.all()))
+
+      return response.redirect().back()
+    }
+  }
+
+  async createDemoGuest({ response, auth, session }: HttpContext) {
+    try {
+      const demoId = await this.uniqueDemoId()
+      const now = DateTime.now()
+      const trx = await db.transaction()
+      let user: User
+
+      try {
+        user = await User.create(
+          {
+            username: `guest_${demoId}`,
+            first_name: 'Guest',
+            last_name: `Demo ${demoId.toUpperCase()}`,
+            email: `guest_${demoId}@demo.plantbud.local`,
+            password: randomBytes(24).toString('hex'),
+            role: 'client',
+            phone: null,
+            dui: null,
+          },
+          { client: trx }
+        )
+
+        await AccountProfile.create(
+          {
+            userId: user.id,
+            displayName: `Guest Demo ${demoId.toUpperCase()}`,
+            subscriptionPlan: 'premium',
+            premiumStartedAt: now,
+            premiumRenewsAt: now.plus({ years: 1 }),
+            rewardPoints: 150,
+            scannerMonthlyLimit: FREE_SCANNER_MONTHLY_LIMIT,
+          },
+          { client: trx }
+        )
+
+        await trx.commit()
+      } catch (error) {
+        await trx.rollback()
+        throw error
+      }
+
+      await auth.use('web').login(user)
+
+      return response.redirect().toRoute('homepage')
+    } catch (error) {
+      session.flash('errors', {
+        auth: ['Demo account could not be created'],
+      })
 
       return response.redirect().back()
     }
@@ -343,6 +398,22 @@ export default class NewAccountController {
     }
 
     return username
+  }
+
+  private async uniqueDemoId() {
+    for (let attempt = 0; attempt < 20; attempt += 1) {
+      const demoId = randomBytes(5).toString('hex')
+      const existingUser = await User.query()
+        .where('username', `guest_${demoId}`)
+        .orWhere('email', `guest_${demoId}@demo.plantbud.local`)
+        .first()
+
+      if (!existingUser) {
+        return demoId
+      }
+    }
+
+    return `${DateTime.now().toMillis().toString(36)}${randomBytes(3).toString('hex')}`.slice(0, 15)
   }
 
   private splitName(fullName?: string | null) {
