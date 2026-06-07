@@ -9,25 +9,27 @@
   dynamic: true,
 })
 
-<div class="relative h-[620px] w-full bg-cover bg-center {{ imageBg }}">
+<div class="relative h-[700px] w-full bg-cover bg-center {{ imageBg }}">
   <div class="absolute inset-0 bg-black/25"></div>
-  <div class="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#416543] to-transparent"></div>
+  <div class="pointer-events-none absolute inset-x-0 bottom-0 h-60 bg-gradient-to-t from-[#416543] to-transparent"></div>
 
-  <div class="relative z-10 flex h-full flex-col items-center justify-center px-6 pt-24 text-center">
-    <h1 class="max-w-4xl text-5xl font-bold text-white md:text-7xl">
-      {{ title }}
-    </h1>
-    <p class="mt-6 max-w-xl text-white/80">
-      {{ text }}
-    </p>
-    <div class="mt-10 flex flex-wrap justify-center gap-5">
-      <a href="{{ catalogHref }}" class="rounded-full bg-[#dca15d] px-8 py-4 font-black text-[#113e14] shadow-[0_10px_30px_rgba(17,62,20,0.25)] transition duration-300 hover:scale-105 hover:bg-[#ebe3a7]">
-        Explore Plants
-      </a>
+<div class="relative z-10 flex h-full flex-col items-center justify-center px-6 pt-24 text-center">
+  <h1 class="max-w-4xl rounded-2xl bg-black/35 px-6 py-3 text-5xl font-bold text-white md:text-7xl">
+    {{ title }}
+  </h1>
 
-      <a href="{{ careHref }}" class="rounded-full border border-white/40 bg-white/16 px-8 py-4 font-black text-white backdrop-blur-md transition duration-300 hover:bg-white/24">
-        Learn More
-      </a>
-    </div>
+  <p class="mt-6 max-w-xl rounded-xl bg-black/35 px-4 py-2 text-white/90">
+    {{ text }}
+  </p>
+
+  <div class="mt-10 flex flex-wrap justify-center gap-5">
+    <a href="{{ catalogHref }}" class="rounded-full bg-[#dca15d] px-8 py-4 font-black text-[#113e14] shadow-[0_10px_30px_rgba(17,62,20,0.25)] transition duration-300 hover:scale-105 hover:bg-[#ebe3a7]">
+      Explore Plants
+    </a>
+
+    <a href="{{ careHref }}" class="rounded-full border border-white/40 bg-white/16 px-8 py-4 font-black text-white backdrop-blur-md transition duration-300 hover:bg-white/24">
+      Learn More
+    </a>
   </div>
+</div>
 </div>

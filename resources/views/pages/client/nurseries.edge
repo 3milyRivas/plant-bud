@@ -39,7 +39,7 @@
       <div class="relative min-h-[360px] overflow-hidden lg:min-h-[560px]">
         <img src="/resources/images/homepagee/nursery-header.jpg" alt="Plants inside a nursery" class="absolute inset-0 h-full w-full object-cover">
         <div class="absolute inset-0 bg-gradient-to-t from-[#113e14]/70 via-transparent to-transparent lg:bg-gradient-to-r lg:from-[#113e14] lg:via-transparent lg:to-transparent"></div>
-        <div class="absolute bottom-6 left-6 right-6 grid grid-cols-3 gap-2 rounded-[26px] border border-white/20 bg-[#113e14]/76 p-2 text-white shadow-2xl backdrop-blur-xl sm:left-auto sm:w-[390px]">
+        <div class="absolute bottom-6 left-6 right-6 grid grid-cols-3 gap-2 rounded-[26px] border border-white/20 bg-[#113e14]/76 p-2 text-white shadow-2xl backdrop-blur-xl sm:left-32 sm:right-auto sm:w-[390px]">
           <div class="rounded-[20px] bg-[#ebe3a7] px-3 py-4 text-center text-[#113e14]">
             <strong class="block text-2xl font-black">{{ totals.registered }}</strong>
             <span class="text-[9px] font-black uppercase tracking-wider">Accounts</span>
@@ -113,6 +113,76 @@
     </div>
   </section>
 
+  <section id="favorite-nurseries" class="scroll-mt-28 px-4 py-12 sm:px-8">
+    <div class="mx-auto max-w-[1320px]">
+      <div class="mb-7 flex flex-col justify-between gap-4 text-white sm:flex-row sm:items-end">
+        <div>
+          <p class="text-xs font-black uppercase tracking-[0.2em] text-[#ebe3a7]">Your saved places</p>
+          <h2 class="mt-2 font-abril text-4xl sm:text-5xl">Favorite nurseries</h2>
+          <p class="mt-3 max-w-2xl font-semibold leading-7 text-white/68">
+            Keep the nurseries you visit most close at hand.
+          </p>
+        </div>
+        @if(canUseFavorites)
+          <span class="w-fit rounded-full bg-[#ebe3a7] px-5 py-2 text-xs font-black text-[#113e14]">
+            {{ totals.favorites }} saved
+          </span>
+        @endif
+      </div>
+
+      @if(favoriteNurseries.length)
+        <div class="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          @each(nursery in favoriteNurseries)
+            <article class="group relative overflow-hidden rounded-[32px] border border-white/16 bg-[#f8f5e7] p-5 text-[#113e14] shadow-[0_18px_50px_rgba(17,62,20,0.2)] transition hover:-translate-y-1">
+              <div class="absolute -right-12 -top-16 h-36 w-36 rounded-full bg-[#dca15d]/18 transition duration-500 group-hover:scale-125"></div>
+              <div class="relative flex items-start gap-4">
+                @if(nursery.image)
+                  <img src="{{ nursery.image }}" alt="{{ nursery.name }}" loading="lazy" decoding="async" class="h-20 w-20 shrink-0 rounded-[24px] border-4 border-white object-cover shadow-lg">
+                @else
+                  <span class="grid h-20 w-20 shrink-0 place-items-center rounded-[24px] border-4 border-white bg-[#416543] text-2xl font-black text-[#ebe3a7] shadow-lg">
+                    {{ nursery.initial }}
+                  </span>
+                @endif
+                <div class="min-w-0 flex-1 pt-1">
+                  <span class="inline-flex rounded-full bg-[#dca15d]/18 px-3 py-1 text-[9px] font-black uppercase tracking-wider text-[#a0602f]">Favorite</span>
+                  <h3 class="mt-2 truncate text-xl font-black">{{ nursery.name }}</h3>
+                  <p class="mt-1 truncate text-xs font-bold text-[#416543]">{{ nursery.location }}</p>
+                </div>
+              </div>
+              <p class="relative mt-4 line-clamp-2 text-sm font-semibold leading-6 text-[#416543]">{{ nursery.description }}</p>
+              <div class="relative mt-5 flex gap-2 border-t border-[#113e14]/10 pt-4">
+                <a href="{{ nursery.profileHref }}" class="flex-1 rounded-full bg-[#113e14] px-5 py-3 text-center text-xs font-black text-white transition hover:bg-[#416543]">
+                  Go to profile
+                </a>
+                @form({
+                  action: '/users/' + nursery.username + '/favorite',
+                  method: 'POST',
+                  class: 'flex-1'
+                })
+                  <button type="submit" class="w-full rounded-full border border-[#113e14]/14 bg-white px-5 py-3 text-xs font-black text-[#113e14] transition hover:bg-[#ebe3a7]">
+                    Remove
+                  </button>
+                @end
+              </div>
+            </article>
+          @endeach
+        </div>
+      @else
+        <div class="rounded-[32px] border border-white/18 bg-white/10 p-8 text-center text-white shadow-xl backdrop-blur-xl">
+          <h3 class="text-2xl font-black">
+            {{ canUseFavorites ? 'No favorite nurseries yet' : 'Sign in to save favorite nurseries' }}
+          </h3>
+          <p class="mx-auto mt-3 max-w-xl font-semibold leading-7 text-white/68">
+            {{ canUseFavorites ? 'Use the favorite button on any nursery account to add it to this section.' : 'Your saved nursery list will stay connected to your Plant Bud account.' }}
+          </p>
+          <a href="{{ canUseFavorites ? '#nursery-accounts' : '/login' }}" class="mt-5 inline-flex rounded-full bg-[#dca15d] px-6 py-3 text-sm font-black text-[#113e14] transition hover:bg-[#ebe3a7]">
+            {{ canUseFavorites ? 'Browse nurseries' : 'Sign in' }}
+          </a>
+        </div>
+      @endif
+    </div>
+  </section>
+
   <section id="nursery-accounts" class="scroll-mt-28 px-4 py-16 sm:px-8">
     <div class="mx-auto max-w-[1320px] rounded-[46px] bg-[#ebe3a7] px-5 py-10 shadow-[0_25px_70px_rgba(17,62,20,0.22)] sm:px-9 lg:px-12">
       <div class="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
@@ -123,7 +193,7 @@
             @if(search)
               Results for “{{ search }}”. Showing {{ pagination.from }}–{{ pagination.to }} of {{ pagination.total }} nursery accounts.
             @else
-              Browse every nursery account in pages of 10, using the profile photo chosen by its owner.
+              Browse all nursery accounts registered on Plant Bud, displayed 10 per page.
             @endif
           </p>
         </div>
@@ -155,7 +225,7 @@
                   <div class="flex items-start justify-between gap-3">
                     <div class="min-w-0">
                       <h3 class="truncate text-xl font-black sm:text-2xl">{{ nursery.name }}</h3>
-                      <p class="mt-1 truncate text-xs font-black text-[#416543]/62">@{{ nursery.username }}</p>
+                      <p class="mt-1 truncate text-xs font-black text-[#416543]/62">{{ '@' + nursery.username }}</p>
                     </div>
                     <div class="shrink-0 rounded-full bg-[#ebe3a7] px-3 py-2 text-xs font-black">
                       {{ nursery.rating ? nursery.rating + ' / 5' : 'New' }}
@@ -182,9 +252,21 @@
 
               <div class="relative mt-5 flex items-center justify-between gap-4 border-t border-[#113e14]/10 pt-4">
                 <p class="min-w-0 truncate text-xs font-bold text-[#416543]">{{ nursery.hours }}</p>
-                <a href="{{ nursery.profileHref }}" class="shrink-0 rounded-full bg-[#113e14] px-5 py-3 text-xs font-black text-white transition hover:bg-[#416543]">
-                  Go to profile
-                </a>
+                <div class="flex shrink-0 items-center gap-2">
+                  @if(canUseFavorites && !nursery.isOwnProfile)
+                    @form({
+                      action: '/users/' + nursery.username + '/favorite',
+                      method: 'POST'
+                    })
+                      <button type="submit" class="{{ nursery.isFavorite ? 'bg-[#dca15d] text-[#113e14]' : 'bg-white text-[#416543]' }} rounded-full px-4 py-3 text-xs font-black shadow-sm transition hover:bg-[#ebe3a7]">
+                        {{ nursery.isFavorite ? 'Favorite' : 'Add favorite' }}
+                      </button>
+                    @end
+                  @endif
+                  <a href="{{ nursery.profileHref }}" class="rounded-full bg-[#113e14] px-5 py-3 text-xs font-black text-white transition hover:bg-[#416543]">
+                    Go to profile
+                  </a>
+                </div>
               </div>
             </article>
           @endeach

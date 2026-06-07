@@ -1,6 +1,7 @@
 import nurseriesData from '#data/nurseries'
 import NurseryProfile from '#models/nursery_profile'
 import type { HttpContext } from '@adonisjs/core/http'
+import db from '@adonisjs/lucid/services/db'
 
 type MapLocation = {
   id: string
@@ -16,7 +17,8 @@ type MapLocation = {
 }
 
 export default class NurseriesController {
-  async index({ request, view }: HttpContext) {
+  async index({ auth, request, view }: HttpContext) {
+    const user = auth.user
     const search = String(request.input('q') || '').trim()
     const requestedPage = Math.max(
       1,
@@ -29,7 +31,15 @@ export default class NurseriesController {
       .orderBy('ratingAverage', 'desc')
       .orderBy('nurseryName', 'asc')
 
-    const allRegisteredNurseries = profiles.map((profile) => this.formatNursery(profile))
+    const favoriteNurseryUserIds = user
+      ? await this.getFavoriteNurseryUserIds(user.id)
+      : new Set<number>()
+    const allRegisteredNurseries = profiles.map((profile) =>
+      this.formatNursery(profile, {
+        isFavorite: favoriteNurseryUserIds.has(profile.userId),
+        isOwnProfile: user?.id === profile.userId,
+      })
+    )
     const filteredNurseries = this.filterNurseries(allRegisteredNurseries, search)
     const perPage = 10
     const totalPages = Math.max(1, Math.ceil(filteredNurseries.length / perPage))
@@ -42,6 +52,7 @@ export default class NurseriesController {
 
     return view.render('pages/client/nurseries', {
       registeredNurseries,
+      favoriteNurseries: allRegisteredNurseries.filter((nursery) => nursery.isFavorite).slice(0, 6),
       editorialNurseries: nurseriesData.nurseries,
       mapLocations,
       mapLocationsJson: JSON.stringify(mapLocations).replace(/</g, '\\u003c'),
@@ -65,7 +76,9 @@ export default class NurseriesController {
         registered: allRegisteredNurseries.length,
         locations: mapLocations.length,
         active: allRegisteredNurseries.filter((nursery) => nursery.isActive).length,
+        favorites: allRegisteredNurseries.filter((nursery) => nursery.isFavorite).length,
       },
+      canUseFavorites: Boolean(user),
     })
   }
 
@@ -100,7 +113,10 @@ export default class NurseriesController {
     return response.json({ nurseries })
   }
 
-  private formatNursery(profile: NurseryProfile) {
+  private formatNursery(
+    profile: NurseryProfile,
+    options: { isFavorite?: boolean; isOwnProfile?: boolean } = {}
+  ) {
     const account = profile.user.accountProfile
     const displayLocation =
       [profile.address, profile.city].filter(Boolean).join(', ') ||
@@ -110,6 +126,7 @@ export default class NurseriesController {
 
     return {
       id: profile.id,
+      userId: profile.userId,
       name: displayName,
       username: profile.user.username,
       image: this.profileMediaUrl(
@@ -130,6 +147,8 @@ export default class NurseriesController {
       services: this.splitStoredList(profile.servicesOffered).slice(0, 3),
       searchServices: this.splitStoredList(profile.servicesOffered),
       isActive: profile.isActive,
+      isFavorite: Boolean(options.isFavorite),
+      isOwnProfile: Boolean(options.isOwnProfile),
       profileHref: `/users/${profile.user.username}`,
     }
   }
@@ -208,6 +227,17 @@ export default class NurseriesController {
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
       .trim()
+  }
+
+  private async getFavoriteNurseryUserIds(userId: number) {
+    const rows = await db
+      .from('favorite_accounts')
+      .join('users', 'users.id', 'favorite_accounts.favorite_user_id')
+      .where('favorite_accounts.user_id', userId)
+      .where('users.role', 'nursery')
+      .select('favorite_accounts.favorite_user_id')
+
+    return new Set(rows.map((row) => Number(row.favorite_user_id)).filter(Boolean))
   }
 
   private paginationHref(search: string, page: number) {
