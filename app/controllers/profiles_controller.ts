@@ -5,8 +5,8 @@ import Follow from '#models/follow'
 import GardenerProfile from '#models/gardener_profile'
 import GardenerService from '#models/gardener_service'
 import NurseryProfile from '#models/nursery_profile'
-import ProfileReview from '#models/profile_review'
-import User from '#models/user'
+import ProfileReviewModel from '#models/profile_review'
+import type User from '#models/user'
 import { FREE_SCANNER_MONTHLY_LIMIT } from '#services/subscription_service'
 import { profileValidator } from '#validators/profile'
 import {
@@ -88,6 +88,10 @@ type ProfileFormPayload = {
   availability_schedule?: string | null
   services_offered?: string | null
   payment_methods?: string | null
+  payout_paypal_email?: string | null
+  payout_cardholder_name?: string | null
+  payout_card_number?: string | null
+  payout_card_configured?: string | null
   public_phone?: string | null
   public_email?: string | null
   address?: string | null
@@ -170,7 +174,7 @@ export default class ProfilesController {
       )
       const profileErrors = {
         ...(await this.validateProfileUpdate(user, normalizedPhone)),
-        ...this.validateRoleProfileFields(payload),
+        ...(await this.validateRoleProfileFields(user, payload)),
         ...socialErrors,
         ...uploadValidation.errors,
       }
@@ -230,6 +234,29 @@ export default class ProfilesController {
     }
   }
 
+  async updateAvailability({ auth, request, response, session }: HttpContext) {
+    const user = auth.user!
+    const availability = request.input('is_available')
+
+    if (availability !== '1' && availability !== '0') {
+      session.flash('profileError', 'Choose a valid availability status.')
+      return response.redirect().toRoute('profile')
+    }
+
+    const gardenerProfile = await this.ensureGardenerProfile(user)
+    gardenerProfile.isAvailable = availability === '1'
+    await gardenerProfile.save()
+
+    session.flash(
+      'success',
+      gardenerProfile.isAvailable
+        ? 'You are now available for new service requests.'
+        : 'You are now unavailable for new service requests.'
+    )
+
+    return response.redirect().toRoute('profile')
+  }
+
   async media({ auth, params, response }: HttpContext) {
     const ownerId = params.userId ? Number(params.userId) : auth.user!.id
     const kind = params.kind as ProfileImageKind
@@ -267,7 +294,7 @@ export default class ProfilesController {
       profileServicesText: '',
       paymentMethods: [] as string[],
       paymentMethodsText: '',
-      profileReviews: [] as ProfileReview[],
+      profileReviews: [] as InstanceType<typeof ProfileReviewModel>[],
       profileRating: { average: 0, averageText: '0.0', count: 0 },
       ratingStars: [1, 2, 3, 4, 5],
     }
@@ -282,7 +309,7 @@ export default class ProfilesController {
         ? serviceRows.map((service) => service.name)
         : this.splitStoredList(roleProfile.servicesOffered)
       const paymentMethods = this.splitStoredList(roleProfile.paymentMethods)
-      const profileReviews = await ProfileReview.query()
+      const profileReviews = await ProfileReviewModel.query()
         .where('gardenerProfileId', roleProfile.id)
         .orderBy('createdAt', 'desc')
         .limit(6)
@@ -309,7 +336,7 @@ export default class ProfilesController {
       const roleProfile = await this.ensureNurseryProfile(user)
       const profileServices = this.splitStoredList(roleProfile.servicesOffered)
       const paymentMethods = this.splitStoredList(roleProfile.paymentMethods)
-      const profileReviews = await ProfileReview.query()
+      const profileReviews = await ProfileReviewModel.query()
         .where('nurseryProfileId', roleProfile.id)
         .orderBy('createdAt', 'desc')
         .limit(6)
@@ -344,6 +371,7 @@ export default class ProfilesController {
       const roleProfile = await this.ensureGardenerProfile(user)
       const profileServices = this.normalizeList(payload.services_offered, 12, 90)
       const paymentMethods = this.normalizePaymentMethods(payload.payment_methods)
+      const payoutCard = this.normalizePayoutCard(payload.payout_card_number)
       const publicPhone = this.normalizePhone(payload.public_phone) || privatePhone
 
       roleProfile.merge({
@@ -353,6 +381,18 @@ export default class ProfilesController {
         availabilitySchedule: this.cleanOptional(payload.availability_schedule),
         servicesOffered: this.listToStoredText(profileServices, 255),
         paymentMethods: this.listToStoredText(paymentMethods),
+        payoutPaypalEmail: paymentMethods.includes('Paypal')
+          ? this.cleanOptional(payload.payout_paypal_email)?.toLowerCase() || null
+          : null,
+        payoutCardholderName: paymentMethods.includes('Card')
+          ? this.cleanOptional(payload.payout_cardholder_name) || roleProfile.payoutCardholderName
+          : null,
+        payoutCardBrand: paymentMethods.includes('Card')
+          ? payoutCard?.brand || roleProfile.payoutCardBrand
+          : null,
+        payoutCardLastFour: paymentMethods.includes('Card')
+          ? payoutCard?.lastFour || roleProfile.payoutCardLastFour
+          : null,
         publicPhone,
         isAvailable: this.booleanFromForm(payload.is_available, roleProfile.isAvailable),
       })
@@ -365,6 +405,7 @@ export default class ProfilesController {
       const roleProfile = await this.ensureNurseryProfile(user)
       const profileServices = this.normalizeList(payload.services_offered, 16, 90)
       const paymentMethods = this.normalizePaymentMethods(payload.payment_methods)
+      const payoutCard = this.normalizePayoutCard(payload.payout_card_number)
       const publicPhone = this.normalizePhone(payload.public_phone) || privatePhone
 
       roleProfile.merge({
@@ -374,6 +415,18 @@ export default class ProfilesController {
         openingHours: this.cleanOptional(payload.opening_hours),
         servicesOffered: this.listToStoredText(profileServices),
         paymentMethods: this.listToStoredText(paymentMethods),
+        payoutPaypalEmail: paymentMethods.includes('Paypal')
+          ? this.cleanOptional(payload.payout_paypal_email)?.toLowerCase() || null
+          : null,
+        payoutCardholderName: paymentMethods.includes('Card')
+          ? this.cleanOptional(payload.payout_cardholder_name) || roleProfile.payoutCardholderName
+          : null,
+        payoutCardBrand: paymentMethods.includes('Card')
+          ? payoutCard?.brand || roleProfile.payoutCardBrand
+          : null,
+        payoutCardLastFour: paymentMethods.includes('Card')
+          ? payoutCard?.lastFour || roleProfile.payoutCardLastFour
+          : null,
         publicPhone,
         publicEmail: this.cleanOptional(payload.public_email) || user.email,
         isActive: this.booleanFromForm(payload.is_active, roleProfile.isActive),
@@ -453,12 +506,42 @@ export default class ProfilesController {
     }
   }
 
-  private validateRoleProfileFields(payload: ProfileFormPayload) {
+  private async validateRoleProfileFields(
+    user: NonNullable<HttpContext['auth']['user']>,
+    payload: ProfileFormPayload
+  ) {
     const errors: FieldErrors = {}
     const publicPhone = this.normalizePhone(payload.public_phone)
 
     if (publicPhone && !/^[0-9]{4}-[0-9]{4}$/.test(publicPhone)) {
       errors.public_phone = ['Public phone must use the format 0000-0000']
+    }
+
+    const paymentMethods = this.normalizePaymentMethods(payload.payment_methods)
+    const roleProfile =
+      user.role === 'gardener'
+        ? await GardenerProfile.findBy('userId', user.id)
+        : user.role === 'nursery'
+          ? await NurseryProfile.findBy('userId', user.id)
+          : null
+    const hasConfiguredCard = Boolean(roleProfile?.payoutCardLastFour)
+
+    if (paymentMethods.includes('Paypal') && !this.cleanOptional(payload.payout_paypal_email)) {
+      errors.payout_paypal_email = ['Add the PayPal account that will receive payments']
+    }
+
+    if (paymentMethods.includes('Card')) {
+      if (!this.cleanOptional(payload.payout_cardholder_name)) {
+        errors.payout_cardholder_name = ['Add the cardholder name']
+      }
+      if (!hasConfiguredCard && !this.normalizePayoutCard(payload.payout_card_number)) {
+        errors.payout_card_number = ['Add a valid card to receive payments']
+      } else if (
+        this.cleanOptional(payload.payout_card_number) &&
+        !this.normalizePayoutCard(payload.payout_card_number)
+      ) {
+        errors.payout_card_number = ['Add a valid card number']
+      }
     }
 
     return errors
@@ -996,6 +1079,42 @@ export default class ProfilesController {
     return allowedPaymentMethods.filter((method) => selected.has(method.toLowerCase()))
   }
 
+  private normalizePayoutCard(value?: string | null) {
+    const cardNumber = String(value || '').replace(/\D/g, '')
+    if (!cardNumber) return null
+    if (cardNumber.length < 13 || cardNumber.length > 19 || !this.passesLuhnCheck(cardNumber)) {
+      return null
+    }
+
+    return {
+      brand: /^4/.test(cardNumber)
+        ? 'Visa'
+        : /^(5[1-5]|2[2-7])/.test(cardNumber)
+          ? 'Mastercard'
+          : /^3[47]/.test(cardNumber)
+            ? 'American Express'
+            : 'Card',
+      lastFour: cardNumber.slice(-4),
+    }
+  }
+
+  private passesLuhnCheck(cardNumber: string) {
+    let sum = 0
+    let doubleDigit = false
+
+    for (let index = cardNumber.length - 1; index >= 0; index -= 1) {
+      let digit = Number(cardNumber[index])
+      if (doubleDigit) {
+        digit *= 2
+        if (digit > 9) digit -= 9
+      }
+      sum += digit
+      doubleDigit = !doubleDigit
+    }
+
+    return sum % 10 === 0
+  }
+
   private splitStoredList(value?: string | null) {
     return (value || '')
       .split(/[\n,;]+/)
@@ -1235,7 +1354,8 @@ export default class ProfilesController {
   }
 
   private async countMutualFriends(userId: number) {
-    return (await this.getFriendIds(userId)).length
+    const friendIds = await this.getFriendIds(userId)
+    return friendIds.length
   }
 
   private profileMediaUrl(userId: number, url?: string | null) {

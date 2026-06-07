@@ -71,7 +71,7 @@
       },
       {
         href: '/notification',
-        label: 'Alerts',
+        label: 'Notifications',
         description: 'Recent interactions.',
       },
     ],
@@ -216,7 +216,7 @@
           @if(avatarUrl)
             <img src="{{ avatarUrl }}" alt="" class="h-full w-full object-cover">
           @else
-            <span class="block leading-none">
+            <span class="flex h-full w-full items-center justify-center text-center leading-none">
               {{ avatarInitial }}
             </span>
           @endif
@@ -229,8 +229,8 @@
               @if(avatarUrl)
                 <img src="{{ avatarUrl }}" alt="" class="h-11 w-11 flex-none rounded-full border-2 border-white object-cover shadow-md">
               @else
-                <span class="flex h-11 w-11 flex-none items-center justify-center rounded-full border-2 border-white bg-[#113e14] text-sm font-black leading-none text-[#ebe3a7] shadow-md">
-                  {{ avatarInitial }}
+                <span class="grid h-11 w-11 flex-none place-items-center rounded-full border-2 border-white bg-[#113e14] text-[#ebe3a7] shadow-md">
+                  <span class="block text-center text-sm font-black leading-none">{{ avatarInitial }}</span>
                 </span>
               @endif
               <span class="min-w-0">

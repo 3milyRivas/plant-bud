@@ -8,8 +8,10 @@ export type ScannedRoutes = {
     'plants.search': { paramsTuple?: []; params?: {} }
     'services.requested': { paramsTuple?: []; params?: {} }
     'maintenance': { paramsTuple?: []; params?: {} }
+    'maintenance.suggestions': { paramsTuple?: []; params?: {} }
     'request.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'request.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'services.requests.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'request': { paramsTuple?: []; params?: {} }
     'plans.index': { paramsTuple?: []; params?: {} }
     'plans.buy': { paramsTuple?: []; params?: {} }
@@ -47,6 +49,7 @@ export type ScannedRoutes = {
     'profile.settings': { paramsTuple?: []; params?: {} }
     'profile.media': { paramsTuple: [ParamValue,ParamValue]; params: {'kind': ParamValue,'fileName': ParamValue} }
     'profile.update': { paramsTuple?: []; params?: {} }
+    'profile.availability': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
     'session.store': { paramsTuple?: []; params?: {} }
     'signup.client': { paramsTuple?: []; params?: {} }
@@ -61,6 +64,7 @@ export type ScannedRoutes = {
     'plants.search': { paramsTuple?: []; params?: {} }
     'services.requested': { paramsTuple?: []; params?: {} }
     'maintenance': { paramsTuple?: []; params?: {} }
+    'maintenance.suggestions': { paramsTuple?: []; params?: {} }
     'request.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'request': { paramsTuple?: []; params?: {} }
     'plans.index': { paramsTuple?: []; params?: {} }
@@ -93,6 +97,7 @@ export type ScannedRoutes = {
     'plants.search': { paramsTuple?: []; params?: {} }
     'services.requested': { paramsTuple?: []; params?: {} }
     'maintenance': { paramsTuple?: []; params?: {} }
+    'maintenance.suggestions': { paramsTuple?: []; params?: {} }
     'request.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'request': { paramsTuple?: []; params?: {} }
     'plans.index': { paramsTuple?: []; params?: {} }
@@ -122,6 +127,7 @@ export type ScannedRoutes = {
   }
   POST: {
     'request.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'services.requests.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'plans.buy': { paramsTuple?: []; params?: {} }
     'plans.cancel': { paramsTuple?: []; params?: {} }
     'garden_designer.remove_background': { paramsTuple?: []; params?: {} }
@@ -138,6 +144,7 @@ export type ScannedRoutes = {
     'community.users.favorite': { paramsTuple: [ParamValue]; params: {'username': ParamValue} }
     'community.users.reviews.store': { paramsTuple: [ParamValue]; params: {'username': ParamValue} }
     'profile.update': { paramsTuple?: []; params?: {} }
+    'profile.availability': { paramsTuple?: []; params?: {} }
     'session.store': { paramsTuple?: []; params?: {} }
     'new_account.store': { paramsTuple?: []; params?: {} }
     'new_account.demo_guest': { paramsTuple?: []; params?: {} }

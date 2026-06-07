@@ -1,0 +1,88 @@
+@let(paymentMethodsValue = $props.get('paymentMethodsValue') || '')
+@let(paymentMethodsLower = paymentMethodsValue.toLowerCase())
+@let(roleProfile = $props.get('roleProfile'))
+@let(old = $props.get('old') || {})
+@let(errors = $props.get('errors') || {})
+@let(paypalValue = old.payout_paypal_email ?? roleProfile?.payoutPaypalEmail ?? '')
+@let(cardholderValue = old.payout_cardholder_name ?? roleProfile?.payoutCardholderName ?? '')
+@let(hasConfiguredCard = !!roleProfile?.payoutCardLastFour)
+
+<section id="payment-settings" class="mt-6 scroll-mt-28 overflow-hidden rounded-[2rem] border border-[#416543]/12 bg-white/48 shadow-sm" data-payment-methods>
+  <div class="border-b border-[#416543]/10 bg-[#113e14] p-5 text-white">
+    <p class="text-xs font-black uppercase tracking-[0.18em] text-[#ebe3a7]">Payments</p>
+    <h3 class="mt-2 text-2xl font-black">Accepted methods and payout accounts</h3>
+    <p class="mt-2 max-w-2xl text-sm font-semibold leading-6 text-white/68">Choose what customers can use, then add where protected payments should be delivered.</p>
+  </div>
+
+  <div class="p-5">
+    <input type="hidden" name="payment_methods" value="{{ paymentMethodsValue }}" data-payment-methods-value>
+    <div class="grid gap-3 sm:grid-cols-3">
+      @each(method in [
+        { value: 'Cash', description: 'Paid in person' },
+        { value: 'Paypal', description: 'Protected online payment' },
+        { value: 'Card', description: 'Protected card payment' },
+      ])
+        <label class="cursor-pointer">
+          <input type="checkbox" value="{{ method.value }}" class="peer sr-only" data-payment-method-checkbox {{ paymentMethodsLower.includes(method.value.toLowerCase()) ? 'checked' : '' }}>
+          <span class="flex min-h-20 flex-col justify-center rounded-2xl border border-[#a8b841] bg-white/76 px-4 text-center text-[#113e14] transition peer-checked:border-[#113e14] peer-checked:bg-[#113e14] peer-checked:text-[#ebe3a7] peer-focus-visible:ring-2 peer-focus-visible:ring-[#dca15d]">
+            <strong class="text-sm font-black">{{ method.value === 'Paypal' ? 'PayPal' : method.value }}</strong>
+            <small class="mt-1 text-[11px] font-bold opacity-65">{{ method.description }}</small>
+          </span>
+        </label>
+      @end
+    </div>
+
+    @if(errors.payment_methods)
+      <span class="mt-2 block text-xs font-bold text-red-700">{{ errors.payment_methods[0] }}</span>
+    @endif
+
+    <div class="mt-5 hidden rounded-[1.5rem] border border-[#416543]/12 bg-[#f5f2df] p-5" data-payout-panel="paypal">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <p class="text-sm font-black text-[#113e14]">PayPal destination</p>
+          <p class="mt-1 text-xs font-bold text-[#416543]/70">Protected PayPal payments will be assigned to this account.</p>
+        </div>
+        <span class="rounded-full bg-[#a8b841]/20 px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-[#416543]">Private</span>
+      </div>
+      <input name="payout_paypal_email" value="{{ paypalValue }}" type="email" maxlength="254" autocomplete="email" placeholder="payments@example.com" class="mt-4 h-12 w-full rounded-2xl border border-[#a8b841] bg-white px-4 text-sm font-bold text-[#113e14] outline-none focus:border-[#416543]" data-payout-detail="paypal">
+      @if(errors.payout_paypal_email)
+        <span class="mt-2 block text-xs font-bold text-red-700">{{ errors.payout_paypal_email[0] }}</span>
+      @endif
+    </div>
+
+    <div class="mt-5 hidden rounded-[1.5rem] border border-[#416543]/12 bg-[#f5f2df] p-5" data-payout-panel="card">
+      <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <p class="text-sm font-black text-[#113e14]">Card destination</p>
+          <p class="mt-1 text-xs font-bold text-[#416543]/70">The complete card number is validated and discarded. Only its brand and last four digits are kept.</p>
+        </div>
+        @if(hasConfiguredCard)
+          <span class="rounded-full bg-[#a8b841]/20 px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-[#416543]">
+            {{ roleProfile.payoutCardBrand }} ending in {{ roleProfile.payoutCardLastFour }}
+          </span>
+        @endif
+      </div>
+      <input type="hidden" name="payout_card_configured" value="{{ hasConfiguredCard ? '1' : '0' }}">
+      <div class="mt-4 grid gap-4 sm:grid-cols-2">
+        <label class="block">
+          <span class="text-xs font-black uppercase tracking-[0.12em] text-[#416543]">Cardholder</span>
+          <input name="payout_cardholder_name" value="{{ cardholderValue }}" maxlength="100" autocomplete="cc-name" placeholder="Full name" class="mt-2 h-12 w-full rounded-2xl border border-[#a8b841] bg-white px-4 text-sm font-bold text-[#113e14] outline-none focus:border-[#416543]" data-payout-detail="card">
+          @if(errors.payout_cardholder_name)
+            <span class="mt-2 block text-xs font-bold text-red-700">{{ errors.payout_cardholder_name[0] }}</span>
+          @endif
+        </label>
+        <label class="block">
+          <span class="text-xs font-black uppercase tracking-[0.12em] text-[#416543]">{{ hasConfiguredCard ? 'Replace card' : 'Card number' }}</span>
+          <input name="payout_card_number" type="text" maxlength="23" inputmode="numeric" autocomplete="cc-number" placeholder="{{ hasConfiguredCard ? 'Leave blank to keep current card' : '0000 0000 0000 0000' }}" class="mt-2 h-12 w-full rounded-2xl border border-[#a8b841] bg-white px-4 text-sm font-bold tracking-[0.08em] text-[#113e14] outline-none focus:border-[#416543]" data-payout-detail="card" data-payout-card-number>
+          @if(errors.payout_card_number)
+            <span class="mt-2 block text-xs font-bold text-red-700">{{ errors.payout_card_number[0] }}</span>
+          @endif
+        </label>
+      </div>
+    </div>
+
+    <div class="mt-5 rounded-2xl border border-[#416543]/10 bg-[#ebe3a7]/48 px-4 py-3 text-xs font-bold leading-5 text-[#416543]">
+      Cash requires no payout account. Card and PayPal destinations are private and are never shown on your public profile.
+    </div>
+  </div>
+</section>

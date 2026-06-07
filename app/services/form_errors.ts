@@ -23,6 +23,9 @@ export function safeOldInput(input: Record<string, unknown>) {
 
   delete oldInput.password
   delete oldInput.passwordConfirmation
+  delete oldInput.card_number
+  delete oldInput.card_cvc
+  delete oldInput.payout_card_number
 
   return oldInput
 }

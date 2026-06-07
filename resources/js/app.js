@@ -142,18 +142,41 @@ function initPaymentMethodControls(page) {
 
     const valueInput = group.querySelector('[data-payment-methods-value]')
     const checkboxes = Array.from(group.querySelectorAll('[data-payment-method-checkbox]'))
+    const payoutPanels = Array.from(group.querySelectorAll('[data-payout-panel]'))
 
     if (!valueInput || !checkboxes.length) return
 
     const syncValue = () => {
-      valueInput.value = checkboxes
+      const selectedMethods = checkboxes
         .filter((checkbox) => checkbox.checked)
         .map((checkbox) => checkbox.value)
+      valueInput.value = selectedMethods
         .join('\n')
+
+      payoutPanels.forEach((panel) => {
+        const method = panel.dataset.payoutPanel
+        const active = selectedMethods.some((selected) => selected.toLowerCase() === method)
+        const configuredCard =
+          method === 'card' &&
+          group.querySelector('input[name="payout_card_configured"]')?.value === '1'
+
+        panel.classList.toggle('hidden', !active)
+        panel.querySelectorAll('[data-payout-detail]').forEach((input) => {
+          input.disabled = !active
+          input.required =
+            active &&
+            (input.name !== 'payout_card_number' || !configuredCard)
+        })
+      })
     }
 
     group.dataset.paymentMethodsReady = 'true'
     checkboxes.forEach((checkbox) => checkbox.addEventListener('change', syncValue))
+    group.querySelector('[data-payout-card-number]')?.addEventListener('input', (event) => {
+      const input = event.currentTarget
+      const digits = input.value.replace(/\D/g, '').slice(0, 19)
+      input.value = digits.replace(/(\d{4})(?=\d)/g, '$1 ')
+    })
     syncValue()
   })
 }
@@ -2302,6 +2325,482 @@ window.PlantBudCatalog = {
   highlightFromHash: highlightPlantFromHash,
 }
 
+function initGardenerSearch() {
+  document.querySelectorAll('[data-gardener-search]').forEach((form) => {
+    if (form.dataset.gardenerSearchReady === 'true') return
+
+    const input = form.querySelector('[data-gardener-search-input]')
+    const results = form.querySelector('[data-gardener-search-results]')
+
+    if (!input || !results) return
+
+    let timer = null
+    let controller = null
+
+    const closeResults = () => {
+      results.classList.add('hidden')
+      input.setAttribute('aria-expanded', 'false')
+    }
+
+    const openResults = () => {
+      results.classList.remove('hidden')
+      input.setAttribute('aria-expanded', 'true')
+    }
+
+    const renderStatus = (message) => {
+      results.replaceChildren()
+
+      if (!message) {
+        closeResults()
+        return
+      }
+
+      const status = document.createElement('p')
+      status.className = 'px-4 py-3 text-sm font-bold text-[#113e14]/60'
+      status.textContent = message
+      results.append(status)
+      openResults()
+    }
+
+    const renderResults = (gardeners) => {
+      results.replaceChildren()
+
+      if (!gardeners.length) {
+        renderStatus('No gardeners found yet.')
+        return
+      }
+
+      gardeners.forEach((gardener) => {
+        const link = document.createElement('a')
+        link.href = gardener.href
+        link.className =
+          'flex items-center gap-3 rounded-2xl px-3 py-3 text-[#113e14] transition hover:bg-white/70 focus:bg-white/70 focus:outline-none'
+        link.setAttribute('role', 'option')
+
+        const image = document.createElement('img')
+        image.src = gardener.photo
+        image.alt = ''
+        image.className = 'h-12 w-12 shrink-0 rounded-xl object-cover shadow-sm'
+
+        const copy = document.createElement('span')
+        copy.className = 'min-w-0 flex-1'
+
+        const name = document.createElement('span')
+        name.className = 'block truncate text-sm font-black'
+        name.textContent = gardener.name
+
+        const details = document.createElement('span')
+        details.className = 'mt-0.5 block truncate text-xs font-bold text-[#416543]'
+        details.textContent = `${gardener.specialty} · ${gardener.location} · ${gardener.isAvailable ? 'Available' : 'Unavailable'}`
+
+        const username = document.createElement('span')
+        username.className = 'shrink-0 text-xs font-black text-[#416543]'
+        username.textContent = `@${gardener.username}`
+
+        copy.append(name, details)
+        link.append(image, copy, username)
+        results.append(link)
+      })
+
+      openResults()
+    }
+
+    const runSearch = async () => {
+      const query = input.value.trim()
+      controller?.abort()
+
+      if (query.length < 2) {
+        renderStatus(query ? 'Keep typing to find gardeners.' : '')
+        return
+      }
+
+      controller = new AbortController()
+      renderStatus('Searching gardeners...')
+
+      try {
+        const response = await fetch(
+          `/maintenance/suggestions?q=${encodeURIComponent(query)}`,
+          {
+            credentials: 'same-origin',
+            headers: { Accept: 'application/json' },
+            cache: 'no-store',
+            signal: controller.signal,
+          }
+        )
+
+        if (!response.ok) throw new Error('Gardener search failed')
+
+        const payload = await response.json()
+        if (input.value.trim() !== query) return
+
+        renderResults(Array.isArray(payload?.gardeners) ? payload.gardeners : [])
+      } catch (error) {
+        if (error.name !== 'AbortError') closeResults()
+      }
+    }
+
+    form.dataset.gardenerSearchReady = 'true'
+    input.addEventListener('input', () => {
+      window.clearTimeout(timer)
+      timer = window.setTimeout(runSearch, 170)
+    })
+    input.addEventListener('focus', runSearch)
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        closeResults()
+        input.blur()
+      }
+    })
+    form.addEventListener('submit', closeResults)
+    document.addEventListener('click', (event) => {
+      if (!form.contains(event.target)) closeResults()
+    })
+  })
+}
+
+function initBudgetInputs() {
+  document.querySelectorAll('[data-budget-input]').forEach((input) => {
+    if (input.dataset.budgetReady === 'true') return
+
+    const formatBudget = () => {
+      const raw = input.value.replace(/,/g, '').replace(/[^\d.]/g, '')
+      const [integer = '', ...decimalParts] = raw.split('.')
+      const decimal = decimalParts.join('').slice(0, 2)
+      const formattedInteger = integer
+        ? Number.parseInt(integer, 10).toLocaleString('en-US')
+        : ''
+      const hasDecimalPoint = raw.includes('.')
+
+      input.value = `${formattedInteger}${hasDecimalPoint ? `.${decimal}` : ''}`
+
+      const maximum = Number(input.dataset.maxAmount || 0)
+      const currentAmount = Number(input.value.replace(/,/g, ''))
+      input.setCustomValidity(
+        maximum > 0 && currentAmount > maximum
+          ? `The amount cannot exceed $${maximum.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}.`
+          : ''
+      )
+    }
+
+    input.dataset.budgetReady = 'true'
+    input.addEventListener('input', formatBudget)
+    formatBudget()
+  })
+}
+
+function initPaymentInputs() {
+  document.querySelectorAll('[data-service-request-form]').forEach((form) => {
+    if (form.dataset.paymentReady === 'true') return
+
+    const budgetInput = form.querySelector('input[name="budget"]')
+    const paymentMethods = Array.from(form.querySelectorAll('[data-payment-method]'))
+    const paymentPanels = Array.from(form.querySelectorAll('[data-payment-panel]'))
+    const paymentSummary = form.querySelector('[data-payment-summary]')
+    const submitButton = form.querySelector('[data-request-submit]')
+    const cardNumber = form.querySelector('[data-card-number]')
+    const expiry = form.querySelector('[data-card-expiry]')
+    const cvc = form.querySelector('[data-card-cvc]')
+    const discountSelect = form.querySelector('[data-discount-steps]')
+    const discountSummary = form.querySelector('[data-discount-summary]')
+    const discountTotal = form.querySelector('[data-discount-total]')
+    const discountUnavailable = form.querySelector('[data-discount-unavailable]')
+
+    const updatePaymentUi = () => {
+      const selectedMethod = paymentMethods.find((method) => method.checked)?.value
+      const amount = Number(budgetInput.value.replace(/,/g, ''))
+      const discountAllowed = selectedMethod === 'card' || selectedMethod === 'paypal'
+      if (discountSelect) {
+        discountSelect.disabled = !discountAllowed
+        if (!discountAllowed) discountSelect.value = '0'
+      }
+      const discountSteps = discountAllowed ? Number(discountSelect?.value || 0) : 0
+      const discountPercent = Math.min(20, Math.max(0, discountSteps * 10))
+      const discountAmount = Math.round(amount * (discountPercent / 100) * 100) / 100
+      const discountedTotal = Math.max(0, Math.round((amount - discountAmount) * 100) / 100)
+      const formatMoney = (value) =>
+        `$${Number(value || 0).toLocaleString('en-US', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })}`
+
+      paymentPanels.forEach((panel) => {
+        const active = panel.dataset.paymentPanel === selectedMethod
+        panel.classList.toggle('hidden', !active)
+        panel.querySelectorAll('[data-payment-detail]').forEach((input) => {
+          input.disabled = !active
+          input.required = active
+        })
+      })
+
+      if (paymentSummary) {
+        paymentSummary.textContent =
+          selectedMethod === 'cash'
+            ? 'Cash on completion'
+            : selectedMethod === 'paypal'
+              ? `${formatMoney(discountedTotal)} protected`
+              : selectedMethod === 'card'
+                ? `${formatMoney(discountedTotal)} held`
+                : 'Choose a method'
+      }
+
+      if (discountSummary) {
+        discountSummary.textContent = `${discountPercent}% · ${formatMoney(discountAmount)}`
+      }
+      if (discountTotal) discountTotal.textContent = formatMoney(discountedTotal)
+      discountUnavailable?.classList.toggle('hidden', discountAllowed)
+
+      if (submitButton) {
+        submitButton.textContent =
+          selectedMethod === 'cash' ? 'Send request' : 'Protect payment & send request'
+      }
+    }
+
+    cardNumber?.addEventListener('input', () => {
+      const digits = cardNumber.value.replace(/\D/g, '').slice(0, 19)
+      cardNumber.value = digits.replace(/(\d{4})(?=\d)/g, '$1 ')
+    })
+
+    expiry?.addEventListener('input', () => {
+      const digits = expiry.value.replace(/\D/g, '').slice(0, 4)
+      expiry.value = digits.length > 2 ? `${digits.slice(0, 2)}/${digits.slice(2)}` : digits
+    })
+
+    cvc?.addEventListener('input', () => {
+      cvc.value = cvc.value.replace(/\D/g, '').slice(0, 4)
+    })
+
+    paymentMethods.forEach((method) => method.addEventListener('change', updatePaymentUi))
+    budgetInput?.addEventListener('input', updatePaymentUi)
+    discountSelect?.addEventListener('change', updatePaymentUi)
+    updatePaymentUi()
+    form.dataset.paymentReady = 'true'
+  })
+}
+
+function initServiceRequestLocation() {
+  document.querySelectorAll('[data-service-request-form]').forEach((form) => {
+    if (form.dataset.locationReady === 'true') return
+
+    const input = form.querySelector('[data-service-location-input]')
+    const latitudeInput = form.querySelector('[data-service-latitude]')
+    const longitudeInput = form.querySelector('[data-service-longitude]')
+    const mapElement = form.querySelector('[data-service-location-map]')
+    const searchResults = form.querySelector('[data-location-search-results]')
+    const currentLocationButton = form.querySelector('[data-use-current-location]')
+    const coordinatesLabel = form.querySelector('[data-location-coordinates]')
+    const status = form.querySelector('[data-location-status]')
+
+    if (!input || !latitudeInput || !longitudeInput || !mapElement || !window.L) return
+
+    const defaultCenter = [13.6929, -89.2182]
+    const map = window.L.map(mapElement, { zoomControl: true }).setView(defaultCenter, 11)
+    window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors',
+      maxZoom: 19,
+    }).addTo(map)
+    let marker = null
+    let searchTimer = null
+
+    const parseCoordinate = (value, min, max) => {
+      const normalized = String(value ?? '').trim()
+      if (!normalized) return null
+
+      const coordinate = Number(normalized)
+      return Number.isFinite(coordinate) && coordinate >= min && coordinate <= max
+        ? coordinate
+        : null
+    }
+
+    const setPin = (latitude, longitude, label = '', zoom = true) => {
+      latitudeInput.value = Number(latitude).toFixed(7)
+      longitudeInput.value = Number(longitude).toFixed(7)
+      if (label) input.value = label.slice(0, 255)
+      if (marker) marker.remove()
+      marker = window.L.circleMarker([latitude, longitude], {
+        radius: 10,
+        color: '#ffffff',
+        weight: 4,
+        fillColor: '#113e14',
+        fillOpacity: 1,
+      }).addTo(map)
+      if (zoom) map.setView([latitude, longitude], 17)
+      input.setCustomValidity('')
+      if (status) status.textContent = 'Exact private location selected.'
+      if (coordinatesLabel) {
+        coordinatesLabel.textContent = `${Number(latitude).toFixed(5)}, ${Number(longitude).toFixed(5)}`
+        coordinatesLabel.classList.remove('hidden')
+      }
+      searchResults?.classList.add('hidden')
+    }
+
+    const reverseGeocode = async (latitude, longitude) => {
+      try {
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${encodeURIComponent(latitude)}&lon=${encodeURIComponent(longitude)}&zoom=18`,
+          { headers: { Accept: 'application/json' } }
+        )
+        if (!response.ok) throw new Error('Reverse geocoding failed')
+        const result = await response.json()
+        return result.display_name || `Pinned location ${latitude.toFixed(5)}, ${longitude.toFixed(5)}`
+      } catch {
+        return `Pinned location ${latitude.toFixed(5)}, ${longitude.toFixed(5)}`
+      }
+    }
+
+    const renderSearchResults = (results) => {
+      if (!searchResults) return
+      searchResults.replaceChildren()
+
+      results.forEach((result) => {
+        const button = document.createElement('button')
+        button.type = 'button'
+        button.className =
+          'block w-full rounded-xl px-3 py-3 text-left text-sm font-bold text-[#113e14] transition hover:bg-[#ebe3a7]/60'
+        button.textContent = result.display_name
+        button.addEventListener('click', () => {
+          setPin(Number(result.lat), Number(result.lon), result.display_name)
+        })
+        searchResults.append(button)
+      })
+
+      searchResults.classList.toggle('hidden', results.length === 0)
+    }
+
+    input.addEventListener('input', () => {
+      window.clearTimeout(searchTimer)
+      const query = input.value.trim()
+      input.setCustomValidity('Select a point on the map or choose a search result.')
+      if (query.length < 3) {
+        renderSearchResults([])
+        return
+      }
+
+      searchTimer = window.setTimeout(async () => {
+        try {
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=5&q=${encodeURIComponent(query)}`,
+            { headers: { Accept: 'application/json' } }
+          )
+          if (!response.ok) throw new Error('Search failed')
+          renderSearchResults(await response.json())
+        } catch {
+          renderSearchResults([])
+          if (status) status.textContent = 'Address search is unavailable. You can still click the map.'
+        }
+      }, 450)
+    })
+
+    map.on('click', async (event) => {
+      if (status) status.textContent = 'Confirming the selected point...'
+      const label = await reverseGeocode(event.latlng.lat, event.latlng.lng)
+      setPin(event.latlng.lat, event.latlng.lng, label, false)
+    })
+
+    const requestCurrentLocation = ({ automatic = false } = {}) => {
+      if (!navigator.geolocation) {
+        if (status) {
+          status.textContent = window.isSecureContext
+            ? 'Current location is not supported by this browser.'
+            : 'Location access requires a secure HTTPS connection.'
+        }
+        return
+      }
+
+      if (currentLocationButton) currentLocationButton.disabled = true
+      if (status) {
+        status.textContent = automatic
+          ? 'Allow location access to start near your current position.'
+          : 'Getting your current location...'
+      }
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords
+          const label = await reverseGeocode(latitude, longitude)
+          setPin(latitude, longitude, label)
+          if (currentLocationButton) currentLocationButton.disabled = false
+        },
+        (error) => {
+          if (status) {
+            status.textContent =
+              error.code === error.PERMISSION_DENIED
+                ? 'Location permission was denied. Enable it in your browser settings or select the point manually.'
+                : 'We could not determine your location. The map remains near San Salvador; search or click any point.'
+          }
+          if (currentLocationButton) currentLocationButton.disabled = false
+        },
+        {
+          enableHighAccuracy: !automatic,
+          timeout: automatic ? 8000 : 12000,
+          maximumAge: automatic ? 300000 : 0,
+        }
+      )
+    }
+
+    currentLocationButton?.addEventListener('click', () => requestCurrentLocation())
+
+    const initialLatitude = parseCoordinate(latitudeInput.value, -90, 90)
+    const initialLongitude = parseCoordinate(longitudeInput.value, -180, 180)
+    if (initialLatitude !== null && initialLongitude !== null) {
+      setPin(initialLatitude, initialLongitude, input.value)
+    } else {
+      latitudeInput.value = ''
+      longitudeInput.value = ''
+      input.setCustomValidity('Select a point on the map or choose a search result.')
+      window.setTimeout(() => requestCurrentLocation({ automatic: true }), 0)
+    }
+
+    document.addEventListener('click', (event) => {
+      if (!form.querySelector('[data-location-picker]')?.contains(event.target)) {
+        searchResults?.classList.add('hidden')
+      }
+    })
+
+    window.setTimeout(() => map.invalidateSize(), 0)
+    form.dataset.locationReady = 'true'
+  })
+}
+
+function initPrivateRequestMaps() {
+  document.querySelectorAll('[data-private-request-map]').forEach((element) => {
+    if (element.dataset.mapReady === 'true' || !window.L) return
+    const rawLatitude = String(element.dataset.latitude ?? '').trim()
+    const rawLongitude = String(element.dataset.longitude ?? '').trim()
+    if (!rawLatitude || !rawLongitude) return
+
+    const latitude = Number(rawLatitude)
+    const longitude = Number(rawLongitude)
+    if (
+      !Number.isFinite(latitude) ||
+      !Number.isFinite(longitude) ||
+      latitude < -90 ||
+      latitude > 90 ||
+      longitude < -180 ||
+      longitude > 180
+    ) {
+      return
+    }
+
+    const map = window.L.map(element, {
+      zoomControl: true,
+      dragging: true,
+      scrollWheelZoom: false,
+    }).setView([latitude, longitude], 16)
+    window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors',
+      maxZoom: 19,
+    }).addTo(map)
+    window.L.circleMarker([latitude, longitude], {
+      radius: 9,
+      color: '#ffffff',
+      weight: 4,
+      fillColor: '#113e14',
+      fillOpacity: 1,
+    }).addTo(map)
+    element.dataset.mapReady = 'true'
+    window.setTimeout(() => map.invalidateSize(), 0)
+  })
+}
+
 function initApp() {
   initAuthForms()
   initProfilePage()
@@ -2310,6 +2809,11 @@ function initApp() {
   initAppNavbarMenus()
   initCommunityPage()
   initPlantCatalogSearch()
+  initGardenerSearch()
+  initBudgetInputs()
+  initPaymentInputs()
+  initServiceRequestLocation()
+  initPrivateRequestMaps()
 }
 
 if (document.readyState === 'loading') {

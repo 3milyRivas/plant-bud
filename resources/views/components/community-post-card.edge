@@ -1,9 +1,11 @@
 @let(surface = $props.get('surface') || 'feed')
 @let(isProfileSurface = surface === 'profile')
+@let(isSavedSurface = surface === 'saved')
 @let(profileTone = 'border-white/30 bg-white/24 shadow-xl hover:bg-white/28')
 @let(feedTone = 'border-white/30 bg-white/24 shadow-xl hover:bg-white/28')
+@let(savedTone = 'border-white/50 bg-[#f5f2df]/92 shadow-[0_18px_55px_rgba(17,62,20,0.16)] hover:bg-white')
 
-<article id="post-{{ post.id }}" data-community-post="{{ post.id }}" class="{{ isProfileSurface ? profileTone : feedTone }} community-post-card max-w-full select-none rounded-3xl border p-4 backdrop-blur-xl sm:p-5">
+<article id="post-{{ post.id }}" data-community-post="{{ post.id }}" class="{{ isProfileSurface ? profileTone : (isSavedSurface ? savedTone : feedTone) }} community-post-card max-w-full select-none rounded-3xl border p-4 backdrop-blur-xl sm:p-5">
   <div class="flex items-start justify-between gap-4">
     <a href="/users/{{ post.author.username }}" class="flex min-w-0 items-center gap-3">
       @if(post.author.avatarUrl)

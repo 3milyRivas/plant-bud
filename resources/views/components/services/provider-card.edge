@@ -1,6 +1,7 @@
 @let(name = $props.get('name'))
 @let(username = $props.get('username'))
 @let(photo = $props.get('photo'))
+@let(initial = $props.get('initial') ?? (name ? Array.from(name)[0].toLocaleUpperCase('en') : 'P'))
 @let(specialty = $props.get('specialty'))
 @let(experience = $props.get('experience'))
 @let(rating = $props.get('rating'))
@@ -13,44 +14,59 @@
 @let(profileHref = $props.get('profileHref') ?? (username ? '/users/' + username : '#'))
 @let(isFavorite = $props.get('isFavorite') ?? false)
 @let(isPremium = $props.get('isPremium') ?? false)
+@let(isAvailable = $props.get('isAvailable') ?? true)
 
 <article class="group flex h-full flex-col overflow-hidden rounded-[1.25rem] border border-[#416543]/12 bg-white/86 text-[#113e14] shadow-[0_18px_55px_rgba(17,62,20,0.13)] backdrop-blur-2xl transition duration-300 hover:-translate-y-1 hover:shadow-[0_24px_70px_rgba(17,62,20,0.19)]">
-  <div class="relative p-5 pb-4">
-    <div class="absolute inset-x-0 top-0 h-24 bg-[linear-gradient(135deg,rgba(168,184,65,0.28),rgba(220,161,93,0.20),rgba(235,227,167,0.34))]"></div>
+  <div class="relative min-h-[9.75rem] overflow-hidden p-5 pb-5">
+    <div class="absolute inset-0 bg-[linear-gradient(145deg,rgba(168,184,65,0.34),rgba(220,161,93,0.24),rgba(235,227,167,0.42))]"></div>
 
-    <div class="relative flex items-start gap-4">
+    <div class="relative flex min-h-24 items-center gap-4">
       <a href="{{ profileHref }}" class="shrink-0">
-        <img loading="lazy" decoding="async" src="{{ photo }}" alt="{{ name }}" class="h-20 w-20 rounded-2xl border-4 border-white object-cover shadow-lg">
+        @if(photo)
+          <img loading="lazy" decoding="async" src="{{ photo }}" alt="{{ name }}" class="h-20 w-20 rounded-2xl border-4 border-white object-cover shadow-lg">
+        @else
+          <span class="flex h-20 w-20 items-center justify-center rounded-2xl border-4 border-white bg-[#113e14] text-3xl font-black text-[#ebe3a7] shadow-lg" aria-label="{{ name }}">
+            {{ initial }}
+          </span>
+        @endif
       </a>
 
       <div class="min-w-0 flex-1 pt-1">
-        <div class="flex flex-wrap items-center gap-2">
-          @if(isFavorite)
-            <span class="rounded-full bg-[#dca15d]/22 px-3 py-1 text-[11px] font-black uppercase tracking-[0.14em] text-[#7b4c1f]">Favorite</span>
-          @endif
-          @if(isPremium)
-            <span class="rounded-full bg-[#113e14] px-3 py-1 text-[11px] font-black uppercase tracking-[0.14em] text-[#ebe3a7]">Premium</span>
-          @endif
-        </div>
-
-        <h2 class="mt-2 truncate text-xl font-black leading-tight">{{ name }}</h2>
-        <a href="{{ profileHref }}" class="mt-1 block truncate text-xs font-bold text-[#416543] hover:text-[#113e14]">{{ '@' + username }}</a>
+        <h2 class="line-clamp-2 text-xl font-black leading-tight">{{ name }}</h2>
+        <a href="{{ profileHref }}" class="mt-1 block break-all text-xs font-bold leading-5 text-[#416543] hover:text-[#113e14]">{{ '@' + username }}</a>
       </div>
     </div>
   </div>
 
-  <div class="flex flex-1 flex-col px-5 pb-5">
-    <p class="text-sm font-black text-[#416543]">{{ specialty }}</p>
-    <p class="mt-2 line-clamp-2 text-sm font-semibold leading-6 text-[#416543]/86">{{ bio }}</p>
+  <div class="relative z-10 flex flex-1 flex-col px-5 pb-5">
+    @if(isFavorite || isPremium || !isAvailable)
+      <div class="relative z-30 -mt-3 mb-4 flex min-h-8 flex-wrap items-center gap-2">
+        @if(isFavorite)
+          <span class="rounded-full border border-[#dca15d]/28 bg-[#fff8e8] px-3 py-1 text-[11px] font-black uppercase tracking-[0.14em] text-[#7b4c1f] shadow-sm">Favorite</span>
+        @endif
+        @if(isPremium)
+          <span class="rounded-full border border-[#113e14]/12 bg-[#113e14] px-3 py-1 text-[11px] font-black uppercase tracking-[0.14em] text-[#ebe3a7] shadow-sm">Premium</span>
+        @endif
+        @if(!isAvailable)
+          <span class="rounded-full border border-[#dca15d]/30 bg-[#f7e5ce] px-3 py-1 text-[11px] font-black uppercase tracking-[0.14em] text-[#7b4c1f] shadow-sm">Unavailable</span>
+        @endif
+      </div>
+    @endif
+
+    <p class="line-clamp-2 min-h-10 text-sm font-black leading-5 text-[#416543]">{{ specialty }}</p>
+    <p class="mt-2 line-clamp-2 min-h-12 text-sm font-semibold leading-6 text-[#416543]/86">{{ bio }}</p>
 
     <div class="mt-4 grid grid-cols-2 gap-2 text-sm font-bold text-[#416543]">
-      <span class="rounded-2xl bg-[#ebe3a7]/48 px-3 py-2">{{ rating }} rating</span>
-      <span class="rounded-2xl bg-[#ebe3a7]/48 px-3 py-2">{{ reviews }} reviews</span>
-      <span class="rounded-2xl bg-[#416543]/8 px-3 py-2">{{ experience }}</span>
-      <span class="rounded-2xl bg-[#416543]/8 px-3 py-2">{{ location }}</span>
+      <span class="flex min-h-10 items-center gap-1 rounded-2xl bg-[#ebe3a7]/48 px-3 py-2">
+        <span class="text-[#d08a36]">&#9733;</span>
+        {{ rating }}
+      </span>
+      <span class="flex min-h-10 items-center rounded-2xl bg-[#ebe3a7]/48 px-3 py-2">{{ reviews }} reviews</span>
+      <span class="flex min-h-14 items-center rounded-2xl bg-[#416543]/8 px-3 py-2 leading-5">{{ experience }}</span>
+      <span class="flex min-h-14 items-center rounded-2xl bg-[#416543]/8 px-3 py-2 leading-5">{{ location }}</span>
     </div>
 
-    <div class="mt-4 flex flex-wrap gap-2">
+    <div class="mt-4 flex min-h-20 content-start flex-wrap gap-2">
       @each(service in services.slice(0, 4))
         <span class="rounded-full border border-[#416543]/10 bg-white px-3 py-1.5 text-xs font-black text-[#113e14] shadow-sm">{{ service }}</span>
       @endeach
@@ -59,14 +75,20 @@
       @endif
     </div>
 
-    <div class="mt-4 rounded-2xl border border-[#416543]/10 bg-[#f5f2df]/70 p-3 text-sm font-semibold leading-6 text-[#416543]">
+    <div class="mt-4 flex min-h-[4.5rem] items-center rounded-2xl border border-[#416543]/10 bg-[#f5f2df]/70 p-3 text-sm font-semibold leading-6 text-[#416543]">
       {{ schedule }}
     </div>
 
-    <div class="mt-5 grid grid-cols-[1fr_auto] gap-2">
-      <a href="{{ href }}" class="inline-flex items-center justify-center rounded-2xl bg-[#113e14] px-5 py-3 text-sm font-black text-[#ebe3a7] shadow-md transition hover:-translate-y-0.5 hover:bg-[#416543]">
-        Request
-      </a>
+    <div class="mt-auto grid grid-cols-[1fr_auto] gap-2 pt-5">
+      @if(isAvailable)
+        <a href="{{ href }}" class="inline-flex items-center justify-center rounded-2xl bg-[#113e14] px-5 py-3 text-sm font-black text-[#ebe3a7] shadow-md transition hover:-translate-y-0.5 hover:bg-[#416543]">
+          Request
+        </a>
+      @else
+        <span class="inline-flex cursor-not-allowed items-center justify-center rounded-2xl bg-[#416543]/10 px-5 py-3 text-sm font-black text-[#416543]/65">
+          Unavailable
+        </span>
+      @endif
       <a href="{{ profileHref }}" class="inline-flex items-center justify-center rounded-2xl border border-[#416543]/12 bg-white px-4 py-3 text-sm font-black text-[#113e14] transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]">
         Profile
       </a>

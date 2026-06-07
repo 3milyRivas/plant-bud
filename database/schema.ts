@@ -113,7 +113,7 @@ export class FollowSchema extends BaseModel {
 }
 
 export class GardenerProfileSchema extends BaseModel {
-  static $columns = ['availabilitySchedule', 'bio', 'createdAt', 'experienceYears', 'headline', 'hourlyRate', 'id', 'isAvailable', 'paymentMethods', 'portfolioUrl', 'publicPhone', 'ratingAverage', 'ratingCount', 'serviceArea', 'servicesOffered', 'updatedAt', 'userId'] as const
+  static $columns = ['availabilitySchedule', 'bio', 'createdAt', 'experienceYears', 'headline', 'hourlyRate', 'id', 'isAvailable', 'paymentMethods', 'payoutCardBrand', 'payoutCardLastFour', 'payoutCardholderName', 'payoutPaypalEmail', 'portfolioUrl', 'publicPhone', 'ratingAverage', 'ratingCount', 'serviceArea', 'servicesOffered', 'updatedAt', 'userId'] as const
   $columns = GardenerProfileSchema.$columns
   @column()
   declare availabilitySchedule: string | null
@@ -133,6 +133,14 @@ export class GardenerProfileSchema extends BaseModel {
   declare isAvailable: boolean
   @column()
   declare paymentMethods: string | null
+  @column()
+  declare payoutCardBrand: string | null
+  @column()
+  declare payoutCardLastFour: string | null
+  @column()
+  declare payoutCardholderName: string | null
+  @column()
+  declare payoutPaypalEmail: string | null
   @column()
   declare portfolioUrl: string | null
   @column()
@@ -202,7 +210,7 @@ export class NurseryProductSchema extends BaseModel {
 }
 
 export class NurseryProfileSchema extends BaseModel {
-  static $columns = ['address', 'bannerUrl', 'city', 'createdAt', 'description', 'id', 'isActive', 'logoUrl', 'nurseryName', 'nurserySlug', 'openingHours', 'ownerName', 'paymentMethods', 'publicEmail', 'publicPhone', 'ratingAverage', 'ratingCount', 'servicesOffered', 'updatedAt', 'userId'] as const
+  static $columns = ['address', 'bannerUrl', 'city', 'createdAt', 'description', 'id', 'isActive', 'logoUrl', 'nurseryName', 'nurserySlug', 'openingHours', 'ownerName', 'paymentMethods', 'payoutCardBrand', 'payoutCardLastFour', 'payoutCardholderName', 'payoutPaypalEmail', 'publicEmail', 'publicPhone', 'ratingAverage', 'ratingCount', 'servicesOffered', 'updatedAt', 'userId'] as const
   $columns = NurseryProfileSchema.$columns
   @column()
   declare address: string | null
@@ -230,6 +238,14 @@ export class NurseryProfileSchema extends BaseModel {
   declare ownerName: string
   @column()
   declare paymentMethods: string | null
+  @column()
+  declare payoutCardBrand: string | null
+  @column()
+  declare payoutCardLastFour: string | null
+  @column()
+  declare payoutCardholderName: string | null
+  @column()
+  declare payoutPaypalEmail: string | null
   @column()
   declare publicEmail: string | null
   @column()
@@ -403,24 +419,78 @@ export class ProfileReviewSchema extends BaseModel {
 }
 
 export class ServiceRequestSchema extends BaseModel {
-  static $columns = ['address', 'budget', 'clientUserId', 'createdAt', 'gardenerProfileId', 'id', 'notes', 'nurseryProfileId', 'scheduledFor', 'serviceType', 'status', 'updatedAt'] as const
+  static $columns = ['address', 'arrivalWindowEnd', 'arrivalWindowStart', 'budget', 'clientConfirmedAt', 'clientUserId', 'completedAt', 'createdAt', 'discountAmount', 'discountPercent', 'finalAmount', 'gardenerConfirmedAt', 'gardenerProfileId', 'gardenerResponse', 'googlePlaceId', 'heldAmount', 'id', 'latitude', 'locationRemovedAt', 'longitude', 'notes', 'nurseryProfileId', 'paymentBrand', 'paymentHeldAt', 'paymentLastFour', 'paymentMethod', 'paymentRefundedAt', 'paymentReleasedAt', 'paymentStatus', 'pointsRedeemed', 'pointsRefundedAt', 'refundedAmount', 'releasedAmount', 'rewardAwardedAt', 'rewardPointsAwarded', 'scheduledFor', 'serviceType', 'status', 'updatedAt', 'verifiedAt'] as const
   $columns = ServiceRequestSchema.$columns
   @column()
   declare address: string | null
   @column()
+  declare arrivalWindowEnd: string | null
+  @column()
+  declare arrivalWindowStart: string | null
+  @column()
   declare budget: number | null
+  @column.dateTime()
+  declare clientConfirmedAt: DateTime | null
   @column()
   declare clientUserId: number
+  @column.dateTime()
+  declare completedAt: DateTime | null
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime | null
   @column()
+  declare discountAmount: number
+  @column()
+  declare discountPercent: number
+  @column()
+  declare finalAmount: number | null
+  @column.dateTime()
+  declare gardenerConfirmedAt: DateTime | null
+  @column()
   declare gardenerProfileId: number | null
+  @column()
+  declare gardenerResponse: string | null
+  @column()
+  declare googlePlaceId: string | null
+  @column()
+  declare heldAmount: number | null
   @column({ isPrimary: true })
   declare id: number
+  @column()
+  declare latitude: number | null
+  @column.dateTime()
+  declare locationRemovedAt: DateTime | null
+  @column()
+  declare longitude: number | null
   @column()
   declare notes: string | null
   @column()
   declare nurseryProfileId: number | null
+  @column()
+  declare paymentBrand: string | null
+  @column.dateTime()
+  declare paymentHeldAt: DateTime | null
+  @column()
+  declare paymentLastFour: string | null
+  @column()
+  declare paymentMethod: string | null
+  @column.dateTime()
+  declare paymentRefundedAt: DateTime | null
+  @column.dateTime()
+  declare paymentReleasedAt: DateTime | null
+  @column()
+  declare paymentStatus: string | null
+  @column()
+  declare pointsRedeemed: number
+  @column.dateTime()
+  declare pointsRefundedAt: DateTime | null
+  @column()
+  declare refundedAmount: number | null
+  @column()
+  declare releasedAmount: number | null
+  @column.dateTime()
+  declare rewardAwardedAt: DateTime | null
+  @column()
+  declare rewardPointsAwarded: number
   @column.dateTime()
   declare scheduledFor: DateTime | null
   @column()
@@ -429,6 +499,8 @@ export class ServiceRequestSchema extends BaseModel {
   declare status: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
+  @column.dateTime()
+  declare verifiedAt: DateTime | null
 }
 
 export class UserSchema extends BaseModel {

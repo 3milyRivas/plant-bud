@@ -47,6 +47,18 @@ export default class GardenerProfile extends BaseModel {
   declare paymentMethods: string | null
 
   @column()
+  declare payoutPaypalEmail: string | null
+
+  @column()
+  declare payoutCardholderName: string | null
+
+  @column()
+  declare payoutCardBrand: string | null
+
+  @column()
+  declare payoutCardLastFour: string | null
+
+  @column()
   declare ratingAverage: number
 
   @column()

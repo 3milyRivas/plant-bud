@@ -1053,6 +1053,7 @@ export default class CommunityController {
         contactEmail: null,
         services: serviceNames,
         paymentMethods: this.splitStoredList(profile.paymentMethods),
+        requestHref: profile.isAvailable ? `/request/${profile.id}` : null,
         products: [],
         ratingStars: [1, 2, 3, 4, 5],
         rating,

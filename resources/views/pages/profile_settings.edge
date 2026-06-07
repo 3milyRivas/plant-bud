@@ -46,6 +46,25 @@
   })
 
   <main class="relative z-10 mx-auto max-w-6xl px-5 pb-16 lg:px-10">
+    <section class="mb-6 rounded-[2rem] border border-white/12 bg-[#113e14]/78 p-6 text-white shadow-2xl backdrop-blur-2xl">
+      <div class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+        <div>
+          <p class="text-xs font-black uppercase tracking-[0.2em] text-[#ebe3a7]">Profile workspace</p>
+          <h1 class="mt-2 text-4xl font-black">Make your profile feel complete</h1>
+          <p class="mt-3 max-w-2xl text-sm font-semibold leading-6 text-white/68">Update your public identity, professional details and payment preferences from one organized place.</p>
+        </div>
+        <a href="/profile" class="w-fit rounded-full border border-white/20 bg-white/10 px-5 py-3 text-sm font-black text-white transition hover:bg-white/18">View profile</a>
+      </div>
+      <nav class="mt-6 flex flex-wrap gap-2">
+        <a href="#identity-settings" class="rounded-full bg-[#ebe3a7] px-4 py-2 text-xs font-black text-[#113e14]">Identity</a>
+        @if(roleProfileKind === 'gardener' || roleProfileKind === 'nursery')
+          <a href="#professional-settings" class="rounded-full bg-white/10 px-4 py-2 text-xs font-black text-white">Professional</a>
+          <a href="#payment-settings" class="rounded-full bg-white/10 px-4 py-2 text-xs font-black text-white">Payments</a>
+        @endif
+        <a href="#social-settings" class="rounded-full bg-white/10 px-4 py-2 text-xs font-black text-white">Social</a>
+      </nav>
+    </section>
+
     @form({
       route: 'profile.update',
       method: 'POST',
@@ -140,7 +159,7 @@
       </section>
 
       <section class="space-y-6">
-        <div class="rounded-[2.5rem] bg-[#ebe3a7]/95 p-6 shadow-[0_24px_70px_rgba(0,0,0,0.18)]">
+        <div id="identity-settings" class="scroll-mt-28 rounded-[2.5rem] bg-[#ebe3a7]/95 p-6 shadow-[0_24px_70px_rgba(0,0,0,0.18)]">
           <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p class="text-sm font-black uppercase tracking-[0.18em] text-[#416543]">Edit profile</p>
@@ -179,7 +198,7 @@
         </div>
 
         @if(roleProfileKind === 'gardener')
-          <div class="rounded-[2.5rem] bg-[#ebe3a7]/95 p-6 shadow-[0_24px_70px_rgba(0,0,0,0.18)]">
+          <div id="professional-settings" class="scroll-mt-28 rounded-[2.5rem] bg-[#ebe3a7]/95 p-6 shadow-[0_24px_70px_rgba(0,0,0,0.18)]">
             <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <p class="text-sm font-black uppercase tracking-[0.18em] text-[#416543]">Gardener services</p>
@@ -242,13 +261,19 @@
               @endif
             </label>
 
-            <div class="mt-5 grid gap-5 md:grid-cols-2">
-              <div class="block" data-weekly-schedule>
-                <span class="text-sm font-black text-[#416543]">Schedule</span>
+            <div class="mt-7">
+              <div class="block w-full" data-weekly-schedule>
+                <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                  <div>
+                    <span class="text-sm font-black text-[#416543]">Schedule</span>
+                    <p class="mt-1 text-sm font-semibold text-[#416543]/70">Select your regular days and hours. Clients will see this before requesting a service.</p>
+                  </div>
+                  <span class="w-fit rounded-full bg-[#416543]/10 px-4 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#416543]">Weekly hours</span>
+                </div>
                 <input type="hidden" name="availability_schedule" value="{{ availabilityValue }}" data-weekly-schedule-value maxlength="500">
-                <div class="mt-2 rounded-2xl border border-[#a8b841] bg-white/70 p-3 text-[#113e14]">
-                  <div class="grid gap-3" data-weekly-schedule-main>
-                    <div class="grid grid-cols-7 gap-1.5" data-weekly-schedule-days>
+                <div class="mt-4 rounded-[2rem] border border-[#a8b841] bg-white/70 p-5 text-[#113e14] shadow-sm sm:p-7">
+                  <div class="grid gap-6" data-weekly-schedule-main>
+                    <div class="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-7 lg:gap-3" data-weekly-schedule-days>
                       @each(day in [
                         { key: 'mon', label: 'Lun', checked: true },
                         { key: 'tue', label: 'Mar', checked: true },
@@ -260,30 +285,30 @@
                       ])
                         <label class="cursor-pointer">
                           <input type="checkbox" value="{{ day.key }}" class="peer sr-only" data-weekly-schedule-day {{ day.checked ? 'checked' : '' }}>
-                          <span class="flex h-10 items-center justify-center rounded-xl border border-[#a8b841] bg-white/70 text-xs font-black text-[#113e14] transition peer-checked:border-[#113e14] peer-checked:bg-[#113e14] peer-checked:text-[#ebe3a7] peer-focus-visible:ring-2 peer-focus-visible:ring-[#dca15d]">
+                          <span class="flex h-12 items-center justify-center rounded-2xl border border-[#a8b841] bg-white/70 text-sm font-black text-[#113e14] transition peer-checked:border-[#113e14] peer-checked:bg-[#113e14] peer-checked:text-[#ebe3a7] peer-focus-visible:ring-2 peer-focus-visible:ring-[#dca15d]">
                             {{ day.label }}
                           </span>
                         </label>
                       @endeach
                     </div>
-                    <div class="grid gap-3 sm:grid-cols-2">
+                    <div class="grid gap-4 sm:grid-cols-2">
                       <label>
                         <span class="text-xs font-black uppercase tracking-[0.12em] text-[#416543]">Desde</span>
-                        <input type="time" value="07:00" class="mt-1 h-11 w-full rounded-xl border border-[#a8b841] bg-white px-3 text-sm font-black text-[#113e14] outline-none focus:border-[#416543]" data-weekly-schedule-start>
+                        <input type="time" value="07:00" class="mt-2 h-14 w-full rounded-2xl border border-[#a8b841] bg-white px-4 text-base font-black text-[#113e14] outline-none focus:border-[#416543]" data-weekly-schedule-start>
                       </label>
                       <label>
                         <span class="text-xs font-black uppercase tracking-[0.12em] text-[#416543]">Hasta</span>
-                        <input type="time" value="15:00" class="mt-1 h-11 w-full rounded-xl border border-[#a8b841] bg-white px-3 text-sm font-black text-[#113e14] outline-none focus:border-[#416543]" data-weekly-schedule-end>
+                        <input type="time" value="15:00" class="mt-2 h-14 w-full rounded-2xl border border-[#a8b841] bg-white px-4 text-base font-black text-[#113e14] outline-none focus:border-[#416543]" data-weekly-schedule-end>
                       </label>
                     </div>
-                    <div class="flex flex-wrap gap-2">
-                      <button type="button" class="rounded-full bg-[#113e14] px-4 py-2 text-xs font-black text-[#ebe3a7] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#416543]" data-weekly-schedule-preset="weekdays">Lun-Vie</button>
-                      <button type="button" class="rounded-full bg-white px-4 py-2 text-xs font-black text-[#113e14] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]" data-weekly-schedule-preset="all">Toda semana</button>
-                      <button type="button" class="rounded-full bg-white px-4 py-2 text-xs font-black text-[#113e14] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]" data-weekly-schedule-toggle-weekend>Fin de semana</button>
+                    <div class="flex flex-wrap gap-3 border-t border-[#a8b841]/45 pt-5">
+                      <button type="button" class="rounded-full bg-[#113e14] px-5 py-3 text-xs font-black text-[#ebe3a7] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#416543]" data-weekly-schedule-preset="weekdays">Lun-Vie</button>
+                      <button type="button" class="rounded-full bg-white px-5 py-3 text-xs font-black text-[#113e14] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]" data-weekly-schedule-preset="all">Toda semana</button>
+                      <button type="button" class="rounded-full bg-white px-5 py-3 text-xs font-black text-[#113e14] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]" data-weekly-schedule-toggle-weekend>Fin de semana</button>
                     </div>
                   </div>
 
-                  <div class="mt-3 hidden rounded-2xl border border-[#a8b841]/70 bg-[#ebe3a7]/55 p-3" data-weekly-schedule-weekend>
+                  <div class="mt-5 hidden rounded-[1.5rem] border border-[#a8b841]/70 bg-[#ebe3a7]/55 p-5" data-weekly-schedule-weekend>
                     <div class="flex items-center justify-between gap-3">
                       <span class="text-xs font-black uppercase tracking-[0.12em] text-[#416543]">Horario extra</span>
                       <button type="button" class="text-xs font-black text-[#113e14] underline decoration-[#dca15d] decoration-2 underline-offset-4" data-weekly-schedule-remove-weekend>Quitar</button>
@@ -310,40 +335,20 @@
                     </div>
                   </div>
 
-                  <p class="mt-3 rounded-xl bg-white px-3 py-2 text-sm font-black leading-6 text-[#416543]" data-weekly-schedule-preview>{{ availabilityValue || 'Pendiente' }}</p>
+                  <p class="mt-5 rounded-2xl border border-[#416543]/10 bg-white px-5 py-4 text-sm font-black leading-6 text-[#416543]" data-weekly-schedule-preview>{{ availabilityValue || 'Pendiente' }}</p>
                 </div>
                 @if(errors.availability_schedule)
                   <span class="mt-2 block text-xs font-bold text-red-700">{{ errors.availability_schedule[0] }}</span>
                 @endif
               </div>
 
-              <div class="block" data-payment-methods>
-                <span class="text-sm font-black text-[#416543]">Payment methods</span>
-                <input type="hidden" name="payment_methods" value="{{ paymentMethodsValue }}" data-payment-methods-value>
-                <div class="mt-2 grid gap-2 sm:grid-cols-3">
-                  <label class="cursor-pointer">
-                    <input type="checkbox" value="Cash" class="peer sr-only" data-payment-method-checkbox {{ paymentMethodsLower.includes('cash') ? 'checked' : '' }}>
-                    <span class="flex min-h-12 items-center justify-center rounded-2xl border border-[#a8b841] bg-white/70 px-4 text-center text-sm font-black text-[#113e14] transition peer-checked:border-[#113e14] peer-checked:bg-[#113e14] peer-checked:text-[#ebe3a7] peer-focus-visible:ring-2 peer-focus-visible:ring-[#dca15d]">Cash</span>
-                  </label>
-                  <label class="cursor-pointer">
-                    <input type="checkbox" value="Paypal" class="peer sr-only" data-payment-method-checkbox {{ paymentMethodsLower.includes('paypal') ? 'checked' : '' }}>
-                    <span class="flex min-h-12 items-center justify-center rounded-2xl border border-[#a8b841] bg-white/70 px-4 text-center text-sm font-black text-[#113e14] transition peer-checked:border-[#113e14] peer-checked:bg-[#113e14] peer-checked:text-[#ebe3a7] peer-focus-visible:ring-2 peer-focus-visible:ring-[#dca15d]">Paypal</span>
-                  </label>
-                  <label class="cursor-pointer">
-                    <input type="checkbox" value="Card" class="peer sr-only" data-payment-method-checkbox {{ paymentMethodsLower.includes('card') ? 'checked' : '' }}>
-                    <span class="flex min-h-12 items-center justify-center rounded-2xl border border-[#a8b841] bg-white/70 px-4 text-center text-sm font-black text-[#113e14] transition peer-checked:border-[#113e14] peer-checked:bg-[#113e14] peer-checked:text-[#ebe3a7] peer-focus-visible:ring-2 peer-focus-visible:ring-[#dca15d]">Card</span>
-                  </label>
-                </div>
-                @if(errors.payment_methods)
-                  <span class="mt-2 block text-xs font-bold text-red-700">{{ errors.payment_methods[0] }}</span>
-                @endif
-              </div>
             </div>
+            @!component('components/profile/payment-settings', { paymentMethodsValue, roleProfile, old, errors })
           </div>
         @endif
 
         @if(roleProfileKind === 'nursery')
-          <div class="rounded-[2.5rem] bg-[#ebe3a7]/95 p-6 shadow-[0_24px_70px_rgba(0,0,0,0.18)]">
+          <div id="professional-settings" class="scroll-mt-28 rounded-[2.5rem] bg-[#ebe3a7]/95 p-6 shadow-[0_24px_70px_rgba(0,0,0,0.18)]">
             <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <p class="text-sm font-black uppercase tracking-[0.18em] text-[#416543]">Nursery storefront</p>
@@ -490,31 +495,11 @@
               </div>
             </div>
 
-            <div class="mt-5 block" data-payment-methods>
-              <span class="text-sm font-black text-[#416543]">Payment methods</span>
-              <input type="hidden" name="payment_methods" value="{{ paymentMethodsValue }}" data-payment-methods-value>
-              <div class="mt-2 grid gap-2 sm:grid-cols-3">
-                <label class="cursor-pointer">
-                  <input type="checkbox" value="Cash" class="peer sr-only" data-payment-method-checkbox {{ paymentMethodsLower.includes('cash') ? 'checked' : '' }}>
-                  <span class="flex min-h-12 items-center justify-center rounded-2xl border border-[#a8b841] bg-white/70 px-4 text-center text-sm font-black text-[#113e14] transition peer-checked:border-[#113e14] peer-checked:bg-[#113e14] peer-checked:text-[#ebe3a7] peer-focus-visible:ring-2 peer-focus-visible:ring-[#dca15d]">Cash</span>
-                </label>
-                <label class="cursor-pointer">
-                  <input type="checkbox" value="Paypal" class="peer sr-only" data-payment-method-checkbox {{ paymentMethodsLower.includes('paypal') ? 'checked' : '' }}>
-                  <span class="flex min-h-12 items-center justify-center rounded-2xl border border-[#a8b841] bg-white/70 px-4 text-center text-sm font-black text-[#113e14] transition peer-checked:border-[#113e14] peer-checked:bg-[#113e14] peer-checked:text-[#ebe3a7] peer-focus-visible:ring-2 peer-focus-visible:ring-[#dca15d]">Paypal</span>
-                </label>
-                <label class="cursor-pointer">
-                  <input type="checkbox" value="Card" class="peer sr-only" data-payment-method-checkbox {{ paymentMethodsLower.includes('card') ? 'checked' : '' }}>
-                  <span class="flex min-h-12 items-center justify-center rounded-2xl border border-[#a8b841] bg-white/70 px-4 text-center text-sm font-black text-[#113e14] transition peer-checked:border-[#113e14] peer-checked:bg-[#113e14] peer-checked:text-[#ebe3a7] peer-focus-visible:ring-2 peer-focus-visible:ring-[#dca15d]">Card</span>
-                </label>
-              </div>
-              @if(errors.payment_methods)
-                <span class="mt-2 block text-xs font-bold text-red-700">{{ errors.payment_methods[0] }}</span>
-              @endif
-            </div>
+            @!component('components/profile/payment-settings', { paymentMethodsValue, roleProfile, old, errors })
           </div>
         @endif
 
-        <div class="rounded-[2.5rem] border border-white/10 bg-white/12 p-6 text-white shadow-xl backdrop-blur-2xl">
+        <div id="social-settings" class="scroll-mt-28 rounded-[2.5rem] border border-white/10 bg-white/12 p-6 text-white shadow-xl backdrop-blur-2xl">
           <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p class="text-sm font-black uppercase tracking-[0.18em] text-[#ebe3a7]">Linked accounts</p>

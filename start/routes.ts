@@ -31,10 +31,17 @@ router
   .use(middleware.auth())
 
 router.get('/maintenance', [ServicesController, 'index']).as('maintenance')
+router
+  .get('/maintenance/suggestions', [ServicesController, 'suggestions'])
+  .as('maintenance.suggestions')
 router.get('/request/:id', [ServicesController, 'show']).as('request.show')
 router
   .post('/request/:id', [ServicesController, 'store'])
   .as('request.store')
+  .use([middleware.auth(), middleware.role(['client'])])
+router
+  .post('/requested/:id/action', [ServicesController, 'updateRequest'])
+  .as('services.requests.update')
   .use(middleware.auth())
 router.get('/request', ({ response }) => response.redirect('/maintenance')).as('request')
 router.on('/care3').render('pages/client/Plants/care3')
@@ -124,6 +131,10 @@ router
     router.get('/profile/settings', [ProfilesController, 'settings']).as('profile.settings')
     router.get('/profile/media/:kind/:fileName', [ProfilesController, 'media']).as('profile.media')
     router.post('/profile', [ProfilesController, 'update']).as('profile.update')
+    router
+      .post('/profile/availability', [ProfilesController, 'updateAvailability'])
+      .as('profile.availability')
+      .use(middleware.role(['gardener']))
   })
   .use(middleware.auth())
 
