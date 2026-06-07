@@ -3,66 +3,248 @@
 <title>Plant Bud - Nurseries</title>
 @endslot
 
-@!component('components/header', {
+@!component('components/app-navbar', {
   section: 'Nurseries',
   active: 'nurseries',
-  title: 'Discover the best plant nurseries',
-  text: 'Explore beautiful places full of life and nature near you.',
-  imageBg: 'bg-[url(/resources/images/homepagee/nursery-header.jpg)]'
+  dynamic: true,
 })
 
-<div class="flex justify-center pt-20 pb-10 text-white">
-  <div class="text-2xl font-bold text-white">Pick up the plants you've been dreaming of</div>
-</div>
+<main class="nursery-directory relative z-10 min-h-screen overflow-hidden text-[#113e14]">
+  <section class="px-4 pb-12 pt-32 sm:px-8 lg:pt-36">
+    <div class="nursery-hero relative mx-auto grid max-w-[1320px] overflow-hidden rounded-[44px] border border-white/16 bg-[#113e14]/88 shadow-[0_30px_90px_rgba(17,62,20,0.3)] lg:grid-cols-[1.08fr_0.92fr]">
+      <div class="relative z-10 flex flex-col justify-center px-7 py-14 sm:px-12 lg:px-16 lg:py-20">
+        <div class="absolute -left-16 top-12 h-40 w-40 rounded-full bg-[#a8b841]/16 blur-2xl"></div>
+        <span class="relative w-fit rounded-full border border-[#ebe3a7]/25 bg-white/8 px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-[#ebe3a7]">
+          Plant Bud local guide
+        </span>
+        <h1 class="relative mt-6 max-w-2xl font-abril text-5xl leading-[0.98] text-white sm:text-6xl lg:text-7xl">
+          Find a place where <span class="text-[#dca15d]">green things grow.</span>
+        </h1>
+        <p class="relative mt-6 max-w-xl text-base font-semibold leading-7 text-white/70">
+          Discover nursery accounts, meet the people behind them, and explore every location from one calmer directory.
+        </p>
 
-<section class="px-6 py-20">
-  <div class="mx-auto grid max-w-6xl grid-cols-1 gap-10 md:grid-cols-2">
-    @each(nursery in nurseries.sponsoredNurseries)
-      @!component('components/nursery-card', { nursery })
-    @endeach
-  </div>
-</section>
+        <form action="/nurseries#nursery-accounts" method="GET" class="relative z-50 mt-9 max-w-xl rounded-[26px] border border-white/18 bg-white/10 p-3 shadow-2xl backdrop-blur-xl" data-nursery-search autocomplete="off">
+          <label for="nurserySearch" class="sr-only">Search nursery accounts</label>
+          <div class="grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto]">
+            <input id="nurserySearch" name="q" value="{{ search }}" type="search" autocomplete="off" placeholder="Search nursery name, location, or plants" class="min-h-14 rounded-[19px] border border-white/35 bg-white px-5 text-sm font-bold text-[#113e14] outline-none placeholder:text-[#416543]/60" data-nursery-search-input aria-autocomplete="list" aria-expanded="false" aria-controls="nurserySearchResults">
+            <button type="submit" class="min-h-14 rounded-[19px] bg-[#dca15d] px-6 text-sm font-black text-[#113e14] transition hover:bg-[#ebe3a7]">
+              Search
+            </button>
+          </div>
+          <div id="nurserySearchResults" class="absolute left-3 right-3 top-[calc(100%+0.35rem)] z-[100] hidden max-h-[24rem] overflow-y-auto rounded-[24px] border border-white/55 bg-[#ebe3a7]/98 p-2 shadow-2xl" data-nursery-search-results role="listbox"></div>
+        </form>
+      </div>
 
-<div class="flex items-center justify-center pt-3">
-  <div class="h-[4px] w-20 bg-gradient-to-r from-transparent to-white/40"></div>
-  <div class="mx-6 rounded-full border border-white/20 bg-white/10 px-6 py-2 text-sm font-semibold uppercase tracking-[0.2em] text-white backdrop-blur-xl">
-    Big Sales %
-  </div>
-  <div class="h-[4px] w-20 bg-gradient-to-l from-transparent to-white/40"></div>
-</div>
+      <div class="relative min-h-[360px] overflow-hidden lg:min-h-[560px]">
+        <img src="/resources/images/homepagee/nursery-header.jpg" alt="Plants inside a nursery" class="absolute inset-0 h-full w-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-t from-[#113e14]/70 via-transparent to-transparent lg:bg-gradient-to-r lg:from-[#113e14] lg:via-transparent lg:to-transparent"></div>
+        <div class="absolute bottom-6 left-6 right-6 grid grid-cols-3 gap-2 rounded-[26px] border border-white/20 bg-[#113e14]/76 p-2 text-white shadow-2xl backdrop-blur-xl sm:left-auto sm:w-[390px]">
+          <div class="rounded-[20px] bg-[#ebe3a7] px-3 py-4 text-center text-[#113e14]">
+            <strong class="block text-2xl font-black">{{ totals.registered }}</strong>
+            <span class="text-[9px] font-black uppercase tracking-wider">Accounts</span>
+          </div>
+          <div class="rounded-[20px] bg-white/10 px-3 py-4 text-center">
+            <strong class="block text-2xl font-black">{{ totals.active }}</strong>
+            <span class="text-[9px] font-black uppercase tracking-wider text-white/60">Active</span>
+          </div>
+          <div class="rounded-[20px] bg-white/10 px-3 py-4 text-center">
+            <strong class="block text-2xl font-black">{{ totals.locations }}</strong>
+            <span class="text-[9px] font-black uppercase tracking-wider text-white/60">Places</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<div class="grid grid-cols-1 gap-8 pt-6 sm:grid-cols-2 lg:grid-cols-4">
-  @!component('components/img-card', {
-    title: 'Izote 50%',
-    text: 'Jardín Botánico La Laguna',
-    imageBg: '/nurseries/sale1.jpg'
-  })
-  @!component('components/img-card', {
-    title: 'Crown of thorns 60%',
-    text: 'Terra Flora Garden',
-    imageBg: '/nurseries/sale2.jpg'
-  })
-  @!component('components/img-card', {
-    title: 'Hot chili pepper 30%',
-    text: 'Green Heaven Nursery',
-    imageBg: '/nurseries/sale3.jpg'
-  })
-  @!component('components/img-card', {
-    title: 'Dumb cane camille 20%',
-    text: 'Jardín Botánico La Laguna',
-    imageBg: '/nurseries/sale4.jpg'
-  })
-</div>
+  <section id="nursery-map" class="scroll-mt-28 px-4 py-12 sm:px-8">
+    <div class="mx-auto max-w-[1320px]">
+      <div class="mb-7 flex flex-col justify-between gap-4 text-white sm:flex-row sm:items-end">
+        <div>
+          <p class="text-xs font-black uppercase tracking-[0.2em] text-[#ebe3a7]">Explore nearby</p>
+          <h2 class="mt-2 font-abril text-4xl sm:text-5xl">Every nursery, on one map</h2>
+        </div>
+        <p class="max-w-md text-sm font-semibold leading-6 text-white/68">Tap a marker to see the nursery, its schedule, profile, and the quickest way to get there.</p>
+      </div>
 
-<div class="flex justify-center pt-16">
-  <div class="h-[4px] w-[300px] bg-gradient-to-r from-transparent via-white/40 to-transparent"></div>
-</div>
+      <div class="nursery-map-shell relative overflow-hidden rounded-[40px] border-[10px] border-[#ebe3a7]/80 bg-[#ebe3a7] shadow-[0_28px_80px_rgba(17,62,20,0.32)]">
+        @if(mapLocations.length)
+          <div class="h-[530px] w-full bg-[#d9dfc3] lg:h-[620px]" data-nursery-map></div>
+        @else
+          <div class="grid min-h-[420px] place-items-center bg-[#f8f5e7] px-6 text-center">
+            <div class="max-w-md">
+              <h3 class="font-abril text-3xl">No registered map locations yet</h3>
+              <p class="mt-3 font-semibold leading-7 text-[#416543]">Nurseries will appear here only after they save an exact location in their profile.</p>
+            </div>
+          </div>
+        @endif
 
-<section class="px-6 py-20">
-  <div class="mx-auto grid max-w-6xl grid-cols-1 gap-10 md:grid-cols-3">
-    @each(nursery in nurseries.nurseries)
-      @!component('components/nursery-card', { nursery })
-    @endeach
-  </div>
-</section>
+        @if(mapLocations.length)
+          <div class="pointer-events-none absolute left-4 right-4 top-4 flex justify-end sm:left-6 sm:right-6 sm:top-6">
+            <button type="button" class="pointer-events-auto rounded-full border border-[#113e14]/10 bg-[#f8f5e7]/92 px-5 py-3 text-xs font-black shadow-lg backdrop-blur-xl transition hover:bg-white" data-nursery-map-fit>
+              Show all places
+            </button>
+          </div>
+
+          <aside class="absolute bottom-4 left-4 right-4 z-[1200] hidden rounded-[30px] border border-white/60 bg-[#f8f5e7]/95 p-4 shadow-2xl backdrop-blur-xl sm:bottom-6 sm:left-6 sm:right-auto sm:w-[390px]" data-nursery-map-preview>
+          <div class="flex items-start gap-4">
+            <div class="relative h-20 w-20 shrink-0">
+              <img src="" alt="" class="hidden h-20 w-20 rounded-[24px] border-4 border-white bg-white object-contain p-1 shadow-md" data-nursery-preview-image>
+              <span class="grid h-20 w-20 place-items-center rounded-[24px] border-4 border-white bg-[#416543] text-2xl font-black text-[#ebe3a7] shadow-md" data-nursery-preview-fallback></span>
+            </div>
+            <div class="min-w-0 flex-1">
+              <div class="flex items-start justify-between gap-2">
+                <span class="rounded-full bg-[#a8b841]/20 px-3 py-1 text-[9px] font-black uppercase tracking-wider text-[#416543]" data-nursery-preview-type></span>
+                <button type="button" class="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-[#113e14]/8 text-base font-black" aria-label="Close nursery preview" data-nursery-preview-close>&times;</button>
+              </div>
+              <h3 class="mt-2 truncate text-xl font-black" data-nursery-preview-name></h3>
+              <p class="mt-1 truncate text-xs font-bold text-[#416543]" data-nursery-preview-location></p>
+              <p class="mt-1 truncate text-[11px] font-bold text-[#416543]/65" data-nursery-preview-hours></p>
+            </div>
+          </div>
+          <div class="mt-4 flex gap-2">
+            <a href="#" target="_blank" rel="noreferrer" class="flex-1 rounded-full bg-[#dca15d] px-4 py-3 text-center text-xs font-black transition hover:bg-[#ebe3a7]" data-nursery-preview-directions>How to get there</a>
+            <a href="#" class="hidden flex-1 rounded-full bg-[#113e14] px-4 py-3 text-center text-xs font-black text-white transition hover:bg-[#416543]" data-nursery-preview-profile>View profile</a>
+          </div>
+          </aside>
+        @endif
+      </div>
+      <script type="application/json" data-nursery-map-data>{{{ mapLocationsJson }}}</script>
+    </div>
+  </section>
+
+  <section id="nursery-accounts" class="scroll-mt-28 px-4 py-16 sm:px-8">
+    <div class="mx-auto max-w-[1320px] rounded-[46px] bg-[#ebe3a7] px-5 py-10 shadow-[0_25px_70px_rgba(17,62,20,0.22)] sm:px-9 lg:px-12">
+      <div class="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+        <div>
+          <p class="text-xs font-black uppercase tracking-[0.2em] text-[#a0602f]">People and businesses</p>
+          <h2 class="mt-2 font-abril text-4xl sm:text-5xl">Nursery accounts</h2>
+          <p class="mt-3 max-w-2xl font-semibold leading-7 text-[#416543]">
+            @if(search)
+              Results for “{{ search }}”. Showing {{ pagination.from }}–{{ pagination.to }} of {{ pagination.total }} nursery accounts.
+            @else
+              Browse every nursery account in pages of 10, using the profile photo chosen by its owner.
+            @endif
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          @if(search)
+            <a href="/nurseries#nursery-accounts" class="rounded-full bg-white/65 px-5 py-2 text-xs font-black text-[#113e14] transition hover:bg-white">Clear search</a>
+          @endif
+          <span class="w-fit rounded-full bg-[#113e14] px-5 py-2 text-xs font-black text-[#ebe3a7]">{{ pagination.total }} profiles</span>
+        </div>
+      </div>
+
+      @if(registeredNurseries.length)
+        <div class="mt-9 grid gap-5 lg:grid-cols-2">
+          @each(nursery in registeredNurseries)
+            <article class="nursery-account-card group relative overflow-hidden rounded-[32px] bg-[#f8f5e7] p-5 shadow-[0_12px_35px_rgba(17,62,20,0.09)] transition hover:-translate-y-1">
+              <div class="absolute -right-12 -top-16 h-36 w-36 rounded-full bg-[#a8b841]/18 transition duration-500 group-hover:scale-125"></div>
+              <div class="relative flex items-start gap-4">
+                <div class="relative shrink-0">
+                  @if(nursery.image)
+                    <img src="{{ nursery.image }}" alt="{{ nursery.name }}" loading="lazy" decoding="async" class="h-20 w-20 rounded-[26px] border-4 border-white object-cover shadow-lg sm:h-24 sm:w-24">
+                  @else
+                    <span class="grid h-20 w-20 place-items-center rounded-[26px] border-4 border-white bg-[#416543] text-2xl font-black text-[#ebe3a7] shadow-lg sm:h-24 sm:w-24 sm:text-3xl">
+                      {{ nursery.initial }}
+                    </span>
+                  @endif
+                  <span class="absolute -bottom-1 -right-1 h-5 w-5 rounded-full border-4 border-[#f8f5e7] {{ nursery.isActive ? 'bg-[#a8b841]' : 'bg-[#dca15d]' }}"></span>
+                </div>
+                <div class="min-w-0 flex-1 pt-1">
+                  <div class="flex items-start justify-between gap-3">
+                    <div class="min-w-0">
+                      <h3 class="truncate text-xl font-black sm:text-2xl">{{ nursery.name }}</h3>
+                      <p class="mt-1 truncate text-xs font-black text-[#416543]/62">@{{ nursery.username }}</p>
+                    </div>
+                    <div class="shrink-0 rounded-full bg-[#ebe3a7] px-3 py-2 text-xs font-black">
+                      {{ nursery.rating ? nursery.rating + ' / 5' : 'New' }}
+                    </div>
+                  </div>
+                  <p class="mt-3 line-clamp-2 text-sm font-semibold leading-6 text-[#416543]">{{ nursery.description }}</p>
+                </div>
+              </div>
+
+              <div class="relative mt-5 grid grid-cols-3 gap-2">
+                <div class="rounded-2xl bg-[#113e14]/6 px-3 py-3">
+                  <span class="block text-[9px] font-black uppercase tracking-wider text-[#416543]/60">Location</span>
+                  <strong class="mt-1 block truncate text-xs">{{ nursery.location }}</strong>
+                </div>
+                <div class="rounded-2xl bg-[#113e14]/6 px-3 py-3">
+                  <span class="block text-[9px] font-black uppercase tracking-wider text-[#416543]/60">Products</span>
+                  <strong class="mt-1 block text-xs">{{ nursery.productsCount }} available</strong>
+                </div>
+                <div class="rounded-2xl bg-[#113e14]/6 px-3 py-3">
+                  <span class="block text-[9px] font-black uppercase tracking-wider text-[#416543]/60">Reviews</span>
+                  <strong class="mt-1 block text-xs">{{ nursery.reviews }} reviews</strong>
+                </div>
+              </div>
+
+              <div class="relative mt-5 flex items-center justify-between gap-4 border-t border-[#113e14]/10 pt-4">
+                <p class="min-w-0 truncate text-xs font-bold text-[#416543]">{{ nursery.hours }}</p>
+                <a href="{{ nursery.profileHref }}" class="shrink-0 rounded-full bg-[#113e14] px-5 py-3 text-xs font-black text-white transition hover:bg-[#416543]">
+                  Go to profile
+                </a>
+              </div>
+            </article>
+          @endeach
+        </div>
+
+        @if(pagination.totalPages > 1)
+          <nav class="mt-9 flex flex-wrap items-center justify-center gap-2" aria-label="Nursery result pages">
+            @if(pagination.previousHref)
+              <a href="{{ pagination.previousHref }}" class="rounded-full border border-[#113e14]/12 bg-[#f8f5e7] px-5 py-3 text-xs font-black transition hover:bg-white">Previous</a>
+            @endif
+            @each(pageItem in pagination.pages)
+              <a href="{{ pageItem.href }}" aria-current="{{ pageItem.current ? 'page' : 'false' }}" class="grid h-11 w-11 place-items-center rounded-full text-sm font-black transition {{ pageItem.current ? 'bg-[#113e14] text-white shadow-lg' : 'bg-[#f8f5e7] hover:bg-white' }}">
+                {{ pageItem.number }}
+              </a>
+            @endeach
+            @if(pagination.nextHref)
+              <a href="{{ pagination.nextHref }}" class="rounded-full border border-[#113e14]/12 bg-[#f8f5e7] px-5 py-3 text-xs font-black transition hover:bg-white">Next</a>
+            @endif
+          </nav>
+        @endif
+      @else
+        <div class="mt-9 rounded-[28px] border border-dashed border-[#113e14]/20 bg-white/45 p-10 text-center">
+          <h3 class="text-2xl font-black">No nursery accounts found</h3>
+          <p class="mt-2 font-semibold text-[#416543]">Try another nursery name, username, service, or location.</p>
+          @if(search)
+            <a href="/nurseries#nursery-accounts" class="mt-5 inline-flex rounded-full bg-[#113e14] px-6 py-3 text-sm font-black text-white">Clear search</a>
+          @endif
+        </div>
+      @endif
+    </div>
+  </section>
+
+  <section class="px-4 pb-24 pt-8 sm:px-8">
+    <div class="mx-auto max-w-[1120px]">
+      <div class="mb-8 text-center text-white">
+        <p class="text-xs font-black uppercase tracking-[0.2em] text-[#ebe3a7]">More places to visit</p>
+        <h2 class="mt-2 font-abril text-4xl sm:text-5xl">The local nursery guide</h2>
+        <p class="mx-auto mt-3 max-w-xl font-semibold leading-7 text-white/68">Extra recommendations kept in a small list so you can browse without an endless wall of cards.</p>
+      </div>
+
+      <div class="grid gap-3" data-progressive-list data-batch-size="4">
+        @each(nursery in editorialNurseries)
+          <article class="nursery-guide-row group grid grid-cols-[68px_minmax(0,1fr)] items-center gap-4 rounded-[24px] border border-white/14 bg-[#113e14]/72 p-3 text-white shadow-lg backdrop-blur-md transition hover:bg-[#113e14]/90 sm:grid-cols-[68px_minmax(0,1fr)_auto]" data-progressive-item>
+            <img src="/{{ nursery.image }}" alt="{{ nursery.name }}" loading="lazy" decoding="async" class="h-16 w-16 rounded-[20px] object-cover">
+            <div class="min-w-0">
+              <h3 class="truncate text-base font-black">{{ nursery.name }}</h3>
+              <p class="mt-1 truncate text-xs font-bold text-white/58">{{ nursery.location }} · {{ nursery.hours }}</p>
+            </div>
+            <a href="https://www.google.com/maps/dir/?api=1&destination={{ encodeURIComponent(nursery.name + ', ' + nursery.location + ', El Salvador') }}" target="_blank" rel="noreferrer" class="col-span-2 rounded-full bg-[#ebe3a7] px-5 py-3 text-center text-xs font-black text-[#113e14] transition hover:bg-white sm:col-span-1">
+              Directions
+            </a>
+          </article>
+        @endeach
+      </div>
+      <div class="mt-7 flex justify-center">
+        <button type="button" class="rounded-full border border-white/18 bg-white/10 px-7 py-3 text-sm font-black text-white backdrop-blur-md transition hover:bg-white/18" data-progressive-more>
+          Show more places
+        </button>
+      </div>
+    </div>
+  </section>
+</main>
 @end

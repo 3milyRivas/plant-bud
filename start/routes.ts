@@ -4,7 +4,6 @@ import router from '@adonisjs/core/services/router'
 import ornamentalPlants from '#data/ornamentalPlants'
 import horticulturalPlants from '#data/horticulturalPlants'
 import succulentPlants from '#data/succulentPlants'
-import nurseries from '#data/nurseries'
 
 const GardenDesignerController = () => import('#controllers/garden_designers_controller')
 const PhoneUploadsController = () => import('#controllers/phone_uploads_controller')
@@ -16,6 +15,8 @@ const PlantsSearchController = () => import('#controllers/plants_search_controll
 const PlansController = () => import('#controllers/plans_controller')
 const ProfilesController = () => import('#controllers/profiles_controller')
 const ServicesController = () => import('#controllers/services_controller')
+const NurseriesController = () => import('#controllers/nurseries_controller')
+const NurseryCatalogController = () => import('#controllers/nursery_catalog_controller')
 
 /* general views */
 router.on('/').render('pages/welcome').as('home')
@@ -79,6 +80,9 @@ router.post('/phone-upload/:token', [PhoneUploadsController, 'upload']).as('phon
 router
   .get('/profile/media/:userId/:kind/:fileName', [ProfilesController, 'media'])
   .as('profile.media.public')
+router
+  .get('/nursery-catalog/media/:userId/:fileName', [NurseryCatalogController, 'media'])
+  .as('nursery_catalog.media')
 /* clients views */
 /*router
   .group(() => {
@@ -132,13 +136,41 @@ router
     router.get('/profile/media/:kind/:fileName', [ProfilesController, 'media']).as('profile.media')
     router.post('/profile', [ProfilesController, 'update']).as('profile.update')
     router
+      .group(() => {
+        router
+          .post('/profile/catalog/categories', [NurseryCatalogController, 'storeCategory'])
+          .as('nursery_catalog.categories.store')
+        router
+          .post('/profile/catalog/categories/:id/delete', [
+            NurseryCatalogController,
+            'destroyCategory',
+          ])
+          .as('nursery_catalog.categories.destroy')
+        router
+          .post('/profile/catalog/products', [NurseryCatalogController, 'storeProduct'])
+          .as('nursery_catalog.products.store')
+        router
+          .post('/profile/catalog/products/:id', [NurseryCatalogController, 'updateProduct'])
+          .as('nursery_catalog.products.update')
+        router
+          .post('/profile/catalog/products/:id/delete', [
+            NurseryCatalogController,
+            'destroyProduct',
+          ])
+          .as('nursery_catalog.products.destroy')
+      })
+      .use(middleware.role(['nursery']))
+    router
       .post('/profile/availability', [ProfilesController, 'updateAvailability'])
       .as('profile.availability')
       .use(middleware.role(['gardener']))
   })
   .use(middleware.auth())
 
-router.on('/nurseries').render('pages/client/nurseries', { nurseries })
+router.get('/nurseries', [NurseriesController, 'index']).as('nurseries.index')
+router
+  .get('/nurseries/suggestions', [NurseriesController, 'suggestions'])
+  .as('nurseries.suggestions')
 /* gardeners views */
 router
   .group(() => {

@@ -6,6 +6,8 @@ import type PostPollOption from '#models/post_poll_option'
 import type User from '#models/user'
 import { BaseCommand, flags } from '@adonisjs/core/ace'
 import type { CommandOptions } from '@adonisjs/core/types/ace'
+import axios from 'axios'
+import https from 'node:https'
 import { DateTime } from 'luxon'
 
 type BotRole = 'client' | 'gardener' | 'nursery'
@@ -41,9 +43,12 @@ type NurseryDetails = {
   description: string
   address: string
   city: string
+  latitude: number
+  longitude: number
   openingHours: string
   servicesOffered: string
   paymentMethods: string
+  categories: string[]
   products: Array<{
     name: string
     category: string
@@ -319,6 +324,87 @@ const botPersonas: BotPersona[] = [
     ],
   },
   {
+    key: 'lucia',
+    role: 'client',
+    displayName: 'Lucia Herrera',
+    username: 'pb.lucia',
+    email: `pb.lucia@${botEmailDomain}`,
+    phone: null,
+    dui: null,
+    location: 'Nuevo Cuscatlan',
+    bio: 'Growing culinary herbs and pollinator-friendly flowers in a sunny family patio.',
+    avatarQuery: 'young woman portrait garden natural light',
+    bannerQuery: 'sunny patio herb garden',
+    social: { instagram: 'lucia.cultiva' },
+    posts: [
+      {
+        body: 'The mint is staying in its own pot this time. I finally learned that lesson.',
+        hashtags: ['herbs', 'mint', 'patiogarden'],
+        imageQuery: 'fresh mint plant terracotta pot',
+      },
+      {
+        body: 'Added zinnias near the herbs and the patio has been full of pollinators all week.',
+        hashtags: ['pollinators', 'flowers', 'urbangarden'],
+        imageQuery: 'zinnia flowers garden bees',
+      },
+    ],
+  },
+  {
+    key: 'rene',
+    role: 'client',
+    displayName: 'Rene Portillo',
+    username: 'pb.rene',
+    email: `pb.rene@${botEmailDomain}`,
+    phone: null,
+    dui: null,
+    location: 'Santa Ana',
+    bio: 'Weekend gardener learning fruit trees, composting, and patient plant care.',
+    avatarQuery: 'latin man portrait backyard garden',
+    bannerQuery: 'backyard fruit trees garden',
+    social: { facebook: 'rene.portillo.garden' },
+    posts: [
+      {
+        body: 'My young lemon tree has its first new flush after a light compost top dressing.',
+        hashtags: ['fruittrees', 'lemon', 'compost'],
+        imageQuery: 'young lemon tree new leaves',
+      },
+      {
+        body: 'What is your favorite way to use dry leaves in the garden?',
+        hashtags: ['compost', 'soilhealth'],
+        poll: {
+          question: 'Where should the dry leaves go?',
+          options: ['Compost pile', 'Mulch layer', 'Leaf mold'],
+        },
+      },
+    ],
+  },
+  {
+    key: 'alejandra',
+    role: 'client',
+    displayName: 'Alejandra Cruz',
+    username: 'pb.alejandra',
+    email: `pb.alejandra@${botEmailDomain}`,
+    phone: null,
+    dui: null,
+    location: 'La Libertad',
+    bio: 'Building a breezy coastal garden with tough foliage and plenty of color.',
+    avatarQuery: 'latin woman portrait tropical garden',
+    bannerQuery: 'colorful coastal patio plants',
+    social: { instagram: 'alejandra.patioverde' },
+    posts: [
+      {
+        body: 'The sea breeze was drying every new leaf, so I moved the youngest plants behind a living windbreak.',
+        hashtags: ['coastalgarden', 'plantcare', 'wind'],
+        imageQuery: 'coastal patio tropical plants',
+      },
+      {
+        body: 'My hibiscus finally opened after settling into its sunnier spot.',
+        hashtags: ['hibiscus', 'flowers', 'patiogarden'],
+        imageQuery: 'red hibiscus flower patio plant',
+      },
+    ],
+  },
+  {
     key: 'marco',
     role: 'gardener',
     displayName: 'Marco Solorzano',
@@ -516,6 +602,202 @@ const botPersonas: BotPersona[] = [
     ],
   },
   {
+    key: 'gabriela',
+    role: 'gardener',
+    displayName: 'Gabriela Quintanilla',
+    username: 'pb.gabriela',
+    email: `pb.gabriela@${botEmailDomain}`,
+    phone: '7005-0505',
+    dui: '05050505-5',
+    location: 'San Salvador',
+    bio: 'Indoor plant specialist creating practical care systems for homes and small businesses.',
+    avatarQuery: 'female indoor plant specialist portrait',
+    bannerQuery: 'indoor plant styling bright apartment',
+    social: { instagram: 'gabriela.indoorverde' },
+    gardener: {
+      headline: 'Indoor plant styling and care routines',
+      serviceArea: 'San Salvador, Escalon, San Benito',
+      availabilitySchedule: 'Mon-Fri, 9:00 AM - 5:00 PM',
+      servicesOffered: 'Indoor plant styling, light assessment, care plans, repotting',
+      paymentMethods: 'Cash, transfer, card',
+      experienceYears: 7,
+      hourlyRate: 23,
+      services: [
+        {
+          name: 'Indoor light assessment',
+          description: 'Room-by-room light review with resilient plant recommendations.',
+          basePrice: 38,
+          durationMinutes: 75,
+        },
+        {
+          name: 'Office plant care',
+          description: 'Routine watering, pruning, cleaning, and health checks.',
+          basePrice: 50,
+          durationMinutes: 120,
+        },
+      ],
+    },
+    posts: [
+      {
+        body: 'A beautiful plant corner starts with honest light measurements, not a shopping list.',
+        hashtags: ['indoorplants', 'plantstyling', 'gardener'],
+        imageQuery: 'bright room indoor plants professional styling',
+      },
+      {
+        body: 'Today we rotated and cleaned an office collection so every plant can use the available light.',
+        hashtags: ['officeplants', 'plantmaintenance'],
+        imageQuery: 'modern office indoor plants',
+      },
+    ],
+  },
+  {
+    key: 'oscar',
+    role: 'gardener',
+    displayName: 'Oscar Lemus',
+    username: 'pb.oscar',
+    email: `pb.oscar@${botEmailDomain}`,
+    phone: '7006-0606',
+    dui: '06060606-6',
+    location: 'Santa Tecla',
+    bio: 'Irrigation technician and gardener focused on efficient watering and healthy lawns.',
+    avatarQuery: 'male landscape gardener portrait irrigation',
+    bannerQuery: 'garden drip irrigation system',
+    social: { instagram: 'oscar.riegoverde' },
+    gardener: {
+      headline: 'Efficient irrigation and lawn recovery',
+      serviceArea: 'Santa Tecla, Zaragoza, Nuevo Cuscatlan',
+      availabilitySchedule: 'Mon-Sat, 7:00 AM - 4:00 PM',
+      servicesOffered: 'Drip irrigation, sprinkler checks, lawn recovery, drainage',
+      paymentMethods: 'Cash, transfer',
+      experienceYears: 9,
+      hourlyRate: 26,
+      services: [
+        {
+          name: 'Irrigation inspection',
+          description: 'Leak, pressure, coverage, and watering schedule review.',
+          basePrice: 42,
+          durationMinutes: 90,
+        },
+        {
+          name: 'Lawn recovery visit',
+          description: 'Compaction, drainage, mowing, and nutrition assessment.',
+          basePrice: 58,
+          durationMinutes: 120,
+        },
+      ],
+    },
+    posts: [
+      {
+        body: 'Two short watering cycles can absorb better than one long cycle on compacted soil.',
+        hashtags: ['irrigation', 'waterwise', 'gardentips'],
+        imageQuery: 'garden drip irrigation close up',
+      },
+      {
+        body: 'Before replacing a lawn, check compaction and drainage. The grass may not be the real problem.',
+        hashtags: ['lawncare', 'drainage', 'soil'],
+        imageQuery: 'gardener checking green lawn soil',
+      },
+    ],
+  },
+  {
+    key: 'karla',
+    role: 'gardener',
+    displayName: 'Karla Bonilla',
+    username: 'pb.karla',
+    email: `pb.karla@${botEmailDomain}`,
+    phone: '7007-0707',
+    dui: '07070707-7',
+    location: 'San Miguel',
+    bio: 'Tropical garden maintenance for hot climates, colorful patios, and resilient landscapes.',
+    avatarQuery: 'female tropical gardener portrait outdoors',
+    bannerQuery: 'colorful tropical garden landscape',
+    social: { instagram: 'karla.tropicalgarden', tiktok: 'karlajardines' },
+    gardener: {
+      headline: 'Tropical patios and heat-ready gardens',
+      serviceArea: 'San Miguel and nearby areas',
+      availabilitySchedule: 'Tue-Sun, 7:00 AM - 3:00 PM',
+      servicesOffered: 'Tropical garden design, pruning, heat care, patio maintenance',
+      paymentMethods: 'Cash, transfer',
+      experienceYears: 6,
+      hourlyRate: 19,
+      services: [
+        {
+          name: 'Tropical patio refresh',
+          description: 'Plant editing, pruning, color planning, and soil check.',
+          basePrice: 44,
+          durationMinutes: 120,
+        },
+        {
+          name: 'Heat stress assessment',
+          description: 'Shade, watering, mulch, and plant placement recommendations.',
+          basePrice: 25,
+          durationMinutes: 60,
+        },
+      ],
+    },
+    posts: [
+      {
+        body: 'In hot gardens, afternoon shade can matter more than adding another watering day.',
+        hashtags: ['tropicalgarden', 'heatcare', 'gardener'],
+        imageQuery: 'lush tropical patio garden shade',
+      },
+      {
+        body: 'Crotons and ixoras brought the color back to this entrance without fighting the climate.',
+        hashtags: ['croton', 'ixora', 'landscaping'],
+        imageQuery: 'croton ixora tropical landscaping',
+      },
+    ],
+  },
+  {
+    key: 'tomas',
+    role: 'gardener',
+    displayName: 'Tomas Iraheta',
+    username: 'pb.tomas',
+    email: `pb.tomas@${botEmailDomain}`,
+    phone: '7008-0808',
+    dui: '08080808-8',
+    location: 'Sonsonate',
+    bio: 'Fruit tree pruning, productive patios, and seasonal care for home orchards.',
+    avatarQuery: 'male orchard gardener portrait fruit trees',
+    bannerQuery: 'gardener pruning citrus orchard',
+    social: { facebook: 'tomas.iraheta.huertos', instagram: 'tomas.frutales' },
+    gardener: {
+      headline: 'Fruit trees and productive home gardens',
+      serviceArea: 'Sonsonate, Acajutla, Armenia',
+      availabilitySchedule: 'Mon-Sat, 6:30 AM - 3:30 PM',
+      servicesOffered: 'Fruit tree pruning, nutrition plans, orchard cleanup, planting',
+      paymentMethods: 'Cash, transfer',
+      experienceYears: 12,
+      hourlyRate: 22,
+      services: [
+        {
+          name: 'Fruit tree pruning',
+          description: 'Structural and productive pruning with sanitation cleanup.',
+          basePrice: 36,
+          durationMinutes: 90,
+        },
+        {
+          name: 'Home orchard assessment',
+          description: 'Health, spacing, nutrition, pests, and seasonal action plan.',
+          basePrice: 47,
+          durationMinutes: 120,
+        },
+      ],
+    },
+    posts: [
+      {
+        body: 'Fruit tree pruning should improve light and airflow without removing the whole canopy at once.',
+        hashtags: ['fruittrees', 'pruning', 'gardener'],
+        imageQuery: 'gardener pruning citrus fruit tree',
+      },
+      {
+        body: 'A productive patio can mix citrus, herbs, and pollinator flowers without feeling crowded.',
+        hashtags: ['homeorchard', 'ediblegarden'],
+        imageQuery: 'small home orchard citrus herb garden',
+      },
+    ],
+  },
+  {
     key: 'loma-verde',
     role: 'nursery',
     displayName: 'Loma Verde Nursery',
@@ -535,9 +817,12 @@ const botPersonas: BotPersona[] = [
       description: 'Indoor plants, substrate mixes, and starter-friendly care kits.',
       address: 'Calle El Cedro #14',
       city: 'Santa Tecla',
+      latitude: 13.6731,
+      longitude: -89.2898,
       openingHours: 'Mon-Sat, 8:00 AM - 6:00 PM',
       servicesOffered: 'Plant sales, repotting station, care kits',
       paymentMethods: 'Cash, transfer, card',
+      categories: ['Indoor plants', 'Soil'],
       products: [
         {
           name: 'Golden pothos',
@@ -593,9 +878,12 @@ const botPersonas: BotPersona[] = [
       description: 'Outdoor ornamentals, flowering plants, and terrace styling support.',
       address: 'Avenida Las Gardenias #7',
       city: 'Antiguo Cuscatlan',
+      latitude: 13.6648,
+      longitude: -89.2532,
       openingHours: 'Tue-Sun, 9:00 AM - 5:30 PM',
       servicesOffered: 'Flowering plants, terrace arrangements, delivery',
       paymentMethods: 'Cash, transfer',
+      categories: ['Flowers', 'Planters'],
       products: [
         {
           name: 'Ixora compacta',
@@ -648,9 +936,12 @@ const botPersonas: BotPersona[] = [
       description: 'Succulents, cacti, mineral mixes, and warm-climate plant advice.',
       address: 'Boulevard Las Palmeras #21',
       city: 'San Miguel',
+      latitude: 13.4833,
+      longitude: -88.1833,
       openingHours: 'Mon-Sat, 8:30 AM - 5:30 PM',
       servicesOffered: 'Cacti, succulents, substrate, repotting support',
       paymentMethods: 'Cash, transfer, card',
+      categories: ['Cacti', 'Succulents'],
       products: [
         {
           name: 'Mini cactus tray',
@@ -702,9 +993,12 @@ const botPersonas: BotPersona[] = [
       description: 'Aroids, moss poles, chunky substrate, and indoor plant guidance.',
       address: 'Colonia San Benito #33',
       city: 'San Salvador',
+      latitude: 13.6929,
+      longitude: -89.2182,
       openingHours: 'Mon-Fri, 10:00 AM - 7:00 PM',
       servicesOffered: 'Aroids, moss poles, soil blends, styling support',
       paymentMethods: 'Cash, transfer, card',
+      categories: ['Aroids', 'Soil'],
       products: [
         {
           name: 'Monstera deliciosa',
@@ -737,11 +1031,279 @@ const botPersonas: BotPersona[] = [
       },
     ],
   },
+  {
+    key: 'semilla-nativa',
+    role: 'nursery',
+    displayName: 'Semilla Nativa',
+    username: 'nursery_semilla_nativa',
+    email: `semilla.nativa@${botEmailDomain}`,
+    phone: '7015-1515',
+    dui: '15151515-5',
+    location: 'Zaragoza',
+    bio: 'Native trees, pollinator plants, and practical choices for resilient local gardens.',
+    avatarQuery: 'native plant nursery storefront',
+    bannerQuery: 'native plants nursery outdoor rows',
+    social: { instagram: 'semillanativa.sv', facebook: 'semillanativasv' },
+    nursery: {
+      nurseryName: 'Semilla Nativa',
+      nurserySlug: 'semilla-nativa',
+      ownerName: 'Daniela Alfaro',
+      description: 'Native trees, flowering shrubs, pollinator plants, and restoration guidance.',
+      address: 'Carretera al Puerto, km 22',
+      city: 'Zaragoza',
+      latitude: 13.5899,
+      longitude: -89.2881,
+      openingHours: 'Mon-Sat, 7:30 AM - 5:00 PM',
+      servicesOffered: 'Native plants, shade trees, pollinator kits, delivery',
+      paymentMethods: 'Cash, transfer, card',
+      categories: ['Native plants', 'Trees', 'Garden kits'],
+      products: [
+        {
+          name: 'Cortez blanco sapling',
+          category: 'Trees',
+          description: 'Young native flowering tree for sunny open spaces.',
+          price: 14,
+          stock: 15,
+          imageQuery: 'young flowering tree sapling nursery',
+        },
+        {
+          name: 'Pollinator garden kit',
+          category: 'Garden kits',
+          description: 'A colorful selection of nectar plants for sunny gardens.',
+          price: 19.5,
+          stock: 11,
+          imageQuery: 'pollinator flower plants nursery pots',
+        },
+        {
+          name: 'Native flowering shrub',
+          category: 'Native plants',
+          description: 'Locally adapted shrub selected for warm, seasonal conditions.',
+          price: 9,
+          stock: 18,
+          imageQuery: 'native flowering shrub nursery',
+        },
+      ],
+    },
+    posts: [
+      {
+        body: 'This week we prepared native flowering shrubs and young shade trees for the rainy season.',
+        hashtags: ['nativeplants', 'trees', 'nursery'],
+        imageQuery: 'native tree seedlings plant nursery',
+      },
+      {
+        body: 'Pollinator kits are ready with plants selected for staggered flowering.',
+        hashtags: ['pollinators', 'flowers', 'gardenkit'],
+        imageQuery: 'pollinator plants pots nursery',
+      },
+    ],
+  },
+  {
+    key: 'huerto-central',
+    role: 'nursery',
+    displayName: 'Huerto Central',
+    username: 'nursery_huerto_central',
+    email: `huerto.central@${botEmailDomain}`,
+    phone: '7016-1616',
+    dui: '16161616-6',
+    location: 'San Salvador',
+    bio: 'Edible seedlings, herbs, seeds, and compact growing supplies for urban homes.',
+    avatarQuery: 'urban garden nursery herb seedlings',
+    bannerQuery: 'vegetable seedlings garden center',
+    social: { instagram: 'huertocentral.sv', tiktok: 'huertocentralsv' },
+    nursery: {
+      nurseryName: 'Huerto Central',
+      nurserySlug: 'huerto-central',
+      ownerName: 'Mauricio Funes',
+      description: 'Herbs, vegetable seedlings, seeds, compost, and supplies for small urban harvests.',
+      address: 'Boulevard Los Heroes #118',
+      city: 'San Salvador',
+      latitude: 13.7084,
+      longitude: -89.2094,
+      openingHours: 'Mon-Sat, 8:00 AM - 6:30 PM',
+      servicesOffered: 'Edible seedlings, seeds, compost, balcony garden kits',
+      paymentMethods: 'Cash, transfer, card',
+      categories: ['Herbs', 'Vegetables', 'Supplies'],
+      products: [
+        {
+          name: 'Kitchen herb pack',
+          category: 'Herbs',
+          description: 'Basil, rosemary, mint, and oregano seedlings.',
+          price: 11,
+          stock: 21,
+          imageQuery: 'culinary herb seedlings pots',
+        },
+        {
+          name: 'Tomato seedling set',
+          category: 'Vegetables',
+          description: 'Four healthy tomato seedlings ready for larger containers.',
+          price: 7.5,
+          stock: 17,
+          imageQuery: 'tomato seedlings nursery pots',
+        },
+        {
+          name: 'Screened compost bag',
+          category: 'Supplies',
+          description: 'Mature screened compost for beds and containers.',
+          price: 6.5,
+          stock: 34,
+          imageQuery: 'organic compost gardening bag soil',
+        },
+      ],
+    },
+    posts: [
+      {
+        body: 'Fresh basil, tomato, sweet pepper, and rosemary seedlings are on the tables today.',
+        hashtags: ['urbangarden', 'seedlings', 'nursery'],
+        imageQuery: 'herb vegetable seedlings nursery',
+      },
+      {
+        body: 'Balcony harvest poll: which edible plant always earns a spot?',
+        hashtags: ['ediblegarden', 'balcony'],
+        poll: {
+          question: 'Your essential edible plant?',
+          options: ['Basil', 'Tomato', 'Sweet pepper'],
+        },
+      },
+    ],
+  },
+  {
+    key: 'orquideas-del-volcan',
+    role: 'nursery',
+    displayName: 'Orquideas del Volcan',
+    username: 'nursery_orquideas_volcan',
+    email: `orquideas.volcan@${botEmailDomain}`,
+    phone: '7017-1717',
+    dui: '17171717-7',
+    location: 'Santa Ana',
+    bio: 'Orchids, bromeliads, mounting supplies, and patient guidance for collectors.',
+    avatarQuery: 'orchid nursery owner greenhouse',
+    bannerQuery: 'orchid greenhouse nursery rows',
+    social: { instagram: 'orquideasdelvolcan' },
+    nursery: {
+      nurseryName: 'Orquideas del Volcan',
+      nurserySlug: 'orquideas-del-volcan',
+      ownerName: 'Claudia Moran',
+      description: 'Healthy orchids, bromeliads, bark mixes, and mounting accessories.',
+      address: 'Avenida Independencia Sur #45',
+      city: 'Santa Ana',
+      latitude: 13.9862,
+      longitude: -89.5597,
+      openingHours: 'Wed-Sun, 9:00 AM - 5:00 PM',
+      servicesOffered: 'Orchids, bromeliads, mounting, bloom care advice',
+      paymentMethods: 'Cash, transfer',
+      categories: ['Orchids', 'Bromeliads', 'Supplies'],
+      products: [
+        {
+          name: 'Phalaenopsis orchid',
+          category: 'Orchids',
+          description: 'Blooming moth orchid with a healthy established root system.',
+          price: 24,
+          stock: 10,
+          imageQuery: 'phalaenopsis orchid pot nursery',
+        },
+        {
+          name: 'Color bromeliad',
+          category: 'Bromeliads',
+          description: 'Bright tropical bromeliad for filtered light.',
+          price: 13,
+          stock: 14,
+          imageQuery: 'colorful bromeliad plant pot',
+        },
+        {
+          name: 'Orchid bark mix',
+          category: 'Supplies',
+          description: 'Airy bark blend for common epiphytic orchids.',
+          price: 8,
+          stock: 26,
+          imageQuery: 'orchid bark potting mix',
+        },
+      ],
+    },
+    posts: [
+      {
+        body: 'Phalaenopsis blooms are open and every plant was checked for healthy roots before display.',
+        hashtags: ['orchids', 'flowers', 'nursery'],
+        imageQuery: 'phalaenopsis orchids greenhouse',
+      },
+      {
+        body: 'Clear pots make orchid root checks much easier. Green roots are your watering clue.',
+        hashtags: ['orchidcare', 'planttips'],
+        imageQuery: 'orchid roots clear pot',
+      },
+    ],
+  },
+  {
+    key: 'palmas-del-pacifico',
+    role: 'nursery',
+    displayName: 'Palmas del Pacifico',
+    username: 'nursery_palmas_pacifico',
+    email: `palmas.pacifico@${botEmailDomain}`,
+    phone: '7018-1818',
+    dui: '18181818-8',
+    location: 'La Libertad',
+    bio: 'Coastal nursery with palms, tropical foliage, and salt-tolerant landscape plants.',
+    avatarQuery: 'tropical palm nursery outdoor',
+    bannerQuery: 'palm tree nursery tropical plants',
+    social: { instagram: 'palmasdelpacifico.sv', facebook: 'palmasdelpacificosv' },
+    nursery: {
+      nurseryName: 'Palmas del Pacifico',
+      nurserySlug: 'palmas-del-pacifico',
+      ownerName: 'Jorge Villalta',
+      description: 'Palms, tropical foliage, and hardy landscape plants for warm coastal properties.',
+      address: 'Carretera Litoral, km 34',
+      city: 'La Libertad',
+      latitude: 13.4886,
+      longitude: -89.3196,
+      openingHours: 'Mon-Sat, 7:00 AM - 5:00 PM',
+      servicesOffered: 'Palms, tropical foliage, bulk orders, coastal plant advice',
+      paymentMethods: 'Cash, transfer, card',
+      categories: ['Palms', 'Tropical plants', 'Landscape plants'],
+      products: [
+        {
+          name: 'Areca palm',
+          category: 'Palms',
+          description: 'Clumping palm for bright patios and protected outdoor spaces.',
+          price: 28,
+          stock: 13,
+          imageQuery: 'areca palm nursery pot',
+        },
+        {
+          name: 'Bird of paradise',
+          category: 'Tropical plants',
+          description: 'Bold tropical foliage for bright warm locations.',
+          price: 21,
+          stock: 16,
+          imageQuery: 'bird of paradise plant nursery',
+        },
+        {
+          name: 'Coastal hedge pack',
+          category: 'Landscape plants',
+          description: 'Six hardy shrubs selected for sunny coastal gardens.',
+          price: 42,
+          stock: 8,
+          imageQuery: 'tropical hedge shrubs nursery',
+        },
+      ],
+    },
+    posts: [
+      {
+        body: 'Areca palms and bird of paradise are ready for bright patios and warm entrances.',
+        hashtags: ['palms', 'tropicalplants', 'nursery'],
+        imageQuery: 'tropical palms plant nursery',
+      },
+      {
+        body: 'Coastal gardens need wind and salt tolerance built into the plant list from day one.',
+        hashtags: ['coastalgarden', 'landscaping'],
+        imageQuery: 'lush coastal tropical garden',
+      },
+    ],
+  },
 ]
 
 export default class DemoBots extends BaseCommand {
   static commandName = 'demo:bots'
-  static description = 'Seed or remove demo bot users, posts, follows, reactions, reviews, and role data.'
+  static description =
+    'Seed or remove demo bot users, posts, follows, reactions, reviews, and role data.'
   static options: CommandOptions = {
     startApp: true,
   }
@@ -794,7 +1356,10 @@ export default class DemoBots extends BaseCommand {
     }
 
     const password = this.password || defaultBotPassword
-    const imageProvider = new DemoImageProvider(Boolean(this.withPexels), this.logger)
+    const imageProvider = new DemoImageProvider(
+      Boolean(this.withPexels || process.env.PEXELS_API_KEY),
+      this.logger
+    )
     const seededPersonas = await this.preparePersonaAssets(imageProvider)
 
     await this.models.db.transaction(async (trx) => {
@@ -813,7 +1378,9 @@ export default class DemoBots extends BaseCommand {
 
     this.logger.success(`Seeded ${seededPersonas.length} demo bot accounts.`)
     this.logger.info(`Default password: ${password}`)
-    this.logger.info('Use "node ace demo:bots --cleanup" when the demo dataset is no longer needed.')
+    this.logger.info(
+      'Use "node ace demo:bots --cleanup" when the demo dataset is no longer needed.'
+    )
   }
 
   private async getExistingDemoBots() {
@@ -851,9 +1418,15 @@ export default class DemoBots extends BaseCommand {
       }
 
       if (persona.nursery) {
-        for (let productIndex = 0; productIndex < persona.nursery.products.length; productIndex += 1) {
+        for (
+          let productIndex = 0;
+          productIndex < persona.nursery.products.length;
+          productIndex += 1
+        ) {
           const product = persona.nursery.products[productIndex]
-          productImages.push(await imageProvider.getProductImage(product.imageQuery, index + productIndex))
+          productImages.push(
+            await imageProvider.getProductImage(product.imageQuery, index + productIndex)
+          )
         }
       }
 
@@ -1002,6 +1575,8 @@ export default class DemoBots extends BaseCommand {
         description: details.description,
         address: details.address,
         city: details.city,
+        latitude: details.latitude,
+        longitude: details.longitude,
         publicPhone: user.phone,
         publicEmail: user.email,
         logoUrl: persona.avatarUrl,
@@ -1024,11 +1599,24 @@ export default class DemoBots extends BaseCommand {
         description: product.description,
         price: product.price,
         stock: product.stock,
-        imageUrl: persona.productImages[index] || fallbackProductImages[index % fallbackProductImages.length],
+        imageUrl:
+          persona.productImages[index] ||
+          fallbackProductImages[index % fallbackProductImages.length],
         isActive: true,
       })),
       { client: trx }
     )
+
+    if (details.categories.length) {
+      await this.models.NurseryCatalogCategory.createMany(
+        [...new Set(details.categories)].slice(0, 5).map((name, index) => ({
+          nurseryProfileId: profile.id,
+          name,
+          sortOrder: index + 1,
+        })),
+        { client: trx }
+      )
+    }
 
     return profile
   }
@@ -1039,7 +1627,9 @@ export default class DemoBots extends BaseCommand {
 
     users.forEach((seededUser, index) => {
       const targets = rotate(users, index + 1).slice(0, 5)
-      const roleTargets = users.filter((target) => target.persona.role !== seededUser.persona.role).slice(0, 3)
+      const roleTargets = users
+        .filter((target) => target.persona.role !== seededUser.persona.role)
+        .slice(0, 3)
 
       for (const target of [...targets, ...roleTargets]) {
         if (target.user.id === seededUser.user.id) continue
@@ -1250,7 +1840,9 @@ export default class DemoBots extends BaseCommand {
       await this.models.ProfileReview.createMany(reviews, { client: trx })
 
       const ratingAverage =
-        Math.round((reviews.reduce((total, review) => total + review.rating, 0) / reviews.length) * 10) / 10
+        Math.round(
+          (reviews.reduce((total, review) => total + review.rating, 0) / reviews.length) * 10
+        ) / 10
 
       if (target.gardenerProfile) {
         target.gardenerProfile.useTransaction(trx)
@@ -1282,6 +1874,7 @@ async function loadModels() {
     gardenerProfile,
     gardenerService,
     nurseryProduct,
+    nurseryCatalogCategory,
     nurseryProfile,
     postComment,
     postHashtag,
@@ -1300,6 +1893,7 @@ async function loadModels() {
     import('#models/gardener_profile'),
     import('#models/gardener_service'),
     import('#models/nursery_product'),
+    import('#models/nursery_catalog_category'),
     import('#models/nursery_profile'),
     import('#models/post_comment'),
     import('#models/post_hashtag'),
@@ -1320,6 +1914,7 @@ async function loadModels() {
     GardenerProfile: gardenerProfile.default,
     GardenerService: gardenerService.default,
     NurseryProduct: nurseryProduct.default,
+    NurseryCatalogCategory: nurseryCatalogCategory.default,
     NurseryProfile: nurseryProfile.default,
     PostComment: postComment.default,
     PostHashtag: postHashtag.default,
@@ -1339,40 +1934,95 @@ class DemoImageProvider {
   private pexelsCache = new Map<string, string[]>()
   private usedPexelsUrls = new Set<string>()
   private warnedAboutPexels = false
+  private warnedAboutLocalTls = false
+  private localTlsAgent = new https.Agent({ rejectUnauthorized: false, keepAlive: true })
 
-  constructor(enabled: boolean, private logger: Pick<BaseCommand['logger'], 'warning' | 'info'>) {
+  constructor(
+    enabled: boolean,
+    private logger: Pick<BaseCommand['logger'], 'warning' | 'info'>
+  ) {
     this.pexelsEnabled = enabled
     this.pexelsKey = process.env.PEXELS_API_KEY
 
     if (enabled && !this.pexelsKey) {
       this.logger.warning('PEXELS_API_KEY is not available. Falling back to local demo images.')
       this.pexelsEnabled = false
+    } else if (this.pexelsEnabled) {
+      this.logger.info('Pexels images enabled for demo profiles, posts, and nursery catalogs.')
     }
   }
 
   async getProfileImage(persona: BotPersona, kind: 'avatar' | 'banner', index: number) {
-    const query = kind === 'avatar' ? persona.avatarQuery : persona.bannerQuery
+    const roleQueries: Record<BotRole, Record<'avatar' | 'banner', string>> = {
+      client: {
+        avatar: 'person portrait with houseplants natural light',
+        banner: 'beautiful home garden plants',
+      },
+      gardener: {
+        avatar: 'professional gardener portrait outdoors',
+        banner: 'professional gardener working in garden',
+      },
+      nursery: {
+        avatar: 'plant nursery owner greenhouse portrait',
+        banner: 'lush plant nursery greenhouse',
+      },
+    }
+    const query = roleQueries[persona.role][kind]
     const orientation = kind === 'avatar' ? 'portrait' : 'landscape'
     const pexelsImage = await this.getPexelsImage(query, orientation, kind)
 
     if (pexelsImage) return pexelsImage
 
-    const fallbackPool = kind === 'avatar' ? fallbackAvatars[persona.role] : fallbackBanners[persona.role]
+    const fallbackPool =
+      kind === 'avatar' ? fallbackAvatars[persona.role] : fallbackBanners[persona.role]
     return fallbackPool[index % fallbackPool.length]
   }
 
   async getContentImage(query: string, index: number) {
     return (
-      (await this.getPexelsImage(query, 'landscape', 'content')) ||
+      (await this.getPexelsImage(this.contentCollectionQuery(query), 'landscape', 'content')) ||
       fallbackPostImages[index % fallbackPostImages.length]
     )
   }
 
   async getProductImage(query: string, index: number) {
     return (
-      (await this.getPexelsImage(query, 'square', 'content')) ||
+      (await this.getPexelsImage(this.productCollectionQuery(query), 'square', 'content')) ||
       fallbackProductImages[index % fallbackProductImages.length]
     )
+  }
+
+  private contentCollectionQuery(query: string) {
+    const value = query.toLowerCase()
+    if (/(orchid|flower|hibiscus|ixora|zinnia|pollinator)/.test(value)) {
+      return 'colorful flowering plants garden nursery'
+    }
+    if (/(cactus|succulent|echeveria)/.test(value)) return 'cactus succulent collection'
+    if (/(herb|vegetable|tomato|compost|edible|orchard|fruit|lemon)/.test(value)) {
+      return 'edible herb vegetable home garden'
+    }
+    if (/(nursery|greenhouse|seedling|restock)/.test(value)) {
+      return 'lush plant nursery greenhouse plants'
+    }
+    if (/(gardener|pruning|maintenance|irrigation|lawn|soil|drainage)/.test(value)) {
+      return 'professional gardener working plants'
+    }
+    if (/(tropical|palm|coastal|croton)/.test(value)) return 'lush tropical patio garden'
+    if (/(office|indoor|monstera|pothos|aroid|moss)/.test(value)) {
+      return 'beautiful indoor houseplants room'
+    }
+    return 'beautiful home garden plants'
+  }
+
+  private productCollectionQuery(query: string) {
+    const value = query.toLowerCase()
+    if (/(soil|compost|bark|mix)/.test(value)) return 'organic potting soil gardening'
+    if (/(cactus|succulent|echeveria)/.test(value)) return 'cactus succulent plant pot'
+    if (/(orchid|bromeliad|flower|ixora)/.test(value)) return 'flowering plant nursery pot'
+    if (/(herb|tomato|vegetable|seedling)/.test(value)) return 'herb vegetable seedlings pots'
+    if (/(palm|tropical|bird of paradise|hedge)/.test(value)) return 'tropical plant nursery pot'
+    if (/(tree|sapling|native|shrub)/.test(value)) return 'tree sapling nursery plant'
+    return 'indoor houseplant nursery pot'
   }
 
   private async getPexelsImage(
@@ -1405,28 +2055,54 @@ class DemoImageProvider {
     cacheKey: string
   ) {
     try {
-      const url = new URL('https://api.pexels.com/v1/search')
+      const request = (allowLocalCertificateFallback = false) =>
+        axios.get('https://api.pexels.com/v1/search', {
+          headers: {
+            Authorization: this.pexelsKey!,
+          },
+          params: {
+            query,
+            per_page: 12,
+            orientation,
+          },
+          timeout: 20000,
+          httpsAgent: allowLocalCertificateFallback ? this.localTlsAgent : undefined,
+        })
+      let response
 
-      url.searchParams.set('query', query)
-      url.searchParams.set('per_page', '12')
-      url.searchParams.set('orientation', orientation)
+      try {
+        response = await request()
+      } catch (error: any) {
+        const certificateCodes = new Set([
+          'UNABLE_TO_VERIFY_LEAF_SIGNATURE',
+          'SELF_SIGNED_CERT_IN_CHAIN',
+          'DEPTH_ZERO_SELF_SIGNED_CERT',
+          'CERT_HAS_EXPIRED',
+        ])
 
-      const response = await fetch(url, {
-        headers: {
-          Authorization: this.pexelsKey!,
-        },
-      })
+        if (
+          process.env.NODE_ENV === 'production' ||
+          !certificateCodes.has(String(error?.code || ''))
+        ) {
+          throw error
+        }
 
-      if (!response.ok) {
-        throw new Error(`Pexels responded with ${response.status}`)
+        if (!this.warnedAboutLocalTls) {
+          this.logger.warning(
+            'Pexels TLS certificate was rejected locally. Retrying with the development fallback.'
+          )
+          this.warnedAboutLocalTls = true
+        }
+        response = await request(true)
       }
 
-      const payload = (await response.json()) as {
+      const payload = response.data as {
         photos?: Array<{
           src?: Partial<Record<'medium' | 'large' | 'large2x' | 'landscape' | 'portrait', string>>
         }>
       }
-      const preferredSource = kind === 'avatar' ? 'portrait' : kind === 'banner' ? 'landscape' : 'large'
+      const preferredSource =
+        kind === 'avatar' ? 'portrait' : kind === 'banner' ? 'landscape' : 'large'
       const pool =
         payload.photos
           ?.map((photo) => {

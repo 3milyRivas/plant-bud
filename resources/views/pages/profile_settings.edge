@@ -23,6 +23,8 @@
 @let(openingHoursValue = old.opening_hours ?? roleProfile?.openingHours ?? '')
 @let(addressValue = old.address ?? roleProfile?.address ?? '')
 @let(cityValue = old.city ?? roleProfile?.city ?? accountProfile?.location ?? '')
+@let(latitudeValue = old.latitude ?? roleProfile?.latitude ?? '')
+@let(longitudeValue = old.longitude ?? roleProfile?.longitude ?? '')
 @let(gardenerStatusValue = old.is_available ?? (roleProfile?.isAvailable ? '1' : '0'))
 @let(nurseryStatusValue = old.is_active ?? (roleProfile?.isActive ? '1' : '0'))
 
@@ -45,7 +47,7 @@
     planLabel: accountProfile.planLabel,
   })
 
-  <main class="relative z-10 mx-auto max-w-6xl px-5 pb-16 lg:px-10">
+  <main class="relative z-10 mx-auto max-w-6xl px-5 pb-36 lg:px-10">
     <section class="mb-6 rounded-[2rem] border border-white/12 bg-[#113e14]/78 p-6 text-white shadow-2xl backdrop-blur-2xl">
       <div class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
         <div>
@@ -59,6 +61,9 @@
         <a href="#identity-settings" class="rounded-full bg-[#ebe3a7] px-4 py-2 text-xs font-black text-[#113e14]">Identity</a>
         @if(roleProfileKind === 'gardener' || roleProfileKind === 'nursery')
           <a href="#professional-settings" class="rounded-full bg-white/10 px-4 py-2 text-xs font-black text-white">Professional</a>
+          @if(roleProfileKind === 'nursery')
+            <a href="#catalog-settings" class="rounded-full bg-[#dca15d] px-4 py-2 text-xs font-black text-[#113e14]">Catalog</a>
+          @endif
           <a href="#payment-settings" class="rounded-full bg-white/10 px-4 py-2 text-xs font-black text-white">Payments</a>
         @endif
         <a href="#social-settings" class="rounded-full bg-white/10 px-4 py-2 text-xs font-black text-white">Social</a>
@@ -69,16 +74,17 @@
       route: 'profile.update',
       method: 'POST',
       enctype: 'multipart/form-data',
-      class: 'grid gap-6 lg:grid-cols-[0.85fr_1.15fr]'
+      class: 'grid gap-6 lg:grid-cols-[0.85fr_1.15fr]',
+      id: 'profile-settings-form',
+      'data-profile-settings-form': true
     })
       <section class="space-y-6">
         <div class="overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/12 shadow-[0_30px_90px_rgba(0,0,0,0.22)] backdrop-blur-3xl">
           <div class="relative h-56 overflow-hidden">
             <div id="banner-fallback" class="{{ bannerUrl ? 'hidden' : 'absolute inset-0' }}">
-              <div class="absolute inset-0 bg-gradient-to-br from-[#113e14] via-[#416543] to-[#416543]"></div>
+              <div class="absolute inset-0 bg-[#f7f6ea]"></div>
             </div>
             <img id="banner-preview" src="{{ bannerUrl || '' }}" alt="" class="{{ bannerUrl ? 'absolute inset-0 block h-full max-h-full w-full object-cover' : 'hidden absolute inset-0 h-full max-h-full w-full object-cover' }}">
-            <div class="absolute inset-0 bg-gradient-to-t from-[#113e14]/80 via-[#113e14]/10 to-transparent"></div>
             <label for="banner" class="absolute right-4 top-4 cursor-pointer rounded-full bg-[#dca15d] px-4 py-2 text-sm font-black text-[#113e14] shadow-lg transition hover:scale-[1.02] hover:bg-[#ebe3a7]">
               Change banner
             </label>
@@ -160,14 +166,9 @@
 
       <section class="space-y-6">
         <div id="identity-settings" class="scroll-mt-28 rounded-[2.5rem] bg-[#ebe3a7]/95 p-6 shadow-[0_24px_70px_rgba(0,0,0,0.18)]">
-          <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p class="text-sm font-black uppercase tracking-[0.18em] text-[#416543]">Edit profile</p>
-              <h2 class="mt-2 text-3xl font-black text-[#113e14]">Public identity</h2>
-            </div>
-            <button type="submit" class="rounded-full bg-[#dca15d] px-6 py-3 text-sm font-black text-[#113e14] shadow-lg transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]">
-              Save changes
-            </button>
+          <div>
+            <p class="text-sm font-black uppercase tracking-[0.18em] text-[#416543]">Edit profile</p>
+            <h2 class="mt-2 text-3xl font-black text-[#113e14]">Public identity</h2>
           </div>
 
           <div class="mt-7 grid gap-5 md:grid-cols-2">
@@ -396,36 +397,69 @@
 
               <label class="block">
                 <span class="text-sm font-black text-[#416543]">City</span>
-                <input name="city" value="{{ cityValue }}" maxlength="120" placeholder="Santa Tecla" class="mt-2 h-12 w-full rounded-2xl border border-[#a8b841] bg-white/70 px-4 text-sm font-bold text-[#113e14] outline-none transition focus:border-[#416543] focus:bg-white">
+                <input name="city" value="{{ cityValue }}" maxlength="120" placeholder="Santa Tecla" class="mt-2 h-12 w-full rounded-2xl border border-[#a8b841] bg-white/70 px-4 text-sm font-bold text-[#113e14] outline-none transition focus:border-[#416543] focus:bg-white" data-nursery-city>
                 @if(errors.city)
                   <span class="mt-2 block text-xs font-bold text-red-700">{{ errors.city[0] }}</span>
                 @endif
               </label>
             </div>
 
-            <label class="mt-5 block">
-              <span class="text-sm font-black text-[#416543]">Address</span>
-              <input name="address" value="{{ addressValue }}" maxlength="255" placeholder="Street, local reference, or pickup point" class="mt-2 h-12 w-full rounded-2xl border border-[#a8b841] bg-white/70 px-4 text-sm font-bold text-[#113e14] outline-none transition focus:border-[#416543] focus:bg-white">
-              @if(errors.address)
-                <span class="mt-2 block text-xs font-bold text-red-700">{{ errors.address[0] }}</span>
-              @endif
-            </label>
+            <section class="mt-6 rounded-[2rem] border border-[#416543]/12 bg-white/50 p-4 sm:p-5" data-nursery-location-picker>
+              <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <p class="text-sm font-black text-[#113e14]">Public nursery location</p>
+                  <p class="mt-1 text-xs font-bold leading-5 text-[#416543]/70">Start from your current position, search an address, or click and drag the pin to the exact entrance.</p>
+                </div>
+                <button type="button" class="w-fit rounded-full bg-[#113e14] px-4 py-2.5 text-xs font-black text-[#ebe3a7] transition hover:bg-[#416543]" data-nursery-use-current-location>
+                  Use my current location
+                </button>
+              </div>
 
-            <div class="mt-5 grid gap-5 md:grid-cols-2">
-              <label class="block">
+              <div class="relative mt-4">
+                <label for="nurseryAddress" class="text-xs font-black uppercase tracking-[0.12em] text-[#416543]">Search or edit address</label>
+                <input id="nurseryAddress" name="address" value="{{ addressValue }}" maxlength="255" autocomplete="off" placeholder="Search the nursery address" class="mt-2 h-12 w-full rounded-2xl border border-[#a8b841] bg-white px-4 text-sm font-bold text-[#113e14] outline-none transition focus:border-[#416543]" data-nursery-location-input>
+                <div class="absolute inset-x-0 top-[calc(100%+0.5rem)] z-[1500] hidden overflow-hidden rounded-2xl border border-[#416543]/15 bg-white p-2 shadow-2xl" data-nursery-location-results></div>
+                @if(errors.address)
+                  <span class="mt-2 block text-xs font-bold text-red-700">{{ errors.address[0] }}</span>
+                @endif
+              </div>
+
+              <input name="latitude" value="{{ latitudeValue }}" type="hidden" data-nursery-latitude>
+              <input name="longitude" value="{{ longitudeValue }}" type="hidden" data-nursery-longitude>
+
+              <div class="mt-4 h-80 overflow-hidden rounded-[1.5rem] border border-[#416543]/15 bg-[#dfe8cf]" data-nursery-location-map></div>
+              <div class="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <p class="text-xs font-bold text-[#416543]/70" data-nursery-location-status>Choose the exact public entrance for your nursery.</p>
+                <span class="hidden rounded-full bg-[#a8b841]/18 px-3 py-1.5 text-xs font-black text-[#416543]" data-nursery-location-coordinates></span>
+              </div>
+
+              @if(errors.latitude || errors.longitude)
+                <span class="mt-2 block text-xs font-bold text-red-700">{{ errors.latitude?.[0] || errors.longitude?.[0] }}</span>
+              @endif
+            </section>
+
+            <div class="mt-7 space-y-6">
+              <label class="block rounded-[2rem] border border-[#416543]/10 bg-white/48 p-5">
                 <span class="text-sm font-black text-[#416543]">Products and services</span>
+                <span class="mt-1 block text-xs font-semibold leading-5 text-[#416543]/65">Summarize the main things visitors can find at your nursery.</span>
                 <textarea name="services_offered" maxlength="1200" rows="4" placeholder="Indoor plants&#10;Succulents&#10;Soil mixes&#10;Plant delivery" class="mt-2 w-full resize-none rounded-2xl border border-[#a8b841] bg-white/70 px-4 py-3 text-sm font-bold leading-6 text-[#113e14] outline-none transition focus:border-[#416543] focus:bg-white">{{ servicesValue }}</textarea>
                 @if(errors.services_offered)
                   <span class="mt-2 block text-xs font-bold text-red-700">{{ errors.services_offered[0] }}</span>
                 @endif
               </label>
 
-              <div class="block" data-weekly-schedule>
-                <span class="text-sm font-black text-[#416543]">Opening hours</span>
+              <div class="block rounded-[2.25rem] border border-[#416543]/12 bg-white/58 p-5 shadow-sm sm:p-7" data-weekly-schedule>
+                <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                  <div>
+                    <span class="text-sm font-black text-[#416543]">Opening hours</span>
+                    <p class="mt-1 text-xs font-semibold leading-5 text-[#416543]/65">Choose regular days first, then set a separate weekend schedule only when needed.</p>
+                  </div>
+                  <span class="w-fit rounded-full bg-[#113e14] px-4 py-2 text-[0.68rem] font-black uppercase tracking-[0.12em] text-[#ebe3a7]">Weekly schedule</span>
+                </div>
                 <input type="hidden" name="opening_hours" value="{{ openingHoursValue }}" data-weekly-schedule-value maxlength="255">
-                <div class="mt-2 rounded-2xl border border-[#a8b841] bg-white/70 p-3 text-[#113e14]">
-                  <div class="grid gap-3" data-weekly-schedule-main>
-                    <div class="grid grid-cols-7 gap-1.5" data-weekly-schedule-days>
+                <div class="mt-5 rounded-[1.75rem] border border-[#a8b841]/65 bg-[#f9f7e9] p-4 text-[#113e14] sm:p-6">
+                  <div class="grid gap-6" data-weekly-schedule-main>
+                    <div class="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-7 lg:gap-3" data-weekly-schedule-days>
                       @each(day in [
                         { key: 'mon', label: 'Lun', checked: true },
                         { key: 'tue', label: 'Mar', checked: true },
@@ -437,7 +471,7 @@
                       ])
                         <label class="cursor-pointer">
                           <input type="checkbox" value="{{ day.key }}" class="peer sr-only" data-weekly-schedule-day {{ day.checked ? 'checked' : '' }}>
-                          <span class="flex h-10 items-center justify-center rounded-xl border border-[#a8b841] bg-white/70 text-xs font-black text-[#113e14] transition peer-checked:border-[#113e14] peer-checked:bg-[#113e14] peer-checked:text-[#ebe3a7] peer-focus-visible:ring-2 peer-focus-visible:ring-[#dca15d]">
+                          <span class="flex h-12 items-center justify-center rounded-2xl border border-[#a8b841] bg-white text-xs font-black text-[#113e14] shadow-sm transition peer-checked:border-[#113e14] peer-checked:bg-[#113e14] peer-checked:text-[#ebe3a7] peer-focus-visible:ring-2 peer-focus-visible:ring-[#dca15d]">
                             {{ day.label }}
                           </span>
                         </label>
@@ -446,21 +480,21 @@
                     <div class="grid gap-3 sm:grid-cols-2">
                       <label>
                         <span class="text-xs font-black uppercase tracking-[0.12em] text-[#416543]">Desde</span>
-                        <input type="time" value="07:00" class="mt-1 h-11 w-full rounded-xl border border-[#a8b841] bg-white px-3 text-sm font-black text-[#113e14] outline-none focus:border-[#416543]" data-weekly-schedule-start>
+                        <input type="time" value="07:00" class="mt-2 h-14 w-full rounded-2xl border border-[#a8b841] bg-white px-4 text-base font-black text-[#113e14] outline-none focus:border-[#416543]" data-weekly-schedule-start>
                       </label>
                       <label>
                         <span class="text-xs font-black uppercase tracking-[0.12em] text-[#416543]">Hasta</span>
-                        <input type="time" value="15:00" class="mt-1 h-11 w-full rounded-xl border border-[#a8b841] bg-white px-3 text-sm font-black text-[#113e14] outline-none focus:border-[#416543]" data-weekly-schedule-end>
+                        <input type="time" value="15:00" class="mt-2 h-14 w-full rounded-2xl border border-[#a8b841] bg-white px-4 text-base font-black text-[#113e14] outline-none focus:border-[#416543]" data-weekly-schedule-end>
                       </label>
                     </div>
                     <div class="flex flex-wrap gap-2">
-                      <button type="button" class="rounded-full bg-[#113e14] px-4 py-2 text-xs font-black text-[#ebe3a7] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#416543]" data-weekly-schedule-preset="weekdays">Lun-Vie</button>
-                      <button type="button" class="rounded-full bg-white px-4 py-2 text-xs font-black text-[#113e14] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]" data-weekly-schedule-preset="all">Toda semana</button>
-                      <button type="button" class="rounded-full bg-white px-4 py-2 text-xs font-black text-[#113e14] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]" data-weekly-schedule-toggle-weekend>Fin de semana</button>
+                      <button type="button" class="rounded-full bg-[#113e14] px-5 py-3 text-xs font-black text-[#ebe3a7] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#416543]" data-weekly-schedule-preset="weekdays">Lun-Vie</button>
+                      <button type="button" class="rounded-full bg-white px-5 py-3 text-xs font-black text-[#113e14] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]" data-weekly-schedule-preset="all">Toda semana</button>
+                      <button type="button" class="rounded-full bg-white px-5 py-3 text-xs font-black text-[#113e14] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]" data-weekly-schedule-toggle-weekend>Fin de semana</button>
                     </div>
                   </div>
 
-                  <div class="mt-3 hidden rounded-2xl border border-[#a8b841]/70 bg-[#ebe3a7]/55 p-3" data-weekly-schedule-weekend>
+                  <div class="mt-5 hidden rounded-[1.5rem] border border-[#a8b841]/70 bg-[#ebe3a7]/55 p-5" data-weekly-schedule-weekend>
                     <div class="flex items-center justify-between gap-3">
                       <span class="text-xs font-black uppercase tracking-[0.12em] text-[#416543]">Horario extra</span>
                       <button type="button" class="text-xs font-black text-[#113e14] underline decoration-[#dca15d] decoration-2 underline-offset-4" data-weekly-schedule-remove-weekend>Quitar</button>
@@ -487,7 +521,7 @@
                     </div>
                   </div>
 
-                  <p class="mt-3 rounded-xl bg-white px-3 py-2 text-sm font-black leading-6 text-[#416543]" data-weekly-schedule-preview>{{ openingHoursValue || 'Pendiente' }}</p>
+                  <p class="mt-5 rounded-2xl border border-[#416543]/10 bg-white px-5 py-4 text-sm font-black leading-6 text-[#416543]" data-weekly-schedule-preview>{{ openingHoursValue || 'Pendiente' }}</p>
                 </div>
                 @if(errors.opening_hours)
                   <span class="mt-2 block text-xs font-bold text-red-700">{{ errors.opening_hours[0] }}</span>
@@ -541,7 +575,204 @@
           </div>
         </div>
       </section>
+
+      <div class="profile-save-dock" data-profile-save-dock>
+        <div class="profile-save-dock__inner">
+          <div class="hidden min-w-0 sm:block">
+            <p class="text-sm font-black text-white">Ready to update your profile?</p>
+            <p class="mt-0.5 truncate text-xs font-semibold text-white/68">Saves identity, professional details, payments and social links.</p>
+          </div>
+          <button type="submit" class="profile-save-primary profile-save-primary--dock inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-black" data-profile-save-button>
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+              <path d="M5 3h11l3 3v15H5z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M8 3v6h8V3M8 21v-7h8v7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Save profile changes
+          </button>
+        </div>
+      </div>
     @end
+
+    @if(roleProfileKind === 'nursery')
+      <section id="catalog-settings" class="mt-8 scroll-mt-28 overflow-hidden rounded-[2.75rem] border border-white/20 bg-[#f5f1d6] text-[#113e14] shadow-[0_30px_90px_rgba(0,0,0,0.24)]">
+        <div class="relative overflow-hidden bg-[#113e14] px-6 py-8 text-white sm:px-8">
+          <div class="absolute -right-16 -top-20 h-64 w-64 rounded-full bg-[#dca15d]/20 blur-3xl"></div>
+          <div class="relative flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p class="text-xs font-black uppercase tracking-[0.22em] text-[#dca15d]">Storefront</p>
+              <h2 class="mt-2 text-3xl font-black sm:text-4xl">Your nursery catalog</h2>
+              <p class="mt-3 max-w-2xl text-sm font-semibold leading-6 text-white/70">
+                Plants are always available as the main category. Add up to five more sections for pots, fertilizers, tools, or anything else you sell.
+              </p>
+            </div>
+            <div class="flex gap-3">
+              <span class="rounded-full bg-white/10 px-4 py-2 text-xs font-black">{{ catalogProducts.length }} products</span>
+              <span class="rounded-full bg-[#dca15d] px-4 py-2 text-xs font-black text-[#113e14]">{{ catalogCategories.length - 1 }}/5 extra categories</span>
+            </div>
+          </div>
+        </div>
+
+        @if(flashMessages.get('catalogError'))
+          <div class="mx-6 mt-6 rounded-2xl border border-red-700/20 bg-red-50 px-5 py-4 text-sm font-black text-red-800 sm:mx-8">
+            {{ flashMessages.get('catalogError') }}
+          </div>
+        @endif
+
+        <div class="grid gap-8 p-6 sm:p-8 xl:grid-cols-[0.72fr_1.28fr]">
+          <div class="space-y-6">
+            <form method="POST" action="/profile/catalog/categories" class="rounded-[2rem] bg-white p-5 shadow-[0_14px_40px_rgba(17,62,20,0.08)]">
+              {{ csrfField() }}
+              <p class="text-xs font-black uppercase tracking-[0.18em] text-[#dca15d]">Organization</p>
+              <h3 class="mt-2 text-2xl font-black">Categories</h3>
+              <div class="mt-5 flex gap-2">
+                <input name="name" maxlength="50" placeholder="Example: Pots" {{ catalogCategories.length >= 6 ? 'disabled' : '' }} class="h-12 min-w-0 flex-1 rounded-2xl border border-[#416543]/20 bg-[#f5f1d6] px-4 text-sm font-bold outline-none focus:border-[#416543]">
+                <button type="submit" {{ catalogCategories.length >= 6 ? 'disabled' : '' }} class="rounded-2xl bg-[#dca15d] px-5 text-sm font-black transition hover:bg-[#ebe3a7] disabled:cursor-not-allowed disabled:opacity-45">Add</button>
+              </div>
+              <div class="mt-5 space-y-2">
+                @each(category in catalogCategories)
+                  <div class="flex items-center justify-between gap-3 rounded-2xl bg-[#416543]/7 px-4 py-3">
+                    <div>
+                      <p class="font-black">{{ category.name }}</p>
+                      <p class="text-xs font-semibold text-[#416543]">{{ category.isDefault ? 'Default category' : 'Custom category' }}</p>
+                    </div>
+                    @if(!category.isDefault)
+                      <button type="submit" formaction="/profile/catalog/categories/{{ category.id }}/delete" class="rounded-full bg-white px-3 py-2 text-xs font-black text-[#416543] transition hover:bg-red-50 hover:text-red-700">Remove</button>
+                    @endif
+                  </div>
+                @end
+              </div>
+            </form>
+
+            <form method="POST" action="/profile/catalog/products" enctype="multipart/form-data" class="rounded-[2rem] bg-[#ebe3a7] p-5 shadow-[0_14px_40px_rgba(17,62,20,0.08)]">
+              {{ csrfField() }}
+              <p class="text-xs font-black uppercase tracking-[0.18em] text-[#416543]">New listing</p>
+              <h3 class="mt-2 text-2xl font-black">Add a product</h3>
+              <div class="mt-5 space-y-4">
+                <label class="block">
+                  <span class="text-sm font-black text-[#416543]">Product photo</span>
+                  <input type="file" name="image" accept="image/jpeg,image/png,image/webp" class="mt-2 block w-full rounded-2xl bg-white px-4 py-3 text-sm font-bold file:mr-3 file:rounded-full file:border-0 file:bg-[#113e14] file:px-4 file:py-2 file:text-xs file:font-black file:text-white">
+                </label>
+                <label class="block">
+                  <span class="text-sm font-black text-[#416543]">Name</span>
+                  <input name="name" required maxlength="120" placeholder="Monstera deliciosa" class="mt-2 h-12 w-full rounded-2xl border border-[#416543]/20 bg-white px-4 text-sm font-bold outline-none focus:border-[#416543]">
+                </label>
+                <label class="block">
+                  <span class="text-sm font-black text-[#416543]">Category</span>
+                  <select name="category" class="mt-2 h-12 w-full rounded-2xl border border-[#416543]/20 bg-white px-4 text-sm font-bold outline-none focus:border-[#416543]">
+                    @each(category in catalogCategories)
+                      <option value="{{ category.name }}">{{ category.name }}</option>
+                    @end
+                  </select>
+                </label>
+                <div class="grid grid-cols-2 gap-3">
+                  <label>
+                    <span class="text-sm font-black text-[#416543]">Price</span>
+                    <input name="price" type="number" min="0" max="999999.99" step="0.01" placeholder="0.00" class="mt-2 h-12 w-full rounded-2xl border border-[#416543]/20 bg-white px-4 text-sm font-bold outline-none">
+                  </label>
+                  <label>
+                    <span class="text-sm font-black text-[#416543]">Stock</span>
+                    <input name="stock" type="number" min="0" max="999999" step="1" value="0" class="mt-2 h-12 w-full rounded-2xl border border-[#416543]/20 bg-white px-4 text-sm font-bold outline-none">
+                  </label>
+                </div>
+                <label class="block">
+                  <span class="text-sm font-black text-[#416543]">Short description</span>
+                  <textarea name="description" maxlength="500" rows="4" placeholder="Size, care, presentation, or anything useful for buyers." class="mt-2 w-full resize-none rounded-2xl border border-[#416543]/20 bg-white px-4 py-3 text-sm font-bold leading-6 outline-none"></textarea>
+                </label>
+                <button type="submit" class="w-full rounded-full bg-[#113e14] px-6 py-3 text-sm font-black text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-[#416543]">Publish product</button>
+              </div>
+            </form>
+          </div>
+
+          <div>
+            <div class="mb-5">
+              <p class="text-xs font-black uppercase tracking-[0.18em] text-[#dca15d]">Inventory</p>
+              <h3 class="mt-2 text-2xl font-black">Published products</h3>
+            </div>
+            <div class="space-y-5">
+              @each(category in catalogCategories)
+                @let(categoryProducts = catalogProducts.filter((product) => (product.category || 'Plants').toLowerCase() === category.name.toLowerCase()))
+                <section class="overflow-hidden rounded-[2rem] border border-[#416543]/10 bg-white/62 shadow-[0_14px_40px_rgba(17,62,20,0.08)]">
+                  <div class="flex items-center justify-between gap-4 border-b border-[#416543]/10 bg-white px-5 py-4">
+                    <div>
+                      <p class="text-xs font-black uppercase tracking-[0.16em] text-[#dca15d]">{{ category.isDefault ? 'Main category' : 'Custom category' }}</p>
+                      <h4 class="mt-1 text-xl font-black">{{ category.name }}</h4>
+                    </div>
+                    <span class="rounded-full bg-[#416543]/10 px-3 py-2 text-xs font-black text-[#416543]">{{ categoryProducts.length }} products</span>
+                  </div>
+                  <div class="space-y-3 p-4">
+                  @each(product in categoryProducts)
+                    <details class="group overflow-hidden rounded-[1.5rem] border border-[#416543]/10 bg-white shadow-sm">
+                  <summary class="flex cursor-pointer list-none items-center gap-4 p-4">
+                    <div class="h-20 w-20 shrink-0 overflow-hidden rounded-2xl bg-[#dfe8cf]">
+                      @if(product.imageUrl)
+                        <img src="{{ product.imageUrl }}" alt="" loading="lazy" class="h-full w-full object-cover">
+                      @else
+                        <div class="flex h-full items-center justify-center text-2xl font-black text-[#113e14]/25">{{ product.name.slice(0, 1).toUpperCase() }}</div>
+                      @endif
+                    </div>
+                    <div class="min-w-0 flex-1">
+                      <p class="truncate text-lg font-black">{{ product.name }}</p>
+                      <p class="mt-1 text-xs font-bold text-[#416543]">{{ product.category || 'Plants' }} · {{ product.stock }} in stock</p>
+                    </div>
+                    <span class="{{ product.isActive ? 'bg-[#dfe8cf] text-[#113e14]' : 'bg-[#416543]/10 text-[#416543]' }} rounded-full px-3 py-2 text-xs font-black">{{ product.isActive ? 'Visible' : 'Hidden' }}</span>
+                    <span class="text-xl font-black text-[#416543] transition group-open:rotate-45">+</span>
+                  </summary>
+                  <form method="POST" action="/profile/catalog/products/{{ product.id }}" enctype="multipart/form-data" class="border-t border-[#416543]/10 bg-[#f9f7e9] p-5">
+                    {{ csrfField() }}
+                    <div class="grid gap-4 sm:grid-cols-2">
+                      <label class="sm:col-span-2">
+                        <span class="text-xs font-black uppercase tracking-[0.12em] text-[#416543]">Name</span>
+                        <input name="name" required value="{{ product.name }}" maxlength="120" class="mt-2 h-11 w-full rounded-xl border border-[#416543]/20 bg-white px-3 text-sm font-bold">
+                      </label>
+                      <label>
+                        <span class="text-xs font-black uppercase tracking-[0.12em] text-[#416543]">Category</span>
+                        <select name="category" class="mt-2 h-11 w-full rounded-xl border border-[#416543]/20 bg-white px-3 text-sm font-bold">
+                          @each(category in catalogCategories)
+                            <option value="{{ category.name }}" {{ (product.category || 'Plants').toLowerCase() === category.name.toLowerCase() ? 'selected' : '' }}>{{ category.name }}</option>
+                          @end
+                        </select>
+                      </label>
+                      <label>
+                        <span class="text-xs font-black uppercase tracking-[0.12em] text-[#416543]">Replace photo</span>
+                        <input type="file" name="image" accept="image/jpeg,image/png,image/webp" class="mt-2 block w-full text-xs font-bold">
+                      </label>
+                      <label>
+                        <span class="text-xs font-black uppercase tracking-[0.12em] text-[#416543]">Price</span>
+                        <input name="price" type="number" min="0" max="999999.99" step="0.01" value="{{ product.price ?? '' }}" class="mt-2 h-11 w-full rounded-xl border border-[#416543]/20 bg-white px-3 text-sm font-bold">
+                      </label>
+                      <label>
+                        <span class="text-xs font-black uppercase tracking-[0.12em] text-[#416543]">Stock</span>
+                        <input name="stock" type="number" min="0" max="999999" step="1" value="{{ product.stock }}" class="mt-2 h-11 w-full rounded-xl border border-[#416543]/20 bg-white px-3 text-sm font-bold">
+                      </label>
+                      <label class="sm:col-span-2">
+                        <span class="text-xs font-black uppercase tracking-[0.12em] text-[#416543]">Description</span>
+                        <textarea name="description" maxlength="500" rows="3" class="mt-2 w-full resize-none rounded-xl border border-[#416543]/20 bg-white px-3 py-3 text-sm font-bold">{{ product.description || '' }}</textarea>
+                      </label>
+                      <label class="flex items-center gap-3 rounded-xl bg-white px-4 py-3 sm:col-span-2">
+                        <input type="checkbox" name="is_active" value="1" {{ product.isActive ? 'checked' : '' }} class="h-5 w-5 accent-[#113e14]">
+                        <span class="text-sm font-black">Visible on my public profile</span>
+                      </label>
+                    </div>
+                    <div class="mt-4 flex flex-wrap gap-2">
+                      <button type="submit" class="rounded-full bg-[#113e14] px-5 py-2.5 text-xs font-black text-white">Save product</button>
+                      <button type="submit" formaction="/profile/catalog/products/{{ product.id }}/delete" formnovalidate class="rounded-full bg-red-50 px-5 py-2.5 text-xs font-black text-red-700">Delete</button>
+                    </div>
+                  </form>
+                    </details>
+                  @else
+                    <div class="rounded-[1.5rem] border border-dashed border-[#416543]/25 bg-[#f9f7e9] p-5 text-center">
+                      <p class="text-sm font-black text-[#113e14]">No products in {{ category.name }}</p>
+                      <p class="mt-1 text-xs font-semibold text-[#416543]">Choose this category when publishing the next product.</p>
+                    </div>
+                  @end
+                  </div>
+                </section>
+              @end
+            </div>
+          </div>
+        </div>
+      </section>
+    @endif
   </main>
 
   <div class="fixed inset-0 z-50 hidden items-center justify-center bg-[#113e14]/85 p-5 backdrop-blur-xl" data-avatar-cropper aria-hidden="true">

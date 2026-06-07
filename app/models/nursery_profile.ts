@@ -2,6 +2,7 @@ import { BaseModel, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 import User from '#models/user'
 import NurseryProduct from '#models/nursery_product'
+import NurseryCatalogCategory from '#models/nursery_catalog_category'
 import ProfileReview from '#models/profile_review'
 import ServiceRequest from '#models/service_request'
 import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
@@ -30,6 +31,12 @@ export default class NurseryProfile extends BaseModel {
 
   @column()
   declare city: string | null
+
+  @column()
+  declare latitude: number | null
+
+  @column()
+  declare longitude: number | null
 
   @column()
   declare publicPhone: string | null
@@ -84,6 +91,9 @@ export default class NurseryProfile extends BaseModel {
 
   @hasMany(() => NurseryProduct)
   declare products: HasMany<typeof NurseryProduct>
+
+  @hasMany(() => NurseryCatalogCategory)
+  declare catalogCategories: HasMany<typeof NurseryCatalogCategory>
 
   @hasMany(() => ProfileReview)
   declare reviews: HasMany<typeof ProfileReview>

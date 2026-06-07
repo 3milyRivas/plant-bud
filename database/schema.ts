@@ -182,6 +182,23 @@ export class GardenerServiceSchema extends BaseModel {
   declare updatedAt: DateTime | null
 }
 
+export class NurseryCatalogCategorySchema extends BaseModel {
+  static $columns = ['createdAt', 'id', 'name', 'nurseryProfileId', 'sortOrder', 'updatedAt'] as const
+  $columns = NurseryCatalogCategorySchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare name: string
+  @column()
+  declare nurseryProfileId: number
+  @column()
+  declare sortOrder: number
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
 export class NurseryProductSchema extends BaseModel {
   static $columns = ['category', 'createdAt', 'description', 'id', 'imageUrl', 'isActive', 'name', 'nurseryProfileId', 'price', 'stock', 'updatedAt'] as const
   $columns = NurseryProductSchema.$columns
@@ -210,7 +227,7 @@ export class NurseryProductSchema extends BaseModel {
 }
 
 export class NurseryProfileSchema extends BaseModel {
-  static $columns = ['address', 'bannerUrl', 'city', 'createdAt', 'description', 'id', 'isActive', 'logoUrl', 'nurseryName', 'nurserySlug', 'openingHours', 'ownerName', 'paymentMethods', 'payoutCardBrand', 'payoutCardLastFour', 'payoutCardholderName', 'payoutPaypalEmail', 'publicEmail', 'publicPhone', 'ratingAverage', 'ratingCount', 'servicesOffered', 'updatedAt', 'userId'] as const
+  static $columns = ['address', 'bannerUrl', 'city', 'createdAt', 'description', 'id', 'isActive', 'latitude', 'logoUrl', 'longitude', 'nurseryName', 'nurserySlug', 'openingHours', 'ownerName', 'paymentMethods', 'payoutCardBrand', 'payoutCardLastFour', 'payoutCardholderName', 'payoutPaypalEmail', 'publicEmail', 'publicPhone', 'ratingAverage', 'ratingCount', 'servicesOffered', 'updatedAt', 'userId'] as const
   $columns = NurseryProfileSchema.$columns
   @column()
   declare address: string | null
@@ -227,7 +244,11 @@ export class NurseryProfileSchema extends BaseModel {
   @column()
   declare isActive: boolean
   @column()
+  declare latitude: number | null
+  @column()
   declare logoUrl: string | null
+  @column()
+  declare longitude: number | null
   @column()
   declare nurseryName: string
   @column()

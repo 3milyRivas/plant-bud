@@ -8,6 +8,8 @@ export interface Nursery {
   hours: string
   social: string
   phone: string
+  latitude: number
+  longitude: number
 }
 
 const sponsoredNurseries: Nursery[] = [
@@ -21,6 +23,8 @@ const sponsoredNurseries: Nursery[] = [
     hours: '6:00 AM - 4:00 PM',
     social: '@ElBambuNursery',
     phone: '7777-3456',
+    latitude: 13.6812,
+    longitude: -89.2864,
   },
   {
     id: 2,
@@ -32,6 +36,8 @@ const sponsoredNurseries: Nursery[] = [
     hours: '9:00 AM - 4:00 PM',
     social: '@JardinBotanicoLaLaguna',
     phone: '2243-1524',
+    latitude: 13.6625,
+    longitude: -89.2524,
   },
   {
     id: 3,
@@ -43,6 +49,8 @@ const sponsoredNurseries: Nursery[] = [
     hours: '9:00 AM - 3:00 PM',
     social: '@ViveroLaEsmeralda',
     phone: '7777-2244',
+    latitude: 13.6758,
+    longitude: -89.2971,
   },
   {
     id: 4,
@@ -54,6 +62,8 @@ const sponsoredNurseries: Nursery[] = [
     hours: '7:30 AM - 1:00 PM',
     social: '@GreenHavenSV',
     phone: '7777-1234',
+    latitude: 13.6877,
+    longitude: -89.2782,
   },
   {
     id: 5,
@@ -65,6 +75,8 @@ const sponsoredNurseries: Nursery[] = [
     hours: '8:00 AM - 4:00 PM',
     social: '@TerraFloraGarden',
     phone: '7333-2164',
+    latitude: 13.6711,
+    longitude: -89.2667,
   },
   {
     id: 6,
@@ -76,6 +88,8 @@ const sponsoredNurseries: Nursery[] = [
     hours: '8:00 AM - 4:00 PM',
     social: '@VerdeVivoSV',
     phone: '7333-2164',
+    latitude: 13.6938,
+    longitude: -89.2386,
   },
 ]
 
@@ -90,6 +104,8 @@ export const nurseries: Nursery[] = [
     hours: '6:00 AM - 5:00 PM',
     social: '@RaicesVerdesSV',
     phone: '7689-4521',
+    latitude: 13.5896,
+    longitude: -89.2886,
   },
   {
     id: 8,
@@ -101,6 +117,8 @@ export const nurseries: Nursery[] = [
     hours: '9:00 AM - 4:00 PM',
     social: '@JardinesVolcan',
     phone: '2243-1524',
+    latitude: 13.9957,
+    longitude: -89.5575,
   },
   {
     id: 9,
@@ -112,6 +130,8 @@ export const nurseries: Nursery[] = [
     hours: '6:00 AM - 5:00 PM',
     social: '@GreenRootsSV',
     phone: '7689-4521',
+    latitude: 13.5808,
+    longitude: -89.2931,
   },
   {
     id: 10,
@@ -123,6 +143,8 @@ export const nurseries: Nursery[] = [
     hours: '8:00 AM - 5:00 PM',
     social: '@BloomParadiseSV',
     phone: '7012-8899',
+    latitude: 13.6684,
+    longitude: -89.247,
   },
   {
     id: 11,
@@ -134,6 +156,8 @@ export const nurseries: Nursery[] = [
     hours: '6:30 AM - 4:30 PM',
     social: '@EcoLifeSV',
     phone: '7654-1122',
+    latitude: 13.7243,
+    longitude: -89.3614,
   },
   {
     id: 12,
@@ -145,6 +169,8 @@ export const nurseries: Nursery[] = [
     hours: '8:00 AM - 4:00 PM',
     social: '@MountainViewSV',
     phone: '7333-2164',
+    latitude: 13.7349,
+    longitude: -89.2838,
   },
 ]
 

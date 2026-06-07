@@ -1,10 +1,15 @@
 import AccountLink from '#models/account_link'
-import AccountProfile from '#models/account_profile'
+import AccountProfile, {
+  DEFAULT_PROFILE_AVATAR_URL,
+  DEFAULT_PROFILE_BANNER_URL,
+} from '#models/account_profile'
 import CommunityPost from '#models/community_post'
 import Follow from '#models/follow'
 import GardenerProfile from '#models/gardener_profile'
 import GardenerService from '#models/gardener_service'
 import NurseryProfile from '#models/nursery_profile'
+import NurseryProduct from '#models/nursery_product'
+import NurseryCatalogCategory from '#models/nursery_catalog_category'
 import ProfileReviewModel from '#models/profile_review'
 import type User from '#models/user'
 import { FREE_SCANNER_MONTHLY_LIMIT } from '#services/subscription_service'
@@ -96,6 +101,8 @@ type ProfileFormPayload = {
   public_email?: string | null
   address?: string | null
   city?: string | null
+  latitude?: number | null
+  longitude?: number | null
   opening_hours?: string | null
   is_available?: string | null
   is_active?: string | null
@@ -297,6 +304,8 @@ export default class ProfilesController {
       profileReviews: [] as InstanceType<typeof ProfileReviewModel>[],
       profileRating: { average: 0, averageText: '0.0', count: 0 },
       ratingStars: [1, 2, 3, 4, 5],
+      catalogCategories: [] as { id: number | null; name: string; isDefault: boolean }[],
+      catalogProducts: [] as NurseryProduct[],
     }
 
     if (user.role === 'gardener') {
@@ -336,16 +345,24 @@ export default class ProfilesController {
       const roleProfile = await this.ensureNurseryProfile(user)
       const profileServices = this.splitStoredList(roleProfile.servicesOffered)
       const paymentMethods = this.splitStoredList(roleProfile.paymentMethods)
-      const profileReviews = await ProfileReviewModel.query()
-        .where('nurseryProfileId', roleProfile.id)
-        .orderBy('createdAt', 'desc')
-        .limit(6)
-      const profileRating = await this.getReviewRatingStats(
-        'nursery_profile_id',
-        roleProfile.id,
-        roleProfile.ratingAverage,
-        roleProfile.ratingCount
-      )
+      const [profileReviews, profileRating, categories, catalogProducts] = await Promise.all([
+        ProfileReviewModel.query()
+          .where('nurseryProfileId', roleProfile.id)
+          .orderBy('createdAt', 'desc')
+          .limit(6),
+        this.getReviewRatingStats(
+          'nursery_profile_id',
+          roleProfile.id,
+          roleProfile.ratingAverage,
+          roleProfile.ratingCount
+        ),
+        NurseryCatalogCategory.query()
+          .where('nurseryProfileId', roleProfile.id)
+          .orderBy('sortOrder', 'asc'),
+        NurseryProduct.query()
+          .where('nurseryProfileId', roleProfile.id)
+          .orderBy('createdAt', 'desc'),
+      ])
 
       return {
         ...baseDetails,
@@ -356,6 +373,15 @@ export default class ProfilesController {
         paymentMethodsText: this.listToStoredText(paymentMethods) || '',
         profileReviews,
         profileRating,
+        catalogCategories: [
+          { id: null, name: 'Plants', isDefault: true },
+          ...categories.map((category) => ({
+            id: category.id,
+            name: category.name,
+            isDefault: false,
+          })),
+        ],
+        catalogProducts,
       }
     }
 
@@ -412,6 +438,8 @@ export default class ProfilesController {
         description: this.cleanOptional(payload.bio),
         address: this.cleanOptional(payload.address),
         city: this.cleanOptional(payload.city),
+        latitude: payload.latitude ?? null,
+        longitude: payload.longitude ?? null,
         openingHours: this.cleanOptional(payload.opening_hours),
         servicesOffered: this.listToStoredText(profileServices),
         paymentMethods: this.listToStoredText(paymentMethods),
@@ -544,6 +572,24 @@ export default class ProfilesController {
       }
     }
 
+    if (user.role === 'nursery') {
+      const hasLatitude = payload.latitude !== null && payload.latitude !== undefined
+      const hasLongitude = payload.longitude !== null && payload.longitude !== undefined
+
+      if (hasLatitude !== hasLongitude) {
+        errors.latitude = ['Select a complete location on the map']
+        errors.longitude = ['Select a complete location on the map']
+      }
+
+      if ((hasLatitude || hasLongitude) && !this.cleanOptional(payload.address)) {
+        errors.address = ['Add the public address for this map location']
+      }
+
+      if ((hasLatitude || hasLongitude) && !this.cleanOptional(payload.city)) {
+        errors.city = ['Add the city for this map location']
+      }
+    }
+
     return errors
   }
 
@@ -583,6 +629,8 @@ export default class ProfilesController {
     return AccountProfile.create({
       userId: user.id,
       displayName: user.fullName || user.username,
+      avatarUrl: DEFAULT_PROFILE_AVATAR_URL,
+      bannerUrl: DEFAULT_PROFILE_BANNER_URL,
       subscriptionPlan: 'free',
       rewardPoints: 0,
       scannerMonthlyLimit: FREE_SCANNER_MONTHLY_LIMIT,
@@ -1208,12 +1256,22 @@ export default class ProfilesController {
         .groupBy('community_post_id')
         .select('community_post_id')
         .count('* as total'),
-      db.from('post_polls').whereIn('community_post_id', postIds).select('id', 'community_post_id', 'question'),
+      db
+        .from('post_polls')
+        .whereIn('community_post_id', postIds)
+        .select('id', 'community_post_id', 'question'),
     ])
     const statsByPost = new Map<number, { likes: number; favorites: number; comments: number }>()
     const pollIds = pollRows.map((row) => Number(row.id))
     const pollPostIds = new Set(pollRows.map((row) => Number(row.community_post_id)))
-    const pollByPost = new Map<number, { question: string; totalVotes: number; options: { label: string; votes: number; percent: number }[] }>()
+    const pollByPost = new Map<
+      number,
+      {
+        question: string
+        totalVotes: number
+        options: { label: string; votes: number; percent: number }[]
+      }
+    >()
 
     postIds.forEach((postId) => statsByPost.set(postId, { likes: 0, favorites: 0, comments: 0 }))
 

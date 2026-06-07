@@ -16,8 +16,8 @@ export default class extends BaseSchema {
         .onDelete('CASCADE')
 
       table.string('display_name', 100).notNullable()
-      table.string('avatar_url', 255).nullable()
-      table.string('banner_url', 255).nullable()
+      table.string('avatar_url', 255).notNullable().defaultTo('/profiles/pfp.png')
+      table.string('banner_url', 255).notNullable().defaultTo('/profiles/banner.png')
       table.text('bio').nullable()
       table.string('location', 120).nullable()
       table.string('website_url', 255).nullable()
@@ -35,7 +35,8 @@ export default class extends BaseSchema {
         await db.table(this.tableName).insert({
           user_id: user.id,
           display_name: `${user.first_name} ${user.last_name}`.trim(),
-          avatar_url: user.profile_picture,
+          avatar_url: user.profile_picture || '/profiles/pfp.png',
+          banner_url: '/profiles/banner.png',
         })
       }
     })

@@ -4,6 +4,9 @@ import PlantScan from '#models/plant_scan'
 import User from '#models/user'
 import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 
+export const DEFAULT_PROFILE_AVATAR_URL = '/profiles/pfp.png'
+export const DEFAULT_PROFILE_BANNER_URL = '/profiles/banner.png'
+
 export default class AccountProfile extends BaseModel {
   @column({ isPrimary: true })
   declare id: number

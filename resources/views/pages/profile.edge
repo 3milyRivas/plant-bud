@@ -41,24 +41,23 @@
       </div>
     @endif
 
-    <section class="isolate overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/10 shadow-[0_30px_90px_rgba(0,0,0,0.22)] backdrop-blur-3xl">
+    <section class="{{ roleProfileKind === 'nursery' ? 'nursery-profile-hero' : '' }} isolate overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/10 shadow-[0_30px_90px_rgba(0,0,0,0.22)] backdrop-blur-3xl">
       <div class="relative h-52 overflow-hidden sm:h-64 lg:h-72">
         @if(bannerUrl)
           <img src="{{ bannerUrl }}" alt="" class="absolute inset-0 block h-full max-h-full w-full object-cover">
         @else
-          <div class="absolute inset-0 bg-gradient-to-br from-[#113e14] via-[#416543] to-[#416543]"></div>
+          <div class="absolute inset-0 bg-[#f7f6ea]"></div>
         @endif
-        <div class="absolute inset-0 bg-gradient-to-t from-[#113e14] via-[#113e14]/15 to-transparent"></div>
       </div>
 
       <div class="px-6 pb-8 pt-6 sm:px-8 sm:pt-8">
         <div class="grid gap-7 lg:grid-cols-[180px_minmax(0,1fr)] lg:items-center">
           <div class="relative mx-auto h-32 w-32 sm:h-40 sm:w-40 lg:mx-0">
-            <div class="absolute -inset-1 rounded-full bg-[#ebe3a7] shadow-[0_18px_55px_rgba(0,0,0,0.28)]"></div>
+            <div class="{{ roleProfileKind === 'nursery' ? 'nursery-profile-avatar-ring' : '' }} absolute -inset-1 rounded-full bg-[#ebe3a7] shadow-[0_18px_55px_rgba(0,0,0,0.28)]"></div>
             @if(avatarUrl)
-              <img src="{{ avatarUrl }}" alt="" class="relative h-full w-full rounded-full border-4 border-white object-cover">
+              <img src="{{ avatarUrl }}" alt="" class="{{ roleProfileKind === 'nursery' ? 'nursery-profile-avatar' : '' }} relative h-full w-full rounded-full border-4 border-white object-cover">
             @else
-              <div class="relative flex h-full w-full items-center justify-center rounded-full border-4 border-white bg-[#113e14] text-5xl font-black text-[#ebe3a7] shadow-inner sm:text-6xl">
+              <div class="{{ roleProfileKind === 'nursery' ? 'nursery-profile-avatar' : '' }} relative flex h-full w-full items-center justify-center rounded-full border-4 border-white bg-[#113e14] text-5xl font-black text-[#ebe3a7] shadow-inner sm:text-6xl">
                 {{ avatarInitial }}
               </div>
             @endif
@@ -84,6 +83,11 @@
                 <a href="/profile/settings" class="flex min-h-12 w-full items-center justify-center rounded-full bg-[#ebe3a7] px-6 py-3 text-sm font-black text-[#113e14] shadow-lg transition hover:-translate-y-0.5 hover:bg-[#dca15d]">
                   Edit profile
                 </a>
+                @if(roleProfileKind === 'nursery')
+                  <a href="#nursery-catalog" class="flex min-h-12 w-full items-center justify-center rounded-full border border-white/18 bg-white/10 px-6 py-3 text-sm font-black text-white backdrop-blur-xl transition hover:-translate-y-0.5 hover:bg-white/18">
+                    View storefront
+                  </a>
+                @endif
                 @if(roleProfileKind === 'gardener')
                   <form method="POST" action="/profile/availability" class="rounded-full border border-white/12 bg-white/10 p-1.5 backdrop-blur-xl">
                     {{ csrfField() }}
@@ -132,7 +136,7 @@
     </section>
 
     @if(roleProfileKind === 'gardener' || roleProfileKind === 'nursery')
-      <section class="mt-6 overflow-hidden rounded-[2.25rem] border border-white/25 bg-[#ebe3a7]/95 text-[#113e14] shadow-[0_24px_70px_rgba(0,0,0,0.18)]">
+      <section class="{{ roleProfileKind === 'nursery' ? 'nursery-profile-panel' : '' }} mt-6 overflow-hidden rounded-[2.25rem] border border-white/25 bg-[#ebe3a7]/95 text-[#113e14] shadow-[0_24px_70px_rgba(0,0,0,0.18)]">
         <div class="flex flex-col gap-5 border-b border-[#416543]/12 px-6 py-6 sm:flex-row sm:items-center sm:justify-between lg:px-8">
           <div>
             <p class="text-xs font-black uppercase tracking-[0.2em] text-[#416543]">
@@ -154,8 +158,8 @@
           </div>
         </div>
 
-        <div class="grid gap-px bg-[#416543]/12 md:grid-cols-2 xl:grid-cols-4">
-          <div class="bg-[#ebe3a7] p-6">
+        <div class="{{ roleProfileKind === 'nursery' ? 'gap-4 bg-transparent p-5 lg:p-7' : 'gap-px bg-[#416543]/12' }} grid md:grid-cols-2 xl:grid-cols-4">
+          <div class="{{ roleProfileKind === 'nursery' ? 'rounded-[1.75rem] border border-white/70 bg-white/62 shadow-sm' : 'bg-[#ebe3a7]' }} p-6">
             <p class="text-xs font-black uppercase tracking-[0.14em] text-[#416543]">{{ roleProfileKind === 'gardener' ? 'Service area' : 'Location' }}</p>
             <p class="mt-3 text-base font-black leading-6">
               @if(roleProfileKind === 'gardener')
@@ -165,18 +169,18 @@
               @endif
             </p>
           </div>
-          <div class="bg-[#ebe3a7] p-6">
+          <div class="{{ roleProfileKind === 'nursery' ? 'rounded-[1.75rem] border border-white/70 bg-white/62 shadow-sm' : 'bg-[#ebe3a7]' }} p-6">
             <p class="text-xs font-black uppercase tracking-[0.14em] text-[#416543]">{{ roleProfileKind === 'gardener' ? 'Schedule' : 'Opening hours' }}</p>
             <p class="mt-3 whitespace-pre-line text-sm font-bold leading-6 text-[#416543]">{{ roleProfileKind === 'gardener' ? (roleProfile?.availabilitySchedule || 'Pending') : (roleProfile?.openingHours || 'Pending') }}</p>
           </div>
-          <div class="bg-[#ebe3a7] p-6">
+          <div class="{{ roleProfileKind === 'nursery' ? 'rounded-[1.75rem] border border-white/70 bg-white/62 shadow-sm' : 'bg-[#ebe3a7]' }} p-6">
             <p class="text-xs font-black uppercase tracking-[0.14em] text-[#416543]">Contact</p>
             <p class="mt-3 text-sm font-black">{{ roleProfile?.publicPhone || user.phone || 'Pending phone' }}</p>
             @if(roleProfileKind === 'nursery')
               <p class="mt-2 break-words text-sm font-bold text-[#416543]">{{ roleProfile?.publicEmail || user.email }}</p>
             @endif
           </div>
-          <div class="bg-[#ebe3a7] p-6">
+          <div class="{{ roleProfileKind === 'nursery' ? 'rounded-[1.75rem] border border-white/70 bg-white/62 shadow-sm' : 'bg-[#ebe3a7]' }} p-6">
             <p class="text-xs font-black uppercase tracking-[0.14em] text-[#416543]">Payment methods</p>
             <div class="mt-3 flex flex-wrap gap-2">
               @each(method in paymentMethods)
@@ -199,6 +203,16 @@
           </div>
         </div>
       </section>
+
+      @if(roleProfileKind === 'nursery')
+        @!component('components/nursery-catalog', {
+          categories: catalogCategories,
+          products: catalogProducts,
+          manageHref: '/profile/settings#catalog-settings',
+          sectionId: 'nursery-catalog',
+          className: 'mt-6 rounded-[2.5rem] bg-[#f5f1d6] p-6 shadow-[0_24px_70px_rgba(0,0,0,0.18)] sm:p-8'
+        })
+      @endif
 
       <section class="mt-6 rounded-[2rem] border border-white/10 bg-white/12 p-6 text-white shadow-xl backdrop-blur-2xl">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">

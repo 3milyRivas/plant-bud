@@ -26,6 +26,6 @@ export default await Env.create(new URL('../', import.meta.url), {
   SESSION_DRIVER: Env.schema.enum(['cookie', 'memory', 'database'] as const),
 
   // External APIs
-  PLANT_ID_API_KEY: Env.schema.string(),
-  PEXELS_API_KEY: Env.schema.string(),
+  PLANT_ID_API_KEYS: Env.schema.string.optional(),
+  PEXELS_API_KEY: Env.schema.string.optional(),
 })

@@ -253,25 +253,31 @@ export default class PlantsController {
       try {
         return await this.postPlantId(payload, apiKey)
       } catch (error: any) {
+        let requestError = error
+
         if (this.isCertificateChainError(error)) {
           console.warn('PLANT.ID TLS WARNING: retrying with local certificate fallback')
 
-          return this.postPlantId(payload, apiKey, {
-            httpsAgent: new https.Agent({
-              rejectUnauthorized: false,
-            }),
-          })
+          try {
+            return await this.postPlantId(payload, apiKey, {
+              httpsAgent: new https.Agent({
+                rejectUnauthorized: false,
+              }),
+            })
+          } catch (tlsFallbackError: any) {
+            requestError = tlsFallbackError
+          }
         }
 
-        lastError = error
+        lastError = requestError
 
-        if (!this.shouldTryNextPlantIdKey(error) || index === keys.length - 1) {
-          throw error
+        if (!this.shouldTryNextPlantIdKey(requestError) || index === keys.length - 1) {
+          throw requestError
         }
 
         console.warn(
           `PLANT.ID KEY FALLBACK: key ${index + 1} failed with ${this.getPlantIdErrorCode(
-            error
+            requestError
           )}; trying key ${index + 2}.`
         )
       }
@@ -301,9 +307,8 @@ export default class PlantsController {
   }
 
   private getPlantIdApiKeys() {
-    const keys = [process.env.PLANT_ID_API_KEYS, env.get('PLANT_ID_API_KEY')]
-      .filter(Boolean)
-      .flatMap((value) => String(value).split(','))
+    const keys = String(env.get('PLANT_ID_API_KEYS') || '')
+      .split(',')
       .map((value) => value.trim())
       .filter(Boolean)
 

@@ -1,6 +1,8 @@
 import AccountProfile from '#models/account_profile'
 import GardenerProfile from '#models/gardener_profile'
 import NurseryProfile from '#models/nursery_profile'
+import NurseryCatalogCategory from '#models/nursery_catalog_category'
+import NurseryProduct from '#models/nursery_product'
 import User from '#models/user'
 import testUtils from '@adonisjs/core/services/test_utils'
 import { test } from '@japa/runner'
@@ -49,9 +51,7 @@ test.group('Profile settings', (group) => {
     await profilePage
       .locator('[data-payment-method-checkbox][value="Paypal"]')
       .check({ force: true })
-    await profilePage
-      .locator('[data-payment-method-checkbox][value="Card"]')
-      .check({ force: true })
+    await profilePage.locator('[data-payment-method-checkbox][value="Card"]').check({ force: true })
     await profilePage.locator('input[name="payout_paypal_email"]').fill('payments@example.com')
     await profilePage.locator('input[name="payout_cardholder_name"]').fill('Payout Gardener')
     await profilePage.locator('input[name="payout_card_number"]').fill('4242424242424242')
@@ -120,6 +120,171 @@ test.group('Profile settings', (group) => {
     assert.include(nursery.paymentMethods || '', 'Paypal')
     assert.equal(nursery.payoutPaypalEmail, 'nursery.payments@example.com')
     assert.isNull(nursery.payoutCardLastFour)
+  })
+
+  test('nursery can save a public map location and expose directions', async ({
+    browserContext,
+    visit,
+    assert,
+  }) => {
+    const user = await User.create({
+      first_name: 'Mapped',
+      last_name: 'Nursery',
+      username: 'mapped.nursery',
+      email: 'mapped.nursery@example.com',
+      phone: '7000-0004',
+      password: 'PlantBud123!',
+      role: 'nursery',
+    })
+    await AccountProfile.create({
+      userId: user.id,
+      displayName: 'Mapped Nursery',
+      subscriptionPlan: 'free',
+      rewardPoints: 0,
+      scannerMonthlyLimit: 5,
+    })
+    const nursery = await NurseryProfile.create({
+      userId: user.id,
+      nurseryName: 'Mapped Nursery',
+      nurserySlug: `mapped-nursery-${user.id}`,
+      ownerName: 'Mapped Nursery',
+      publicPhone: '7000-0004',
+      publicEmail: user.email,
+      paymentMethods: 'Cash',
+      isActive: true,
+      ratingAverage: 0,
+      ratingCount: 0,
+    })
+
+    await browserContext.loginAs(user)
+    const settingsPage = await visit('/profile/settings')
+    await settingsPage.locator('input[name="city"]').fill('San Salvador')
+    await settingsPage.locator('input[name="address"]').fill('Colonia Escalon')
+    await settingsPage.locator('input[name="latitude"]').evaluate((element: { value: string }) => {
+      element.value = '13.7081000'
+    })
+    await settingsPage.locator('input[name="longitude"]').evaluate((element: { value: string }) => {
+      element.value = '-89.2423000'
+    })
+    await settingsPage
+      .locator('input[name="address"]')
+      .evaluate((element: { setCustomValidity: (message: string) => void }) => {
+        element.setCustomValidity('')
+      })
+    await settingsPage.getByRole('button', { name: 'Save changes' }).click()
+    await settingsPage.waitForURL('**/profile')
+
+    await nursery.refresh()
+    assert.equal(Number(nursery.latitude), 13.7081)
+    assert.equal(Number(nursery.longitude), -89.2423)
+
+    const publicProfile = await visit(`/users/${user.username}`)
+    assert.equal(await publicProfile.locator('[data-public-nursery-map]').count(), 1)
+    await publicProfile
+      .getByRole('link', { name: 'How to get there' })
+      .getAttribute('href')
+      .then((href) => {
+        assert.equal(
+          href,
+          'https://www.google.com/maps/dir/?api=1&destination=13.7081,-89.2423&travelmode=driving'
+        )
+      })
+  })
+
+  test('nursery can create catalog categories and publish products', async ({
+    browserContext,
+    visit,
+    assert,
+  }) => {
+    const user = await User.create({
+      first_name: 'Catalog',
+      last_name: 'Nursery',
+      username: 'catalog.nursery',
+      email: 'catalog.nursery@example.com',
+      phone: '7000-0005',
+      password: 'PlantBud123!',
+      role: 'nursery',
+    })
+    await AccountProfile.create({
+      userId: user.id,
+      displayName: 'Catalog Nursery',
+      subscriptionPlan: 'free',
+      rewardPoints: 0,
+      scannerMonthlyLimit: 5,
+    })
+    const nursery = await NurseryProfile.create({
+      userId: user.id,
+      nurseryName: 'Catalog Nursery',
+      nurserySlug: `catalog-nursery-${user.id}`,
+      ownerName: 'Catalog Nursery',
+      publicPhone: '7000-0005',
+      publicEmail: user.email,
+      paymentMethods: 'Cash',
+      isActive: true,
+      ratingAverage: 0,
+      ratingCount: 0,
+    })
+
+    await browserContext.loginAs(user)
+    const settingsPage = await visit('/profile/settings')
+    const categoryForm = settingsPage.locator('form[action="/profile/catalog/categories"]')
+    await categoryForm.locator('input[name="name"]').fill('Pots')
+    await categoryForm.getByRole('button', { name: 'Add' }).click()
+    await settingsPage.waitForURL('**/profile/settings#catalog-settings')
+
+    const productForm = settingsPage.locator('form[action="/profile/catalog/products"]')
+    await productForm.locator('input[name="name"]').fill('Terracotta pot')
+    await productForm.locator('select[name="category"]').selectOption('Pots')
+    await productForm.locator('input[name="price"]').fill('12.50')
+    await productForm.locator('input[name="stock"]').fill('8')
+    await productForm
+      .locator('textarea[name="description"]')
+      .fill('Hand-finished pot for indoor plants.')
+    await productForm.getByRole('button', { name: 'Publish product' }).click()
+    await settingsPage.waitForURL('**/profile/settings#catalog-settings')
+
+    for (const categoryName of ['Fertilizers', 'Tools', 'Seeds', 'Decor']) {
+      const extraCategoryForm = settingsPage.locator('form[action="/profile/catalog/categories"]')
+      await extraCategoryForm.locator('input[name="name"]').fill(categoryName)
+      await extraCategoryForm.getByRole('button', { name: 'Add' }).click()
+      await settingsPage.waitForURL('**/profile/settings#catalog-settings')
+    }
+
+    const categories = await NurseryCatalogCategory.query().where('nurseryProfileId', nursery.id)
+    const product = await NurseryProduct.findBy('nurseryProfileId', nursery.id)
+    assert.lengthOf(categories, 5)
+    assert.isTrue(
+      await settingsPage
+        .locator('form[action="/profile/catalog/categories"]')
+        .getByRole('button', { name: 'Add' })
+        .isDisabled()
+    )
+    assert.equal(product?.name, 'Terracotta pot')
+    assert.equal(product?.category, 'Pots')
+    assert.equal(Number(product?.price), 12.5)
+
+    for (let index = 1; index <= 6; index += 1) {
+      await NurseryProduct.create({
+        nurseryProfileId: nursery.id,
+        name: `Catalog plant ${index}`,
+        category: 'Plants',
+        description: `Plant number ${index}`,
+        price: 5 + index,
+        stock: index,
+        imageUrl: null,
+        isActive: true,
+      })
+    }
+
+    const publicProfile = await visit(`/users/${user.username}`)
+    const publicCatalog = publicProfile.locator('#public-nursery-catalog')
+    await publicCatalog.getByRole('button', { name: /Pots/ }).click()
+    await publicCatalog.getByText('Terracotta pot').waitFor()
+    await publicCatalog.getByText('$12.50').waitFor()
+    await publicCatalog.getByRole('button', { name: /All/ }).click()
+    await publicCatalog.getByText('1-6 of 7 products').waitFor()
+    await publicCatalog.getByRole('button', { name: 'Next' }).click()
+    await publicCatalog.getByText('7-7 of 7 products').waitFor()
   })
 
   test('gardener can update availability directly from their profile', async ({

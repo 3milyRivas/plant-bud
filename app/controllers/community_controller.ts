@@ -1,10 +1,14 @@
 import AccountLink from '#models/account_link'
-import AccountProfile from '#models/account_profile'
+import AccountProfile, {
+  DEFAULT_PROFILE_AVATAR_URL,
+  DEFAULT_PROFILE_BANNER_URL,
+} from '#models/account_profile'
 import CommunityPost from '#models/community_post'
 import Follow from '#models/follow'
 import GardenerProfile from '#models/gardener_profile'
 import GardenerService from '#models/gardener_service'
 import NurseryProduct from '#models/nursery_product'
+import NurseryCatalogCategory from '#models/nursery_catalog_category'
 import NurseryProfile from '#models/nursery_profile'
 import PostComment from '#models/post_comment'
 import PostHashtag from '#models/post_hashtag'
@@ -107,18 +111,17 @@ export default class CommunityController {
       profileRelations,
       accountLinks,
       publicRoleDetails,
-    ] =
-      await Promise.all([
-        this.getUserPosts(profileUser, currentUser),
-        isOwnProfile ? this.getFavoritePosts(profileUser, currentUser) : [],
-        this.isFollowing(currentUser.id, profileUser.id),
-        isOwnProfile ? false : this.isFriend(currentUser.id, profileUser.id),
-        isOwnProfile ? false : this.isFavoriteAccount(currentUser.id, profileUser.id),
-        this.getUserStats(profileUser.id),
-        this.getProfileRelations(profileUser, currentUser),
-        AccountLink.query().where('userId', profileUser.id).orderBy('sortOrder', 'asc'),
-        this.getPublicRoleDetails(profileUser),
-      ])
+    ] = await Promise.all([
+      this.getUserPosts(profileUser, currentUser),
+      isOwnProfile ? this.getFavoritePosts(profileUser, currentUser) : [],
+      this.isFollowing(currentUser.id, profileUser.id),
+      isOwnProfile ? false : this.isFriend(currentUser.id, profileUser.id),
+      isOwnProfile ? false : this.isFavoriteAccount(currentUser.id, profileUser.id),
+      this.getUserStats(profileUser.id),
+      this.getProfileRelations(profileUser, currentUser),
+      AccountLink.query().where('userId', profileUser.id).orderBy('sortOrder', 'asc'),
+      this.getPublicRoleDetails(profileUser),
+    ])
 
     return view.render('pages/community_profile', {
       viewer: await this.getViewerProfile(currentUser),
@@ -456,16 +459,23 @@ export default class CommunityController {
       return response.redirect().toRoute('community.index')
     }
 
-    const [viewer, posts, suggestions, trendingHashtags, favoriteAccounts, friendAccounts, friendActivity] =
-      await Promise.all([
-        this.getViewerProfile(user),
-        this.getHashtagPosts(tag, user),
-        this.getSuggestedUsers(user),
-        this.getTrendingHashtags(),
-        this.getFavoriteAccounts(user),
-        this.getFriendAccounts(user),
-        this.getFriendActivity(user),
-      ])
+    const [
+      viewer,
+      posts,
+      suggestions,
+      trendingHashtags,
+      favoriteAccounts,
+      friendAccounts,
+      friendActivity,
+    ] = await Promise.all([
+      this.getViewerProfile(user),
+      this.getHashtagPosts(tag, user),
+      this.getSuggestedUsers(user),
+      this.getTrendingHashtags(),
+      this.getFavoriteAccounts(user),
+      this.getFriendAccounts(user),
+      this.getFriendActivity(user),
+    ])
 
     return view.render('pages/community', {
       viewer,
@@ -848,6 +858,8 @@ export default class CommunityController {
       {
         userId: user.id,
         displayName: user.fullName || user.username,
+        avatarUrl: DEFAULT_PROFILE_AVATAR_URL,
+        bannerUrl: DEFAULT_PROFILE_BANNER_URL,
       }
     )
   }
@@ -927,9 +939,7 @@ export default class CommunityController {
 
     if (!favoriteIds.length) return []
 
-    const users = await User.query()
-      .whereIn('id', favoriteIds)
-      .preload('accountProfile')
+    const users = await User.query().whereIn('id', favoriteIds).preload('accountProfile')
     const order = new Map(favoriteIds.map((id, index) => [id, index]))
 
     return users
@@ -945,9 +955,7 @@ export default class CommunityController {
 
     if (!friendIds.length) return []
 
-    const users = await User.query()
-      .whereIn('id', friendIds.slice(0, 40))
-      .preload('accountProfile')
+    const users = await User.query().whereIn('id', friendIds.slice(0, 40)).preload('accountProfile')
     const order = new Map(friendIds.map((id, index) => [id, index]))
 
     return users
@@ -1049,10 +1057,14 @@ export default class CommunityController {
         statusTone: profile.isAvailable ? 'positive' : 'muted',
         schedule: profile.availabilitySchedule,
         location: profile.serviceArea,
+        latitude: null,
+        longitude: null,
+        directionsHref: null,
         contactPhone: profile.publicPhone,
         contactEmail: null,
         services: serviceNames,
         paymentMethods: this.splitStoredList(profile.paymentMethods),
+        catalogCategories: [],
         requestHref: profile.isAvailable ? `/request/${profile.id}` : null,
         products: [],
         ratingStars: [1, 2, 3, 4, 5],
@@ -1063,12 +1075,15 @@ export default class CommunityController {
 
     if (user.role === 'nursery') {
       const profile = await this.ensureNurseryProfile(user)
-      const [products, reviews, rating] = await Promise.all([
+      const [products, categories, reviews, rating] = await Promise.all([
         NurseryProduct.query()
           .where('nurseryProfileId', profile.id)
           .where('isActive', true)
-          .orderBy('name', 'asc')
-          .limit(6),
+          .orderBy('createdAt', 'desc')
+          .limit(30),
+        NurseryCatalogCategory.query()
+          .where('nurseryProfileId', profile.id)
+          .orderBy('sortOrder', 'asc'),
         ProfileReview.query()
           .where('nurseryProfileId', profile.id)
           .preload('reviewer', (query) => query.preload('accountProfile'))
@@ -1089,15 +1104,32 @@ export default class CommunityController {
         statusTone: profile.isActive ? 'positive' : 'muted',
         schedule: profile.openingHours,
         location: [profile.address, profile.city].filter(Boolean).join(', ') || null,
+        latitude: profile.latitude,
+        longitude: profile.longitude,
+        directionsHref:
+          profile.latitude !== null && profile.longitude !== null
+            ? `https://www.google.com/maps/dir/?api=1&destination=${profile.latitude},${profile.longitude}&travelmode=driving`
+            : null,
         contactPhone: profile.publicPhone,
         contactEmail: profile.publicEmail,
         services: this.splitStoredList(profile.servicesOffered),
         paymentMethods: this.splitStoredList(profile.paymentMethods),
+        catalogCategories: [
+          { id: null, name: 'Plants', isDefault: true },
+          ...categories.map((category) => ({
+            id: category.id,
+            name: category.name,
+            isDefault: false,
+          })),
+        ],
         products: products.map((product) => ({
           name: product.name,
           category: product.category,
           price: product.price,
           stock: product.stock,
+          description: product.description,
+          imageUrl: product.imageUrl,
+          isActive: true,
         })),
         ratingStars: [1, 2, 3, 4, 5],
         rating,
@@ -1112,10 +1144,14 @@ export default class CommunityController {
       statusTone: 'muted',
       schedule: null,
       location: null,
+      latitude: null,
+      longitude: null,
+      directionsHref: null,
       contactPhone: null,
       contactEmail: null,
       services: [],
       paymentMethods: [],
+      catalogCategories: [],
       products: [],
       ratingStars: [1, 2, 3, 4, 5],
       rating: { average: 0, averageText: '0.0', count: 0 },

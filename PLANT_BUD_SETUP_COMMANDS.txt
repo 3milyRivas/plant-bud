@@ -1,0 +1,79 @@
+PLANT BUD - COMANDOS Y REQUISITOS DE SETUP
+==========================================
+
+Comando principal:
+
+  npm run setup
+
+El comando ejecuta este flujo:
+
+1. Prepara el archivo de entorno.
+
+   - Si .env no existe, crea uno usando .env.example.
+   - Agrega variables nuevas que falten sin borrar valores existentes.
+   - Si APP_KEY esta vacia, genera una llave criptograficamente segura.
+   - Deja vacias estas variables para que el administrador coloque sus keys:
+
+     PLANT_ID_API_KEYS=
+     PEXELS_API_KEY=
+
+2. Instala todas las dependencias Node declaradas en package.json:
+
+   npm install
+
+3. Prepara Python para la herramienta de eliminacion de fondos:
+
+   Windows:
+     py -3 -m venv .venv
+     .venv\Scripts\python.exe -m pip install --upgrade pip
+     .venv\Scripts\python.exe -m pip install -r requirements.txt
+     .venv\Scripts\python.exe resources/py/warmup_rembg.py
+
+   Linux/macOS:
+     python3 -m venv .venv
+     .venv/bin/python -m pip install --upgrade pip
+     .venv/bin/python -m pip install -r requirements.txt
+     .venv/bin/python resources/py/warmup_rembg.py
+
+4. Ejecuta todas las migraciones pendientes:
+
+   node ace migration:run
+
+5. Crea los bots demo, publicaciones, jardineros, nurseries y catalogos:
+
+   node ace demo:bots
+
+   Si PEXELS_API_KEY ya tiene un valor, el comando usa Pexels automaticamente.
+   Si la key esta vacia, usa las imagenes locales de respaldo.
+
+6. Compila y verifica la aplicacion para produccion:
+
+   npm run build
+
+7. Para iniciar Plant Bud en desarrollo:
+
+   npm run dev
+
+Opciones disponibles:
+
+  npm run setup -- --refresh-bots
+  npm run setup -- --skip-env
+  npm run setup -- --skip-node
+  npm run setup -- --skip-python
+  npm run setup -- --skip-db
+  npm run setup -- --skip-bots
+  npm run setup -- --skip-build
+
+Requisitos instalados en el servidor antes de ejecutar el setup:
+
+  - Node.js 24 o superior
+  - npm
+  - Python 3.10, 3.11 o 3.12
+  - Herramientas de compilacion requeridas por paquetes nativos de Node/Python
+
+Variables externas que deben agregarse manualmente en .env:
+
+  PLANT_ID_API_KEYS=key1,key2,key3
+  PEXELS_API_KEY=tu_key
+
+El setup no reemplaza una APP_KEY existente ni elimina configuraciones del .env.

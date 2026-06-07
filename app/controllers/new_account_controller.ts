@@ -1,5 +1,8 @@
 import User from '#models/user'
-import AccountProfile from '#models/account_profile'
+import AccountProfile, {
+  DEFAULT_PROFILE_AVATAR_URL,
+  DEFAULT_PROFILE_BANNER_URL,
+} from '#models/account_profile'
 import GardenerProfile from '#models/gardener_profile'
 import NurseryProfile from '#models/nursery_profile'
 import { FREE_SCANNER_MONTHLY_LIMIT } from '#services/subscription_service'
@@ -108,6 +111,8 @@ export default class NewAccountController {
           {
             userId: user.id,
             displayName: normalized.displayName,
+            avatarUrl: DEFAULT_PROFILE_AVATAR_URL,
+            bannerUrl: DEFAULT_PROFILE_BANNER_URL,
             subscriptionPlan: 'free',
             rewardPoints: 0,
             scannerMonthlyLimit: FREE_SCANNER_MONTHLY_LIMIT,
@@ -195,6 +200,8 @@ export default class NewAccountController {
           {
             userId: user.id,
             displayName: `Guest Demo ${demoId.toUpperCase()}`,
+            avatarUrl: DEFAULT_PROFILE_AVATAR_URL,
+            bannerUrl: DEFAULT_PROFILE_BANNER_URL,
             subscriptionPlan: 'premium',
             premiumStartedAt: now,
             premiumRenewsAt: now.plus({ years: 1 }),

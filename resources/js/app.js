@@ -1,5 +1,27 @@
 import Alpine from 'alpinejs'
 
+let leafletPromise = null
+
+function loadLeaflet() {
+  if (window.L) return Promise.resolve(window.L)
+  if (leafletPromise) return leafletPromise
+
+  leafletPromise = new Promise((resolve, reject) => {
+    const stylesheet = document.createElement('link')
+    stylesheet.rel = 'stylesheet'
+    stylesheet.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'
+    document.head.append(stylesheet)
+
+    const script = document.createElement('script')
+    script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'
+    script.onload = () => resolve(window.L)
+    script.onerror = () => reject(new Error('Leaflet could not be loaded'))
+    document.head.append(script)
+  })
+
+  return leafletPromise
+}
+
 const eyeIcon = `
   <svg class="w-5 h-5 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"></path>
@@ -150,8 +172,7 @@ function initPaymentMethodControls(page) {
       const selectedMethods = checkboxes
         .filter((checkbox) => checkbox.checked)
         .map((checkbox) => checkbox.value)
-      valueInput.value = selectedMethods
-        .join('\n')
+      valueInput.value = selectedMethods.join('\n')
 
       payoutPanels.forEach((panel) => {
         const method = panel.dataset.payoutPanel
@@ -163,9 +184,7 @@ function initPaymentMethodControls(page) {
         panel.classList.toggle('hidden', !active)
         panel.querySelectorAll('[data-payout-detail]').forEach((input) => {
           input.disabled = !active
-          input.required =
-            active &&
-            (input.name !== 'payout_card_number' || !configuredCard)
+          input.required = active && (input.name !== 'payout_card_number' || !configuredCard)
         })
       })
     }
@@ -220,10 +239,14 @@ function initWeeklyScheduleControls(page) {
     hydrateWeeklyScheduleFromText(schedule, initialValue)
     preview.textContent = initialValue || 'Pendiente'
 
-    schedule.querySelectorAll('[data-weekly-schedule-day], [data-weekly-schedule-start], [data-weekly-schedule-end]').forEach((control) => {
-      control.addEventListener('change', markChanged)
-      control.addEventListener('input', markChanged)
-    })
+    schedule
+      .querySelectorAll(
+        '[data-weekly-schedule-day], [data-weekly-schedule-start], [data-weekly-schedule-end]'
+      )
+      .forEach((control) => {
+        control.addEventListener('change', markChanged)
+        control.addEventListener('input', markChanged)
+      })
 
     schedule.querySelectorAll('[data-weekly-schedule-preset]').forEach((button) => {
       button.addEventListener('click', () => {
@@ -416,7 +439,9 @@ function formatWeeklyScheduleDays(days) {
   if (indexes.join(',') === '0,1,2,3,4') return 'lunes a viernes'
   if (indexes.join(',') === '5,6') return 'fin de semana'
 
-  const isContiguous = indexes.every((index, position) => position === 0 || index === indexes[position - 1] + 1)
+  const isContiguous = indexes.every(
+    (index, position) => position === 0 || index === indexes[position - 1] + 1
+  )
 
   if (isContiguous && indexes.length > 1) {
     return `${dayNames[dayOrder[indexes[0]]]} a ${dayNames[dayOrder[indexes[indexes.length - 1]]]}`
@@ -1729,8 +1754,6 @@ function updateCommunityReaction(form, payload) {
   const button = form.querySelector('button')
 
   button?.classList.toggle('is-active', payload.active)
-  button?.classList.toggle('border-[#dca15d]/35', payload.active)
-  button?.classList.toggle('bg-[#ebe3a7]/66', payload.active)
 
   if (button) {
     button.classList.remove('is-burst')
@@ -2418,15 +2441,12 @@ function initGardenerSearch() {
       renderStatus('Searching gardeners...')
 
       try {
-        const response = await fetch(
-          `/maintenance/suggestions?q=${encodeURIComponent(query)}`,
-          {
-            credentials: 'same-origin',
-            headers: { Accept: 'application/json' },
-            cache: 'no-store',
-            signal: controller.signal,
-          }
-        )
+        const response = await fetch(`/maintenance/suggestions?q=${encodeURIComponent(query)}`, {
+          credentials: 'same-origin',
+          headers: { Accept: 'application/json' },
+          cache: 'no-store',
+          signal: controller.signal,
+        })
 
         if (!response.ok) throw new Error('Gardener search failed')
 
@@ -2458,6 +2478,142 @@ function initGardenerSearch() {
   })
 }
 
+function initNurserySearch() {
+  document.querySelectorAll('[data-nursery-search]').forEach((form) => {
+    if (form.dataset.nurserySearchReady === 'true') return
+
+    const input = form.querySelector('[data-nursery-search-input]')
+    const results = form.querySelector('[data-nursery-search-results]')
+    if (!input || !results) return
+
+    let timer = null
+    let controller = null
+
+    const closeResults = () => {
+      results.classList.add('hidden')
+      input.setAttribute('aria-expanded', 'false')
+    }
+
+    const openResults = () => {
+      results.classList.remove('hidden')
+      input.setAttribute('aria-expanded', 'true')
+    }
+
+    const renderStatus = (message) => {
+      results.replaceChildren()
+      if (!message) {
+        closeResults()
+        return
+      }
+
+      const status = document.createElement('p')
+      status.className = 'px-4 py-3 text-sm font-bold text-[#113e14]/60'
+      status.textContent = message
+      results.append(status)
+      openResults()
+    }
+
+    const createAvatar = (nursery) => {
+      if (nursery.photo) {
+        const image = document.createElement('img')
+        image.src = nursery.photo
+        image.alt = ''
+        image.className = 'h-12 w-12 shrink-0 rounded-2xl object-cover shadow-sm'
+        return image
+      }
+
+      const fallback = document.createElement('span')
+      fallback.className =
+        'grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-[#416543] text-base font-black text-[#ebe3a7] shadow-sm'
+      fallback.textContent = nursery.initial || 'N'
+      return fallback
+    }
+
+    const renderResults = (nurseries) => {
+      results.replaceChildren()
+      if (!nurseries.length) {
+        renderStatus('No nursery accounts found.')
+        return
+      }
+
+      nurseries.forEach((nursery) => {
+        const link = document.createElement('a')
+        link.href = nursery.href
+        link.className =
+          'flex items-center gap-3 rounded-2xl px-3 py-3 text-[#113e14] transition hover:bg-white/70 focus:bg-white/70 focus:outline-none'
+        link.setAttribute('role', 'option')
+
+        const copy = document.createElement('span')
+        copy.className = 'min-w-0 flex-1'
+
+        const name = document.createElement('span')
+        name.className = 'block truncate text-sm font-black'
+        name.textContent = nursery.name
+
+        const details = document.createElement('span')
+        details.className = 'mt-0.5 block truncate text-xs font-bold text-[#416543]'
+        details.textContent = `${nursery.location} · ${nursery.productsCount} products · ${nursery.isActive ? 'Active' : 'Inactive'}`
+
+        const username = document.createElement('span')
+        username.className = 'hidden shrink-0 text-xs font-black text-[#416543] sm:block'
+        username.textContent = `@${nursery.username}`
+
+        copy.append(name, details)
+        link.append(createAvatar(nursery), copy, username)
+        results.append(link)
+      })
+
+      openResults()
+    }
+
+    const runSearch = async () => {
+      const query = input.value.trim()
+      controller?.abort()
+
+      if (query.length < 2) {
+        renderStatus(query ? 'Keep typing to find nurseries.' : '')
+        return
+      }
+
+      controller = new AbortController()
+      renderStatus('Searching nursery accounts...')
+
+      try {
+        const response = await fetch(`/nurseries/suggestions?q=${encodeURIComponent(query)}`, {
+          credentials: 'same-origin',
+          headers: { Accept: 'application/json' },
+          cache: 'no-store',
+          signal: controller.signal,
+        })
+        if (!response.ok) throw new Error('Nursery search failed')
+
+        const payload = await response.json()
+        if (input.value.trim() !== query) return
+        renderResults(Array.isArray(payload?.nurseries) ? payload.nurseries : [])
+      } catch (error) {
+        if (error.name !== 'AbortError') closeResults()
+      }
+    }
+
+    form.dataset.nurserySearchReady = 'true'
+    input.addEventListener('input', () => {
+      window.clearTimeout(timer)
+      timer = window.setTimeout(runSearch, 170)
+    })
+    input.addEventListener('focus', runSearch)
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        closeResults()
+        input.blur()
+      }
+    })
+    form.addEventListener('submit', closeResults)
+    document.addEventListener('click', (event) => {
+      if (!form.contains(event.target)) closeResults()
+    })
+  })
+}
+
 function initBudgetInputs() {
   document.querySelectorAll('[data-budget-input]').forEach((input) => {
     if (input.dataset.budgetReady === 'true') return
@@ -2466,9 +2622,7 @@ function initBudgetInputs() {
       const raw = input.value.replace(/,/g, '').replace(/[^\d.]/g, '')
       const [integer = '', ...decimalParts] = raw.split('.')
       const decimal = decimalParts.join('').slice(0, 2)
-      const formattedInteger = integer
-        ? Number.parseInt(integer, 10).toLocaleString('en-US')
-        : ''
+      const formattedInteger = integer ? Number.parseInt(integer, 10).toLocaleString('en-US') : ''
       const hasDecimalPoint = raw.includes('.')
 
       input.value = `${formattedInteger}${hasDecimalPoint ? `.${decimal}` : ''}`
@@ -2641,7 +2795,9 @@ function initServiceRequestLocation() {
         )
         if (!response.ok) throw new Error('Reverse geocoding failed')
         const result = await response.json()
-        return result.display_name || `Pinned location ${latitude.toFixed(5)}, ${longitude.toFixed(5)}`
+        return (
+          result.display_name || `Pinned location ${latitude.toFixed(5)}, ${longitude.toFixed(5)}`
+        )
       } catch {
         return `Pinned location ${latitude.toFixed(5)}, ${longitude.toFixed(5)}`
       }
@@ -2685,7 +2841,8 @@ function initServiceRequestLocation() {
           renderSearchResults(await response.json())
         } catch {
           renderSearchResults([])
-          if (status) status.textContent = 'Address search is unavailable. You can still click the map.'
+          if (status)
+            status.textContent = 'Address search is unavailable. You can still click the map.'
         }
       }, 450)
     })
@@ -2760,6 +2917,245 @@ function initServiceRequestLocation() {
   })
 }
 
+function initNurseryLocationPicker() {
+  document.querySelectorAll('[data-nursery-location-picker]').forEach((picker) => {
+    if (picker.dataset.locationReady === 'true' || !window.L) return
+
+    const input = picker.querySelector('[data-nursery-location-input]')
+    const cityInput = document.querySelector('[data-nursery-city]')
+    const latitudeInput = picker.querySelector('[data-nursery-latitude]')
+    const longitudeInput = picker.querySelector('[data-nursery-longitude]')
+    const mapElement = picker.querySelector('[data-nursery-location-map]')
+    const results = picker.querySelector('[data-nursery-location-results]')
+    const currentButton = picker.querySelector('[data-nursery-use-current-location]')
+    const status = picker.querySelector('[data-nursery-location-status]')
+    const coordinates = picker.querySelector('[data-nursery-location-coordinates]')
+    if (!input || !latitudeInput || !longitudeInput || !mapElement) return
+
+    const map = window.L.map(mapElement, {
+      zoomControl: true,
+      scrollWheelZoom: false,
+    }).setView([13.6929, -89.2182], 11)
+    window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors',
+      maxZoom: 19,
+    }).addTo(map)
+
+    const markerIcon = window.L.divIcon({
+      className: '',
+      html: '<div class="nursery-location-pin"></div>',
+      iconSize: [34, 34],
+      iconAnchor: [17, 31],
+    })
+    let marker = null
+    let searchTimer = null
+
+    const parseCoordinate = (value, min, max) => {
+      const normalized = String(value ?? '').trim()
+      if (!normalized) return null
+      const coordinate = Number(normalized)
+      return Number.isFinite(coordinate) && coordinate >= min && coordinate <= max
+        ? coordinate
+        : null
+    }
+
+    const getCity = (address = {}) =>
+      address.city ||
+      address.town ||
+      address.village ||
+      address.municipality ||
+      address.county ||
+      address.state ||
+      ''
+
+    const setPin = (latitude, longitude, options = {}) => {
+      const { label = '', city = '', zoom = true } = options
+      latitudeInput.value = Number(latitude).toFixed(7)
+      longitudeInput.value = Number(longitude).toFixed(7)
+      if (label) input.value = label.slice(0, 255)
+      if (city && cityInput) cityInput.value = city.slice(0, 120)
+
+      if (!marker) {
+        marker = window.L.marker([latitude, longitude], {
+          icon: markerIcon,
+          draggable: true,
+          autoPan: true,
+        }).addTo(map)
+        marker.on('dragend', async () => {
+          const point = marker.getLatLng()
+          if (status) status.textContent = 'Updating the selected entrance...'
+          const location = await reverseGeocode(point.lat, point.lng)
+          setPin(point.lat, point.lng, {
+            label: location.label,
+            city: location.city,
+            zoom: false,
+          })
+        })
+      } else {
+        marker.setLatLng([latitude, longitude])
+      }
+
+      if (zoom) map.setView([latitude, longitude], 17)
+      input.setCustomValidity('')
+      if (status)
+        status.textContent = 'Public nursery entrance selected. Save the profile to publish it.'
+      if (coordinates) {
+        coordinates.textContent = `${Number(latitude).toFixed(5)}, ${Number(longitude).toFixed(5)}`
+        coordinates.classList.remove('hidden')
+      }
+      results?.classList.add('hidden')
+    }
+
+    const reverseGeocode = async (latitude, longitude) => {
+      try {
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${encodeURIComponent(latitude)}&lon=${encodeURIComponent(longitude)}&zoom=18&addressdetails=1`,
+          { headers: { Accept: 'application/json' } }
+        )
+        if (!response.ok) throw new Error('Reverse geocoding failed')
+        const result = await response.json()
+        return {
+          label:
+            result.display_name ||
+            `Pinned location ${Number(latitude).toFixed(5)}, ${Number(longitude).toFixed(5)}`,
+          city: getCity(result.address),
+        }
+      } catch {
+        return {
+          label:
+            input.value ||
+            `Pinned location ${Number(latitude).toFixed(5)}, ${Number(longitude).toFixed(5)}`,
+          city: cityInput?.value || '',
+        }
+      }
+    }
+
+    const renderResults = (items) => {
+      if (!results) return
+      results.replaceChildren()
+
+      items.forEach((item) => {
+        const button = document.createElement('button')
+        button.type = 'button'
+        button.className =
+          'block w-full rounded-xl px-3 py-3 text-left text-sm font-bold text-[#113e14] transition hover:bg-[#ebe3a7]/60'
+        button.textContent = item.display_name
+        button.addEventListener('click', () => {
+          setPin(Number(item.lat), Number(item.lon), {
+            label: item.display_name,
+            city: getCity(item.address),
+          })
+        })
+        results.append(button)
+      })
+
+      results.classList.toggle('hidden', items.length === 0)
+    }
+
+    input.addEventListener('input', () => {
+      window.clearTimeout(searchTimer)
+      const query = input.value.trim()
+      latitudeInput.value = ''
+      longitudeInput.value = ''
+      input.setCustomValidity(query ? 'Select a search result or click the map.' : '')
+      if (coordinates) coordinates.classList.add('hidden')
+      if (status) {
+        status.textContent = query
+          ? 'Select a result or move the pin to confirm this address.'
+          : 'Search an address or click the map to publish a location.'
+      }
+      if (query.length < 3) {
+        renderResults([])
+        return
+      }
+
+      searchTimer = window.setTimeout(async () => {
+        try {
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=5&q=${encodeURIComponent(query)}`,
+            { headers: { Accept: 'application/json' } }
+          )
+          if (!response.ok) throw new Error('Search failed')
+          renderResults(await response.json())
+        } catch {
+          renderResults([])
+          if (status)
+            status.textContent = 'Address search is unavailable. You can still click the map.'
+        }
+      }, 420)
+    })
+
+    map.on('click', async (event) => {
+      if (status) status.textContent = 'Confirming the selected entrance...'
+      const location = await reverseGeocode(event.latlng.lat, event.latlng.lng)
+      setPin(event.latlng.lat, event.latlng.lng, {
+        label: location.label,
+        city: location.city,
+        zoom: false,
+      })
+    })
+
+    const requestCurrentLocation = ({ automatic = false } = {}) => {
+      if (!navigator.geolocation) {
+        if (status) status.textContent = 'Current location is not supported by this browser.'
+        return
+      }
+
+      if (currentButton) currentButton.disabled = true
+      if (status) {
+        status.textContent = automatic
+          ? 'Allow location access to start the map near you.'
+          : 'Getting your current location...'
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        async ({ coords }) => {
+          const location = await reverseGeocode(coords.latitude, coords.longitude)
+          setPin(coords.latitude, coords.longitude, {
+            label: location.label,
+            city: location.city,
+          })
+          if (currentButton) currentButton.disabled = false
+        },
+        () => {
+          if (status) {
+            status.textContent =
+              'We could not use your location. Search an address or click the map manually.'
+          }
+          if (currentButton) currentButton.disabled = false
+        },
+        {
+          enableHighAccuracy: !automatic,
+          timeout: automatic ? 8000 : 12000,
+          maximumAge: automatic ? 300000 : 0,
+        }
+      )
+    }
+
+    currentButton?.addEventListener('click', () => requestCurrentLocation())
+
+    const initialLatitude = parseCoordinate(latitudeInput.value, -90, 90)
+    const initialLongitude = parseCoordinate(longitudeInput.value, -180, 180)
+    if (initialLatitude !== null && initialLongitude !== null) {
+      setPin(initialLatitude, initialLongitude, {
+        label: input.value,
+        city: cityInput?.value || '',
+      })
+    } else {
+      latitudeInput.value = ''
+      longitudeInput.value = ''
+      window.setTimeout(() => requestCurrentLocation({ automatic: true }), 0)
+    }
+
+    document.addEventListener('click', (event) => {
+      if (!picker.contains(event.target)) results?.classList.add('hidden')
+    })
+
+    window.setTimeout(() => map.invalidateSize(), 0)
+    picker.dataset.locationReady = 'true'
+  })
+}
+
 function initPrivateRequestMaps() {
   document.querySelectorAll('[data-private-request-map]').forEach((element) => {
     if (element.dataset.mapReady === 'true' || !window.L) return
@@ -2801,7 +3197,343 @@ function initPrivateRequestMaps() {
   })
 }
 
-function initApp() {
+function initPublicNurseryMaps() {
+  document.querySelectorAll('[data-public-nursery-map]').forEach((element) => {
+    if (element.dataset.mapReady === 'true' || !window.L) return
+    const latitude = Number(element.dataset.latitude)
+    const longitude = Number(element.dataset.longitude)
+    if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) return
+
+    const map = window.L.map(element, {
+      zoomControl: false,
+      dragging: false,
+      scrollWheelZoom: false,
+      doubleClickZoom: false,
+      keyboard: false,
+      attributionControl: false,
+    }).setView([latitude, longitude], 15)
+    window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+    }).addTo(map)
+    window.L.circleMarker([latitude, longitude], {
+      radius: 9,
+      color: '#ffffff',
+      weight: 4,
+      fillColor: '#113e14',
+      fillOpacity: 1,
+    }).addTo(map)
+    element.dataset.mapReady = 'true'
+    window.setTimeout(() => map.invalidateSize(), 0)
+  })
+}
+
+function initNurseryDirectoryMap() {
+  const element = document.querySelector('[data-nursery-map]')
+  const dataElement = document.querySelector('[data-nursery-map-data]')
+  if (!element || !dataElement || element.dataset.mapReady === 'true' || !window.L) return
+
+  let locations = []
+  try {
+    locations = JSON.parse(dataElement.textContent || '[]')
+  } catch {
+    return
+  }
+  if (!Array.isArray(locations) || locations.length === 0) return
+
+  const map = window.L.map(element, {
+    zoomControl: true,
+    scrollWheelZoom: false,
+  })
+  window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors',
+    maxZoom: 19,
+  }).addTo(map)
+
+  const preview = document.querySelector('[data-nursery-map-preview]')
+  const previewImage = preview?.querySelector('[data-nursery-preview-image]')
+  const previewFallback = preview?.querySelector('[data-nursery-preview-fallback]')
+  const previewType = preview?.querySelector('[data-nursery-preview-type]')
+  const previewName = preview?.querySelector('[data-nursery-preview-name]')
+  const previewLocation = preview?.querySelector('[data-nursery-preview-location]')
+  const previewHours = preview?.querySelector('[data-nursery-preview-hours]')
+  const directionsLink = preview?.querySelector('[data-nursery-preview-directions]')
+  const profileLink = preview?.querySelector('[data-nursery-preview-profile]')
+  const markerEntries = []
+  const bounds = []
+
+  const showPreview = (location, markerElement) => {
+    markerEntries.forEach(({ element: entryElement }) =>
+      entryElement?.classList.remove('is-active')
+    )
+    markerElement?.classList.add('is-active')
+    if (!preview) return
+
+    if (previewImage && previewFallback) {
+      previewImage.classList.toggle('hidden', !location.image)
+      previewFallback.classList.toggle('hidden', Boolean(location.image))
+      previewFallback.textContent = location.initial || 'N'
+      if (location.image) {
+        previewImage.src = location.image
+        previewImage.alt = location.name
+      } else {
+        previewImage.removeAttribute('src')
+        previewImage.alt = ''
+      }
+    }
+    if (previewType) {
+      previewType.textContent = 'Registered nursery'
+    }
+    if (previewName) previewName.textContent = location.name
+    if (previewLocation) previewLocation.textContent = location.location
+    if (previewHours) previewHours.textContent = location.hours
+    if (directionsLink) directionsLink.href = location.directionsHref
+    if (profileLink) {
+      profileLink.classList.toggle('hidden', !location.profileHref)
+      profileLink.href = location.profileHref || '#'
+    }
+    preview.classList.remove('hidden')
+  }
+
+  locations.forEach((location) => {
+    const latitude = Number(location.latitude)
+    const longitude = Number(location.longitude)
+    if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) return
+
+    const markerContent = document.createElement('div')
+    markerContent.className = 'nursery-map-marker'
+
+    if (location.image) {
+      const media = document.createElement('span')
+      media.className = 'nursery-map-marker-media'
+      const image = document.createElement('img')
+      image.src = location.image
+      image.alt = ''
+      image.loading = 'lazy'
+      image.decoding = 'async'
+      media.append(image)
+      markerContent.append(media)
+    } else {
+      const initial = document.createElement('span')
+      initial.textContent = location.initial || 'N'
+      markerContent.append(initial)
+    }
+
+    const markerIcon = window.L.divIcon({
+      className: '',
+      html: markerContent.outerHTML,
+      iconSize: [64, 64],
+      iconAnchor: [32, 32],
+    })
+    const marker = window.L.marker([latitude, longitude], { icon: markerIcon }).addTo(map)
+    const markerElement = marker.getElement()?.firstElementChild
+    marker.on('click', () => showPreview(location, markerElement))
+    markerEntries.push({ marker, element: markerElement })
+    bounds.push([latitude, longitude])
+  })
+
+  const fitLocations = () => {
+    if (bounds.length === 1) {
+      map.setView(bounds[0], 14)
+      return
+    }
+    map.fitBounds(bounds, { padding: [55, 55], maxZoom: 13 })
+  }
+
+  document.querySelector('[data-nursery-map-fit]')?.addEventListener('click', fitLocations)
+  preview?.querySelector('[data-nursery-preview-close]')?.addEventListener('click', () => {
+    preview.classList.add('hidden')
+    markerEntries.forEach(({ element: markerElement }) =>
+      markerElement?.classList.remove('is-active')
+    )
+  })
+
+  fitLocations()
+  element.dataset.mapReady = 'true'
+  window.setTimeout(() => map.invalidateSize(), 0)
+}
+
+function initDeferredNurseryMap() {
+  const element = document.querySelector('[data-nursery-map]')
+  if (!element || element.dataset.mapLoadScheduled === 'true') return
+
+  const loadMap = async () => {
+    if (element.dataset.mapReady === 'true') return
+    try {
+      await loadLeaflet()
+      initNurseryDirectoryMap()
+    } catch {
+      element.setAttribute('data-map-error', 'true')
+    }
+  }
+
+  element.dataset.mapLoadScheduled = 'true'
+
+  if (!('IntersectionObserver' in window)) {
+    loadMap()
+    return
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return
+      observer.disconnect()
+      loadMap()
+    },
+    { rootMargin: '320px 0px' }
+  )
+  observer.observe(element)
+}
+
+function initDeferredPublicNurseryMaps() {
+  const elements = [...document.querySelectorAll('[data-public-nursery-map]')]
+  if (!elements.length) return
+
+  const loadMaps = async () => {
+    try {
+      await loadLeaflet()
+      initPublicNurseryMaps()
+    } catch {
+      elements.forEach((element) => element.setAttribute('data-map-error', 'true'))
+    }
+  }
+
+  if (!('IntersectionObserver' in window)) {
+    loadMaps()
+    return
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return
+      observer.disconnect()
+      loadMaps()
+    },
+    { rootMargin: '240px 0px' }
+  )
+  elements.forEach((element) => observer.observe(element))
+}
+
+function initProgressiveLists() {
+  document.querySelectorAll('[data-progressive-list]').forEach((list) => {
+    if (list.dataset.progressiveReady === 'true') return
+
+    const section = list.parentElement
+    const button = section?.querySelector('[data-progressive-more]')
+    const items = [...list.querySelectorAll('[data-progressive-item]')]
+    const batchSize = Math.max(1, Number(list.dataset.batchSize) || 4)
+    let visibleCount = Math.min(batchSize, items.length)
+
+    const render = () => {
+      items.forEach((item, index) => {
+        item.hidden = index >= visibleCount
+      })
+
+      if (!button) return
+      const remaining = items.length - visibleCount
+      button.hidden = remaining <= 0
+      button.textContent =
+        remaining > 0 ? `Show ${Math.min(batchSize, remaining)} more` : 'All nurseries shown'
+    }
+
+    button?.addEventListener('click', () => {
+      visibleCount = Math.min(visibleCount + batchSize, items.length)
+      render()
+    })
+
+    render()
+    list.dataset.progressiveReady = 'true'
+  })
+}
+
+function initNurseryCatalogPagination() {
+  document.querySelectorAll('[data-nursery-catalog]').forEach((catalog) => {
+    if (catalog.dataset.catalogReady === 'true') return
+
+    const products = [...catalog.querySelectorAll('[data-catalog-product]')]
+    const filters = [...catalog.querySelectorAll('[data-catalog-filter]')]
+    const pagination = catalog.querySelector('[data-catalog-pagination]')
+    const pageStatus = catalog.querySelector('[data-catalog-page-status]')
+    const pages = catalog.querySelector('[data-catalog-pages]')
+    const previous = catalog.querySelector('[data-catalog-previous]')
+    const next = catalog.querySelector('[data-catalog-next]')
+    const pageSize = Math.max(1, Number(catalog.dataset.pageSize) || 6)
+    let activeCategory = 'all'
+    let currentPage = 1
+
+    const render = () => {
+      const filtered = products.filter(
+        (product) => activeCategory === 'all' || product.dataset.catalogCategory === activeCategory
+      )
+      const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize))
+      currentPage = Math.min(currentPage, totalPages)
+      const firstVisible = (currentPage - 1) * pageSize
+      const visibleProducts = new Set(filtered.slice(firstVisible, firstVisible + pageSize))
+
+      products.forEach((product) => {
+        product.hidden = !visibleProducts.has(product)
+      })
+
+      filters.forEach((filter) => {
+        const active = filter.dataset.catalogFilter === activeCategory
+        filter.classList.toggle('bg-[#113e14]', active)
+        filter.classList.toggle('text-white', active)
+        filter.classList.toggle('bg-white/75', !active)
+        filter.classList.toggle('text-[#416543]', !active)
+      })
+
+      if (pagination) {
+        pagination.classList.toggle('hidden', totalPages <= 1)
+        pagination.classList.toggle('flex', totalPages > 1)
+      }
+      if (pageStatus) {
+        const from = filtered.length ? firstVisible + 1 : 0
+        const to = Math.min(firstVisible + pageSize, filtered.length)
+        pageStatus.textContent = `${from}-${to} of ${filtered.length} products`
+      }
+      if (previous) previous.disabled = currentPage <= 1
+      if (next) next.disabled = currentPage >= totalPages
+
+      if (pages) {
+        pages.replaceChildren()
+        for (let page = 1; page <= totalPages; page += 1) {
+          const button = document.createElement('button')
+          button.type = 'button'
+          button.textContent = page
+          button.className =
+            page === currentPage
+              ? 'grid h-9 w-9 place-items-center rounded-full bg-[#dca15d] text-xs font-black text-[#113e14]'
+              : 'grid h-9 w-9 place-items-center rounded-full bg-white text-xs font-black text-[#416543]'
+          button.addEventListener('click', () => {
+            currentPage = page
+            render()
+          })
+          pages.append(button)
+        }
+      }
+    }
+
+    filters.forEach((filter) => {
+      filter.addEventListener('click', () => {
+        activeCategory = filter.dataset.catalogFilter || 'all'
+        currentPage = 1
+        render()
+      })
+    })
+    previous?.addEventListener('click', () => {
+      currentPage = Math.max(1, currentPage - 1)
+      render()
+    })
+    next?.addEventListener('click', () => {
+      currentPage += 1
+      render()
+    })
+
+    render()
+    catalog.dataset.catalogReady = 'true'
+  })
+}
+
+async function initApp() {
   initAuthForms()
   initProfilePage()
   initProfileRelationsModal()
@@ -2810,10 +3542,26 @@ function initApp() {
   initCommunityPage()
   initPlantCatalogSearch()
   initGardenerSearch()
+  initNurserySearch()
   initBudgetInputs()
   initPaymentInputs()
-  initServiceRequestLocation()
-  initPrivateRequestMaps()
+  initProgressiveLists()
+  initNurseryCatalogPagination()
+  initDeferredNurseryMap()
+  initDeferredPublicNurseryMaps()
+  const immediateMap = document.querySelector(
+    '[data-service-location-map], [data-private-request-map], [data-nursery-location-map]'
+  )
+  if (immediateMap) {
+    try {
+      await loadLeaflet()
+      initServiceRequestLocation()
+      initNurseryLocationPicker()
+      initPrivateRequestMaps()
+    } catch {
+      immediateMap.setAttribute('data-map-error', 'true')
+    }
+  }
 }
 
 if (document.readyState === 'loading') {

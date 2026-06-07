@@ -1,5 +1,8 @@
 import { DateTime } from 'luxon'
-import AccountProfile from '#models/account_profile'
+import AccountProfile, {
+  DEFAULT_PROFILE_AVATAR_URL,
+  DEFAULT_PROFILE_BANNER_URL,
+} from '#models/account_profile'
 import PlantScan from '#models/plant_scan'
 import type User from '#models/user'
 
@@ -15,6 +18,8 @@ export default class SubscriptionService {
       {
         userId: user.id,
         displayName: user.fullName || user.username,
+        avatarUrl: DEFAULT_PROFILE_AVATAR_URL,
+        bannerUrl: DEFAULT_PROFILE_BANNER_URL,
         subscriptionPlan: 'free',
         rewardPoints: 0,
         scannerMonthlyLimit: FREE_SCANNER_MONTHLY_LIMIT,

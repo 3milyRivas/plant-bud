@@ -25,6 +25,8 @@ export const profileValidator = vine.compile(
     public_email: vine.string().trim().email().maxLength(254).optional().nullable(),
     address: nullableText(255),
     city: nullableText(120),
+    latitude: vine.number().min(-90).max(90).optional().nullable(),
+    longitude: vine.number().min(-180).max(180).optional().nullable(),
     opening_hours: nullableText(255),
     is_available: nullableText(5),
     is_active: nullableText(5),

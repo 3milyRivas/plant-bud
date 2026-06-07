@@ -44,7 +44,7 @@
         </div>
       @endif
 
-      <div class="rounded-3xl border border-white/30 bg-white/24 p-4 shadow-xl backdrop-blur-xl transition duration-300 hover:bg-white/28">
+      <div class="community-composer rounded-3xl border p-4 sm:p-5">
         @form({
           action: '/community/posts',
           method: 'POST',
@@ -52,6 +52,14 @@
           class: 'space-y-4',
           'data-community-post-form': true
         })
+          <div class="flex items-center justify-between gap-4 border-b border-[#416543]/10 pb-4">
+            <div>
+              <p class="text-xs font-black uppercase tracking-[0.16em] text-[#b77738]">New post</p>
+              <h2 class="mt-1 text-lg font-black text-[#113e14]">Share with the community</h2>
+            </div>
+            <span class="hidden rounded-full bg-white/55 px-3 py-1.5 text-xs font-black text-[#416543] sm:inline">Plant Bud</span>
+          </div>
+
           <div class="flex items-start gap-4 sm:gap-6">
             @if(viewer.avatarUrl)
               <img src="{{ viewer.avatarUrl }}" alt="" loading="lazy" decoding="async" class="h-12 w-12 rounded-full object-cover">
@@ -61,7 +69,7 @@
               </span>
             @endif
 
-            <div class="min-w-0 flex-1 rounded-2xl border border-white/55 bg-white/78 px-4 py-3 shadow-sm">
+            <div class="community-composer-field min-w-0 flex-1 rounded-2xl border px-4 py-3">
               <textarea name="body" maxlength="2000" rows="2" placeholder="Share a plant update, question, or small win..." class="min-h-16 w-full resize-none bg-transparent text-sm font-semibold text-[#113e14]/78 outline-none placeholder:text-[#416543]/62" data-community-composer-input>{{ old.body ?? '' }}</textarea>
             </div>
           </div>
@@ -72,18 +80,18 @@
           <p class="hidden text-xs font-bold text-red-800" data-community-form-error></p>
 
           <div class="grid gap-3 md:grid-cols-[1fr_auto]">
-            <label class="block rounded-2xl bg-white/22 px-4 py-3">
+            <label class="community-composer-meta block rounded-2xl px-4 py-3">
               <span class="text-xs font-black uppercase tracking-[0.12em] text-[#416543]">Hashtags</span>
               <input name="hashtags" value="{{ old.hashtags ?? '' }}" maxlength="240" placeholder="plants balcony care" class="mt-2 h-10 w-full bg-transparent text-sm font-semibold text-[#113e14] outline-none placeholder:text-[#416543]/55">
             </label>
 
-            <div class="flex flex-wrap items-center gap-2 rounded-2xl bg-white/18 px-3 py-3">
+            <div class="community-composer-tools flex flex-wrap items-center gap-2 rounded-2xl px-3 py-3">
               <input type="file" name="image" accept="image/jpeg,image/png,image/webp" class="sr-only" data-community-image-input>
-              <button type="button" class="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-bold text-[#113e14]/70 transition hover:bg-white/35 hover:text-[#113e14]" data-community-file-trigger>
+              <button type="button" class="community-composer-tool flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-bold" data-community-file-trigger>
                 <div class="h-6 w-6 bg-[url('/resources/images/community/image.png')] bg-contain bg-no-repeat"></div>
                 Images
               </button>
-              <button type="button" class="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-bold text-[#113e14]/70 transition hover:bg-white/35 hover:text-[#113e14]" data-community-poll-trigger>
+              <button type="button" class="community-composer-tool flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-bold" data-community-poll-trigger>
                 <div class="h-6 w-6 bg-[url('/resources/images/community/poll.png')] bg-contain bg-no-repeat"></div>
                 Poll
               </button>
@@ -112,7 +120,7 @@
           </div>
 
           <div class="flex justify-end">
-            <button type="submit" class="flex items-center gap-2 rounded-full bg-[#dca15d] px-5 py-2.5 text-sm font-black text-[#113e14] shadow-md transition hover:-translate-y-0.5 hover:bg-[#ebe3a7] active:translate-y-0.5">
+            <button type="submit" class="community-publish-button flex items-center gap-2 rounded-full px-6 py-3 text-sm font-black">
               <div class="h-6 w-6 bg-[url('/resources/images/community/send.png')] bg-contain bg-no-repeat"></div>
               Publish
             </button>

@@ -73,7 +73,63 @@
                             <h2 class="mt-2 text-white text-xl font-black">Edit selected item</h2>
                             <div class="w-14 h-1 bg-[#dca15d] rounded-full mt-3 mb-5"></div>
 
-                            <div class="space-y-2">
+                            <div class="designer-tool-groups">
+                                <div class="designer-tool-group designer-tool-group--wide">
+                                    @each(tool in [
+                                        { action: 'clearSelection()', icon: 'deselect.png', label: 'Deselect item' },
+                                        { action: 'duplicateSelected()', icon: 'copy.png', label: 'Copy item' },
+                                        { action: 'deleteSelected()', icon: 'delete.png', label: 'Delete item' },
+                                        { action: 'clearAll()', icon: 'clear.png', label: 'Clear workspace' }
+                                    ])
+                                        <button type="button" onclick="{{ tool.action }}" class="designer-tool-button"
+                                            aria-label="{{ tool.label }}" title="{{ tool.label }}">
+                                            <img src="/resources/images/designer-tools/{{ tool.icon }}" alt="">
+                                        </button>
+                                    @end
+                                </div>
+
+                                <div class="designer-tool-row">
+                                    <div class="designer-tool-group">
+                                        @each(tool in [
+                                            { action: 'undo()', icon: 'undo.png', label: 'Undo' },
+                                            { action: 'redo()', icon: 'redo.png', label: 'Redo' }
+                                        ])
+                                            <button type="button" onclick="{{ tool.action }}" class="designer-tool-button"
+                                                aria-label="{{ tool.label }}" title="{{ tool.label }}">
+                                                <img src="/resources/images/designer-tools/{{ tool.icon }}" alt="">
+                                            </button>
+                                        @end
+                                    </div>
+
+                                    <div class="designer-tool-group">
+                                        @each(tool in [
+                                            { action: 'bringFront()', icon: 'front.png', label: 'Bring to front' },
+                                            { action: 'sendBack()', icon: 'back.png', label: 'Send to back' }
+                                        ])
+                                            <button type="button" onclick="{{ tool.action }}" class="designer-tool-button"
+                                                aria-label="{{ tool.label }}" title="{{ tool.label }}">
+                                                <img src="/resources/images/designer-tools/{{ tool.icon }}" alt="">
+                                            </button>
+                                        @end
+                                    </div>
+                                </div>
+
+                                <div class="designer-tool-group designer-tool-group--wide">
+                                    @each(tool in [
+                                        { action: 'rotateSelected()', icon: 'rotate.png', label: 'Rotate item' },
+                                        { action: 'flipSelected()', icon: 'flip-x.png', label: 'Flip horizontally' },
+                                        { action: 'flipYSelected()', icon: 'flip-y.png', label: 'Flip vertically' },
+                                        { action: 'toggleLock()', icon: 'lock.png', label: 'Lock or unlock item' }
+                                    ])
+                                        <button type="button" onclick="{{ tool.action }}" class="designer-tool-button"
+                                            aria-label="{{ tool.label }}" title="{{ tool.label }}">
+                                            <img src="/resources/images/designer-tools/{{ tool.icon }}" alt="">
+                                        </button>
+                                    @end
+                                </div>
+                            </div>
+
+                            <div class="hidden">
 
                                 <div class="grid grid-cols-2 gap-2">
                                     <button onclick="clearSelection()"
