@@ -3,10 +3,6 @@
   "compilerOptions": {
     "rootDir": "./",
     "outDir": "./build",
-    "baseUrl": "./",
     "ignoreDeprecations": "6.0",
-    "paths": {
-      "#data/*": ["app/data/*"]
-    }
   }
 }

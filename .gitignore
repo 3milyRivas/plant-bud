@@ -18,6 +18,7 @@ storage/phone_uploads
 # Frontend assets compiled code
 public/assets
 public/uploads
+public/resources
 
 # Build tools specific
 npm-debug.log

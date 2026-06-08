@@ -1,0 +1,33 @@
+services:
+  app:
+    image: plant-bud
+    build: .
+    restart: unless-stopped
+    volumes:
+      - app_storage:/app/storage
+      - app_tmp:/app/tmp
+    env_file:
+      - .env
+    environment:
+      - MIGRATE=true
+      - PORT=3333
+      - HOST=0.0.0.0
+    labels:
+      caddy: localhost
+      caddy.reverse_proxy: "{{upstreams 3333}}"
+    
+  caddy:
+    image: ghcr.io/glimmer-labs/wolfi-caddy:docker-proxy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - caddy_data:/data
+
+volumes:
+  app_storage:
+  app_tmp:
+  caddy_data:

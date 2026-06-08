@@ -30,9 +30,9 @@ export class AccountProfileSchema extends BaseModel {
   static $columns = ['avatarUrl', 'bannerUrl', 'bio', 'createdAt', 'displayName', 'id', 'location', 'premiumRenewsAt', 'premiumStartedAt', 'rewardPoints', 'scannerMonthlyLimit', 'subscriptionPlan', 'updatedAt', 'userId', 'websiteUrl'] as const
   $columns = AccountProfileSchema.$columns
   @column()
-  declare avatarUrl: string | null
+  declare avatarUrl: string
   @column()
-  declare bannerUrl: string | null
+  declare bannerUrl: string
   @column()
   declare bio: string | null
   @column.dateTime({ autoCreate: true })
