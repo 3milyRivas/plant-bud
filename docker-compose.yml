@@ -13,7 +13,7 @@ services:
       - PORT=3333
       - HOST=0.0.0.0
     labels:
-      caddy: localhost
+      caddy: plantbud.fundacionpoma.com
       caddy.reverse_proxy: "{{upstreams 3333}}"
     
   caddy:
