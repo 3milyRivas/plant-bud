@@ -18,11 +18,11 @@
     })
     <input id="upload" type="file" accept="image/*" class="hidden">
 
-    <main class="relative z-10 pt-10 pb-10 px-6 lg:px-10 select-none">
+    <main class="relative z-10 pt-10 pb-10 px-4 sm:px-6 lg:px-10 select-none">
 
-        <div class="max-w-7xl mx-auto grid grid-cols-1 xl:grid-cols-[320px_1fr] gap-8 min-h-[calc(100vh-11rem)]">
+        <div class="w-full max-w-[min(90rem,calc(100vw-2rem))] mx-auto grid grid-cols-1 xl:grid-cols-[320px_1fr] gap-8 min-h-[calc(100vh-11rem)]">
 
-            <aside class="relative">
+            <aside class="relative min-w-0">
                 <div class="absolute -inset-2 bg-white/10 blur-2xl rounded-[2.5rem] opacity-70"></div>
 
                 <div
@@ -57,9 +57,9 @@
                             <div class="w-14 h-1 bg-[#dca15d] rounded-full mt-3 mb-5"></div>
 
                             <div id="inventory"
-                                class="grid grid-cols-2 gap-3 max-h-[340px] overflow-y-auto pr-1 select-none">
+                                class="grid grid-cols-1 gap-3 sm:grid-cols-2 max-h-[340px] overflow-y-auto pr-1 select-none">
 
-                                <div class="col-span-2 text-center py-8 rounded-3xl bg-white/10 border border-white/14">
+                                <div class="col-span-1 sm:col-span-2 text-center py-8 rounded-3xl bg-white/10 border border-white/14">
                                     <p class="text-white/55 text-sm font-semibold">
                                         No assets yet. Search above or upload your own image.
                                     </p>
@@ -209,7 +209,7 @@
                         </div>
 
                         <div
-                            class="flex-1 min-h-[600px] rounded-[2.5rem] bg-[#416543]/8 border border-[#416543]/12 p-4 lg:p-6 overflow-auto">
+                            class="flex-1 min-h-[420px] sm:min-h-[520px] md:min-h-[600px] rounded-[2.5rem] bg-[#416543]/8 border border-[#416543]/12 p-4 lg:p-6 overflow-auto">
 
                             <div id="workspace" class="w-full h-full flex items-center justify-center">
 
@@ -258,7 +258,7 @@
         <div class="absolute inset-0 flex items-center justify-center p-4">
 
             <div
-                class="relative w-full max-w-6xl max-h-[90vh] bg-[#113e14]/92 backdrop-blur-3xl border border-[#ebe3a7]/12 rounded-[3rem] overflow-hidden">
+                class="relative w-full max-w-[min(90rem,calc(100vw-2rem))] max-h-[90vh] bg-[#113e14]/92 backdrop-blur-3xl border border-[#ebe3a7]/12 rounded-[3rem] overflow-hidden">
 
                 <div class="relative flex items-center justify-between px-8 py-6 border-b border-[#ebe3a7]/12">
                     <h3 class="text-2xl font-black text-white">Search Results</h3>

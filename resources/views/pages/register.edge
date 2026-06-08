@@ -3,7 +3,7 @@
 <title>Sign Up</title>
 @endslot
 
-<div class="relative z-10 min-h-screen overflow-hidden flex items-center justify-center px-4 py-8">
+<div class="relative z-10 min-h-screen overflow-hidden flex items-center justify-center px-4 py-8 sm:px-6 lg:px-8">
   <div class="absolute inset-0">
     <img src="resources/images/welcome/header3.png" class="w-full h-full object-cover" alt="">
     <div class="absolute inset-0 bg-[#113e14]/72"></div>
@@ -17,10 +17,10 @@
     Back
   </a>
 
-  <div class="relative z-20 w-full max-w-5xl">
+  <div class="relative z-20 w-full max-w-[min(68rem,calc(100vw-2rem))] mx-auto">
     <div class="absolute -inset-2 bg-gradient-to-r from-white/8 via-[#ebe3a7]/10 to-white/8 blur-3xl rounded-[2rem] opacity-90"></div>
 
-    <div class="auth-card is-alive auth-panel-in relative bg-white/10 backdrop-blur-3xl border border-white/10 rounded-[1.5rem] px-6 py-7 md:px-8 md:py-8 shadow-[0_35px_120px_rgba(0,0,0,0.35)] overflow-hidden">
+    <div class="auth-card is-alive auth-panel-in relative bg-white/10 backdrop-blur-3xl border border-white/10 rounded-[1.5rem] px-5 py-6 sm:px-6 sm:py-7 md:px-8 md:py-8 shadow-[0_35px_120px_rgba(0,0,0,0.35)] overflow-hidden">
       <div class="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-[#ebe3a7]/45 to-transparent"></div>
 
       <form method="POST" action="/demo/guest" class="relative z-10 mb-7">
@@ -66,7 +66,7 @@
         </button>
       </form>
 
-      <div class="relative z-10 grid lg:grid-cols-[0.95fr_1.05fr] gap-8 items-center">
+      <div class="relative z-10 grid gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:gap-8 items-center">
         <div class="text-center lg:text-left">
           <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/10 backdrop-blur-xl border border-white/10 shadow-lg mb-5">
             <div class="welcome-signal w-2 h-2 rounded-full bg-[#a8b841]"></div>
@@ -102,7 +102,7 @@
         </div>
 
         <div class="grid gap-4">
-          <a href="/signup/client" class="auth-choice group relative overflow-hidden rounded-[1.35rem] bg-[#ebe3a7] text-[#113e14] px-6 py-5 shadow-[0_20px_60px_rgba(0,0,0,0.18)]">
+          <a href="/signup/client" class="auth-choice group relative overflow-hidden rounded-[1.35rem] bg-[#ebe3a7] text-[#113e14] px-4 py-5 sm:px-5 shadow-[0_20px_60px_rgba(0,0,0,0.18)]">
             <div class="absolute -top-8 -right-8 w-24 h-24 bg-white/40 rounded-full blur-2xl"></div>
 
             <div class="relative flex items-center gap-4">
@@ -129,7 +129,7 @@
             </div>
           </a>
 
-          <a href="/signup/gardener" class="auth-choice group relative overflow-hidden rounded-[1.35rem] bg-[#ebe3a7] text-[#113e14] px-6 py-5 shadow-[0_20px_60px_rgba(0,0,0,0.18)]">
+          <a href="/signup/gardener" class="auth-choice group relative overflow-hidden rounded-[1.35rem] bg-[#ebe3a7] text-[#113e14] px-4 py-5 sm:px-5 shadow-[0_20px_60px_rgba(0,0,0,0.18)]">
 
             <div class="relative flex items-center gap-4">
               <div class="w-14 h-14 rounded-2xl bg-white shadow-lg flex items-center justify-center shrink-0 group-hover:-translate-y-0.5 transition duration-500">
@@ -155,7 +155,7 @@
             </div>
           </a>
 
-          <a href="/signup/nursery" class="auth-choice group relative overflow-hidden rounded-[1.35rem] bg-[#ebe3a7] text-[#113e14] px-6 py-5 shadow-[0_20px_60px_rgba(0,0,0,0.18)]">
+          <a href="/signup/nursery" class="auth-choice group relative overflow-hidden rounded-[1.35rem] bg-[#ebe3a7] text-[#113e14] px-4 py-5 sm:px-5 shadow-[0_20px_60px_rgba(0,0,0,0.18)]">
 
             <div class="relative flex items-center gap-4">
               <div class="w-14 h-14 rounded-2xl bg-white shadow-lg flex items-center justify-center shrink-0 group-hover:-translate-y-0.5 transition duration-500">

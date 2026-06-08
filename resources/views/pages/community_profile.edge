@@ -4,7 +4,7 @@
 @endslot
 @let(hasProfileSidebar = accountLinks.length || publicRoleDetails.kind !== 'client' || isOwnProfile)
 
-<div class="relative z-10 min-h-dvh overflow-hidden bg-[#416543] text-[#113e14]" data-community-page>
+<div class="relative z-10 min-h-dvh overflow-x-hidden bg-[#416543] text-[#113e14]" data-community-page>
   <div class="fixed inset-0 -z-10 pointer-events-none">
     <img src="/resources/images/welcome/header3.png" alt="" class="h-full w-full object-cover opacity-25">
     <div class="absolute inset-0 bg-gradient-to-b from-[#113e14]/80 via-[#416543]/80 to-[#416543]"></div>
@@ -53,7 +53,7 @@
                     <span class="{{ isFriend ? '' : 'hidden' }} profile-badge profile-badge--friend" data-friend-badge>Friend</span>
                   @endif
                 </div>
-                <h1 class="mt-3 break-words text-4xl font-black leading-tight lg:text-5xl">{{ profileUser.displayName }}</h1>
+                <h1 class="mt-3 break-words text-3xl font-black leading-tight sm:text-4xl lg:text-5xl">{{ profileUser.displayName }}</h1>
                 <p class="mt-2 text-base font-bold text-[#ebe3a7]">{{ '@' + profileUser.username }}</p>
                 <p class="mx-auto mt-4 max-w-2xl text-sm font-semibold leading-7 text-white/78 lg:mx-0">
                   {{ profileUser.bio || 'This profile is building its community presence.' }}
@@ -62,11 +62,11 @@
 
               <div class="mx-auto flex w-full max-w-md flex-wrap justify-center gap-2 lg:mx-0 lg:justify-start xl:w-80 xl:shrink-0 xl:justify-end">
                 @if(isOwnProfile)
-                  <a href="/profile/settings" class="min-w-40 flex-1 rounded-full bg-[#ebe3a7] px-5 py-3 text-center text-sm font-black text-[#113e14] shadow-lg transition hover:-translate-y-0.5">
+                  <a href="/profile/settings" class="w-full sm:min-w-40 sm:flex-1 rounded-full bg-[#ebe3a7] px-5 py-3 text-center text-sm font-black text-[#113e14] shadow-lg transition hover:-translate-y-0.5">
                     Edit profile
                   </a>
                   @if(publicRoleDetails.kind === 'nursery')
-                    <a href="#public-nursery-catalog" class="min-w-40 flex-1 rounded-full border border-white/20 bg-white/10 px-5 py-3 text-center text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-white/18">
+                    <a href="#public-nursery-catalog" class="w-full sm:min-w-40 sm:flex-1 rounded-full border border-white/20 bg-white/10 px-5 py-3 text-center text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-white/18">
                       View catalog
                     </a>
                   @endif
@@ -79,7 +79,7 @@
                   @form({
                     action: '/users/' + profileUser.username + '/follow',
                     method: 'POST',
-                    class: 'min-w-32 flex-1',
+                    class: 'w-full sm:min-w-32 sm:flex-1',
                     'data-follow-form': true
                   })
                     <button type="submit" class="{{ isFollowing ? 'bg-white/15 text-white' : 'bg-[#dca15d] text-[#113e14]' }} w-full rounded-full px-5 py-3 text-sm font-black shadow-lg transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]">
@@ -89,7 +89,7 @@
                   @form({
                     action: '/users/' + profileUser.username + '/favorite',
                     method: 'POST',
-                    class: 'min-w-32 flex-1',
+                    class: 'w-full sm:min-w-32 sm:flex-1',
                     'data-favorite-account-form': true
                   })
                     <button type="submit" class="{{ isFavoriteAccount ? 'bg-[#ebe3a7] text-[#113e14]' : 'bg-white/15 text-white' }} w-full rounded-full px-5 py-3 text-sm font-black shadow-lg transition hover:-translate-y-0.5" data-favorite-account-button>
@@ -102,7 +102,7 @@
           </div>
         </div>
 
-        <div class="{{ isOwnProfile ? 'sm:grid-cols-4' : 'sm:grid-cols-3' }} mt-8 grid overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/10 text-center text-white">
+        <div class="{{ isOwnProfile ? 'grid-cols-2 sm:grid-cols-4' : 'grid-cols-2 sm:grid-cols-3' }} mt-8 grid overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/10 text-center text-white">
           <div class="p-4">
             <p class="text-2xl font-black">{{ profileStats.posts }}</p>
             <p class="text-[0.68rem] font-black uppercase tracking-[0.14em] text-[#ebe3a7]">Posts</p>
@@ -156,7 +156,7 @@
       })
     @endif
 
-    <section class="{{ hasProfileSidebar ? 'lg:grid-cols-[0.82fr_1.18fr]' : 'lg:grid-cols-[minmax(0,1fr)]' }} mt-8 grid gap-8">
+    <section class="mt-8 grid grid-cols-1 gap-8 {{ hasProfileSidebar ? 'lg:grid-cols-[0.82fr_1.18fr]' : '' }}">
       <div class="space-y-5 lg:order-2">
         <div class="flex items-end justify-between gap-4 text-white">
           <div>

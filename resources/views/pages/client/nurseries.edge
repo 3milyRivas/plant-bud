@@ -11,7 +11,7 @@
 
 <main class="nursery-directory relative z-10 min-h-screen overflow-hidden text-[#113e14]">
   <section class="px-4 pb-12 pt-32 sm:px-8 lg:pt-36">
-    <div class="nursery-hero relative mx-auto grid max-w-[1320px] overflow-hidden rounded-[44px] border border-white/16 bg-[#113e14]/88 shadow-[0_30px_90px_rgba(17,62,20,0.3)] lg:grid-cols-[1.08fr_0.92fr]">
+    <div class="nursery-hero relative mx-auto grid w-full max-w-[min(90rem,calc(100vw-2rem))] overflow-hidden rounded-[44px] border border-white/16 bg-[#113e14]/88 shadow-[0_30px_90px_rgba(17,62,20,0.3)] lg:grid-cols-[1.08fr_0.92fr]">
       <div class="relative z-10 flex flex-col justify-center px-7 py-14 sm:px-12 lg:px-16 lg:py-20">
         <div class="absolute -left-16 top-12 h-40 w-40 rounded-full bg-[#a8b841]/16 blur-2xl"></div>
         <span class="relative w-fit rounded-full border border-[#ebe3a7]/25 bg-white/8 px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-[#ebe3a7]">
@@ -24,7 +24,7 @@
           Discover nursery accounts, meet the people behind them, and explore every location from one calmer directory.
         </p>
 
-        <form action="/nurseries#nursery-accounts" method="GET" class="relative z-50 mt-9 max-w-xl rounded-[26px] border border-white/18 bg-white/10 p-3 shadow-2xl backdrop-blur-xl" data-nursery-search autocomplete="off">
+        <form action="/nurseries#nursery-accounts" method="GET" class="relative z-50 mt-9 w-full max-w-full rounded-[26px] border border-white/18 bg-white/10 p-3 shadow-2xl backdrop-blur-xl" data-nursery-search autocomplete="off">
           <label for="nurserySearch" class="sr-only">Search nursery accounts</label>
           <div class="grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto]">
             <input id="nurserySearch" name="q" value="{{ search }}" type="search" autocomplete="off" placeholder="Search nursery name, location, or plants" class="min-h-14 rounded-[19px] border border-white/35 bg-white px-5 text-sm font-bold text-[#113e14] outline-none placeholder:text-[#416543]/60" data-nursery-search-input aria-autocomplete="list" aria-expanded="false" aria-controls="nurserySearchResults">
@@ -39,7 +39,7 @@
       <div class="relative min-h-[360px] overflow-hidden lg:min-h-[560px]">
         <img src="/resources/images/homepagee/nursery-header.jpg" alt="Plants inside a nursery" class="absolute inset-0 h-full w-full object-cover">
         <div class="absolute inset-0 bg-gradient-to-t from-[#113e14]/70 via-transparent to-transparent lg:bg-gradient-to-r lg:from-[#113e14] lg:via-transparent lg:to-transparent"></div>
-        <div class="absolute bottom-6 left-6 right-6 grid grid-cols-3 gap-2 rounded-[26px] border border-white/20 bg-[#113e14]/76 p-2 text-white shadow-2xl backdrop-blur-xl sm:left-32 sm:right-auto sm:w-[390px]">
+        <div class="absolute bottom-6 left-4 right-4 grid grid-cols-1 gap-2 rounded-[26px] border border-white/20 bg-[#113e14]/76 p-2 text-white shadow-2xl backdrop-blur-xl sm:left-32 sm:right-auto sm:w-[390px] sm:grid-cols-3">
           <div class="rounded-[20px] bg-[#ebe3a7] px-3 py-4 text-center text-[#113e14]">
             <strong class="block text-2xl font-black">{{ totals.registered }}</strong>
             <span class="text-[9px] font-black uppercase tracking-wider">Accounts</span>
@@ -58,7 +58,7 @@
   </section>
 
   <section id="nursery-map" class="scroll-mt-28 px-4 py-12 sm:px-8">
-    <div class="mx-auto max-w-[1320px]">
+    <div class="mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))]">
       <div class="mb-7 flex flex-col justify-between gap-4 text-white sm:flex-row sm:items-end">
         <div>
           <p class="text-xs font-black uppercase tracking-[0.2em] text-[#ebe3a7]">Explore nearby</p>
@@ -69,7 +69,7 @@
 
       <div class="nursery-map-shell relative overflow-hidden rounded-[40px] border-[10px] border-[#ebe3a7]/80 bg-[#ebe3a7] shadow-[0_28px_80px_rgba(17,62,20,0.32)]">
         @if(mapLocations.length)
-          <div class="h-[530px] w-full bg-[#d9dfc3] lg:h-[620px]" data-nursery-map></div>
+          <div class="h-[340px] w-full bg-[#d9dfc3] sm:h-[520px] lg:h-[620px]" data-nursery-map></div>
         @else
           <div class="grid min-h-[420px] place-items-center bg-[#f8f5e7] px-6 text-center">
             <div class="max-w-md">
@@ -114,7 +114,7 @@
   </section>
 
   <section id="favorite-nurseries" class="scroll-mt-28 px-4 py-12 sm:px-8">
-    <div class="mx-auto max-w-[1320px]">
+    <div class="mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))]">
       <div class="mb-7 flex flex-col justify-between gap-4 text-white sm:flex-row sm:items-end">
         <div>
           <p class="text-xs font-black uppercase tracking-[0.2em] text-[#ebe3a7]">Your saved places</p>
@@ -184,7 +184,7 @@
   </section>
 
   <section id="nursery-accounts" class="scroll-mt-28 px-4 py-16 sm:px-8">
-    <div class="mx-auto max-w-[1320px] rounded-[46px] bg-[#ebe3a7] px-5 py-10 shadow-[0_25px_70px_rgba(17,62,20,0.22)] sm:px-9 lg:px-12">
+    <div class="mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))] rounded-[46px] bg-[#ebe3a7] px-5 py-10 shadow-[0_25px_70px_rgba(17,62,20,0.22)] sm:px-9 lg:px-12">
       <div class="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
         <div>
           <p class="text-xs font-black uppercase tracking-[0.2em] text-[#a0602f]">People and businesses</p>
@@ -206,7 +206,7 @@
       </div>
 
       @if(registeredNurseries.length)
-        <div class="mt-9 grid gap-5 lg:grid-cols-2">
+        <div class="mt-9 grid gap-5 grid-cols-1 lg:grid-cols-2">
           @each(nursery in registeredNurseries)
             <article class="nursery-account-card group relative overflow-hidden rounded-[32px] bg-[#f8f5e7] p-5 shadow-[0_12px_35px_rgba(17,62,20,0.09)] transition hover:-translate-y-1">
               <div class="absolute -right-12 -top-16 h-36 w-36 rounded-full bg-[#a8b841]/18 transition duration-500 group-hover:scale-125"></div>
@@ -250,7 +250,7 @@
                 </div>
               </div>
 
-              <div class="relative mt-5 flex items-center justify-between gap-4 border-t border-[#113e14]/10 pt-4">
+              <div class="relative mt-5 grid gap-3 border-t border-[#113e14]/10 pt-4 sm:grid-cols-[1fr_auto]">
                 <p class="min-w-0 truncate text-xs font-bold text-[#416543]">{{ nursery.hours }}</p>
                 <div class="flex shrink-0 items-center gap-2">
                   @if(canUseFavorites && !nursery.isOwnProfile)

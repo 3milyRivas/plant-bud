@@ -47,7 +47,7 @@
     planLabel: accountProfile.planLabel,
   })
 
-  <main class="relative z-10 mx-auto max-w-6xl px-5 pb-36 lg:px-10">
+  <main class="relative z-10 mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))] px-4 pb-36 pt-4 sm:px-5 lg:px-10">
     <section class="mb-6 rounded-[2rem] border border-white/12 bg-[#113e14]/78 p-6 text-white shadow-2xl backdrop-blur-2xl">
       <div class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
         <div>
@@ -624,7 +624,7 @@
               {{ csrfField() }}
               <p class="text-xs font-black uppercase tracking-[0.18em] text-[#dca15d]">Organization</p>
               <h3 class="mt-2 text-2xl font-black">Categories</h3>
-              <div class="mt-5 flex gap-2">
+              <div class="mt-5 flex flex-col gap-2 sm:flex-row">
                 <input name="name" maxlength="50" placeholder="Example: Pots" {{ catalogCategories.length >= 6 ? 'disabled' : '' }} class="h-12 min-w-0 flex-1 rounded-2xl border border-[#416543]/20 bg-[#f5f1d6] px-4 text-sm font-bold outline-none focus:border-[#416543]">
                 <button type="submit" {{ catalogCategories.length >= 6 ? 'disabled' : '' }} class="rounded-2xl bg-[#dca15d] px-5 text-sm font-black transition hover:bg-[#ebe3a7] disabled:cursor-not-allowed disabled:opacity-45">Add</button>
               </div>
@@ -664,7 +664,7 @@
                     @end
                   </select>
                 </label>
-                <div class="grid grid-cols-2 gap-3">
+                <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
                   <label>
                     <span class="text-sm font-black text-[#416543]">Price</span>
                     <input name="price" type="number" min="0" max="999999.99" step="0.01" placeholder="0.00" class="mt-2 h-12 w-full rounded-2xl border border-[#416543]/20 bg-white px-4 text-sm font-bold outline-none">

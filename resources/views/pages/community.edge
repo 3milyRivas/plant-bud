@@ -5,7 +5,7 @@
 
 @let(errors = formErrors || {})
 
-<div class="min-h-screen text-[#113e14]" data-community-page>
+<div class="min-h-screen overflow-x-hidden text-[#113e14]" data-community-page>
   @!component('components/community/top-navbar', {
     viewer,
     active: 'community',
@@ -14,7 +14,7 @@
     searchError
   })
 
-  <div class="mx-auto grid max-w-[1360px] gap-8 px-4 pb-24 pt-36 lg:px-6 xl:grid-cols-[minmax(0,790px)_26rem] xl:items-start xl:gap-12 2xl:grid-cols-[minmax(0,830px)_27rem] 2xl:gap-14" data-community-layout>
+  <div class="mx-auto grid max-w-[1360px] gap-8 px-4 pb-24 pt-36 lg:px-6 grid-cols-1 xl:grid-cols-[minmax(0,790px)_26rem] xl:items-start xl:gap-12 2xl:grid-cols-[minmax(0,830px)_27rem] 2xl:gap-14" data-community-layout>
     <main class="min-w-0 space-y-6" data-community-main>
 
       @form({
@@ -60,7 +60,7 @@
             <span class="hidden rounded-full bg-white/55 px-3 py-1.5 text-xs font-black text-[#416543] sm:inline">Plant Bud</span>
           </div>
 
-          <div class="flex items-start gap-4 sm:gap-6">
+          <div class="flex items-start gap-3 sm:gap-6">
             @if(viewer.avatarUrl)
               <img src="{{ viewer.avatarUrl }}" alt="" loading="lazy" decoding="async" class="h-12 w-12 rounded-full object-cover">
             @else
@@ -119,7 +119,7 @@
             @endif
           </div>
 
-          <div class="flex justify-end">
+          <div class="flex justify-end sm:justify-end">
             <button type="submit" class="community-publish-button flex items-center gap-2 rounded-full px-6 py-3 text-sm font-black">
               <div class="h-6 w-6 bg-[url('/resources/images/community/send.png')] bg-contain bg-no-repeat"></div>
               Publish
@@ -324,7 +324,7 @@
 
       <section class="rounded-3xl border border-white/30 bg-white/24 p-4 shadow-xl backdrop-blur-xl">
         <p class="text-xs font-black uppercase tracking-[0.18em] text-[#416543]">Useful paths</p>
-        <div class="mt-4 grid grid-cols-2 gap-2">
+        <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
           <a href="/ornamental" class="rounded-2xl bg-white/34 px-3 py-4 text-sm font-black text-[#113e14] transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]">Catalog</a>
           <a href="/nurseries" class="rounded-2xl bg-white/34 px-3 py-4 text-sm font-black text-[#113e14] transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]">Nurseries</a>
           <a href="/scanner" class="rounded-2xl bg-white/34 px-3 py-4 text-sm font-black text-[#113e14] transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]">Scanner</a>

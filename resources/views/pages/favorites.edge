@@ -10,7 +10,7 @@
     section: 'Saved posts'
   })
 
-  <main class="mx-auto grid max-w-[1280px] gap-7 px-4 pb-24 pt-7 lg:grid-cols-[minmax(0,1fr)_20rem] lg:px-8" data-community-layout="compact">
+  <main class="mx-auto grid w-full max-w-[1280px] grid-cols-1 gap-7 px-4 pb-24 pt-7 lg:grid-cols-[minmax(0,1fr)_20rem] lg:px-8" data-community-layout="compact">
     <section class="min-w-0 space-y-6" data-community-main>
       <div class="relative overflow-hidden rounded-[2rem] border border-white/20 bg-[#113e14]/90 p-7 text-white shadow-[0_28px_80px_rgba(17,62,20,0.28)] backdrop-blur-2xl md:p-9">
         <div class="absolute -right-16 -top-20 h-56 w-56 rounded-full bg-[#a8b841]/20 blur-2xl"></div>
@@ -23,7 +23,7 @@
               Keep useful ideas, plant inspiration, and community advice together in one place.
             </p>
           </div>
-          <div class="flex items-center gap-3">
+          <div class="flex flex-wrap items-center gap-3">
             <div class="rounded-[1.25rem] border border-white/12 bg-white/10 px-5 py-3 text-center">
               <p class="text-3xl font-black" data-saved-total>{{ viewer.stats.saved }}</p>
               <p class="text-[10px] font-black uppercase tracking-[0.16em] text-white/55">Saved</p>
@@ -33,7 +33,7 @@
         </div>
       </div>
 
-      <div class="flex items-end justify-between gap-4 px-1">
+      <div class="flex flex-col gap-3 px-1 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p class="text-xs font-black uppercase tracking-[0.18em] text-[#ebe3a7]">Collection</p>
           <h2 class="mt-1 text-2xl font-black text-white">Posts worth returning to</h2>
@@ -58,14 +58,14 @@
       </div>
     </section>
 
-    <aside class="hidden lg:block" data-community-sidebar>
-      <div class="sticky top-28 space-y-4">
+    <aside class="block" data-community-sidebar>
+      <div class="space-y-4 lg:sticky lg:top-28">
         <details open class="rounded-[1.5rem] border border-white/50 bg-[#f5f2df]/92 p-5 text-[#113e14] shadow-xl backdrop-blur-xl">
           <summary class="flex cursor-pointer list-none items-center justify-between">
             <h2 class="text-lg font-black">Your community</h2>
             <span class="text-xs font-bold text-[#416543]">private</span>
           </summary>
-          <div class="mt-4 grid grid-cols-2 gap-3 text-center">
+          <div class="mt-4 grid grid-cols-1 gap-3 text-center sm:grid-cols-2">
             <div class="rounded-2xl bg-[#a8b841]/16 p-4">
               <p class="text-2xl font-black" data-saved-total>{{ viewer.stats.saved }}</p>
               <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#416543]">Saved</p>

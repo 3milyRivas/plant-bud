@@ -10,7 +10,7 @@
     section: 'Notifications'
   })
 
-  <main class="mx-auto grid max-w-[1280px] gap-7 px-4 pb-24 pt-7 lg:px-8 xl:grid-cols-[minmax(0,1fr)_21rem] xl:items-start" data-community-layout>
+  <main class="mx-auto grid w-full max-w-[1280px] grid-cols-1 gap-7 px-4 pb-24 pt-7 sm:px-6 lg:px-8 xl:grid-cols-[minmax(0,1fr)_21rem] xl:items-start" data-community-layout>
     <section class="min-w-0 space-y-6" data-community-main>
       <div class="relative overflow-hidden rounded-[2rem] border border-white/20 bg-[#113e14]/90 p-7 text-white shadow-[0_28px_80px_rgba(17,62,20,0.28)] backdrop-blur-2xl md:p-9">
         <div class="absolute -right-16 -top-20 h-56 w-56 rounded-full bg-[#dca15d]/22 blur-2xl"></div>
@@ -36,8 +36,8 @@
       <div class="rounded-[1.75rem] border border-white/45 bg-[#f5f2df]/90 p-3 shadow-[0_20px_65px_rgba(17,62,20,0.18)] backdrop-blur-xl sm:p-4">
         <div class="space-y-3">
           @each(notification in notifications)
-            <a href="{{ notification.href }}" class="group flex items-center justify-between gap-4 rounded-[1.25rem] border border-[#416543]/8 bg-white/72 p-4 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-[#dca15d]/35 hover:bg-white hover:shadow-lg">
-              <div class="flex min-w-0 items-center gap-3">
+            <a href="{{ notification.href }}" class="group flex flex-col items-start gap-4 rounded-[1.25rem] border border-[#416543]/8 bg-white/72 p-4 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-[#dca15d]/35 hover:bg-white hover:shadow-lg sm:flex-row sm:items-center sm:justify-between">
+              <div class="flex min-w-0 flex-1 items-center gap-3">
                 @if(notification.actor && notification.actor.avatarUrl)
                   <img src="{{ notification.actor.avatarUrl }}" alt="" class="h-14 w-14 flex-none rounded-2xl border-2 border-white object-cover shadow-md">
                 @elseif(notification.actor)
@@ -55,8 +55,8 @@
                 </span>
               </div>
 
-              <div class="flex flex-none items-center gap-3">
-                <span class="hidden rounded-full bg-[#ebe3a7]/55 px-3 py-1.5 text-xs font-black text-[#416543] sm:block">{{ notification.createdAtHuman }}</span>
+              <div class="flex flex-none flex-wrap items-center gap-3">
+                <span class="rounded-full bg-[#ebe3a7]/55 px-3 py-1.5 text-xs font-black text-[#416543]">{{ notification.createdAtHuman }}</span>
                 @if(notification.thumbnailUrl)
                   <img src="{{ notification.thumbnailUrl }}" alt="" class="h-12 w-12 rounded-xl object-cover">
                 @else
@@ -75,8 +75,8 @@
       </div>
     </section>
 
-    <aside class="hidden min-w-0 xl:block" data-community-sidebar>
-      <div class="sticky top-28 space-y-4">
+    <aside class="block min-w-0 xl:block" data-community-sidebar>
+      <div class="space-y-4 xl:sticky xl:top-28">
         <details open class="rounded-[1.5rem] border border-white/50 bg-[#f5f2df]/92 p-5 text-[#113e14] shadow-xl backdrop-blur-xl">
           <summary class="flex cursor-pointer list-none items-center justify-between">
             <h2 class="text-lg font-black">Your profile</h2>

@@ -29,7 +29,7 @@
     planLabel: accountProfile.planLabel,
   })
 
-  <main class="relative z-10 mx-auto max-w-6xl px-5 pb-16 lg:px-10">
+  <main class="relative z-10 mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))] px-4 pb-16 pt-4 sm:px-5 lg:px-10">
     @if(flashMessages.get('success'))
       <div class="mb-5 rounded-[1.5rem] border border-white/10 bg-white/15 px-5 py-4 text-sm font-bold text-[#ebe3a7] shadow-xl backdrop-blur-2xl">
         {{ flashMessages.get('success') }}
@@ -263,7 +263,7 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-3 gap-3 rounded-[2rem] border border-white/10 bg-white/12 p-4 text-center text-white shadow-xl backdrop-blur-2xl">
+        <div class="grid grid-cols-1 gap-3 rounded-[2rem] border border-white/10 bg-white/12 p-4 text-center text-white shadow-xl backdrop-blur-2xl sm:grid-cols-3">
           <div>
             <p class="text-2xl font-black">{{ stats.likes }}</p>
             <p class="text-[0.68rem] font-bold uppercase tracking-[0.12em] text-[#ebe3a7]">Likes</p>
@@ -291,7 +291,7 @@
         </div>
 
         @if(recentPosts.length)
-          <div class="grid grid-cols-2 gap-3 md:grid-cols-3">
+          <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
             @each(post in recentPosts)
               <button
                 type="button"
@@ -373,7 +373,7 @@
         </div>
         <p class="mt-2 text-sm font-black text-[#dca15d]" data-profile-post-modal-author></p>
 
-        <div class="mt-5 grid grid-cols-3 gap-2">
+        <div class="mt-5 grid grid-cols-1 gap-2 sm:grid-cols-3">
           <div class="rounded-2xl bg-[#416543]/8 p-3">
             <p class="text-lg font-black text-[#113e14]" data-profile-post-modal-likes>0</p>
             <p class="text-[0.65rem] font-black uppercase tracking-[0.12em] text-[#416543]">Likes</p>

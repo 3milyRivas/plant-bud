@@ -3,9 +3,9 @@
 <title>Login</title>
 @endslot
 
-<div class="relative z-10 h-dvh overflow-hidden" data-auth-page>
+<div class="relative z-10 min-h-screen overflow-hidden" data-auth-page>
 
-  <div class="relative grid h-dvh lg:grid-cols-2">
+  <div class="relative grid min-h-screen lg:grid-cols-2">
 
     <div class="hidden lg:block relative">
       <img src="/resources/images/login/login-first.png" class="absolute inset-0 w-full h-full object-cover" alt="">
@@ -30,21 +30,21 @@
       </div>
     </div>
 
-    <div class="relative h-dvh overflow-y-auto px-6 py-10 lg:px-14">
+    <div class="relative min-h-screen overflow-y-auto px-4 py-10 sm:px-6 lg:px-14">
       <div class="flex min-h-full items-center justify-center">
 
       <a href="/register"
-         class="absolute top-6 left-6 inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-white/10 backdrop-blur-xl border border-white/10 text-[#ebe3a7] font-bold text-sm hover:bg-[#ebe3a7] hover:text-[#113e14] transition">
+         class="absolute top-4 left-4 sm:top-6 sm:left-6 inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-white/10 backdrop-blur-xl border border-white/10 text-[#ebe3a7] font-bold text-sm hover:bg-[#ebe3a7] hover:text-[#113e14] transition">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
           <path d="M15 19l-7-7 7-7"></path>
         </svg>
         Back
       </a>
 
-      <div class="w-full max-w-md">
-        <div class="text-center mb-6">
+      <div class="w-full max-w-[min(32rem,100%)] sm:max-w-md">
+        <div class="text-center mb-6 px-2 sm:px-0">
           <div class="relative inline-block mb-2">
-            <img src="/resources/images/essential/pb-logo.png" class="relative w-56 mx-auto" alt="">
+            <img src="/resources/images/essential/pb-logo.png" class="relative w-40 mx-auto md:w-56" alt="">
           </div>
 
           <h1 class="text-4xl font-black text-white">Welcome back</h1>
@@ -57,10 +57,7 @@
         <div class="relative">
           <div class="absolute -inset-2 bg-[#ebe3a7]/10 blur-3xl rounded-[1.5rem]"></div>
 
-          <div class="auth-card is-alive auth-panel-in relative bg-[#113e14]/82 text-white backdrop-blur-3xl border border-[#ebe3a7]/12 rounded-[1.5rem] px-8 py-6 shadow-[0_30px_90px_rgba(0,0,0,0.25)] overflow-hidden">
-
-            @if(flashMessages.get('errors')?.auth)
-              <p class="text-red-300 text-sm text-center mb-4">
+          <div class="auth-card is-alive auth-panel-in relative bg-[#113e14]/82 text-white backdrop-blur-3xl border border-[#ebe3a7]/12 rounded-[1.5rem] px-6 py-6 sm:px-8 shadow-[0_30px_90px_rgba(0,0,0,0.25)] overflow-hidden">
                 {{ flashMessages.get('errors').auth[0] }}
               </p>
             @endif

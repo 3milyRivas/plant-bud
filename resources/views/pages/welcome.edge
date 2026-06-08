@@ -5,9 +5,9 @@
 @vite(['resources/js/tips.js'])
 
 <div class="relative z-10 min-h-dvh overflow-hidden text-white">
-  <header class="fixed top-0 left-0 w-full z-50 px-6 lg:px-10 py-6">
+  <header class="fixed top-0 left-0 w-full z-50 px-4 sm:px-6 lg:px-10 py-6">
     <div
-      class="max-w-7xl mx-auto bg-white/10 backdrop-blur-xl border border-white/10 rounded-full px-6 py-4 flex items-center justify-between shadow-[0_10px_40px_rgba(0,0,0,0.15)]">
+      class="w-full max-w-[min(90rem,calc(100vw-2rem))] mx-auto bg-white/10 backdrop-blur-xl border border-white/10 rounded-full px-4 py-4 sm:px-6 flex items-center justify-between shadow-[0_10px_40px_rgba(0,0,0,0.15)]">
       <div class="flex items-center gap-4 px-3 rounded-full">
         <img decoding="async" src="resources/images/essential/logo.png"
           class="w-18 hover:rotate-6 transition duration-500" alt="">
@@ -60,7 +60,7 @@
     <div class="absolute inset-0"></div>
     <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#416543] to-transparent"></div>
 
-    <div class="relative z-10 mx-auto grid max-w-7xl gap-14 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
+    <div class="relative z-10 mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))] grid gap-14 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
       <div class="max-w-3xl text-center lg:text-left">
         <div class="mb-7 inline-flex items-center gap-3 rounded-full border border-white/15 bg-white/10 px-5 py-3 shadow-xl backdrop-blur-xl">
           <span class="welcome-signal h-2.5 w-2.5 rounded-full bg-[#a8b841] shadow-[0_0_16px_rgba(168,184,65,0.58)]"></span>
@@ -78,7 +78,7 @@
 
         <div class="mt-10 flex justify-center lg:justify-start">
           <a href="/register"
-            class="inline-flex items-center gap-3 rounded-full bg-[#dca15d] px-10 py-5 text-sm font-black text-[#113e14] shadow-[0_18px_45px_rgba(0,0,0,0.28)] transition hover:-translate-y-1 hover:scale-[1.02] hover:bg-[#ebe3a7]">
+            class="inline-flex items-center gap-3 rounded-full bg-[#dca15d] px-8 py-4 text-sm font-black text-[#113e14] shadow-[0_18px_45px_rgba(0,0,0,0.28)] transition hover:-translate-y-1 hover:scale-[1.02] hover:bg-[#ebe3a7] sm:px-10 sm:py-5">
             Start Now
             <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
               <path d="M5 12h14"></path>
@@ -112,9 +112,9 @@
   </section>
 
   <main class="relative z-10 text-white">
-    <section class="relative px-6 pb-16 pt-28 lg:px-10">
-      <div class="welcome-reveal mx-auto max-w-7xl rounded-[1.5rem] bg-[#ebe3a7]/92 p-5 text-[#113e14] shadow-[0_18px_55px_rgba(0,0,0,0.18)] backdrop-blur-xl md:p-6">
-        <div class="grid gap-4 md:grid-cols-4">
+    <section class="relative px-4 pb-16 pt-28 sm:px-6 lg:px-10">
+      <div class="welcome-reveal mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))] rounded-[1.5rem] bg-[#ebe3a7]/92 p-5 text-[#113e14] shadow-[0_18px_55px_rgba(0,0,0,0.18)] backdrop-blur-xl md:p-6">
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-4">
           <div class="rounded-[1.15rem] bg-white/74 p-5 shadow-sm md:col-span-1">
             <p class="text-sm font-black uppercase tracking-[0.2em] text-[#416543]">Real green data</p>
             <h2 class="mt-3 text-2xl font-black leading-tight">Nature is bigger than we imagine.</h2>
@@ -135,8 +135,8 @@
       </div>
     </section>
 
-    <section class="px-6 py-16 lg:px-10">
-      <div class="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+    <section class="px-4 py-16 sm:px-6 lg:px-10">
+      <div class="mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))] grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
         <div class="welcome-drift">
           <p class="text-sm font-black uppercase tracking-[0.24em] text-[#ebe3a7]">What is Plant Bud?</p>
           <h2 class="mt-4 text-balance text-4xl font-black leading-tight md:text-6xl">
@@ -166,9 +166,9 @@
       </div>
     </section>
 
-    <section class="px-6 py-16 lg:px-10">
-      <div class="mx-auto max-w-7xl">
-        <div class="welcome-slip mb-10 max-w-3xl">
+    <section class="px-4 py-16 sm:px-6 lg:px-10">
+      <div class="mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))]">
+        <div class="welcome-slip mb-10 max-w-full sm:max-w-3xl">
           <p class="text-sm font-black uppercase tracking-[0.24em] text-[#ebe3a7]">What Plant Bud includes</p>
           <h2 class="mt-4 text-balance text-4xl font-black leading-tight md:text-6xl">
             Everything starts with <span class="welcome-gradient-text">understanding your plant.</span>
@@ -178,7 +178,7 @@
           </p>
         </div>
 
-        <div class="grid gap-5 lg:grid-cols-3">
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           @each(feature in [
             { image: 'benefit1.png', kicker: 'Plant knowledge', title: 'Care guides that feel clear', text: 'Watering, sunlight, soil, humidity, plant families, and warning signs in one place.' },
             { image: 'benefit2.png', kicker: 'Expert connection', title: 'A bridge to green help', text: 'A path toward gardeners, nurseries, and plant-focused support when care gets harder.' },
@@ -197,8 +197,8 @@
       </div>
     </section>
 
-    <section class="px-6 py-16 lg:px-10">
-      <div class="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.88fr_1.12fr] lg:items-stretch">
+    <section class="px-4 py-16 sm:px-6 lg:px-10">
+      <div class="mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))] grid gap-8 lg:grid-cols-[0.88fr_1.12fr] lg:items-stretch">
         <div class="welcome-tilt-soft rounded-[1.5rem] bg-[#ebe3a7] p-8 text-[#113e14] shadow-[0_18px_55px_rgba(0,0,0,0.18)] backdrop-blur-xl">
           <p class="text-sm font-black uppercase tracking-[0.24em] text-[#416543]">Problems it helps solve</p>
           <h2 class="mt-5 text-balance text-4xl font-black leading-tight md:text-5xl">
@@ -232,8 +232,8 @@
       </div>
     </section>
 
-    <section class="px-6 py-16 lg:px-10">
-      <div class="mx-auto max-w-7xl">
+    <section class="px-4 py-16 sm:px-6 lg:px-10">
+      <div class="mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))]">
         <div class="welcome-scale mb-10 text-center">
           <p class="text-sm font-black uppercase tracking-[0.24em] text-[#ebe3a7]">Services and benefits</p>
           <h2 class="mx-auto mt-4 max-w-4xl text-balance text-4xl font-black leading-tight md:text-6xl">
@@ -241,7 +241,7 @@
           </h2>
         </div>
 
-        <div class="grid gap-5 lg:grid-cols-4">
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
           @each(service in [
             { title: 'For plant owners', text: 'Understand symptoms and organize care.' },
             { title: 'For gardeners', text: 'Show expertise and build trust.' },
@@ -258,16 +258,16 @@
       </div>
     </section>
 
-    <section class="px-6 py-16 lg:px-10">
-      <div class="mx-auto max-w-7xl">
-        <div class="welcome-drift mb-10 max-w-3xl">
+    <section class="px-4 py-16 sm:px-6 lg:px-10">
+      <div class="mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))]">
+        <div class="welcome-drift mb-10 max-w-full sm:max-w-3xl">
           <p class="text-sm font-black uppercase tracking-[0.24em] text-[#ebe3a7]">Why plants matter</p>
           <h2 class="mt-4 text-balance text-4xl font-black leading-tight md:text-6xl">
             Good plant care starts with noticing small signals.
           </h2>
         </div>
 
-        <div class="grid gap-5 lg:grid-cols-3">
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           <div class="welcome-soft-card is-alive rounded-[1.45rem] bg-[#113e14]/58 p-7 text-white shadow-[0_14px_45px_rgba(0,0,0,0.16)] backdrop-blur-xl">
             <p class="text-sm font-black uppercase tracking-[0.2em] text-[#ebe3a7]">Leaves</p>
             <h3 class="mt-4 text-3xl font-black leading-tight">Color changes usually speak first.</h3>
@@ -295,8 +295,8 @@
       </div>
     </section>
 
-    <section class="px-6 py-16 lg:px-10">
-      <div class="mx-auto grid max-w-7xl gap-6 lg:grid-cols-2">
+    <section class="px-4 py-16 sm:px-6 lg:px-10">
+      <div class="mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))] grid gap-6 lg:grid-cols-2">
         @each(card in [
           { image: 'mission.png', title: 'Mission', text: 'To inspire people to care for plants through simple knowledge, warmer habits, and sustainable green spaces.' },
           { image: 'vision.png', title: 'Vision', text: 'To make plant care feel natural in everyday life, from small homes to growing communities.' }
@@ -312,8 +312,8 @@
       </div>
     </section>
 
-    <section class="px-6 py-16 lg:px-10">
-      <div class="mx-auto max-w-7xl">
+    <section class="px-4 py-16 sm:px-6 lg:px-10">
+      <div class="mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))]">
         <div class="welcome-scale mb-10 text-center">
           <p class="text-sm font-black uppercase tracking-[0.24em] text-[#ebe3a7]">Values</p>
           <h2 class="mx-auto mt-4 max-w-4xl text-balance text-4xl font-black leading-tight md:text-6xl">
@@ -339,7 +339,7 @@
       </div>
     </section>
 
-    <section class="px-6 pb-20 pt-8 lg:px-10">
+    <section class="px-4 pb-20 pt-8 sm:px-6 lg:px-10">
       <div class="welcome-scale mx-auto max-w-5xl rounded-[1.5rem] bg-[#113e14]/88 px-7 py-9 text-center text-white shadow-[0_18px_55px_rgba(0,0,0,0.18)] backdrop-blur-xl md:px-10">
         <p class="text-sm font-black uppercase tracking-[0.24em] text-[#ebe3a7]">Join the green journey</p>
         <h2 class="mx-auto mt-4 max-w-3xl text-balance text-3xl font-black leading-tight md:text-5xl">

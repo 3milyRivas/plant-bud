@@ -24,8 +24,8 @@
     })
     <input id="plantUpload" type="file" accept="image/*" class="hidden">
 
-    <main class="relative z-10 pt-10 pb-10 px-6 lg:px-10">
-        <div id="scannerLimitBox" class="mx-auto mb-6 hidden max-w-7xl rounded-[1.5rem] border border-[#dca15d]/35 bg-[#113e14]/74 px-5 py-4 text-[#ebe3a7] shadow-xl backdrop-blur-2xl">
+    <main class="relative z-10 pt-10 pb-10 px-4 sm:px-6 lg:px-10">
+        <div id="scannerLimitBox" class="mx-auto mb-6 hidden w-full max-w-[min(90rem,calc(100vw-2rem))] rounded-[1.5rem] border border-[#dca15d]/35 bg-[#113e14]/74 px-5 py-4 text-[#ebe3a7] shadow-xl backdrop-blur-2xl">
             <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <p class="text-sm font-black uppercase tracking-[0.18em]">Scanner limit reached</p>
@@ -35,8 +35,8 @@
             </div>
         </div>
 
-        <div class="max-w-7xl mx-auto grid grid-cols-1 xl:grid-cols-[370px_1fr] gap-8 min-h-[calc(100vh-11rem)]">
-            <aside class="relative">
+        <div class="w-full max-w-[min(90rem,calc(100vw-2rem))] mx-auto grid grid-cols-1 xl:grid-cols-[370px_1fr] gap-8 min-h-[calc(100vh-11rem)]">
+            <aside class="relative min-w-0">
                 <div class="absolute -inset-2 bg-white/10 blur-2xl rounded-[2.5rem]"></div>
                 <div class="relative h-full overflow-hidden bg-white/12 backdrop-blur-2xl border border-white/18 rounded-[2.5rem] p-6 shadow-[0_30px_80px_rgba(0,0,0,0.16)]">
                     <div class="absolute inset-x-6 top-0 h-1 rounded-b-full bg-[#a8b841]/60"></div>
@@ -47,7 +47,7 @@
                     <div class="w-14 h-1 bg-[#dca15d] rounded-full mt-4 mb-6"></div>
 
                     <div id="previewBox"
-                        class="relative w-full min-h-[240px] bg-white/10 border border-white/14 rounded-2xl flex items-center justify-center overflow-hidden shadow-inner shadow-[#113e14]/16">
+                        class="relative w-full min-h-[220px] sm:min-h-[240px] bg-white/10 border border-white/14 rounded-2xl flex items-center justify-center overflow-hidden shadow-inner shadow-[#113e14]/16">
                         <div class="absolute left-5 top-5 h-3 w-3 rounded-full bg-[#a8b841] shadow-[0_0_18px_rgba(168,184,65,0.45)]"></div>
                         <div id="dropText" class="absolute px-5 text-center">
                             <p class="text-[#ebe3a7] text-sm font-black">Drop plant image here</p>
@@ -62,7 +62,7 @@
                             <p id="statusText" class="text-white font-bold">Waiting</p>
                         </div>
 
-                        <div class="grid grid-cols-2 gap-3">
+                        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
                             <div class="p-4 bg-white/10 border border-white/14 rounded-2xl">
                                 <p class="text-white/60 text-sm">Confidence</p>
                                 <p id="confidenceText" class="text-[#ebe3a7] font-bold">-</p>
@@ -118,7 +118,7 @@
                 </div>
             </aside>
 
-            <section class="relative">
+            <section class="relative min-w-0">
                 <div class="absolute -inset-2 bg-white/10 blur-2xl rounded-[3rem]"></div>
 
                 <div
