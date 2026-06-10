@@ -14,6 +14,7 @@ export default defineConfig({
         'resources/css/app.css',
         'resources/js/app.js',
         'resources/js/categories.js',
+        'resources/js/menu-plants.js',
         'resources/js/garden.js',
         'resources/js/scanner.js',
         'resources/js/tips.js',
