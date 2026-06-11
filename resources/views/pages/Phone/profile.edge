@@ -1,0 +1,426 @@
+@layout()
+@slot('title')
+<title>Plant Bud - Profile</title>
+@endslot
+
+@let(displayName = accountProfile?.displayName || user.fullName || user.username)
+@let(publicDisplayName = roleProfileKind === 'nursery' && roleProfile?.nurseryName ? roleProfile.nurseryName : displayName)
+@let(profileBio = roleProfileKind === 'gardener' && roleProfile?.bio ? roleProfile.bio : (roleProfileKind === 'nursery' && roleProfile?.description ? roleProfile.description : accountProfile?.bio))
+@let(avatarUrl = accountProfile?.avatarUrl || user.profilePicture)
+@let(bannerUrl = accountProfile?.bannerUrl)
+@let(memberSince = user.createdAt ? user.createdAt.toFormat('LLL yyyy') : 'Recently')
+
+<div class="relative z-10 min-h-dvh overflow-hidden bg-[#416543] text-[#113e14]">
+  <div class="fixed inset-0 pointer-events-none">
+    <img src="/resources/images/welcome/header3.png" alt="" class="h-full w-full object-cover opacity-25">
+    <div class="absolute inset-0 bg-gradient-to-b from-[#113e14]/80 via-[#416543]/80 to-[#416543]"></div>
+    <div class="absolute left-10 top-24 h-72 w-72 rounded-full bg-[#ebe3a7]/10 blur-3xl"></div>
+    <div class="absolute bottom-10 right-10 h-96 w-96 rounded-full bg-white/10 blur-3xl"></div>
+  </div>
+
+  @!component('components/app-navbar', {
+    section: 'Profile',
+    active: 'profile',
+    maxWidth: 'max-w-[min(1500px,calc(100vw-2rem))]',
+    avatarUrl,
+    avatarInitial,
+    displayName: publicDisplayName,
+    roleLabel: user.role,
+    planLabel: accountProfile.planLabel,
+  })
+
+  <main class="relative z-10 mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))] px-4 pb-16 pt-4 sm:px-5 lg:px-10">
+    @if(flashMessages.get('success'))
+      <div class="mb-5 rounded-[1.5rem] border border-white/10 bg-white/15 px-5 py-4 text-sm font-bold text-[#ebe3a7] shadow-xl backdrop-blur-2xl">
+        {{ flashMessages.get('success') }}
+      </div>
+    @endif
+    @if(flashMessages.get('profileError'))
+      <div class="mb-5 rounded-[1.5rem] border border-red-200/30 bg-red-950/35 px-5 py-4 text-sm font-bold text-red-50 shadow-xl backdrop-blur-2xl">
+        {{ flashMessages.get('profileError') }}
+      </div>
+    @endif
+
+    <section class="{{ roleProfileKind === 'nursery' ? 'nursery-profile-hero' : '' }} isolate overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/10 shadow-[0_30px_90px_rgba(0,0,0,0.22)] backdrop-blur-3xl">
+      <div class="relative h-52 overflow-hidden sm:h-64 lg:h-72">
+        @if(bannerUrl)
+          <img src="{{ bannerUrl }}" alt="" class="absolute inset-0 block h-full max-h-full w-full object-cover">
+        @else
+          <div class="absolute inset-0 bg-[#f7f6ea]"></div>
+        @endif
+      </div>
+
+      <div class="px-6 pb-8 pt-6 sm:px-8 sm:pt-8">
+        <div class="grid gap-7 lg:grid-cols-[180px_minmax(0,1fr)] lg:items-center">
+          <div class="relative mx-auto h-32 w-32 sm:h-40 sm:w-40 lg:mx-0">
+            <div class="{{ roleProfileKind === 'nursery' ? 'nursery-profile-avatar-ring' : '' }} absolute -inset-1 rounded-full bg-[#ebe3a7] shadow-[0_18px_55px_rgba(0,0,0,0.28)]"></div>
+            @if(avatarUrl)
+              <img src="{{ avatarUrl }}" alt="" class="{{ roleProfileKind === 'nursery' ? 'nursery-profile-avatar' : '' }} relative h-full w-full rounded-full border-4 border-white object-cover">
+            @else
+              <div class="{{ roleProfileKind === 'nursery' ? 'nursery-profile-avatar' : '' }} relative flex h-full w-full items-center justify-center rounded-full border-4 border-white bg-[#113e14] text-5xl font-black text-[#ebe3a7] shadow-inner sm:text-6xl">
+                {{ avatarInitial }}
+              </div>
+            @endif
+          </div>
+
+          <div class="min-w-0 text-center lg:text-left">
+            <div class="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
+              <div class="min-w-0">
+                <div class="flex flex-wrap items-center justify-center gap-2 lg:justify-start">
+                  <span class="profile-badge profile-badge--role">{{ user.role }}</span>
+                  @if(accountProfile?.isPremium)
+                    <span class="profile-badge profile-badge--premium">Premium</span>
+                  @endif
+                </div>
+                <h1 class="mt-3 break-words text-4xl font-black leading-tight text-white lg:text-5xl">{{ publicDisplayName }}</h1>
+                <p class="mt-2 text-base font-bold text-[#ebe3a7]">{{ '@' + user.username }}</p>
+                <p class="mx-auto mt-4 max-w-2xl text-sm font-semibold leading-7 text-white/82 lg:mx-0">
+                  {{ profileBio || 'This profile is ready. Add a description from settings to tell the community what you grow, care for, or sell.' }}
+                </p>
+              </div>
+
+              <div class="mx-auto flex w-full max-w-sm flex-col gap-3 lg:mx-0 xl:w-72 xl:shrink-0">
+                <a href="/profile/settings" class="flex min-h-12 w-full items-center justify-center rounded-full bg-[#ebe3a7] px-6 py-3 text-sm font-black text-[#113e14] shadow-lg transition hover:-translate-y-0.5 hover:bg-[#dca15d]">
+                  Edit profile
+                </a>
+                @if(roleProfileKind === 'nursery')
+                  <a href="#nursery-catalog" class="flex min-h-12 w-full items-center justify-center rounded-full border border-white/18 bg-white/10 px-6 py-3 text-sm font-black text-white backdrop-blur-xl transition hover:-translate-y-0.5 hover:bg-white/18">
+                    View storefront
+                  </a>
+                @endif
+                @if(roleProfileKind === 'gardener')
+                  <form method="POST" action="/profile/availability" class="rounded-full border border-white/12 bg-white/10 p-1.5 backdrop-blur-xl">
+                    {{ csrfField() }}
+                    <div class="grid grid-cols-2 gap-1.5">
+                      <button type="submit" name="is_available" value="1" class="min-h-10 rounded-full px-3 text-xs font-black transition {{ roleProfile?.isAvailable ? 'bg-[#ebe3a7] text-[#113e14] shadow-md' : 'text-white/75 hover:bg-white/10' }}">
+                        Available
+                      </button>
+                      <button type="submit" name="is_available" value="0" class="min-h-10 rounded-full px-3 text-xs font-black transition {{ !roleProfile?.isAvailable ? 'bg-[#dca15d] text-[#113e14] shadow-md' : 'text-white/75 hover:bg-white/10' }}">
+                        Unavailable
+                      </button>
+                    </div>
+                  </form>
+                @endif
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 grid overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/10 text-center text-white sm:grid-cols-4">
+          <div class="p-4">
+            <p class="text-2xl font-black">{{ stats.posts }}</p>
+            <p class="text-[0.68rem] font-black uppercase tracking-[0.14em] text-[#ebe3a7]">Posts</p>
+          </div>
+          <button type="button" class="border-white/10 p-4 transition hover:bg-white/10 sm:border-l" data-relations-open="followers">
+            <p class="text-2xl font-black">{{ stats.followers }}</p>
+            <p class="text-[0.68rem] font-black uppercase tracking-[0.14em] text-[#ebe3a7]">Followers</p>
+          </button>
+          <button type="button" class="border-white/10 p-4 transition hover:bg-white/10 sm:border-l" data-relations-open="following">
+            <p class="text-2xl font-black" data-following-count>{{ stats.following }}</p>
+            <p class="text-[0.68rem] font-black uppercase tracking-[0.14em] text-[#ebe3a7]">Following</p>
+          </button>
+          <button type="button" class="border-white/10 p-4 transition hover:bg-white/10 sm:border-l" data-relations-open="friends">
+            <p class="text-2xl font-black" data-friends-count>{{ stats.friends }}</p>
+            <p class="text-[0.68rem] font-black uppercase tracking-[0.14em] text-[#ebe3a7]">Friends</p>
+          </button>
+        </div>
+
+        <div class="mt-5 flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs font-bold text-white/65 lg:justify-start">
+          @if(accountProfile?.location)
+            <span>{{ accountProfile.location }}</span>
+          @endif
+          <span>Member since {{ memberSince }}</span>
+          <span>{{ stats.reliability }}% profile complete</span>
+        </div>
+      </div>
+    </section>
+
+    @if(roleProfileKind === 'gardener' || roleProfileKind === 'nursery')
+      <section class="{{ roleProfileKind === 'nursery' ? 'nursery-profile-panel' : '' }} mt-6 overflow-hidden rounded-[2.25rem] border border-white/25 bg-[#ebe3a7]/95 text-[#113e14] shadow-[0_24px_70px_rgba(0,0,0,0.18)]">
+        <div class="flex flex-col gap-5 border-b border-[#416543]/12 px-6 py-6 sm:flex-row sm:items-center sm:justify-between lg:px-8">
+          <div>
+            <p class="text-xs font-black uppercase tracking-[0.2em] text-[#416543]">
+              {{ roleProfileKind === 'gardener' ? 'Gardener profile' : 'Nursery profile' }}
+            </p>
+            <h2 class="mt-2 text-3xl font-black">
+              {{ roleProfileKind === 'gardener' ? (roleProfile?.headline || 'Gardening professional') : (roleProfile?.nurseryName || publicDisplayName) }}
+            </h2>
+          </div>
+          <div class="flex flex-wrap items-center gap-3">
+            <span class="rounded-full bg-white/75 px-4 py-2 text-sm font-black text-[#416543]">{{ profileRating.averageText }} / 5 · {{ profileRating.count }} reviews</span>
+            <span class="rounded-full bg-[#113e14] px-4 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#ebe3a7]">
+              @if(roleProfileKind === 'gardener')
+                {{ roleProfile?.isAvailable ? 'Available' : 'Paused' }}
+              @else
+                {{ roleProfile?.isActive ? 'Open profile' : 'Paused profile' }}
+              @endif
+            </span>
+          </div>
+        </div>
+
+        <div class="{{ roleProfileKind === 'nursery' ? 'gap-4 bg-transparent p-5 lg:p-7' : 'gap-px bg-[#416543]/12' }} grid md:grid-cols-2 xl:grid-cols-4">
+          <div class="{{ roleProfileKind === 'nursery' ? 'rounded-[1.75rem] border border-white/70 bg-white/62 shadow-sm' : 'bg-[#ebe3a7]' }} p-6">
+            <p class="text-xs font-black uppercase tracking-[0.14em] text-[#416543]">{{ roleProfileKind === 'gardener' ? 'Service area' : 'Location' }}</p>
+            <p class="mt-3 text-base font-black leading-6">
+              @if(roleProfileKind === 'gardener')
+                {{ roleProfile?.serviceArea || accountProfile?.location || 'Pending' }}
+              @else
+                {{ roleProfile?.address || roleProfile?.city || accountProfile?.location || 'Pending' }}
+              @endif
+            </p>
+          </div>
+          <div class="{{ roleProfileKind === 'nursery' ? 'rounded-[1.75rem] border border-white/70 bg-white/62 shadow-sm' : 'bg-[#ebe3a7]' }} p-6">
+            <p class="text-xs font-black uppercase tracking-[0.14em] text-[#416543]">{{ roleProfileKind === 'gardener' ? 'Schedule' : 'Opening hours' }}</p>
+            <p class="mt-3 whitespace-pre-line text-sm font-bold leading-6 text-[#416543]">{{ roleProfileKind === 'gardener' ? (roleProfile?.availabilitySchedule || 'Pending') : (roleProfile?.openingHours || 'Pending') }}</p>
+          </div>
+          <div class="{{ roleProfileKind === 'nursery' ? 'rounded-[1.75rem] border border-white/70 bg-white/62 shadow-sm' : 'bg-[#ebe3a7]' }} p-6">
+            <p class="text-xs font-black uppercase tracking-[0.14em] text-[#416543]">Contact</p>
+            <p class="mt-3 text-sm font-black">{{ roleProfile?.publicPhone || user.phone || 'Pending phone' }}</p>
+            @if(roleProfileKind === 'nursery')
+              <p class="mt-2 break-words text-sm font-bold text-[#416543]">{{ roleProfile?.publicEmail || user.email }}</p>
+            @endif
+          </div>
+          <div class="{{ roleProfileKind === 'nursery' ? 'rounded-[1.75rem] border border-white/70 bg-white/62 shadow-sm' : 'bg-[#ebe3a7]' }} p-6">
+            <p class="text-xs font-black uppercase tracking-[0.14em] text-[#416543]">Payment methods</p>
+            <div class="mt-3 flex flex-wrap gap-2">
+              @each(method in paymentMethods)
+                <span class="rounded-full bg-[#416543] px-3 py-1.5 text-xs font-black text-white">{{ method }}</span>
+              @else
+                <span class="text-sm font-bold text-[#416543]">Pending</span>
+              @end
+            </div>
+          </div>
+        </div>
+
+        <div class="px-6 py-6 lg:px-8">
+          <p class="text-xs font-black uppercase tracking-[0.14em] text-[#416543]">Services</p>
+          <div class="mt-3 flex flex-wrap gap-2">
+            @each(service in profileServices)
+              <span class="rounded-full bg-white px-4 py-2 text-sm font-black text-[#416543] shadow-sm">{{ service }}</span>
+            @else
+              <p class="text-sm font-bold text-[#416543]">Services are ready to be added from settings.</p>
+            @end
+          </div>
+        </div>
+      </section>
+
+      @if(roleProfileKind === 'nursery')
+        @!component('components/nursery-catalog', {
+          categories: catalogCategories,
+          products: catalogProducts,
+          manageHref: '/profile/settings#catalog-settings',
+          sectionId: 'nursery-catalog',
+          className: 'mt-6 rounded-[2.5rem] bg-[#f5f1d6] p-6 shadow-[0_24px_70px_rgba(0,0,0,0.18)] sm:p-8'
+        })
+      @endif
+
+      <section class="mt-6 rounded-[2rem] border border-white/10 bg-white/12 p-6 text-white shadow-xl backdrop-blur-2xl">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p class="text-sm font-black uppercase tracking-[0.18em] text-[#ebe3a7]">Reviews</p>
+            <h2 class="mt-2 text-2xl font-black">Community trust</h2>
+          </div>
+          <span class="rounded-full bg-white/10 px-4 py-2 text-sm font-black text-[#ebe3a7]">
+            {{ profileRating.averageText }} / 5
+          </span>
+        </div>
+
+        <div class="mt-5 grid gap-4 md:grid-cols-3">
+          @each(review in profileReviews)
+            <article class="rounded-2xl bg-white/10 p-4">
+              <div class="flex items-center justify-between gap-3">
+                <p class="font-black">{{ review.reviewerName || 'Plant Bud user' }}</p>
+                <span class="rounded-full bg-[#ebe3a7] px-3 py-1 text-xs font-black text-[#113e14]">{{ review.rating }}/5</span>
+              </div>
+              <p class="mt-3 line-clamp-4 text-sm font-semibold leading-6 text-white/75">
+                {{ review.comment || 'No written comment yet.' }}
+              </p>
+            </article>
+          @else
+            <div class="rounded-2xl border border-dashed border-white/20 p-5 text-sm font-semibold leading-6 text-white/75 md:col-span-3">
+              Reviews will appear here once clients rate this profile.
+            </div>
+          @end
+        </div>
+      </section>
+    @endif
+
+    <section class="mt-6 grid gap-6 lg:grid-cols-[0.75fr_1.25fr]">
+      <aside class="space-y-6">
+        <div class="rounded-[2rem] border border-white/10 bg-white/12 p-6 text-white shadow-xl backdrop-blur-2xl">
+          <p class="text-sm font-black uppercase tracking-[0.18em] text-[#ebe3a7]">Linked accounts</p>
+          <div class="mt-5 space-y-3">
+            @each(link in accountLinks)
+              <a href="{{ link.url }}" target="_blank" rel="noreferrer" class="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm font-bold transition hover:-translate-y-0.5 hover:bg-white/20">
+                <span>{{ link.label }}</span>
+                <span class="text-xs font-black uppercase tracking-[0.16em] text-[#ebe3a7]">Open</span>
+              </a>
+            @else
+              <p class="rounded-2xl border border-dashed border-white/20 px-4 py-4 text-sm font-semibold text-white/75">
+                No linked accounts yet.
+              </p>
+            @end
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-3 rounded-[2rem] border border-white/10 bg-white/12 p-4 text-center text-white shadow-xl backdrop-blur-2xl sm:grid-cols-3">
+          <div>
+            <p class="text-2xl font-black">{{ stats.likes }}</p>
+            <p class="text-[0.68rem] font-bold uppercase tracking-[0.12em] text-[#ebe3a7]">Likes</p>
+          </div>
+          <div>
+            <p class="text-2xl font-black">{{ stats.favorites }}</p>
+            <p class="text-[0.68rem] font-bold uppercase tracking-[0.12em] text-[#ebe3a7]">Saved</p>
+          </div>
+          <div>
+            <p class="text-2xl font-black">{{ stats.comments }}</p>
+            <p class="text-[0.68rem] font-bold uppercase tracking-[0.12em] text-[#ebe3a7]">Comments</p>
+          </div>
+        </div>
+      </aside>
+
+      <section class="rounded-[2rem] border border-white/25 bg-white/82 p-5 text-[#113e14] shadow-[0_24px_70px_rgba(0,0,0,0.16)] backdrop-blur-2xl">
+        <div class="flex items-center justify-between gap-4 px-1 pb-5">
+          <div>
+            <p class="text-xs font-black uppercase tracking-[0.18em] text-[#416543]">Profile feed</p>
+            <h2 class="mt-1 text-2xl font-black text-[#113e14]">Posts</h2>
+          </div>
+          <a href="/community" class="rounded-full bg-[#dca15d] px-4 py-2 text-sm font-black text-[#113e14] shadow-sm transition hover:bg-[#ebe3a7]">
+            Community
+          </a>
+        </div>
+
+        @if(recentPosts.length)
+          <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
+            @each(post in recentPosts)
+              <button
+                type="button"
+                class="group relative aspect-square overflow-hidden rounded-[1.35rem] border border-[#416543]/15 bg-[#ebe3a7]/45 text-left shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[#dca15d]/70 hover:shadow-[0_18px_45px_rgba(17,62,20,0.18)] focus:outline-none focus:ring-2 focus:ring-[#dca15d]/70"
+                data-profile-post-preview
+                data-post-body="{{ post.body }}"
+                data-post-media="{{ post.mediaUrl || '' }}"
+                data-post-created="{{ post.createdAtHuman }}"
+                data-post-author="{{ '@' + user.username }}"
+                data-post-kind="{{ post.kindLabel }}"
+                data-post-likes="{{ post.likes }}"
+                data-post-favorites="{{ post.favorites }}"
+                data-post-comments="{{ post.comments }}"
+                data-post-poll="{{ post.pollJson }}"
+                data-post-delete-action="/community/posts/{{ post.id }}/delete"
+              >
+                @if(post.mediaUrl)
+                  <img src="{{ post.mediaUrl }}" alt="" class="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]">
+                  <div class="absolute inset-0 bg-gradient-to-t from-[#113e14]/78 via-[#113e14]/10 to-transparent opacity-75 transition group-hover:opacity-95"></div>
+                  <span class="absolute left-4 top-4 rounded-full bg-white/82 px-3 py-1 text-[0.68rem] font-black uppercase tracking-[0.12em] text-[#113e14]">
+                    {{ post.kindLabel }}
+                  </span>
+                  <p class="absolute inset-x-4 bottom-4 line-clamp-3 text-sm font-bold leading-5 text-white">
+                    {{ post.body }}
+                  </p>
+                @else
+                  <div class="flex h-full w-full flex-col justify-between p-5">
+                    <span class="w-fit rounded-full bg-white/75 px-3 py-1 text-[0.68rem] font-black uppercase tracking-[0.12em] text-[#416543]">
+                      {{ post.kindLabel }}
+                    </span>
+                    <p class="line-clamp-6 text-sm font-black leading-6 text-[#113e14]">{{ post.body }}</p>
+                    <span class="text-xs font-black text-[#416543]">{{ post.likes }} likes - {{ post.comments }} comments</span>
+                  </div>
+                @endif
+              </button>
+            @end
+          </div>
+        @else
+          <div class="flex min-h-80 items-center justify-center rounded-[1.5rem] border border-dashed border-[#416543]/40 bg-white/45 p-8 text-center">
+            <div class="max-w-sm">
+              <img src="/resources/images/homepagee/comunity.png" alt="" class="mx-auto h-24 w-24 object-contain">
+              <h3 class="mt-5 text-2xl font-black text-[#113e14]">No posts yet</h3>
+              <p class="mt-2 text-sm font-semibold leading-6 text-[#416543]">
+                Your future community posts will appear here as a clean profile grid.
+              </p>
+            </div>
+          </div>
+        @endif
+      </section>
+    </section>
+  </main>
+
+  @!component('components/profile-relations-modal', {
+    relations: profileRelations,
+    showFriends: true,
+    canManage: true
+  })
+
+  <div class="fixed inset-0 z-50 hidden items-center justify-center bg-[#113e14]/82 p-5 backdrop-blur-xl" data-profile-post-modal aria-hidden="true">
+    <div class="relative grid max-h-[90vh] w-full max-w-3xl overflow-hidden rounded-[2rem] border border-white/20 bg-white text-[#113e14] shadow-[0_30px_90px_rgba(0,0,0,0.35)] md:grid-cols-[0.95fr_1.05fr]">
+      <button type="button" class="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-xl font-black text-[#113e14] shadow-sm transition hover:bg-[#ebe3a7]" data-profile-post-modal-close aria-label="Close post preview">
+        x
+      </button>
+
+      <div class="min-h-72 bg-[#416543]/10">
+        <img src="" alt="" class="hidden h-full max-h-[90vh] w-full object-cover" data-profile-post-modal-image>
+        <div class="flex h-full min-h-72 items-center justify-center p-8 text-center" data-profile-post-modal-empty>
+          <div>
+            <p class="text-xs font-black uppercase tracking-[0.18em] text-[#416543]">Text post</p>
+            <p class="mt-3 text-3xl font-black text-[#113e14]">Plant Bud</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex max-h-[90vh] flex-col overflow-y-auto p-6">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="rounded-full bg-[#ebe3a7] px-3 py-1 text-[0.68rem] font-black uppercase tracking-[0.14em] text-[#113e14]" data-profile-post-modal-kind>Post</span>
+          <span class="text-xs font-black uppercase tracking-[0.16em] text-[#416543]" data-profile-post-modal-meta>Recently</span>
+        </div>
+        <p class="mt-2 text-sm font-black text-[#dca15d]" data-profile-post-modal-author></p>
+
+        <div class="mt-5 grid grid-cols-1 gap-2 sm:grid-cols-3">
+          <div class="rounded-2xl bg-[#416543]/8 p-3">
+            <p class="text-lg font-black text-[#113e14]" data-profile-post-modal-likes>0</p>
+            <p class="text-[0.65rem] font-black uppercase tracking-[0.12em] text-[#416543]">Likes</p>
+          </div>
+          <div class="rounded-2xl bg-[#416543]/8 p-3">
+            <p class="text-lg font-black text-[#113e14]" data-profile-post-modal-favorites>0</p>
+            <p class="text-[0.65rem] font-black uppercase tracking-[0.12em] text-[#416543]">Saves</p>
+          </div>
+          <div class="rounded-2xl bg-[#416543]/8 p-3">
+            <p class="text-lg font-black text-[#113e14]" data-profile-post-modal-comments>0</p>
+            <p class="text-[0.65rem] font-black uppercase tracking-[0.12em] text-[#416543]">Comments</p>
+          </div>
+        </div>
+
+        <div class="mt-5 hidden rounded-[1.5rem] bg-[#416543]/8 p-4" data-profile-post-modal-poll>
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <p class="text-[0.68rem] font-black uppercase tracking-[0.14em] text-[#416543]">Poll results</p>
+              <h3 class="mt-1 text-lg font-black leading-6 text-[#113e14]" data-profile-post-modal-poll-question></h3>
+            </div>
+            <span class="rounded-full bg-[#ebe3a7] px-3 py-1 text-[0.68rem] font-black uppercase tracking-[0.12em] text-[#113e14]" data-profile-post-modal-poll-total>0 votes</span>
+          </div>
+          <div class="mt-4 space-y-3" data-profile-post-modal-poll-options></div>
+        </div>
+
+        <p class="mt-5 whitespace-pre-line text-base font-bold leading-7 text-[#113e14]" data-profile-post-modal-body></p>
+
+        <form method="POST" action="" class="mt-8 hidden" data-profile-post-delete-form>
+          {{ csrfField() }}
+          <button type="button" class="w-full rounded-full bg-[#dca15d] px-5 py-3 text-sm font-black text-[#113e14] shadow-lg transition hover:bg-[#ebe3a7]" data-profile-post-delete-open>
+            Delete post
+          </button>
+          <div class="mt-4 hidden rounded-[1.5rem] border border-[#dca15d]/40 bg-[#ebe3a7]/55 p-4" data-profile-post-delete-confirm>
+            <p class="text-sm font-black text-[#113e14]">Delete this post?</p>
+            <p class="mt-1 text-xs font-bold leading-5 text-[#416543]">This action removes it from your profile and community feed.</p>
+            <div class="mt-4 flex flex-wrap gap-2">
+              <button type="submit" class="rounded-full bg-[#dca15d] px-4 py-2 text-xs font-black text-[#113e14] shadow-sm transition hover:bg-[#ebe3a7]">
+                Yes, delete
+              </button>
+              <button type="button" class="rounded-full bg-white px-4 py-2 text-xs font-black text-[#113e14] shadow-sm transition hover:bg-[#ebe3a7]" data-profile-post-delete-cancel>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+@end

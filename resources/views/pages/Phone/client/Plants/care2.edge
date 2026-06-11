@@ -1,0 +1,433 @@
+@layout()
+@slot('title')
+<title>Horticultural Care</title>
+@endslot
+
+<div class="relative text-[#113e14]">
+  @!component('components/header', {
+  title: "Taking care of plants is care of yourself",
+  text: "Sustainable outdoor solutions designed to inspire peaceful spaces and healthier living.",
+  imageBg:'bg-[url(/resources/images/care/bg_hor.jpg)]',
+  catalogHref: '/horticultural',
+  careHref: '/care2',
+  })
+  <section class="relative mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))] px-4 pb-16 pt-20 sm:px-5 lg:px-10">
+    <div class="relative z-10 mx-auto w-full grid grid-cols-1 gap-14 lg:grid-cols-2 items-center">
+
+
+      <div class="relative group">
+
+        <div class="relative overflow-hidden rounded-[42px] border border-[#ebe3a7]/38 shadow-2xl">
+          <img decoding="async" src="/resources/images/care/radish.jpg" alt="Succulent plants"
+            class="homepage-hero-media h-[320px] w-full object-cover transition duration-700 group-hover:scale-105 sm:h-[420px] lg:h-[620px]">
+          <div class="absolute inset-0 bg-[#113e14]/35"></div>
+        </div>
+      </div>
+
+
+      <div
+        class="homepage-lively-card relative rounded-[34px] border border-[#ebe3a7]/48 bg-[#ebe3a7]/86 p-8 shadow-xl backdrop-blur-2xl sm:p-10 lg:p-12">
+        <div
+          class="inline-flex items-center gap-3 rounded-full bg-[#113e14] px-5 py-2 text-sm font-black tracking-wide text-[#ebe3a7] shadow-sm mb-8">
+
+          <div class="w-2.5 h-2.5 rounded-full bg-[#a8b841]"></div>
+          Learn about:
+        </div>
+        <h2 class="font-abril text-4xl leading-tight text-[#113e14] md:text-5xl mb-8">
+          Essential Care for
+          Horticultural Plants
+        </h2>
+        <div class="text-[#416543] text-lg font-semibold leading-[2rem] mb-10">
+          Vegetable plants are those grown primarily for food, such as vegetables, herbs, and some fruits.
+
+          <br><br>
+
+          Success in vegetable gardening begins with soil
+          preparation and continues with watering, disease control, and harvesting.
+
+        </div>
+
+
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          @!component('components/care/metric-card', {
+          icon: 'resources/images/care/hand.png',
+          title: 'Low Maintenance',
+          text: 'Easy to care for daily',
+          })
+          @!component('components/care/metric-card', {
+          icon: 'resources/images/care/11.png',
+          title: 'Bright Spaces',
+          text: 'Thrives with sunlight',
+          })
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<section class="relative mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))] px-4 pb-16 pt-20 sm:px-5 lg:px-10">
+
+  <div class="relative z-10 mx-auto w-full">
+    <div class="flex items-center justify-center mb-12">
+      <div class="h-[4px] w-20 bg-white/35"></div>
+      <div
+        class="mx-6 px-6 py-2 rounded-full bg-[#ebe3a7] border border-[#ebe3a7]/60 text-[#113e14] tracking-[0.2em] uppercase text-sm font-semibold">
+        Horticultural Plants
+      </div>
+      <div class="h-[4px] w-20 bg-white/35"></div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      @!component('components/img-card', {
+      title: "Carrot",
+      text: "A great source of calcium and folic acid",
+      imageBg: 'resources/images/care/carrots1.jpg'
+      })
+      @!component('components/img-card', {
+      title: "White mustard",
+      text: "Golden colors and an amazing beauty",
+      imageBg: "resources/images/care/white mustard.jpg"
+      })
+      @!component('components/img-card', {
+      title: "Fennel",
+      text: "Excelent for modern decoration",
+      imageBg: "resources/images/care/fennel.jpg"
+      })
+      @!component('components/img-card', {
+      title: "Allium canadense",
+      text: "Fresh and resilient",
+      imageBg: "resources/images/care/Allium_canadense.jpg"
+      })
+    </div>
+    <div class="flex justify-center pt-16">
+      <div class="w-[300px] h-[4px] bg-white/35">
+      </div>
+    </div>
+  </div>
+</section>
+<section class="relative py-20 px-4 overflow-hidden sm:px-5 lg:px-6">
+  <div class="relative z-10 mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))]">
+    <div
+      class="care-focus-panel homepage-lively-card overflow-hidden rounded-[42px] border shadow-xl backdrop-blur-2xl">
+      <div class="grid grid-cols-1 lg:grid-cols-5">
+        <div class="lg:col-span-3 p-8 lg:p-12 flex flex-col justify-center">
+          <div
+            class="inline-flex w-fit items-center gap-3 rounded-full bg-[#113e14] px-4 py-2 text-[#ebe3a7] text-[13px] tracking-[2px] font-semibold mb-6">
+            <div class="w-2.5 h-2.5 rounded-full bg-[#a8b841]"></div>HORTICULTURAL CARE
+          </div>
+          <h2 class="text-4xl lg:text-5xl font-abril text-[#113e14] leading-tight mb-6">Proper Lighting</h2>
+          <div class="text-[#113e14]/78 font-poppins text-[15px] leading-[1.9rem] max-w-xl">
+            Horticultural plants grow best in areas that receive abundant sunlight and good air circulation.
+            Proper lighting helps plants develop strong growth, healthy leaves, and better production of
+            vegetables and fruits. The University of Minnesota explains that healthy growing conditions,
+            including adequate light, are essential for successful plant development.
+            <br><br>
+            Plants grown in shaded areas may develop weak growth and reduced productivity. For this reason,
+            the university recommends placing gardens in open spaces where plants can receive consistent light
+            throughout the day.
+            <br><br>
+            When natural sunlight is limited, healthy plant growth can also be supported by maintaining proper watering,
+            healthy soil, and good growing conditions that allow plants to use available light more efficiently.
+          </div>
+          <div class="flex flex-wrap gap-4 mt-8">
+            <div
+              class="flex items-center gap-4 bg-[#416543]/8 border border-[#416543]/12 rounded-2xl px-4 py-3 hover:bg-[#ebe3a7]/70 transition-all duration-300">
+              <div class="w-11 h-11 rounded-xl bg-[#a8b841]/20 flex items-center justify-center">
+                <img loading="lazy" decoding="async" src="/resources/images/care/11.png" alt="sun icon"
+                  class="w-6 h-6 object-contain">
+              </div>
+              <div>
+                <div class="text-[#113e14] text-sm font-black">Natural Light</div>
+                <div class="text-[#416543] text-[12px] font-semibold">Healthy daily growth</div>
+              </div>
+            </div>
+            <div
+              class="flex items-center gap-4 bg-[#416543]/8 border border-[#416543]/12 rounded-2xl px-4 py-3 hover:bg-[#ebe3a7]/70 transition-all duration-300">
+              <div class="w-11 h-11 rounded-xl bg-[#a8b841]/20 flex items-center justify-center">
+                <img loading="lazy" decoding="async" src="/resources/images/care/ll.png" alt="light icon"
+                  class="w-6 h-6 object-contain">
+              </div>
+              <div>
+                <div class="text-[#113e14] text-sm font-black">Artificial Light</div>
+                <div class="text-[#416543] text-[12px] font-semibold">
+                  Perfect indoors
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="lg:col-span-2 relative h-[260px] sm:h-[340px] lg:h-[380px]">
+          <img loading="lazy" decoding="async" src="/resources/images/care/Curly_parsley.jpg" alt="Plant lighting"
+            class="absolute inset-0 w-full h-full object-cover">
+          <div class="absolute inset-0 bg-[#113e14]/32"></div>
+          <div
+            class="absolute bottom-6 left-6 bg-[#a8b841]/90 backdrop-blur-md border border-[#ebe3a7]/55 rounded-2xl px-5 py-4 shadow-xl">
+            <div class="flex items-center gap-3">
+              <div class="w-11 h-11 rounded-xl bg-[#ebe3a7]/65 flex items-center justify-center">
+                <img loading="lazy" decoding="async" src="/resources/images/care/leaff.png" alt="leaf icon"
+                  class="w-6 h-6">
+              </div>
+              <div>
+                <p class="text-[#113e14] text-sm font-black">8-6 Hours</p>
+                <p class="text-[#416543] text-xs font-semibold">Recommended light exposure</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="w-full py-28 px-4 relative overflow-hidden sm:px-5 lg:px-6">
+  <div class="mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))] relative z-10">
+    <div class="text-center mb-20">
+      <div
+        class="inline-flex items-center gap-3 rounded-full bg-[#ebe3a7]/82 px-6 py-3 text-[#113e14] text-sm tracking-[0.25em] uppercase shadow-lg">
+        Horticultural Care Guide</div>
+      <h2 class="mt-8 font-abril text-5xl leading-tight text-white md:text-6xl">
+        Essential Care Tips
+        <span class="text-[#ebe3a7]">
+          for Horticultural
+        </span>
+      </h2>
+      <p class="mt-6 text-white/80 max-w-3xl mx-auto text-lg leading-relaxed">
+        Learn how to maintain healthy, productive, and thriving horticultural plants with proper growing and care
+        practices.
+      </p>
+    </div>
+    <div class="care-tip-grid grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10">
+      <div class="group relative">
+        <div
+          class="relative h-full bg-[#ebe3a7]/82 border border-[#ebe3a7]/48 rounded-[34px] overflow-hidden shadow-xl backdrop-blur-2xl transition hover:-translate-y-1 duration-300">
+          <div class="relative p-8 pb-6">
+            <div class="flex items-center justify-between mb-8">
+              <div
+                class="w-14 h-14 rounded-2xl bg-[#113e14] text-[#ebe3a7] flex items-center justify-center text-xl font-poppins font-bold shadow-lg">
+                01</div>
+            </div>
+            <h3 class="text-3xl font-poppins font-bold text-[#113e14] leading-tight">Proper Watering
+            </h3>
+          </div>
+          <div class="mx-8 h-[1px] bg-white/20"></div>
+          <div class="p-8">
+            <p class="text-[#416543] font-semibold leading-relaxed mb-6">
+              Watering is essential because plants need water
+              to transport nutrients and maintain their growth.
+            </p>
+            <p class="text-[#113e14]/72 leading-relaxed text-sm">
+              Sandy soils may need watering twice a week, while clay soils or those rich in organic matter retain
+              moisture better and require less watering - They also recommend checking the soil and watering when it is
+              dry two inches below the surface.
+          </div>
+        </div>
+      </div>
+      <div class="group relative">
+        <div
+          class="relative h-full bg-[#ebe3a7]/82 border border-[#ebe3a7]/48 rounded-[34px] overflow-hidden shadow-xl backdrop-blur-2xl transition hover:-translate-y-1 duration-300">
+          <div class="relative p-8 pb-6">
+            <div class="flex items-center justify-between mb-8">
+              <div
+                class="w-14 h-14 rounded-2xl bg-[#113e14] text-[#ebe3a7] flex items-center justify-center text-xl font-poppins font-bold shadow-lg">
+                02</div>
+            </div>
+            <h3 class="text-3xl font-poppins font-bold text-[#113e14] leading-tight">
+              Soil and Nutrition
+            </h3>
+          </div>
+          <div class="mx-8 h-[1px] bg-white/20"></div>
+          <div class="p-8">
+            <p class="text-[#416543] font-semibold leading-relaxed mb-6">
+              It is important to properly prepare the soil and garden area before planting. It's recommend:
+            </p>
+            <p class="text-[#113e14]/72 leading-relaxed text-sm">
+              - Using compost
+              - Conducting soil tests
+              - Using raised beds if drainage is poor,
+              compost improves organic matter and helps the soil retain moisture.
+          </div>
+        </div>
+      </div>
+      <div class="group relative">
+        <div
+          class="relative h-full bg-[#ebe3a7]/82 border border-[#ebe3a7]/48 rounded-[34px] overflow-hidden shadow-xl backdrop-blur-2xl transition hover:-translate-y-1 duration-300">
+          <div class="relative p-8 pb-6">
+            <div class="flex items-center justify-between mb-8">
+              <div
+                class="w-14 h-14 rounded-2xl bg-[#113e14] text-[#ebe3a7] flex items-center justify-center text-xl font-poppins font-bold shadow-lg">
+                03
+              </div>
+            </div>
+            <h3 class="text-3xl font-poppins font-bold text-[#113e14] leading-tight">
+              Fertilization
+            </h3>
+          </div>
+          <div class="mx-8 h-[1px] bg-white/20"></div>
+          <div class="p-8">
+            <p class="text-[#416543] font-semibold leading-relaxed mb-6">
+              The usage of mulch helps retain moisture and reduces water loss. It also protects the roots and helps
+              regulate soil temperature.
+            </p>
+            <p class="text-[#113e14]/72 leading-relaxed text-sm">
+              And when vegetable plants suffer from drought, they may:
+              - Produce small fruits
+              - Stop producing
+              - Become tough or bitterg
+              - Will wither
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="group relative">
+        <div
+          class="relative h-full bg-[#ebe3a7]/82 border border-[#ebe3a7]/48 rounded-[34px] overflow-hidden shadow-xl backdrop-blur-2xl transition hover:-translate-y-1 duration-300">
+          <div class="relative p-8 pb-6">
+            <div class="flex items-center justify-between mb-8">
+              <div
+                class="w-14 h-14 rounded-2xl bg-[#113e14] text-[#ebe3a7] flex items-center justify-center text-xl font-poppins font-bold shadow-lg">
+                04
+              </div>
+            </div>
+            <h3 class="text-3xl font-black text-[#113e14] leading-tight">
+              Harvesting and storage
+            </h3>
+          </div>
+          <div class="mx-8 h-[1px] bg-white/20"></div>
+          <div class="p-8">
+            <p class="text-[#416543] font-semibold leading-relaxed mb-6">
+              Harvesting is one of the most important process, so storagin well is an important part to enjoy of the
+              escence of this plants
+            </p>
+            <p class="text-[#113e14]/72 leading-relaxed text-sm">
+              We recommend to:
+              - Harvesting
+              - Storage
+              - Preservation
+              - Seed saving
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="group relative md:col-span-2 xl:col-span-2">
+        <div
+          class="relative h-full bg-[#ebe3a7]/82 border border-[#ebe3a7]/48 rounded-[34px] overflow-hidden shadow-xl backdrop-blur-2xl transition hover:-translate-y-1 duration-300">
+          <div class="relative p-8 pb-6">
+            <div class="flex items-center justify-between mb-8">
+              <div
+                class="w-14 h-14 rounded-2xl bg-[#113e14] text-[#ebe3a7] flex items-center justify-center text-xl font-poppins font-bold shadow-lg">
+                05
+              </div>
+            </div>
+            <h3 class="text-3xl font-black text-[#113e14] leading-tight">
+              Pests and Diseases
+            </h3>
+          </div>
+          <div class="mx-8 h-[1px] bg-white/20"></div>
+          <div class="p-8">
+            <p class="text-[#416543] font-semibold leading-relaxed mb-6">
+              When caring for succulents, it's important
+              to keep in mind that pests aren't very common,
+              but they can still appear:
+              - mealybugs
+              - scale insects
+              - mites
+            </p>
+            <p class="text-[#113e14]/72 leading-relaxed text-sm">
+              To control them, they recommend:
+              - wiping away pests with cotton and alcohol
+              - maintaining good lighting
+              - avoiding overwatering
+              - constantly monitoring the plants
+              <br><br>
+              It is also important to know that excessive
+              humidity can cause mold and rot.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<hr class="mx-10 border-t-2 border-white/20 mb-24">
+<div class="mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))] px-4 pb-24 sm:px-5 lg:px-6">
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+    <div class="relative group">
+      <div class="absolute -top-5 -left-5 w-full h-full border-2 border-[#113e14] rounded-[2.5rem]">
+      </div>
+      <div class="relative overflow-hidden rounded-[2.5rem] shadow-[0_25px_70px_rgba(0,0,0,0.25)]">
+        <img loading="lazy" decoding="async" src="/resources/images/care/vvvv (1).jpg" alt=""
+          class="w-full h-[650px] object-cover group-hover:scale-105 transition duration-700">
+        <div class="absolute inset-0 bg-[#113e14]/35">
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="text-[#113e14] uppercase tracking-[0.3em] text-sm font-bold mb-5">
+        Horticultural Plant Care
+      </div>
+      <h2 class="text-5xl md:text-6xl font-black text-white leading-tight mb-8">
+        General Tips for
+        <span class="text-[#ebe3a7]">
+          Caring for Horticultural
+        </span>
+      </h2>
+      <div class="space-y-5 text-white/85 text-lg leading-relaxed">
+        <p>
+          The most important steps for caring for your horticultural plants are:
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="flex items-center gap-3">
+            <div class="w-3 h-3 rounded-full bg-[#113e14]"></div>
+            <p>Properly prepare the soil before planting</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-3 h-3 rounded-full bg-[#113e14]"></div>
+            <p>Use compost and organic matter</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-3 h-3 rounded-full bg-[#113e14]"></div>
+            <p>Check the soil before watering</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-3 h-3 rounded-full bg-[#113e14]"></div>
+            <p>Water slowly near the roots</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-3 h-3 rounded-full bg-[#113e14]"></div>
+            <p>Avoid excess water and moisture</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-3 h-3 rounded-full bg-[#113e14]"></div>
+            <p>Control weeds regularly</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-3 h-3 rounded-full bg-[#113e14]"></div>
+            <p>Check for pests and diseases frequently</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-3 h-3 rounded-full bg-[#113e14]"></div>
+            <p>Clean and disinfect tools</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-3 h-3 rounded-full bg-[#113e14]"></div>
+            <p>Use well-drained soil</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-3 h-3 rounded-full bg-[#113e14]"></div>
+            <p>Watch for signs of drought</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-3 h-3 rounded-full bg-[#113e14]"></div>
+            <p>Harvest and store crops properly</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-3 h-3 rounded-full bg-[#113e14]"></div>
+            <p>Clean and disinfect tools</p>
+          </div>
+        </div>
+      </div>
+      <button
+        class="mt-10 px-8 py-4 bg-[#dca15d] hover:bg-[#ebe3a7] text-[#113e14] font-bold text-lg rounded-2xl shadow-[0_15px_35px_rgba(0,0,0,0.2)] hover:-translate-y-1 transition-all duration-300">
+        Get a plant
+      </button>
+    </div>
+  </div>
+</div>
+@end

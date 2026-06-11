@@ -27,7 +27,7 @@ export class AccountLinkSchema extends BaseModel {
 }
 
 export class AccountProfileSchema extends BaseModel {
-  static $columns = ['avatarUrl', 'bannerUrl', 'bio', 'createdAt', 'displayName', 'id', 'location', 'premiumRenewsAt', 'premiumStartedAt', 'rewardPoints', 'scannerMonthlyLimit', 'subscriptionPlan', 'updatedAt', 'userId', 'websiteUrl'] as const
+  static $columns = ['avatarUrl', 'bannerUrl', 'bio', 'createdAt', 'displayName', 'id', 'location', 'notificationsClearedAt', 'notificationsSeenAt', 'premiumRenewsAt', 'premiumStartedAt', 'rewardPoints', 'scannerMonthlyLimit', 'subscriptionPlan', 'updatedAt', 'userId', 'websiteUrl'] as const
   $columns = AccountProfileSchema.$columns
   @column()
   declare avatarUrl: string | null
@@ -43,6 +43,10 @@ export class AccountProfileSchema extends BaseModel {
   declare id: number
   @column()
   declare location: string | null
+  @column.dateTime()
+  declare notificationsClearedAt: DateTime | null
+  @column.dateTime()
+  declare notificationsSeenAt: DateTime | null
   @column.dateTime()
   declare premiumRenewsAt: DateTime | null
   @column.dateTime()
@@ -440,7 +444,7 @@ export class ProfileReviewSchema extends BaseModel {
 }
 
 export class ServiceRequestSchema extends BaseModel {
-  static $columns = ['address', 'arrivalWindowEnd', 'arrivalWindowStart', 'budget', 'clientConfirmedAt', 'clientUserId', 'completedAt', 'createdAt', 'discountAmount', 'discountPercent', 'finalAmount', 'gardenerConfirmedAt', 'gardenerProfileId', 'gardenerResponse', 'googlePlaceId', 'heldAmount', 'id', 'latitude', 'locationRemovedAt', 'longitude', 'notes', 'nurseryProfileId', 'paymentBrand', 'paymentHeldAt', 'paymentLastFour', 'paymentMethod', 'paymentRefundedAt', 'paymentReleasedAt', 'paymentStatus', 'pointsRedeemed', 'pointsRefundedAt', 'refundedAmount', 'releasedAmount', 'rewardAwardedAt', 'rewardPointsAwarded', 'scheduledFor', 'serviceType', 'status', 'updatedAt', 'verifiedAt'] as const
+  static $columns = ['address', 'arrivalWindowEnd', 'arrivalWindowStart', 'budget', 'clientConfirmedAt', 'clientHiddenAt', 'clientUserId', 'completedAt', 'createdAt', 'discountAmount', 'discountPercent', 'finalAmount', 'gardenerConfirmedAt', 'gardenerHiddenAt', 'gardenerProfileId', 'gardenerResponse', 'googlePlaceId', 'heldAmount', 'id', 'latitude', 'locationRemovedAt', 'longitude', 'notes', 'nurseryProfileId', 'paymentBrand', 'paymentHeldAt', 'paymentLastFour', 'paymentMethod', 'paymentRefundedAt', 'paymentReleasedAt', 'paymentStatus', 'pointsRedeemed', 'pointsRefundedAt', 'refundedAmount', 'releasedAmount', 'rewardAwardedAt', 'rewardPointsAwarded', 'scheduledFor', 'serviceType', 'status', 'updatedAt', 'verifiedAt'] as const
   $columns = ServiceRequestSchema.$columns
   @column()
   declare address: string | null
@@ -452,6 +456,8 @@ export class ServiceRequestSchema extends BaseModel {
   declare budget: number | null
   @column.dateTime()
   declare clientConfirmedAt: DateTime | null
+  @column.dateTime()
+  declare clientHiddenAt: DateTime | null
   @column()
   declare clientUserId: number
   @column.dateTime()
@@ -466,6 +472,8 @@ export class ServiceRequestSchema extends BaseModel {
   declare finalAmount: number | null
   @column.dateTime()
   declare gardenerConfirmedAt: DateTime | null
+  @column.dateTime()
+  declare gardenerHiddenAt: DateTime | null
   @column()
   declare gardenerProfileId: number | null
   @column()
@@ -522,6 +530,19 @@ export class ServiceRequestSchema extends BaseModel {
   declare updatedAt: DateTime | null
   @column.dateTime()
   declare verifiedAt: DateTime | null
+}
+
+export class SessionSchema extends BaseModel {
+  static $columns = ['data', 'expiresAt', 'id', 'userId'] as const
+  $columns = SessionSchema.$columns
+  @column()
+  declare data: string
+  @column.dateTime()
+  declare expiresAt: DateTime
+  @column({ isPrimary: true })
+  declare id: string
+  @column()
+  declare userId: string | null
 }
 
 export class UserSchema extends BaseModel {

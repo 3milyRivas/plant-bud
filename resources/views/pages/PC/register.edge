@@ -3,21 +3,14 @@
 <title>Sign Up</title>
 @endslot
 
-<div class="relative z-10 min-h-screen overflow-hidden flex items-center justify-center px-4 py-8 sm:px-6 lg:px-8">
-  <div class="absolute inset-0">
+<div class="relative z-10 flex h-dvh items-start justify-center overflow-x-hidden overflow-y-auto px-4 py-8 sm:px-6 lg:px-8" data-register-page data-register-frontend="PC">
+  <div class="fixed inset-0">
     <img src="resources/images/welcome/header3.png" class="w-full h-full object-cover" alt="">
     <div class="absolute inset-0 bg-[#113e14]/72"></div>
     <div class="absolute inset-0 bg-gradient-to-br from-[#113e14]/90 via-[#416543]/76 to-[#113e14]/84"></div>
   </div>
 
-  <a href="/" class="absolute top-5 left-5 z-30 group inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-xl border border-white/10 text-[#ebe3a7] text-sm font-semibold shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:bg-[#ebe3a7] hover:text-[#113e14] transition-all duration-300">
-    <svg class="w-4 h-4 group-hover:-translate-x-0.5 transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-      <path d="M15 19l-7-7 7-7"></path>
-    </svg>
-    Back
-  </a>
-
-  <div class="relative z-20 w-full max-w-[min(68rem,calc(100vw-2rem))] mx-auto">
+  <div class="relative z-20 w-full max-w-[min(68rem,calc(100vw-2rem))]" data-register-content>
     <div class="absolute -inset-2 bg-gradient-to-r from-white/8 via-[#ebe3a7]/10 to-white/8 blur-3xl rounded-[2rem] opacity-90"></div>
 
     <div class="auth-card is-alive auth-panel-in relative bg-white/10 backdrop-blur-3xl border border-white/10 rounded-[1.5rem] px-5 py-6 sm:px-6 sm:py-7 md:px-8 md:py-8 shadow-[0_35px_120px_rgba(0,0,0,0.35)] overflow-hidden">

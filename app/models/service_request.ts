@@ -120,6 +120,12 @@ export default class ServiceRequest extends BaseModel {
   @column.dateTime()
   declare rewardAwardedAt: DateTime | null
 
+  @column.dateTime()
+  declare clientHiddenAt: DateTime | null
+
+  @column.dateTime()
+  declare gardenerHiddenAt: DateTime | null
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 

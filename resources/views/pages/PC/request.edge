@@ -221,24 +221,24 @@
               <div class="grid gap-4 sm:grid-cols-2">
               <label class="block sm:col-span-2">
                 <span class="text-xs font-black uppercase tracking-[0.12em] text-white/62">Name on card</span>
-                <input name="cardholder_name" value="{{ old.cardholder_name ?? '' }}" type="text" minlength="3" maxlength="100" autocomplete="cc-name" placeholder="Full name" class="mt-2 min-h-12 w-full rounded-2xl border border-white/14 bg-white/10 px-4 text-sm font-bold text-white outline-none placeholder:text-white/38 focus:border-[#ebe3a7]" data-payment-detail data-cardholder-name>
+                <input name="cardholder_name" value="Plant Bud Demo" type="text" readonly aria-readonly="true" class="mt-2 min-h-12 w-full cursor-not-allowed rounded-2xl border border-white/14 bg-white/10 px-4 text-sm font-bold text-white/78 outline-none" data-payment-detail data-cardholder-name>
               </label>
               <label class="block sm:col-span-2">
                 <span class="text-xs font-black uppercase tracking-[0.12em] text-white/62">Card number</span>
-                <input name="card_number" type="text" minlength="15" maxlength="23" inputmode="numeric" autocomplete="cc-number" placeholder="0000 0000 0000 0000" class="mt-2 min-h-12 w-full rounded-2xl border border-white/14 bg-white/10 px-4 text-sm font-bold tracking-[0.12em] text-white outline-none placeholder:text-white/38 focus:border-[#ebe3a7]" data-payment-detail data-card-number>
+                <input name="card_number" value="0000 0000 0000 0000" type="text" readonly aria-readonly="true" class="mt-2 min-h-12 w-full cursor-not-allowed rounded-2xl border border-white/14 bg-white/10 px-4 text-sm font-bold tracking-[0.12em] text-white/78 outline-none" data-payment-detail data-card-number>
               </label>
               <label class="block">
                 <span class="text-xs font-black uppercase tracking-[0.12em] text-white/62">Expiry</span>
-                <input name="card_expiry" type="text" maxlength="5" inputmode="numeric" autocomplete="cc-exp" placeholder="MM/YY" class="mt-2 min-h-12 w-full rounded-2xl border border-white/14 bg-white/10 px-4 text-sm font-bold text-white outline-none placeholder:text-white/38 focus:border-[#ebe3a7]" data-payment-detail data-card-expiry>
+                <input name="card_expiry" value="03/67" type="text" readonly aria-readonly="true" class="mt-2 min-h-12 w-full cursor-not-allowed rounded-2xl border border-white/14 bg-white/10 px-4 text-sm font-bold text-white/78 outline-none" data-payment-detail data-card-expiry>
               </label>
               <label class="block">
                 <span class="text-xs font-black uppercase tracking-[0.12em] text-white/62">Security code</span>
-                <input name="card_cvc" type="password" minlength="3" maxlength="4" inputmode="numeric" autocomplete="cc-csc" placeholder="CVC" class="mt-2 min-h-12 w-full rounded-2xl border border-white/14 bg-white/10 px-4 text-sm font-bold text-white outline-none placeholder:text-white/38 focus:border-[#ebe3a7]" data-payment-detail data-card-cvc>
+                <input name="card_cvc" value="123" type="text" readonly aria-readonly="true" class="mt-2 min-h-12 w-full cursor-not-allowed rounded-2xl border border-white/14 bg-white/10 px-4 text-sm font-bold text-white/78 outline-none" data-payment-detail data-card-cvc>
               </label>
               </div>
               <div class="mt-4 flex items-center gap-3 rounded-2xl border border-white/10 bg-white/8 px-4 py-3 text-xs font-bold text-white/62">
                 <span class="flex h-8 w-8 items-center justify-center rounded-full bg-[#a8b841] text-[#113e14]">✓</span>
-                Only the card brand and last four digits are kept with the request.
+                Demo payment details are fixed and cannot be edited.
               </div>
             </div>
 
@@ -246,8 +246,9 @@
               <p class="text-sm font-semibold leading-6 text-white/72">Your budget is protected until both parties confirm the completed service.</p>
               <label class="mt-4 block">
                 <span class="text-xs font-black uppercase tracking-[0.12em] text-white/62">PayPal email</span>
-                <input name="paypal_email" value="{{ old.paypal_email ?? '' }}" type="email" maxlength="254" autocomplete="email" placeholder="name@example.com" class="mt-2 min-h-12 w-full rounded-2xl border border-white/14 bg-white/10 px-4 text-sm font-bold text-white outline-none placeholder:text-white/38 focus:border-[#ebe3a7]" data-payment-detail>
+                <input name="paypal_email" value="testplantbud@gmail.com" type="email" readonly aria-readonly="true" class="mt-2 min-h-12 w-full cursor-not-allowed rounded-2xl border border-white/14 bg-white/10 px-4 text-sm font-bold text-white/78 outline-none" data-payment-detail>
               </label>
+              <p class="mt-3 text-xs font-bold text-white/58">Demo PayPal account. It is displayed only to simulate checkout.</p>
             </div>
 
             <div class="mt-5 hidden rounded-[1.25rem] border border-white/10 bg-white/6 p-4" data-payment-panel="cash">

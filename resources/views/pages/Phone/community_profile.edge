@@ -1,0 +1,358 @@
+@layout()
+@slot('title')
+<title>Plant Bud - {{ '@' + profileUser.username }}</title>
+@endslot
+@let(hasProfileSidebar = accountLinks.length || publicRoleDetails.kind !== 'client' || isOwnProfile)
+
+<div class="relative z-10 min-h-dvh overflow-x-hidden bg-[#416543] text-[#113e14]" data-community-page>
+  <div class="fixed inset-0 -z-10 pointer-events-none">
+    <img src="/resources/images/welcome/header3.png" alt="" class="h-full w-full object-cover opacity-25">
+    <div class="absolute inset-0 bg-gradient-to-b from-[#113e14]/80 via-[#416543]/80 to-[#416543]"></div>
+    <div class="absolute left-10 top-24 h-72 w-72 rounded-full bg-[#ebe3a7]/10 blur-3xl"></div>
+    <div class="absolute bottom-10 right-10 h-96 w-96 rounded-full bg-white/10 blur-3xl"></div>
+  </div>
+
+  @!component('components/community/top-navbar', {
+    viewer,
+    active: 'community',
+    section: 'Profile'
+  })
+
+  <main class="mx-auto max-w-6xl px-5 pb-20 lg:px-10">
+    <section class="{{ publicRoleDetails.kind === 'nursery' ? 'nursery-profile-hero' : '' }} isolate overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/10 shadow-[0_30px_90px_rgba(0,0,0,0.22)] backdrop-blur-3xl">
+      <div class="relative h-52 overflow-hidden sm:h-64 lg:h-72">
+        @if(profileUser.bannerUrl)
+          <img src="{{ profileUser.bannerUrl }}" alt="" class="absolute inset-0 h-full w-full object-cover">
+        @else
+          <div class="absolute inset-0 bg-[#f7f6ea]"></div>
+        @endif
+      </div>
+
+      <div class="px-6 pb-8 pt-6 sm:px-8 sm:pt-8">
+        <div class="grid gap-7 lg:grid-cols-[180px_minmax(0,1fr)] lg:items-center">
+          <div class="relative mx-auto h-32 w-32 sm:h-40 sm:w-40 lg:mx-0">
+            <div class="{{ publicRoleDetails.kind === 'nursery' ? 'nursery-profile-avatar-ring' : '' }} absolute -inset-1 rounded-full bg-[#ebe3a7] shadow-[0_18px_55px_rgba(0,0,0,0.28)]"></div>
+            @if(profileUser.avatarUrl)
+              <img src="{{ profileUser.avatarUrl }}" alt="" class="{{ publicRoleDetails.kind === 'nursery' ? 'nursery-profile-avatar' : '' }} relative h-full w-full rounded-full border-4 border-white object-cover">
+            @else
+              <span class="{{ publicRoleDetails.kind === 'nursery' ? 'nursery-profile-avatar' : '' }} relative flex h-full w-full items-center justify-center rounded-full border-4 border-white bg-[#113e14] text-5xl font-black text-[#ebe3a7] shadow-inner sm:text-6xl">
+                {{ profileUser.initial }}
+              </span>
+            @endif
+          </div>
+
+          <div class="min-w-0 text-center text-white lg:text-left">
+            <div class="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
+              <div class="min-w-0">
+                <div class="flex flex-wrap items-center justify-center gap-2 lg:justify-start">
+                  <span class="profile-badge profile-badge--role">{{ profileUser.roleLabel }}</span>
+                  @if(profileUser.isPremium)
+                    <span class="profile-badge profile-badge--premium">Premium</span>
+                  @endif
+                  @if(!isOwnProfile)
+                    <span class="{{ isFriend ? '' : 'hidden' }} profile-badge profile-badge--friend" data-friend-badge>Friend</span>
+                  @endif
+                </div>
+                <h1 class="mt-3 break-words text-3xl font-black leading-tight sm:text-4xl lg:text-5xl">{{ profileUser.displayName }}</h1>
+                <p class="mt-2 text-base font-bold text-[#ebe3a7]">{{ '@' + profileUser.username }}</p>
+                <p class="mx-auto mt-4 max-w-2xl text-sm font-semibold leading-7 text-white/78 lg:mx-0">
+                  {{ profileUser.bio || 'This profile is building its community presence.' }}
+                </p>
+              </div>
+
+              <div class="mx-auto flex w-full max-w-md flex-wrap justify-center gap-2 lg:mx-0 lg:justify-start xl:w-80 xl:shrink-0 xl:justify-end">
+                @if(isOwnProfile)
+                  <a href="/profile/settings" class="w-full sm:min-w-40 sm:flex-1 rounded-full bg-[#ebe3a7] px-5 py-3 text-center text-sm font-black text-[#113e14] shadow-lg transition hover:-translate-y-0.5">
+                    Edit profile
+                  </a>
+                  @if(publicRoleDetails.kind === 'nursery')
+                    <a href="#public-nursery-catalog" class="w-full sm:min-w-40 sm:flex-1 rounded-full border border-white/20 bg-white/10 px-5 py-3 text-center text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-white/18">
+                      View catalog
+                    </a>
+                  @endif
+                @else
+                  @if(viewer.role === 'client' && publicRoleDetails.kind === 'gardener' && publicRoleDetails.requestHref)
+                    <a href="{{ publicRoleDetails.requestHref }}" class="w-full rounded-full bg-[#ebe3a7] px-5 py-3 text-center text-sm font-black text-[#113e14] shadow-lg transition hover:-translate-y-0.5 hover:bg-[#dca15d]">
+                      Request service
+                    </a>
+                  @endif
+                  @form({
+                    action: '/users/' + profileUser.username + '/follow',
+                    method: 'POST',
+                    class: 'w-full sm:min-w-32 sm:flex-1',
+                    'data-follow-form': true
+                  })
+                    <button type="submit" class="{{ isFollowing ? 'bg-white/15 text-white' : 'bg-[#dca15d] text-[#113e14]' }} w-full rounded-full px-5 py-3 text-sm font-black shadow-lg transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]">
+                      <span data-follow-label>{{ isFollowing ? 'Following' : 'Follow' }}</span>
+                    </button>
+                  @end
+                  @form({
+                    action: '/users/' + profileUser.username + '/favorite',
+                    method: 'POST',
+                    class: 'w-full sm:min-w-32 sm:flex-1',
+                    'data-favorite-account-form': true
+                  })
+                    <button type="submit" class="{{ isFavoriteAccount ? 'bg-[#ebe3a7] text-[#113e14]' : 'bg-white/15 text-white' }} w-full rounded-full px-5 py-3 text-sm font-black shadow-lg transition hover:-translate-y-0.5" data-favorite-account-button>
+                      <span data-favorite-account-label>{{ isFavoriteAccount ? 'Favorite' : 'Add favorite' }}</span>
+                    </button>
+                  @end
+                @endif
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="{{ isOwnProfile ? 'grid-cols-2 sm:grid-cols-4' : 'grid-cols-2 sm:grid-cols-3' }} mt-8 grid overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/10 text-center text-white">
+          <div class="p-4">
+            <p class="text-2xl font-black">{{ profileStats.posts }}</p>
+            <p class="text-[0.68rem] font-black uppercase tracking-[0.14em] text-[#ebe3a7]">Posts</p>
+          </div>
+          <button type="button" class="border-white/10 p-4 transition hover:bg-white/10 sm:border-l" data-relations-open="followers">
+            <p class="text-2xl font-black" data-followers-count>{{ profileStats.followers }}</p>
+            <p class="text-[0.68rem] font-black uppercase tracking-[0.14em] text-[#ebe3a7]">Followers</p>
+          </button>
+          <button type="button" class="border-white/10 p-4 transition hover:bg-white/10 sm:border-l" data-relations-open="following">
+            <p class="text-2xl font-black" data-following-count>{{ profileStats.following }}</p>
+            <p class="text-[0.68rem] font-black uppercase tracking-[0.14em] text-[#ebe3a7]">Following</p>
+          </button>
+          @if(isOwnProfile)
+            <div class="border-white/10 p-4 sm:border-l">
+              <p class="text-2xl font-black">{{ profileStats.saved }}</p>
+              <p class="text-[0.68rem] font-black uppercase tracking-[0.14em] text-[#ebe3a7]">Saved</p>
+            </div>
+          @endif
+        </div>
+      </div>
+    </section>
+
+    @if(publicRoleDetails.kind === 'nursery')
+      <section class="nursery-profile-panel mt-8 grid gap-4 border border-white/50 p-5 shadow-[0_24px_70px_rgba(0,0,0,0.18)] sm:grid-cols-2 sm:p-7 lg:grid-cols-4">
+        <div class="rounded-[1.75rem] border border-white/70 bg-white/65 p-5 shadow-sm">
+          <p class="text-[0.68rem] font-black uppercase tracking-[0.16em] text-[#dca15d]">Visit</p>
+          <p class="mt-2 text-sm font-black leading-6">{{ publicRoleDetails.location || 'Location coming soon' }}</p>
+        </div>
+        <div class="rounded-[1.75rem] border border-white/70 bg-white/65 p-5 shadow-sm">
+          <p class="text-[0.68rem] font-black uppercase tracking-[0.16em] text-[#dca15d]">Opening hours</p>
+          <p class="mt-2 text-sm font-black leading-6">{{ publicRoleDetails.schedule || 'Schedule coming soon' }}</p>
+        </div>
+        <div class="rounded-[1.75rem] border border-white/70 bg-white/65 p-5 shadow-sm">
+          <p class="text-[0.68rem] font-black uppercase tracking-[0.16em] text-[#dca15d]">Catalog</p>
+          <p class="mt-2 text-2xl font-black">{{ publicRoleDetails.products.length }}</p>
+          <p class="text-xs font-bold text-[#416543]">available products</p>
+        </div>
+        <div class="rounded-[1.75rem] bg-[#113e14] p-5 text-white shadow-lg">
+          <p class="text-[0.68rem] font-black uppercase tracking-[0.16em] text-[#ebe3a7]">Community rating</p>
+          <p class="mt-2 text-2xl font-black">{{ publicRoleDetails.rating.averageText }} / 5</p>
+          <p class="text-xs font-bold text-white/60">{{ publicRoleDetails.rating.count }} reviews</p>
+        </div>
+      </section>
+
+      @!component('components/nursery-catalog', {
+        categories: publicRoleDetails.catalogCategories,
+        products: publicRoleDetails.products,
+        manageHref: isOwnProfile ? '/profile/settings#catalog-settings' : null,
+        sectionId: 'public-nursery-catalog',
+        className: 'mt-8 rounded-[2.5rem] bg-[#f5f1d6] p-6 shadow-[0_24px_70px_rgba(0,0,0,0.20)] sm:p-8'
+      })
+    @endif
+
+    <section class="mt-8 grid grid-cols-1 gap-8 {{ hasProfileSidebar ? 'lg:grid-cols-[0.82fr_1.18fr]' : '' }}">
+      <div class="space-y-5 lg:order-2">
+        <div class="flex items-end justify-between gap-4 text-white">
+          <div>
+            <p class="text-sm font-black uppercase tracking-[0.22em] text-[#ebe3a7]">Shared</p>
+            <h2 class="mt-2 text-3xl font-black">Posts</h2>
+          </div>
+        </div>
+
+        @each(post in posts)
+          @!component('components/community-post-card', { post, viewer, surface: 'profile' })
+        @else
+          <div class="rounded-[2rem] border border-white/30 bg-white/70 p-8 text-center shadow-xl backdrop-blur-2xl">
+            <h3 class="text-2xl font-black text-[#113e14]">No public posts yet</h3>
+          </div>
+        @end
+      </div>
+
+      @if(hasProfileSidebar)
+      <aside class="space-y-5 lg:order-1">
+        @if(accountLinks.length)
+          <section class="rounded-[2rem] border border-white/30 bg-white/78 p-5 text-[#113e14] shadow-xl backdrop-blur-2xl">
+            <p class="text-sm font-black uppercase tracking-[0.22em] text-[#416543]">Links</p>
+            <div class="mt-4 flex flex-wrap gap-2">
+              @each(link in accountLinks)
+                <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer" class="rounded-full bg-[#416543]/10 px-4 py-2 text-sm font-black text-[#113e14] transition hover:-translate-y-0.5 hover:bg-[#dca15d]">
+                  {{ link.label }}
+                </a>
+              @end
+            </div>
+          </section>
+        @endif
+
+        @if(publicRoleDetails.kind !== 'client')
+          <section class="rounded-[2rem] border border-[#ebe3a7]/35 bg-[#ebe3a7]/82 p-5 text-[#113e14] shadow-xl backdrop-blur-2xl">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <p class="text-sm font-black uppercase tracking-[0.22em] text-[#416543]">{{ profileUser.roleLabel }}</p>
+                <h2 class="mt-2 text-2xl font-black">{{ publicRoleDetails.title }}</h2>
+              </div>
+              @if(publicRoleDetails.statusLabel)
+                <span class="{{ publicRoleDetails.statusTone === 'positive' ? 'bg-[#dca15d] text-[#113e14]' : 'bg-white/70 text-[#113e14]' }} rounded-full px-3 py-1 text-[11px] font-black uppercase tracking-[0.12em]">
+                  {{ publicRoleDetails.statusLabel }}
+                </span>
+              @endif
+            </div>
+
+            <div class="mt-5 grid gap-3 sm:grid-cols-2">
+              @if(publicRoleDetails.schedule)
+                <div class="rounded-2xl bg-white/54 p-4">
+                  <p class="text-xs font-black uppercase tracking-[0.14em] text-[#416543]">Hours</p>
+                  <p class="mt-2 text-sm font-semibold leading-6 text-[#113e14]/78">{{ publicRoleDetails.schedule }}</p>
+                </div>
+              @endif
+              @if(publicRoleDetails.location)
+                <div class="rounded-2xl bg-white/54 p-4">
+                  <p class="text-xs font-black uppercase tracking-[0.14em] text-[#416543]">Area</p>
+                  <p class="mt-2 text-sm font-semibold leading-6 text-[#113e14]/78">{{ publicRoleDetails.location }}</p>
+                </div>
+              @endif
+              @if(publicRoleDetails.contactPhone || publicRoleDetails.contactEmail)
+                <div class="rounded-2xl bg-white/54 p-4 sm:col-span-2">
+                  <p class="text-xs font-black uppercase tracking-[0.14em] text-[#416543]">Contact</p>
+                  @if(publicRoleDetails.contactPhone)
+                    <p class="mt-2 text-sm font-semibold text-[#113e14]/78">{{ publicRoleDetails.contactPhone }}</p>
+                  @endif
+                  @if(publicRoleDetails.contactEmail)
+                    <p class="mt-1 text-sm font-semibold text-[#113e14]/78">{{ publicRoleDetails.contactEmail }}</p>
+                  @endif
+                </div>
+              @endif
+            </div>
+
+            @if(publicRoleDetails.kind === 'nursery' && publicRoleDetails.directionsHref)
+              <div class="mt-5 overflow-hidden rounded-[1.5rem] border border-white/55 bg-white/58">
+                <div class="h-52 bg-[#dfe8cf]" data-public-nursery-map data-latitude="{{ publicRoleDetails.latitude }}" data-longitude="{{ publicRoleDetails.longitude }}"></div>
+                <div class="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <p class="text-xs font-black uppercase tracking-[0.14em] text-[#416543]">Visit this nursery</p>
+                    <p class="mt-1 text-sm font-semibold text-[#113e14]/72">Open a route from your current location to the nursery entrance.</p>
+                  </div>
+                  <a href="{{ publicRoleDetails.directionsHref }}" target="_blank" rel="noopener noreferrer" class="shrink-0 rounded-full bg-[#113e14] px-5 py-3 text-center text-xs font-black text-white transition hover:bg-[#416543]">
+                    How to get there
+                  </a>
+                </div>
+              </div>
+            @endif
+
+            @if(publicRoleDetails.services.length)
+              <div class="mt-5">
+                <p class="text-xs font-black uppercase tracking-[0.14em] text-[#416543]">Services</p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  @each(service in publicRoleDetails.services)
+                    <span class="rounded-full bg-white/62 px-3 py-1.5 text-xs font-black text-[#113e14]">{{ service }}</span>
+                  @end
+                </div>
+              </div>
+            @endif
+
+            @if(publicRoleDetails.paymentMethods.length)
+              <div class="mt-5">
+                <p class="text-xs font-black uppercase tracking-[0.14em] text-[#416543]">Payment methods</p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  @each(method in publicRoleDetails.paymentMethods)
+                    <span class="rounded-full bg-[#dca15d] px-3 py-1.5 text-xs font-black text-[#113e14]">{{ method }}</span>
+                  @end
+                </div>
+              </div>
+            @endif
+
+          </section>
+
+          <section class="rounded-[2rem] border border-white/30 bg-white/78 p-5 text-[#113e14] shadow-xl backdrop-blur-2xl">
+            <div class="flex items-center justify-between gap-4">
+              <div>
+                <p class="text-sm font-black uppercase tracking-[0.22em] text-[#416543]">Rating</p>
+                <h2 class="mt-2 text-2xl font-black">{{ publicRoleDetails.rating.averageText }} / 5</h2>
+              </div>
+              <div class="text-right">
+                <div class="flex gap-1 text-xl">
+                  @each(star in publicRoleDetails.ratingStars)
+                    <span class="{{ star <= publicRoleDetails.rating.average ? 'text-[#dca15d]' : 'text-[#416543]/25' }}">★</span>
+                  @end
+                </div>
+                <p class="mt-1 text-xs font-bold text-[#416543]">{{ publicRoleDetails.rating.count }} reviews</p>
+              </div>
+            </div>
+
+            @if(!isOwnProfile)
+              @form({
+                action: '/users/' + profileUser.username + '/reviews',
+                method: 'POST',
+                class: 'mt-5 space-y-3'
+              })
+                <div class="flex flex-wrap gap-2">
+                  @each(star in publicRoleDetails.ratingStars)
+                    <label class="cursor-pointer">
+                      <input type="radio" name="rating" value="{{ star }}" class="peer sr-only" {{ star === 5 ? 'checked' : '' }}>
+                      <span class="block rounded-full bg-[#416543]/10 px-3 py-2 text-sm font-black text-[#113e14] transition peer-checked:bg-[#dca15d] peer-checked:text-[#113e14]">{{ star }}</span>
+                    </label>
+                  @end
+                </div>
+                <textarea name="comment" maxlength="500" rows="3" placeholder="Share a short review..." class="w-full resize-none rounded-2xl border border-white/10 bg-white/90 px-4 py-3 text-sm font-bold text-[#113e14] outline-none"></textarea>
+                <button type="submit" class="rounded-full bg-[#dca15d] px-5 py-2 text-sm font-black text-[#113e14] transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]">Send review</button>
+              @end
+            @endif
+
+            <div class="mt-5 space-y-3">
+              @each(review in publicRoleDetails.reviews)
+                <div class="rounded-2xl bg-[#416543]/8 p-4">
+                  <div class="flex items-center justify-between gap-3">
+                    <p class="text-sm font-black">{{ review.reviewerName }}</p>
+                    <p class="text-xs font-black text-[#dca15d]">{{ review.rating }}/5</p>
+                  </div>
+                  @if(review.comment)
+                    <p class="mt-2 text-sm font-semibold leading-6 text-[#113e14]/72">{{ review.comment }}</p>
+                  @endif
+                </div>
+              @else
+                <p class="rounded-2xl border border-dashed border-[#416543]/25 p-4 text-sm font-semibold text-[#416543]">No reviews yet.</p>
+              @end
+            </div>
+          </section>
+        @endif
+
+        @if(isOwnProfile)
+          <section class="rounded-[2rem] border border-white/20 bg-white/14 p-5 text-white shadow-xl backdrop-blur-2xl">
+            <p class="text-sm font-black uppercase tracking-[0.22em] text-[#ebe3a7]">Saved</p>
+            <h2 class="mt-2 text-2xl font-black">Kept posts</h2>
+            <p class="mt-2 text-sm font-semibold leading-6 text-white/70">
+              Your saved posts are private and only appear here for you.
+            </p>
+
+            <div class="mt-4 space-y-4">
+              @each(post in savedPosts)
+                <a href="/community#post-{{ post.id }}" class="block overflow-hidden rounded-[1.5rem] border border-white/25 bg-white/70 p-4 shadow-lg backdrop-blur-2xl transition hover:-translate-y-0.5">
+                  <p class="line-clamp-3 text-sm font-black leading-6 text-[#113e14]">{{ post.body || 'Image post' }}</p>
+                  <p class="mt-2 text-xs font-bold text-[#416543]">By {{ '@' + post.author.username }}</p>
+                </a>
+              @else
+                <div class="rounded-[1.5rem] border border-dashed border-white/30 p-5 text-sm font-semibold leading-6 text-white/75">
+                  No saved posts yet.
+                </div>
+              @end
+            </div>
+          </section>
+        @endif
+      </aside>
+      @endif
+    </section>
+  </main>
+
+  @!component('components/profile-relations-modal', {
+    relations: profileRelations,
+    showFriends: isOwnProfile,
+    canManage: isOwnProfile
+  })
+</div>
+
+@end

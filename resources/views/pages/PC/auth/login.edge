@@ -58,6 +58,8 @@
           <div class="absolute -inset-2 bg-[#ebe3a7]/10 blur-3xl rounded-[1.5rem]"></div>
 
           <div class="auth-card is-alive auth-panel-in relative bg-[#113e14]/82 text-white backdrop-blur-3xl border border-[#ebe3a7]/12 rounded-[1.5rem] px-6 py-6 sm:px-8 shadow-[0_30px_90px_rgba(0,0,0,0.25)] overflow-hidden">
+            @if(flashMessages.has('errors') && flashMessages.get('errors').auth)
+              <p class="relative z-10 mb-4 rounded-xl border border-red-300/30 bg-red-950/28 px-4 py-3 text-sm font-bold text-red-100">
                 {{ flashMessages.get('errors').auth[0] }}
               </p>
             @endif

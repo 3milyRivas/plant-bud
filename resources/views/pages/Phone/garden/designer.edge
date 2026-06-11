@@ -12,13 +12,14 @@
 
     @!component('components/app-navbar', {
         section: '2D Garden designer',
-        toolMode: 'designer',
+        active: 'designer',
         maxWidth: 'max-w-[min(1500px,calc(100vw-2rem))]',
         planLabel: subscription?.planLabel ?? 'Premium',
     })
     <input id="upload" type="file" accept="image/*" class="hidden">
 
     <main class="relative z-10 pt-10 pb-10 px-4 sm:px-6 lg:px-10 select-none">
+        @!component('components/tool-action-panel', { mode: 'designer' })
 
         <div class="w-full max-w-[min(90rem,calc(100vw-2rem))] mx-auto grid grid-cols-1 xl:grid-cols-[320px_1fr] gap-8 min-h-[calc(100vh-11rem)]">
 
@@ -231,7 +232,7 @@
                                                     Upload a Garden Photo
                                                 </h3>
                                                 <p class="text-[#416543] font-semibold mt-3 max-w-md">
-                                                    Use Upload in the navbar first. Then search assets and place them on top of the photo.
+                                                    Use Upload image above first. Then search assets and place them on top of the photo.
                                                 </p>
                                             </div>
 

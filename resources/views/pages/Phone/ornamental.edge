@@ -1,0 +1,110 @@
+@layout()
+@slot('title')
+<title>Plant Bud</title>
+@endslot
+@vite([
+    'resources/js/categories.js',
+    'resources/js/menu-plants.js'
+])
+
+
+<div class="relative overflow-x-hidden">
+  @!component('components/header-plants', {
+  title: "Discover Ornamental Plants",
+  text: "Explore elegant tropical species, connect with gardeners and create beautiful green spaces.",
+  imageBg:'resources/images/00-2.jpg',
+  careHref: '/care1',
+  })
+
+
+  @!component('components/plants/catalog-search', {
+    careHref: '/care1',
+  })
+
+  <div class="flex justify-center mt-4 px-4 sm:px-0">
+    <div class="flex justify-center mt-8 w-full max-w-[58rem] px-0 sm:px-5">
+      <div data-catalog-switch-bar
+        class="relative flex w-full max-w-[min(58rem,calc(100vw-2rem))] flex-wrap items-center justify-center gap-3 rounded-[1.4rem] border border-[#416543]/12 bg-white/72 px-3 py-3 shadow-[0_18px_55px_rgba(17,62,20,0.14)] backdrop-blur-2xl">
+
+        <button onclick="toggleMenu()" data-catalog-section-toggle
+          class="relative z-50 flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-[#416543]/12 bg-[#f5f2df] shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#ebe3a7]">
+          <img src="/plants/icon.flower.png" class="w-6 h-6" />
+        </button>
+
+        <div id="familias" data-catalog-family-panel class="flex min-w-0 flex-1 justify-center gap-2 overflow-x-auto px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <button onclick="showCategory(event, 'araceae')"
+            class="category-btn px-4 py-2 rounded-full bg-[#113e14] text-white font-medium shadow transition-all duration-300 hover:scale-105">
+            Araceae
+          </button>
+
+          <button onclick="showCategory(event, 'apocynaceae')"
+            class="category-btn px-4 py-2 rounded-full text-[#2D2B2B] transition-all duration-300 hover:scale-105 hover:bg-white/40">
+            Apocynaceae
+          </button>
+
+          <button onclick="showCategory(event, 'rutaceae')"
+            class="category-btn px-4 py-2 rounded-full text-[#2D2B2B] transition-all duration-300 hover:scale-105 hover:bg-white/40">
+            Rutaceae
+          </button>
+
+          <button onclick="showCategory(event, 'rubiaceae')"
+            class="category-btn px-4 py-2 rounded-full text-[#2D2B2B] transition-all duration-300 hover:scale-105 hover:bg-white/40">
+            Rubiaceae
+          </button>
+
+          <button onclick="showCategory(event, 'zamiaceae')"
+            class="category-btn px-4 py-2 rounded-full text-[#2D2B2B] transition-all duration-300 hover:scale-105 hover:bg-white/40">
+            Zamiaceae
+          </button>
+        </div>
+
+
+        <div id="menu"
+          data-catalog-section-menu
+          class="hidden min-w-0 flex-1 items-center justify-center gap-2 overflow-x-auto px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+
+          <a href="/ornamental"
+            class="menu-item group flex h-12 w-12 items-center justify-center rounded-2xl bg-[#f5f2df] ring-2 ring-[#a8b841]/55 shadow-md transition-all duration-300 hover:-translate-y-0.5">
+            <img src="/plants/icon.flower.png" class="w-6 h-6 transition-all duration-300" />
+          </a>
+
+          <a href="/horticultural"
+            class="menu-item group flex h-12 w-12 items-center justify-center rounded-2xl bg-[#ebe3a7]/58 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#f5f2df]">
+            <img src="/plants/icon.vegetables.png" class="w-6 h-6 transition-all duration-300" />
+          </a>
+
+
+          <a href="/succulent"
+            class="menu-item group flex h-12 w-12 items-center justify-center rounded-2xl bg-[#ebe3a7]/58 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#f5f2df]">
+            <img src="/plants/icon.plant.png" class="w-6 h-6 transition-all duration-300" />
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="flex justify-center pt-20 pb-20 px-4 sm:px-0">
+    <div class="max-w-[1500px] w-full px-4 sm:px-10 mx-auto flex justify-center">
+      @each((plants, familyName, index) in ornamentalPlants)
+      <div id="{{ familyName }}"
+        class="category-section grid justify-center gap-8 md:gap-10 lg:gap-12 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 {{ index != 0 ? 'hidden' : '' }}">
+        @each((plant, plantIndex) in plants)
+        <div id="plant-{{ familyName }}-{{ plantIndex }}"
+          class="plant-catalog-anchor scroll-mt-32 rounded-[42px] transition-all duration-500" data-plant-card>
+          @component('components/plants/plant-card', {
+          imageSrc: plant.image,
+          imageAlt: plant.alt,
+          title: plant.name,
+          scientificName: plant.scientificName
+          })
+          @end
+        </div>
+        @endeach
+      </div>
+      @end
+
+    </div>
+  </div>
+  @end
+</div>

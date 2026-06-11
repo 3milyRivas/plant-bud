@@ -1,0 +1,194 @@
+@layout()
+@slot('title')
+<title>Plant Bud - Maintenance</title>
+@endslot
+
+@let(viewerProfile = auth.user?.accountProfile)
+@let(displayName = viewerProfile?.displayName || auth.user?.fullName || auth.user?.username || 'Profile')
+@let(avatarUrl = viewerProfile?.avatarUrl || auth.user?.profilePicture)
+@let(avatarInitial = displayName ? Array.from(displayName)[0].toLocaleUpperCase('en') : 'P')
+
+<div class="relative z-10 min-h-dvh overflow-hidden text-[#113e14]">
+  @!component('components/app-navbar', {
+    section: 'Services',
+    active: 'services',
+    maxWidth: 'max-w-[min(1500px,calc(100vw-2rem))]',
+    avatarUrl,
+    avatarInitial,
+    displayName,
+    roleLabel: auth.user?.role || 'guest',
+    planLabel: viewerProfile?.planLabel || 'Free',
+  })
+
+  <main class="relative z-10 mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))] px-4 pb-24 pt-8 sm:px-5 lg:px-10">
+    <section class="relative z-40 grid gap-10 py-12 lg:grid-cols-[0.95fr_1.05fr] lg:items-end lg:py-16">
+      <div class="text-white">
+        <p class="text-sm font-black uppercase tracking-[0.24em] text-[#ebe3a7]">Gardener services</p>
+        <h1 class="mt-4 font-abril text-5xl leading-[1.02] text-white drop-shadow-lg md:text-7xl">
+          Find real gardeners for your plants and spaces.
+        </h1>
+        <p class="mt-6 max-w-2xl text-lg font-semibold leading-8 text-white/78">
+          Compare public gardener profiles, save favorites, and request maintenance from one place.
+        </p>
+      </div>
+
+      <form action="/maintenance" method="GET" class="relative z-50 w-full rounded-[1.5rem] border border-[#ebe3a7]/24 bg-white/12 p-4 shadow-[0_24px_70px_rgba(0,0,0,0.20)] backdrop-blur-2xl" data-gardener-search autocomplete="off">
+        <label for="gardenerSearch" class="sr-only">Search gardeners</label>
+        <div class="grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto]">
+          <input id="gardenerSearch" name="q" value="{{ search }}" type="search" autocomplete="off" placeholder="Search gardeners, services, or location" class="min-h-14 rounded-2xl border border-white/40 bg-white px-5 text-sm font-bold text-[#113e14] outline-none placeholder:text-[#416543]/70" data-gardener-search-input aria-autocomplete="list" aria-expanded="false" aria-controls="gardenerSearchResults">
+          <button type="submit" class="min-h-14 rounded-2xl bg-[#dca15d] px-6 text-sm font-black text-[#113e14] shadow-lg transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]">
+            Search
+          </button>
+        </div>
+        <div id="gardenerSearchResults" class="absolute left-4 right-4 top-[calc(100%+0.25rem)] z-[100] hidden max-h-[24rem] overflow-y-auto overscroll-contain rounded-[1.5rem] border border-white/55 bg-[#ebe3a7]/96 p-2 shadow-2xl shadow-[#113e14]/30 backdrop-blur-2xl" data-gardener-search-results role="listbox"></div>
+      </form>
+    </section>
+
+    <section class="relative z-10 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
+      <a href="/requested" class="rounded-[1.25rem] border border-white/34 bg-[#ebe3a7]/88 p-5 shadow-xl backdrop-blur-2xl transition hover:-translate-y-1">
+        <p class="text-xs font-black uppercase tracking-[0.18em] text-[#416543]">Requests</p>
+        <p class="mt-3 text-3xl font-black">{{ stats.available }}</p>
+        <p class="mt-1 text-sm font-bold text-[#416543]">Available gardeners</p>
+      </a>
+
+      <a href="#favorites" class="rounded-[1.25rem] border border-white/34 bg-white/82 p-5 shadow-xl backdrop-blur-2xl transition hover:-translate-y-1">
+        <p class="text-xs font-black uppercase tracking-[0.18em] text-[#416543]">Saved</p>
+        <p class="mt-3 text-3xl font-black">{{ stats.favorites }}</p>
+        <p class="mt-1 text-sm font-bold text-[#416543]">Favorite gardeners</p>
+      </a>
+
+      <a href="#featured" class="rounded-[1.25rem] border border-white/34 bg-[#a8b841]/24 p-5 shadow-xl backdrop-blur-2xl transition hover:-translate-y-1">
+        <p class="text-xs font-black uppercase tracking-[0.18em] text-[#416543]">Featured</p>
+        <p class="mt-3 text-3xl font-black">{{ stats.featured }}</p>
+        <p class="mt-1 text-sm font-bold text-[#416543]">Top public profiles</p>
+      </a>
+
+      <a href="/designer" class="rounded-[1.25rem] border border-white/34 bg-[#113e14] p-5 text-[#ebe3a7] shadow-xl backdrop-blur-2xl transition hover:-translate-y-1 hover:bg-[#416543]">
+        <p class="text-xs font-black uppercase tracking-[0.18em] text-[#ebe3a7]/80">Planning</p>
+        <p class="mt-3 text-3xl font-black">2D</p>
+        <p class="mt-1 text-sm font-bold text-white/72">Garden designer</p>
+      </a>
+    </section>
+
+    <section id="featured" class="scroll-mt-32 pt-14">
+      <div class="mb-6 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p class="text-sm font-black uppercase tracking-[0.2em] text-[#ebe3a7]">Recommended</p>
+          <h2 class="mt-2 text-3xl font-black text-white md:text-4xl">Featured gardeners</h2>
+        </div>
+        <a href="#gardeners" class="inline-flex rounded-full bg-white/74 px-5 py-3 text-sm font-black text-[#113e14] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]">View all</a>
+      </div>
+
+      <div class="grid gap-5 lg:grid-cols-2 xl:grid-cols-4">
+        @each(gardener in featuredGardeners)
+          @!component('components/services/provider-card', {
+            name: gardener.name,
+            username: gardener.username,
+            photo: gardener.photo,
+            initial: gardener.initial,
+            specialty: gardener.specialty,
+            experience: gardener.experience,
+            rating: gardener.rating,
+            reviews: gardener.reviews,
+            location: gardener.location,
+            services: gardener.services,
+            schedule: gardener.schedule,
+            bio: gardener.bio,
+            href: `/request/${gardener.id}`,
+            profileHref: gardener.profileHref,
+            isFavorite: gardener.isFavorite,
+            isPremium: gardener.isPremium,
+            isAvailable: gardener.isAvailable
+          })
+        @end
+      </div>
+    </section>
+
+    <section id="favorites" class="scroll-mt-32 pt-14">
+      <div class="mb-6 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p class="text-sm font-black uppercase tracking-[0.2em] text-[#ebe3a7]">Saved</p>
+          <h2 class="mt-2 text-3xl font-black text-white md:text-4xl">Your favorite gardeners</h2>
+        </div>
+        <a href="/favorites" class="inline-flex rounded-full bg-white/74 px-5 py-3 text-sm font-black text-[#113e14] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]">Saved posts</a>
+      </div>
+
+      @if(favoriteGardeners.length)
+        <div class="grid gap-5 lg:grid-cols-2 xl:grid-cols-4">
+          @each(gardener in favoriteGardeners)
+            @!component('components/services/provider-card', {
+              name: gardener.name,
+              username: gardener.username,
+              photo: gardener.photo,
+              initial: gardener.initial,
+              specialty: gardener.specialty,
+              experience: gardener.experience,
+              rating: gardener.rating,
+              reviews: gardener.reviews,
+              location: gardener.location,
+              services: gardener.services,
+              schedule: gardener.schedule,
+              bio: gardener.bio,
+              href: `/request/${gardener.id}`,
+              profileHref: gardener.profileHref,
+              isFavorite: gardener.isFavorite,
+              isPremium: gardener.isPremium,
+              isAvailable: gardener.isAvailable
+            })
+          @end
+        </div>
+      @else
+        <div class="rounded-[1.25rem] border border-[#416543]/12 bg-white/82 p-6 text-[#113e14] shadow-xl backdrop-blur-2xl">
+          <h3 class="text-xl font-black">No favorite gardeners yet</h3>
+          <p class="mt-2 max-w-2xl text-sm font-semibold leading-6 text-[#416543]">
+            Open a gardener profile and save it as favorite to keep it here.
+          </p>
+        </div>
+      @endif
+    </section>
+
+    <section id="gardeners" class="scroll-mt-32 pt-14">
+      <div class="mb-6 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p class="text-sm font-black uppercase tracking-[0.2em] text-[#ebe3a7]">Catalog</p>
+          <h2 class="mt-2 text-3xl font-black text-white md:text-4xl">
+            {{ search ? 'Search results' : 'All gardeners' }}
+          </h2>
+        </div>
+        @if(search)
+          <a href="/maintenance" class="inline-flex rounded-full bg-[#113e14] px-5 py-3 text-sm font-black text-[#ebe3a7] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#416543]">Clear search</a>
+        @endif
+      </div>
+
+      <div class="grid gap-5 lg:grid-cols-2 xl:grid-cols-3">
+        @each(gardener in gardeners)
+          @!component('components/services/provider-card', {
+            name: gardener.name,
+            username: gardener.username,
+            photo: gardener.photo,
+            initial: gardener.initial,
+            specialty: gardener.specialty,
+            experience: gardener.experience,
+            rating: gardener.rating,
+            reviews: gardener.reviews,
+            location: gardener.location,
+            services: gardener.services,
+            schedule: gardener.schedule,
+            bio: gardener.bio,
+            href: `/request/${gardener.id}`,
+            profileHref: gardener.profileHref,
+            isFavorite: gardener.isFavorite,
+            isPremium: gardener.isPremium,
+            isAvailable: gardener.isAvailable
+          })
+        @else
+          <div class="rounded-[1.25rem] border border-[#416543]/12 bg-white/82 p-8 text-center shadow-xl backdrop-blur-2xl xl:col-span-3">
+            <h2 class="text-2xl font-black">No gardeners found</h2>
+            <p class="mt-2 text-sm font-semibold text-[#416543]">Try another name, service, or location.</p>
+          </div>
+        @end
+      </div>
+    </section>
+  </main>
+</div>
+@end

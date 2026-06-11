@@ -529,7 +529,7 @@ select {
     grid-row: 1;
   }
 
-  [data-community-navbar-shell] > details[data-app-profile-menu] {
+  [data-pb-navbar-account] {
     grid-column: 3;
     grid-row: 1;
   }
@@ -839,10 +839,11 @@ div[data-community-layout] {
   }
 
   [data-community-layout] {
-    max-width: min(74rem, calc(100vw - 2rem)) !important;
+    max-width: min(68rem, calc(100vw - 2rem)) !important;
     grid-template-columns: minmax(0, 42rem) minmax(17rem, 20rem) !important;
     align-items: start !important;
     gap: clamp(1.2rem, 2vw, 1.8rem) !important;
+    justify-content: center !important;
   }
 
   [data-community-layout='compact'] {
@@ -885,8 +886,9 @@ div[data-community-layout] {
 
 @media (min-width: 1280px) {
   [data-community-layout] {
-    max-width: min(82rem, calc(100vw - 2.5rem)) !important;
+    max-width: min(72rem, calc(100vw - 2.5rem)) !important;
     grid-template-columns: minmax(0, 46rem) minmax(18.5rem, 22rem) !important;
+    justify-content: center !important;
   }
 
   [data-community-layout='compact'] {
@@ -905,9 +907,10 @@ div[data-community-layout] {
   }
 
   [data-community-layout] {
-    max-width: min(88rem, calc(100vw - 3rem)) !important;
+    max-width: min(76.25rem, calc(100vw - 3rem)) !important;
     grid-template-columns: minmax(0, 50rem) minmax(21rem, 24rem) !important;
     gap: 2.25rem !important;
+    justify-content: center !important;
   }
 }
 
@@ -1564,6 +1567,60 @@ details[open] .app-nav-menu-panel,
   background: #ebe3a7;
 }
 
+@media (min-width: 1024px) and (min-height: 700px) {
+  [data-register-frontend='PC'] {
+    align-items: center;
+    scrollbar-gutter: stable both-edges;
+  }
+}
+
+.tool-action-panel {
+  position: relative;
+  z-index: 40;
+}
+
+.tool-action-primary,
+.tool-action-secondary {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+  padding: 0.75rem 1.4rem;
+  font-size: 0.875rem;
+  font-weight: 950;
+  transition:
+    transform 180ms ease,
+    background-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.tool-action-primary {
+  background: #dca15d;
+  color: #113e14;
+  box-shadow: 0 14px 32px rgb(220 161 93 / 0.28);
+}
+
+.tool-action-secondary {
+  border: 1px solid rgb(235 227 167 / 0.28);
+  background: rgb(255 255 255 / 0.12);
+  color: #ebe3a7;
+}
+
+.tool-action-primary:hover,
+.tool-action-secondary:hover {
+  transform: translateY(-2px);
+}
+
+.tool-action-primary:hover {
+  background: #ebe3a7;
+  box-shadow: 0 18px 38px rgb(235 227 167 / 0.28);
+}
+
+.tool-action-secondary:hover {
+  background: rgb(255 255 255 / 0.2);
+}
+
 @media (min-width: 640px) {
   [data-pb-navbar-shell] {
     grid-template-columns: minmax(12rem, 15rem) minmax(0, 1fr) minmax(12rem, 15rem) !important;
@@ -1579,7 +1636,7 @@ details[open] .app-nav-menu-panel,
     justify-self: center;
   }
 
-  [data-pb-navbar-shell] > details[data-app-profile-menu] {
+  [data-pb-navbar-account] {
     justify-self: end;
   }
 }
@@ -2539,7 +2596,28 @@ details[open] .app-nav-menu-panel,
 }
 
 [data-auth-page] {
-  overscroll-behavior: none;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+[data-auth-page] > .relative {
+  min-height: 100dvh;
+}
+
+[data-auth-page] > .relative > [class*='overflow-y-auto'] {
+  height: 100dvh;
+  min-height: 0 !important;
+  padding-bottom: max(2.5rem, env(safe-area-inset-bottom));
+  -webkit-overflow-scrolling: touch;
+}
+
+[data-register-page] {
+  overscroll-behavior-y: contain;
+  scrollbar-gutter: stable;
+  -webkit-overflow-scrolling: touch;
 }
 
 .auth-signup-visual {

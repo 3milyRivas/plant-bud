@@ -328,6 +328,11 @@
                       {{ serviceRequest.rewardPointsAwarded.toLocaleString('en-US') }} reward points were credited.
                     @endif
                   </div>
+                  @form({ action: `/requested/${serviceRequest.id}/delete`, method: 'POST', class: 'mt-4 flex justify-end' })
+                    <button type="submit" class="rounded-full border border-[#dca15d]/30 bg-white px-5 py-2.5 text-xs font-black text-[#7b4c1f] transition hover:bg-[#dca15d]/15" aria-label="Remove completed request from list">
+                      Remove from list
+                    </button>
+                  @end
                 @endif
 
                 @if(serviceRequest.canCancel && !serviceRequest.canConfirmComplete)
@@ -393,6 +398,14 @@
                       @end
                     @endif
                   </div>
+                @endif
+
+                @if(serviceRequest.isVerified)
+                  @form({ action: `/requested/${serviceRequest.id}/delete`, method: 'POST', class: 'mt-4 flex justify-end' })
+                    <button type="submit" class="rounded-full border border-[#dca15d]/30 bg-white px-5 py-2.5 text-xs font-black text-[#7b4c1f] transition hover:bg-[#dca15d]/15" aria-label="Remove completed request from list">
+                      Remove from list
+                    </button>
+                  @end
                 @endif
               @endif
 

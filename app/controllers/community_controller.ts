@@ -10,6 +10,11 @@ import GardenerService from '#models/gardener_service'
 import NurseryProduct from '#models/nursery_product'
 import NurseryCatalogCategory from '#models/nursery_catalog_category'
 import NurseryProfile from '#models/nursery_profile'
+import {
+  clearNotifications,
+  getNotificationItems,
+  markNotificationsSeen,
+} from '#services/notification_service'
 import PostComment from '#models/post_comment'
 import PostHashtag from '#models/post_hashtag'
 import PostPoll from '#models/post_poll'
@@ -494,12 +499,22 @@ export default class CommunityController {
 
   async notifications({ auth, view }: HttpContext) {
     const user = auth.user!
+    const notifications = await getNotificationItems(user)
+    const unreadCount = notifications.filter((notification) => notification.isUnread).length
+    await markNotificationsSeen(user)
 
     return view.render('pages/notification', {
       viewer: await this.getViewerProfile(user),
-      notifications: await this.getNotificationItems(user),
+      notifications,
+      unreadCount,
       suggestions: await this.getSuggestedUsers(user),
     })
+  }
+
+  async clearNotifications({ auth, response, session }: HttpContext) {
+    await clearNotifications(auth.user!)
+    session.flash('success', 'Notifications cleared and marked as read.')
+    return response.redirect('/notification')
   }
 
   async storeReview({ auth, params, request, response, session }: HttpContext) {
@@ -1187,107 +1202,6 @@ export default class CommunityController {
       reviewerUsername: review.reviewer?.username || null,
       createdAtHuman: review.createdAt?.toRelative() || 'Recently',
     }))
-  }
-
-  private async getNotificationItems(user: AuthUser) {
-    const [follows, comments, likeMilestones] = await Promise.all([
-      Follow.query()
-        .where('followingId', user.id)
-        .preload('follower', (query) => query.preload('accountProfile'))
-        .orderBy('createdAt', 'desc')
-        .limit(8),
-      PostComment.query()
-        .whereNot('userId', user.id)
-        .whereHas('post', (postQuery) => {
-          postQuery.where('userId', user.id)
-        })
-        .preload('user', (query) => query.preload('accountProfile'))
-        .preload('post')
-        .orderBy('createdAt', 'desc')
-        .limit(8),
-      this.getLikeMilestoneNotifications(user.id),
-    ])
-    const followItems = follows.map((follow) => ({
-      type: 'follow',
-      title: 'New follower',
-      body: `${this.formatUser(follow.follower).displayName} started following you.`,
-      actor: this.formatUser(follow.follower),
-      href: `/users/${follow.follower.username}`,
-      thumbnailUrl: null,
-      createdAtHuman: follow.createdAt?.toRelative() || 'Recently',
-      timestamp: follow.createdAt?.toMillis() || 0,
-    }))
-    const commentItems = comments.map((comment) => {
-      const actor = this.formatUser(comment.user)
-      const postPreview = comment.post.body || 'your post'
-
-      return {
-        type: 'comment',
-        title: 'New comment',
-        body: `${actor.displayName}: "${comment.body.slice(0, 90)}"`,
-        actor,
-        href: `/community#post-${comment.communityPostId}`,
-        thumbnailUrl: comment.post.mediaUrl,
-        postPreview: postPreview.slice(0, 90),
-        createdAtHuman: comment.createdAt?.toRelative() || 'Recently',
-        timestamp: comment.createdAt?.toMillis() || 0,
-      }
-    })
-
-    return [...followItems, ...commentItems, ...likeMilestones]
-      .sort((first, second) => second.timestamp - first.timestamp)
-      .slice(0, 18)
-  }
-
-  private async getLikeMilestoneNotifications(userId: number) {
-    const rows = (await db
-      .from('post_reactions')
-      .join('community_posts', 'community_posts.id', 'post_reactions.community_post_id')
-      .where('community_posts.user_id', userId)
-      .where('post_reactions.type', 'like')
-      .groupBy(
-        'community_posts.id',
-        'community_posts.body',
-        'community_posts.media_url',
-        'community_posts.created_at'
-      )
-      .select(
-        'community_posts.id',
-        'community_posts.body',
-        'community_posts.media_url',
-        'community_posts.created_at'
-      )
-      .count('* as total')) as {
-      id: number
-      body?: string | null
-      media_url?: string | null
-      created_at?: string | Date
-      total?: number | string
-    }[]
-    const thresholds = [5, 10, 20, 30, 40, 50, 75, 100, 150, 200]
-
-    const notifications = rows
-      .map((row) => {
-        const total = Number(row.total || 0)
-        const threshold = thresholds.filter((candidate) => total >= candidate).pop()
-
-        if (!threshold) return null
-
-        return {
-          type: 'milestone',
-          title: `${threshold} likes reached`,
-          body: `One of your posts is now at ${total} likes.`,
-          actor: null,
-          href: `/community#post-${row.id}`,
-          thumbnailUrl: row.media_url || null,
-          postPreview: (row.body || 'Image post').slice(0, 90),
-          createdAtHuman: 'Community milestone',
-          timestamp: row.created_at ? new Date(row.created_at).getTime() : 0,
-        }
-      })
-      .filter((item): item is NonNullable<typeof item> => Boolean(item))
-
-    return notifications
   }
 
   private async getReviewTarget(user: User) {

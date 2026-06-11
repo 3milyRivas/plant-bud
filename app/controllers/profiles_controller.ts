@@ -69,6 +69,10 @@ const socialLinkConfigs = [
   },
 ] as const
 const allowedPaymentMethods = ['Cash', 'Paypal', 'Card'] as const
+const DEMO_PAYOUT_PAYPAL_EMAIL = 'testplantbud@gmail.com'
+const DEMO_PAYOUT_CARDHOLDER = 'Plant Bud Demo Account'
+const DEMO_PAYOUT_CARD_BRAND = 'Demo Card'
+const DEMO_PAYOUT_CARD_LAST_FOUR = '0000'
 
 type SocialLinkConfig = (typeof socialLinkConfigs)[number]
 type SocialKey = SocialLinkConfig['key']
@@ -397,7 +401,6 @@ export default class ProfilesController {
       const roleProfile = await this.ensureGardenerProfile(user)
       const profileServices = this.normalizeList(payload.services_offered, 12, 90)
       const paymentMethods = this.normalizePaymentMethods(payload.payment_methods)
-      const payoutCard = this.normalizePayoutCard(payload.payout_card_number)
       const publicPhone = this.normalizePhone(payload.public_phone) || privatePhone
 
       roleProfile.merge({
@@ -408,16 +411,16 @@ export default class ProfilesController {
         servicesOffered: this.listToStoredText(profileServices, 255),
         paymentMethods: this.listToStoredText(paymentMethods),
         payoutPaypalEmail: paymentMethods.includes('Paypal')
-          ? this.cleanOptional(payload.payout_paypal_email)?.toLowerCase() || null
+          ? DEMO_PAYOUT_PAYPAL_EMAIL
           : null,
         payoutCardholderName: paymentMethods.includes('Card')
-          ? this.cleanOptional(payload.payout_cardholder_name) || roleProfile.payoutCardholderName
+          ? DEMO_PAYOUT_CARDHOLDER
           : null,
         payoutCardBrand: paymentMethods.includes('Card')
-          ? payoutCard?.brand || roleProfile.payoutCardBrand
+          ? DEMO_PAYOUT_CARD_BRAND
           : null,
         payoutCardLastFour: paymentMethods.includes('Card')
-          ? payoutCard?.lastFour || roleProfile.payoutCardLastFour
+          ? DEMO_PAYOUT_CARD_LAST_FOUR
           : null,
         publicPhone,
         isAvailable: this.booleanFromForm(payload.is_available, roleProfile.isAvailable),
@@ -431,7 +434,6 @@ export default class ProfilesController {
       const roleProfile = await this.ensureNurseryProfile(user)
       const profileServices = this.normalizeList(payload.services_offered, 16, 90)
       const paymentMethods = this.normalizePaymentMethods(payload.payment_methods)
-      const payoutCard = this.normalizePayoutCard(payload.payout_card_number)
       const publicPhone = this.normalizePhone(payload.public_phone) || privatePhone
 
       roleProfile.merge({
@@ -444,16 +446,16 @@ export default class ProfilesController {
         servicesOffered: this.listToStoredText(profileServices),
         paymentMethods: this.listToStoredText(paymentMethods),
         payoutPaypalEmail: paymentMethods.includes('Paypal')
-          ? this.cleanOptional(payload.payout_paypal_email)?.toLowerCase() || null
+          ? DEMO_PAYOUT_PAYPAL_EMAIL
           : null,
         payoutCardholderName: paymentMethods.includes('Card')
-          ? this.cleanOptional(payload.payout_cardholder_name) || roleProfile.payoutCardholderName
+          ? DEMO_PAYOUT_CARDHOLDER
           : null,
         payoutCardBrand: paymentMethods.includes('Card')
-          ? payoutCard?.brand || roleProfile.payoutCardBrand
+          ? DEMO_PAYOUT_CARD_BRAND
           : null,
         payoutCardLastFour: paymentMethods.includes('Card')
-          ? payoutCard?.lastFour || roleProfile.payoutCardLastFour
+          ? DEMO_PAYOUT_CARD_LAST_FOUR
           : null,
         publicPhone,
         publicEmail: this.cleanOptional(payload.public_email) || user.email,
@@ -543,33 +545,6 @@ export default class ProfilesController {
 
     if (publicPhone && !/^[0-9]{4}-[0-9]{4}$/.test(publicPhone)) {
       errors.public_phone = ['Public phone must use the format 0000-0000']
-    }
-
-    const paymentMethods = this.normalizePaymentMethods(payload.payment_methods)
-    const roleProfile =
-      user.role === 'gardener'
-        ? await GardenerProfile.findBy('userId', user.id)
-        : user.role === 'nursery'
-          ? await NurseryProfile.findBy('userId', user.id)
-          : null
-    const hasConfiguredCard = Boolean(roleProfile?.payoutCardLastFour)
-
-    if (paymentMethods.includes('Paypal') && !this.cleanOptional(payload.payout_paypal_email)) {
-      errors.payout_paypal_email = ['Add the PayPal account that will receive payments']
-    }
-
-    if (paymentMethods.includes('Card')) {
-      if (!this.cleanOptional(payload.payout_cardholder_name)) {
-        errors.payout_cardholder_name = ['Add the cardholder name']
-      }
-      if (!hasConfiguredCard && !this.normalizePayoutCard(payload.payout_card_number)) {
-        errors.payout_card_number = ['Add a valid card to receive payments']
-      } else if (
-        this.cleanOptional(payload.payout_card_number) &&
-        !this.normalizePayoutCard(payload.payout_card_number)
-      ) {
-        errors.payout_card_number = ['Add a valid card number']
-      }
     }
 
     if (user.role === 'nursery') {
@@ -1125,42 +1100,6 @@ export default class ProfilesController {
     const selected = new Set(this.splitStoredList(value).map((item) => item.toLowerCase()))
 
     return allowedPaymentMethods.filter((method) => selected.has(method.toLowerCase()))
-  }
-
-  private normalizePayoutCard(value?: string | null) {
-    const cardNumber = String(value || '').replace(/\D/g, '')
-    if (!cardNumber) return null
-    if (cardNumber.length < 13 || cardNumber.length > 19 || !this.passesLuhnCheck(cardNumber)) {
-      return null
-    }
-
-    return {
-      brand: /^4/.test(cardNumber)
-        ? 'Visa'
-        : /^(5[1-5]|2[2-7])/.test(cardNumber)
-          ? 'Mastercard'
-          : /^3[47]/.test(cardNumber)
-            ? 'American Express'
-            : 'Card',
-      lastFour: cardNumber.slice(-4),
-    }
-  }
-
-  private passesLuhnCheck(cardNumber: string) {
-    let sum = 0
-    let doubleDigit = false
-
-    for (let index = cardNumber.length - 1; index >= 0; index -= 1) {
-      let digit = Number(cardNumber[index])
-      if (doubleDigit) {
-        digit *= 2
-        if (digit > 9) digit -= 9
-      }
-      sum += digit
-      doubleDigit = !doubleDigit
-    }
-
-    return sum % 10 === 0
   }
 
   private splitStoredList(value?: string | null) {

@@ -110,6 +110,26 @@ function updateUsage(usage) {
   })
 
   if (usageText) usageText.textContent = asideLabel
+  document.querySelectorAll('[data-scanner-remaining]').forEach((item) => {
+    item.textContent = usage.unlimited ? 'Unlimited' : String(usage.remaining)
+  })
+  document.querySelectorAll('[data-scanner-remaining-summary]').forEach((item) => {
+    item.textContent = usage.unlimited
+      ? 'Unlimited analyses available'
+      : `${usage.remaining} of ${usage.limit} analyses available`
+  })
+  document.querySelectorAll('[data-scanner-reset]').forEach((item) => {
+    item.textContent = usage.unlimited
+      ? 'No monthly reset needed'
+      : `Restores on ${usage.resetLabel || 'the first day of next month'}`
+  })
+  document.querySelectorAll('[data-scanner-reset-date]').forEach((item) => {
+    item.textContent = usage.resetLabel || 'the first day of next month'
+  })
+  document.querySelectorAll('[data-scanner-progress]').forEach((item) => {
+    const percent = usage.unlimited ? 100 : (Number(usage.remaining) / Number(usage.limit || 1)) * 100
+    item.style.width = `${Math.max(0, Math.min(percent, 100))}%`
+  })
 }
 
 function showLimitState(data) {

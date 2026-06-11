@@ -63,6 +63,7 @@ export default class SubscriptionService {
       ? null
       : profile.scannerMonthlyLimit || FREE_SCANNER_MONTHLY_LIMIT
     const remaining = limit === null ? null : Math.max(limit - used, 0)
+    const periodEnd = DateTime.now().plus({ months: 1 }).startOf('month')
 
     return {
       used,
@@ -70,6 +71,8 @@ export default class SubscriptionService {
       remaining,
       unlimited: limit === null,
       periodStart: this.currentPeriodStart(),
+      periodEnd,
+      resetLabel: periodEnd.toFormat("MMMM d, yyyy 'at' h:mm a"),
       label: limit === null ? 'Scanner: unlimited' : `Uses left: ${remaining}/${limit}`,
     }
   }

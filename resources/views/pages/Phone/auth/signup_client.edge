@@ -1,0 +1,171 @@
+@layout()
+@slot('title')
+<title>Sign Up - Client</title>
+@endslot
+
+<div class="relative z-10 min-h-screen overflow-hidden" data-auth-page>
+    <div class="relative min-h-screen grid lg:grid-cols-2">
+        <div class="auth-signup-visual hidden min-h-0 overflow-hidden lg:block relative">
+            <img src="/resources/images/signup/register-client.png" alt="Signup Image" draggable="false" class="auth-signup-image pointer-events-none absolute inset-0 h-full w-full select-none object-cover">
+            <div class="absolute inset-0 bg-gradient-to-br from-[#113e14]/82 via-[#416543]/36 to-transparent"></div>
+            <div class="absolute inset-0 bg-black/20"></div>
+
+            <div class="relative z-10 h-full flex flex-col justify-end p-12 xl:p-16">
+                <div class="max-w-md">
+                    <div class="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-white/10 backdrop-blur-xl border border-white/10 shadow-xl mb-6">
+                        <div class="welcome-signal w-2 h-2 rounded-full bg-[#a8b841]"></div>
+                        <span class="text-sm font-bold tracking-[0.16em] text-white/85">CLIENT ACCOUNT</span>
+                    </div>
+
+                    <h2 class="text-5xl xl:text-6xl font-black text-white leading-[0.95] drop-shadow-2xl">
+                        Create Your
+                        <span class="block text-[#ebe3a7]">Plant Journey</span>
+                    </h2>
+
+                    <div class="w-28 h-1 bg-[#dca15d] rounded-full mt-8 mb-8"></div>
+
+                    <p class="text-lg xl:text-xl font-semibold text-white/85 leading-relaxed">
+                        Join Plant Bud to discover trusted gardeners and keep your plants thriving.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="relative min-h-screen overflow-y-auto overscroll-contain px-4 py-10 sm:px-6 lg:px-10 xl:px-14">
+            <div class="flex min-h-full items-start justify-center pt-16 lg:items-center lg:pt-0">
+            <a href="/register" class="absolute top-4 left-4 sm:top-6 sm:left-6 inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-white/10 backdrop-blur-xl border border-white/10 text-[#ebe3a7] font-bold text-sm shadow-lg hover:bg-[#ebe3a7] hover:text-[#113e14] transition-all duration-300">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path d="M15 19l-7-7 7-7"></path>
+                </svg>
+                Back
+            </a>
+
+            <div class="w-full max-w-[min(32rem,100%)]">
+                <div class="text-center mb-8">
+                    <div class="flex justify-center mb-6">
+                        <img src="/resources/images/essential/pb-logo.png" alt="Plant Bud" class="w-72 md:w-80 drop-shadow-[0_0_18px_rgba(255,255,255,0.16)]">
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl font-black text-white leading-tight drop-shadow-xl">
+                        Create Account
+                    </h1>
+
+                    <div class="w-24 h-1 bg-[#dca15d] rounded-full mx-auto mt-5 mb-5"></div>
+
+                    <p class="text-white/80 font-semibold text-base md:text-lg">
+                        Sign up as a client and start connecting with gardening professionals.
+                    </p>
+                </div>
+
+                <div class="relative">
+                    <div class="absolute -inset-2 bg-[#ebe3a7]/10 blur-3xl rounded-[1.5rem]"></div>
+
+                    <div class="auth-card is-alive auth-panel-in relative bg-[#113e14]/82 text-white backdrop-blur-3xl border border-[#ebe3a7]/12 rounded-[1.5rem] px-6 py-7 sm:px-7 sm:py-8 md:px-8 md:py-9 shadow-[0_30px_100px_rgba(0,0,0,0.30)] overflow-hidden">
+                        <div class="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white/70 to-transparent"></div>
+
+                        @form({ route: 'new_account.store', method: 'POST' })
+                        <input type="hidden" name="role" value="client">
+
+                        <div class="space-y-5">
+
+                            <div>
+                                @field.root({ name: 'username' })
+                                @!field.label({ text: 'Username', class: 'block text-[#ebe3a7] font-black text-sm mb-2 tracking-wide' })
+                                @!input.control({
+                                    id: 'username',
+                                    name: 'username',
+                                    placeholder: 'Choose a username',
+                                    value: flashMessages.get('old')?.username,
+                                    maxlength: 15,
+                                    minlength: 3,
+                                    'data-required-message': 'Username is required',
+                                    'data-username-input': true,
+                                    class: 'w-full h-12 px-4 rounded-2xl bg-[#ebe3a7]/95 text-[#113e14] placeholder:text-[#416543]/70 font-semibold border border-transparent focus:outline-none focus:ring-2 focus:ring-[#a8b841] shadow-sm'
+                                })
+                                @!field.error({ class: 'text-red-200 font-bold text-xs mt-2' })
+                                @end
+                            </div>
+
+                            <div>
+                                @field.root({ name: 'display_name' })
+                                @!field.label({ text: 'Display Name', class: 'block text-[#ebe3a7] font-black text-sm mb-2 tracking-wide' })
+                                @!input.control({
+                                    placeholder: 'Name shown in your profile',
+                                    value: flashMessages.get('old')?.display_name,
+                                    maxlength: 22,
+                                    minlength: 2,
+                                    'data-required-message': 'Display name is required',
+                                    class: 'w-full h-12 px-4 rounded-2xl bg-[#ebe3a7]/95 text-[#113e14] placeholder:text-[#416543]/70 font-semibold border border-transparent focus:outline-none focus:ring-2 focus:ring-[#a8b841] shadow-sm'
+                                })
+                                @!field.error({ class: 'text-red-200 font-bold text-xs mt-2' })
+                                @end
+                            </div>
+
+                            <div>
+                                @field.root({ name: 'email' })
+                                @!field.label({ text: 'Email', class: 'block text-[#ebe3a7] font-black text-sm mb-2 tracking-wide' })
+                                @!input.control({
+                                    type: 'email',
+                                    placeholder: 'Type your email address',
+                                    value: flashMessages.get('old')?.email,
+                                    'data-required-message': 'Email is required',
+                                    class: 'w-full h-12 px-4 rounded-2xl bg-[#ebe3a7]/95 text-[#113e14] placeholder:text-[#416543]/70 font-semibold border border-transparent focus:outline-none focus:ring-2 focus:ring-[#a8b841] shadow-sm'
+                                })
+                                @!field.error({ class: 'text-red-200 font-bold text-xs mt-2' })
+                                @end
+                            </div>
+
+                            <div>
+                                @field.root({ name: 'password' })
+                                @!field.label({ text: 'Password', class: 'block text-[#ebe3a7] font-black text-sm mb-2 tracking-wide' })
+                                <div class="relative">
+                                    @!input.control({
+                                        type: 'password',
+                                        id: 'password',
+                                        placeholder: 'Create a password',
+                                        'data-required-message': 'Password is required',
+                                        class: 'w-full h-12 pl-4 pr-12 rounded-2xl bg-[#ebe3a7]/95 text-[#113e14] placeholder:text-[#416543]/70 font-semibold border border-transparent focus:outline-none focus:ring-2 focus:ring-[#a8b841] shadow-sm'
+                                    })
+                                    <button type="button" data-password-toggle="password" class="absolute inset-y-0 right-0 px-4 flex items-center text-[#416543] hover:text-[#113e14] transition"></button>
+                                </div>
+                                @!field.error({ class: 'text-red-200 font-bold text-xs mt-2' })
+                                @end
+                            </div>
+
+                            <div>
+                                @field.root({ name: 'passwordConfirmation' })
+                                @!field.label({ text: 'Confirm Password', class: 'block text-[#ebe3a7] font-black text-sm mb-2 tracking-wide' })
+                                <div class="relative">
+                                    @!input.control({
+                                        type: 'password',
+                                        id: 'passwordConfirmation',
+                                        placeholder: 'Repeat your password',
+                                        'data-required-message': 'Password confirmation is required',
+                                        'data-confirm-with': 'password',
+                                        class: 'w-full h-12 pl-4 pr-12 rounded-2xl bg-[#ebe3a7]/95 text-[#113e14] placeholder:text-[#416543]/70 font-semibold border border-transparent focus:outline-none focus:ring-2 focus:ring-[#a8b841] shadow-sm'
+                                    })
+                                    <button type="button" data-password-toggle="passwordConfirmation" class="absolute inset-y-0 right-0 px-4 flex items-center text-[#416543] hover:text-[#113e14] transition"></button>
+                                </div>
+                                @!field.error({ class: 'text-red-200 font-bold text-xs mt-2' })
+                                @end
+                            </div>
+
+                            <button type="submit" class="w-full h-[3.25rem] bg-[#dca15d] text-[#113e14] rounded-2xl font-black text-base shadow-[0_15px_40px_rgba(0,0,0,0.18)] hover:-translate-y-0.5 transition-all duration-300">
+                                Sign Up
+                            </button>
+
+                        </div>
+                        @end
+                    </div>
+                </div>
+
+                <p class="text-center text-white/85 font-semibold mt-6 text-sm md:text-base">
+                    Already have an account?
+                    <a href="/login" class="text-[#ebe3a7] font-black hover:underline">Login here</a>
+                </p>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+@end
