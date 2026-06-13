@@ -6,7 +6,7 @@
   ? 'Upload a clear image first, then run the plant health analysis.'
   : 'Upload the base garden image first, build the design, then download the result.')
 
-<section class="tool-action-panel mx-auto mb-7 w-full max-w-[min(90rem,calc(100vw-2rem))]" aria-label="{{ isScanner ? 'Scanner actions' : 'Designer actions' }}">
+<section class="tool-action-panel mx-auto mb-7 w-full max-w-[min(90rem,calc(100vw-2rem))]" aria-label="{{ isScanner ? 'Scanner actions' : 'Designer actions' }}" data-tool-action-panel data-tool-mode="{{ mode }}">
   <div class="flex flex-col gap-5 rounded-[1.75rem] border border-white/28 bg-[#113e14]/82 p-5 text-white shadow-[0_22px_65px_rgba(17,62,20,0.28)] backdrop-blur-2xl lg:flex-row lg:items-center lg:justify-between">
     <div class="flex min-w-0 items-center gap-4">
       <span class="flex h-12 w-12 flex-none items-center justify-center rounded-2xl bg-[#ebe3a7] text-[#113e14] shadow-lg">
@@ -21,6 +21,12 @@
       </div>
     </div>
 
+    <div class="phone-tool-flow" aria-label="{{ isScanner ? 'Scanner workflow' : 'Designer workflow' }}">
+      <span><strong>1</strong>{{ isScanner ? 'Add photo' : 'Add garden' }}</span>
+      <span><strong>2</strong>{{ isScanner ? 'Review' : 'Design' }}</span>
+      <span><strong>3</strong>{{ isScanner ? 'Analyze' : 'Download' }}</span>
+    </div>
+
     <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
       <div class="relative" data-phone-upload-menu>
         <button type="button" class="tool-action-secondary w-full sm:w-auto" data-phone-upload-menu-button>
@@ -30,9 +36,15 @@
           <label for="{{ inputId }}" class="block w-full cursor-pointer rounded-2xl px-4 py-3 text-left text-sm font-black transition hover:bg-[#416543]/10" data-phone-upload-computer>
             Upload from this device
           </label>
-          <button type="button" class="block w-full cursor-pointer rounded-2xl px-4 py-3 text-left text-sm font-black transition hover:bg-[#416543]/10" data-phone-upload-trigger data-phone-upload-input="#{{ inputId }}" data-phone-upload-tool="{{ mode }}" data-phone-upload-tool-label="{{ isScanner ? 'Plant scanner' : 'Garden designer' }}">
-            Upload from phone
-          </button>
+          @if(frontend === 'Phone')
+            <button type="button" class="block w-full cursor-pointer rounded-2xl px-4 py-3 text-left text-sm font-black transition hover:bg-[#416543]/10" data-phone-camera-trigger data-phone-upload-input="#{{ inputId }}" data-phone-upload-tool-label="{{ isScanner ? 'Plant scanner' : 'Garden designer' }}">
+              Open camera
+            </button>
+          @else
+            <button type="button" class="block w-full cursor-pointer rounded-2xl px-4 py-3 text-left text-sm font-black transition hover:bg-[#416543]/10" data-phone-upload-trigger data-phone-upload-input="#{{ inputId }}" data-phone-upload-tool="{{ mode }}" data-phone-upload-tool-label="{{ isScanner ? 'Plant scanner' : 'Garden designer' }}">
+              Upload from phone
+            </button>
+          @endif
         </div>
       </div>
 

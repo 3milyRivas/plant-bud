@@ -14,8 +14,15 @@
     searchError
   })
 
-  <div class="mx-auto grid max-w-[1360px] gap-8 px-4 pb-24 pt-36 lg:px-6 grid-cols-1 xl:grid-cols-[minmax(0,790px)_26rem] xl:items-start xl:gap-12 2xl:grid-cols-[minmax(0,830px)_27rem] 2xl:gap-14" data-community-layout>
+  <div class="mx-auto grid max-w-[1360px] gap-8 px-4 pb-24 pt-4 lg:px-6 grid-cols-1 xl:grid-cols-[minmax(0,790px)_26rem] xl:items-start xl:gap-12 2xl:grid-cols-[minmax(0,830px)_27rem] 2xl:gap-14" data-community-layout>
     <main class="min-w-0 space-y-6" data-community-main>
+
+      @!component('components/community-mobile-tools', {
+        favoriteAccounts,
+        suggestions,
+        friendAccounts,
+        trendingHashtags,
+      })
 
       @form({
         action: '/community/search',
@@ -44,7 +51,7 @@
         </div>
       @endif
 
-      <div class="community-composer rounded-3xl border p-4 sm:p-5">
+      <div class="community-composer rounded-3xl border p-4 sm:p-5" data-community-composer>
         @form({
           action: '/community/posts',
           method: 'POST',
@@ -60,7 +67,7 @@
             <span class="hidden rounded-full bg-white/55 px-3 py-1.5 text-xs font-black text-[#416543] sm:inline">Plant Bud</span>
           </div>
 
-          <div class="flex items-start gap-3 sm:gap-6">
+          <div class="community-composer-body flex items-start gap-3 sm:gap-6">
             @if(viewer.avatarUrl)
               <img src="{{ viewer.avatarUrl }}" alt="" loading="lazy" decoding="async" class="h-12 w-12 rounded-full object-cover">
             @else
@@ -79,7 +86,7 @@
           @endif
           <p class="hidden text-xs font-bold text-red-800" data-community-form-error></p>
 
-          <div class="grid gap-3 md:grid-cols-[1fr_auto]">
+          <div class="community-composer-options grid gap-3 md:grid-cols-[1fr_auto]">
             <label class="community-composer-meta block rounded-2xl px-4 py-3">
               <span class="text-xs font-black uppercase tracking-[0.12em] text-[#416543]">Hashtags</span>
               <input name="hashtags" value="{{ old.hashtags ?? '' }}" maxlength="240" placeholder="plants balcony care" class="mt-2 h-10 w-full bg-transparent text-sm font-semibold text-[#113e14] outline-none placeholder:text-[#416543]/55">
@@ -119,8 +126,8 @@
             @endif
           </div>
 
-          <div class="flex justify-end sm:justify-end">
-            <button type="submit" class="community-publish-button flex items-center gap-2 rounded-full px-6 py-3 text-sm font-black">
+          <div class="community-composer-submit flex justify-end sm:justify-end">
+            <button type="submit" class="community-publish-button flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-black">
               <div class="h-6 w-6 bg-[url('/resources/images/community/send.png')] bg-contain bg-no-repeat"></div>
               Publish
             </button>
@@ -145,7 +152,7 @@
       </div>
     </main>
 
-    <aside class="community-sidebar-shell min-w-0 xl:sticky xl:self-start" data-community-sidebar>
+    <aside class="community-sidebar-shell hidden min-w-0 xl:sticky xl:block xl:self-start" data-community-sidebar>
       <div class="community-sidebar-scroll space-y-5 xl:overflow-y-auto xl:overscroll-contain xl:p-1 xl:pb-10 xl:pr-3">
       <section class="relative z-50 hidden overflow-visible rounded-3xl border border-white/30 bg-white/24 p-4 shadow-xl backdrop-blur-xl xl:block">
         <div class="flex items-center justify-between gap-3">

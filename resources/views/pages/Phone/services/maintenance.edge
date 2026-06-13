@@ -8,7 +8,7 @@
 @let(avatarUrl = viewerProfile?.avatarUrl || auth.user?.profilePicture)
 @let(avatarInitial = displayName ? Array.from(displayName)[0].toLocaleUpperCase('en') : 'P')
 
-<div class="relative z-10 min-h-dvh overflow-hidden text-[#113e14]">
+<div class="phone-services-page relative z-10 min-h-dvh overflow-hidden text-[#113e14]" data-phone-services>
   @!component('components/app-navbar', {
     section: 'Services',
     active: 'services',
@@ -20,8 +20,8 @@
     planLabel: viewerProfile?.planLabel || 'Free',
   })
 
-  <main class="relative z-10 mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))] px-4 pb-24 pt-8 sm:px-5 lg:px-10">
-    <section class="relative z-40 grid gap-10 py-12 lg:grid-cols-[0.95fr_1.05fr] lg:items-end lg:py-16">
+  <main class="relative z-10 mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))] px-4 pb-24 pt-3 sm:px-5 lg:px-10">
+    <section class="phone-services-hero relative z-40 grid gap-10 pb-8 pt-4 lg:grid-cols-[0.95fr_1.05fr] lg:items-end lg:py-16" data-phone-first-content>
       <div class="text-white">
         <p class="text-sm font-black uppercase tracking-[0.24em] text-[#ebe3a7]">Gardener services</p>
         <h1 class="mt-4 font-abril text-5xl leading-[1.02] text-white drop-shadow-lg md:text-7xl">
@@ -44,33 +44,41 @@
       </form>
     </section>
 
-    <section class="relative z-10 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
+    <section class="phone-services-shortcuts relative z-10 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4" aria-label="Service shortcuts">
       <a href="/requested" class="rounded-[1.25rem] border border-white/34 bg-[#ebe3a7]/88 p-5 shadow-xl backdrop-blur-2xl transition hover:-translate-y-1">
-        <p class="text-xs font-black uppercase tracking-[0.18em] text-[#416543]">Requests</p>
-        <p class="mt-3 text-3xl font-black">{{ stats.available }}</p>
-        <p class="mt-1 text-sm font-bold text-[#416543]">Available gardeners</p>
+        <span class="phone-services-shortcut-icon">
+          <img src="/resources/images/phone-icons/Requested.png" alt="">
+        </span>
+        <p class="text-xs font-black uppercase tracking-[0.18em] text-[#416543]">My requests</p>
+        <p class="mt-1 text-sm font-bold text-[#416543]">Track gardener services</p>
       </a>
 
       <a href="#favorites" class="rounded-[1.25rem] border border-white/34 bg-white/82 p-5 shadow-xl backdrop-blur-2xl transition hover:-translate-y-1">
+        <span class="phone-services-shortcut-icon">
+          <img src="/resources/images/phone-icons/Saved.png" alt="">
+        </span>
         <p class="text-xs font-black uppercase tracking-[0.18em] text-[#416543]">Saved</p>
-        <p class="mt-3 text-3xl font-black">{{ stats.favorites }}</p>
-        <p class="mt-1 text-sm font-bold text-[#416543]">Favorite gardeners</p>
+        <p class="mt-1 text-sm font-bold text-[#416543]">{{ stats.favorites }} favorite gardeners</p>
       </a>
 
-      <a href="#featured" class="rounded-[1.25rem] border border-white/34 bg-[#a8b841]/24 p-5 shadow-xl backdrop-blur-2xl transition hover:-translate-y-1">
-        <p class="text-xs font-black uppercase tracking-[0.18em] text-[#416543]">Featured</p>
-        <p class="mt-3 text-3xl font-black">{{ stats.featured }}</p>
-        <p class="mt-1 text-sm font-bold text-[#416543]">Top public profiles</p>
+      <a href="/nurseries" class="rounded-[1.25rem] border border-white/34 bg-[#a8b841]/24 p-5 shadow-xl backdrop-blur-2xl transition hover:-translate-y-1">
+        <span class="phone-services-shortcut-icon">
+          <img src="/resources/images/phone-icons/Nurseries.png" alt="">
+        </span>
+        <p class="text-xs font-black uppercase tracking-[0.18em] text-[#416543]">Find nurseries</p>
+        <p class="mt-1 text-sm font-bold text-[#416543]">Plants, products and places</p>
       </a>
 
       <a href="/designer" class="rounded-[1.25rem] border border-white/34 bg-[#113e14] p-5 text-[#ebe3a7] shadow-xl backdrop-blur-2xl transition hover:-translate-y-1 hover:bg-[#416543]">
+        <span class="phone-services-shortcut-icon phone-services-shortcut-icon--light">
+          <img src="/resources/images/phone-icons/Designer.png" alt="">
+        </span>
         <p class="text-xs font-black uppercase tracking-[0.18em] text-[#ebe3a7]/80">Planning</p>
-        <p class="mt-3 text-3xl font-black">2D</p>
-        <p class="mt-1 text-sm font-bold text-white/72">Garden designer</p>
+        <p class="mt-1 text-sm font-bold text-white/72">Open garden designer</p>
       </a>
     </section>
 
-    <section id="featured" class="scroll-mt-32 pt-14">
+    <section id="featured" class="phone-services-section scroll-mt-32 pt-14">
       <div class="mb-6 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div>
           <p class="text-sm font-black uppercase tracking-[0.2em] text-[#ebe3a7]">Recommended</p>
@@ -79,7 +87,7 @@
         <a href="#gardeners" class="inline-flex rounded-full bg-white/74 px-5 py-3 text-sm font-black text-[#113e14] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]">View all</a>
       </div>
 
-      <div class="grid gap-5 lg:grid-cols-2 xl:grid-cols-4">
+      <div class="phone-services-featured-track grid gap-5 lg:grid-cols-2 xl:grid-cols-4">
         @each(gardener in featuredGardeners)
           @!component('components/services/provider-card', {
             name: gardener.name,
@@ -98,13 +106,14 @@
             profileHref: gardener.profileHref,
             isFavorite: gardener.isFavorite,
             isPremium: gardener.isPremium,
-            isAvailable: gardener.isAvailable
+            isAvailable: gardener.isAvailable,
+            variant: 'phone'
           })
         @end
       </div>
     </section>
 
-    <section id="favorites" class="scroll-mt-32 pt-14">
+    <section id="favorites" class="phone-services-section scroll-mt-32 pt-14">
       <div class="mb-6 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div>
           <p class="text-sm font-black uppercase tracking-[0.2em] text-[#ebe3a7]">Saved</p>
@@ -114,7 +123,7 @@
       </div>
 
       @if(favoriteGardeners.length)
-        <div class="grid gap-5 lg:grid-cols-2 xl:grid-cols-4">
+        <div class="phone-services-favorites-track grid gap-5 lg:grid-cols-2 xl:grid-cols-4">
           @each(gardener in favoriteGardeners)
             @!component('components/services/provider-card', {
               name: gardener.name,
@@ -133,7 +142,8 @@
               profileHref: gardener.profileHref,
               isFavorite: gardener.isFavorite,
               isPremium: gardener.isPremium,
-              isAvailable: gardener.isAvailable
+              isAvailable: gardener.isAvailable,
+              variant: 'phone'
             })
           @end
         </div>
@@ -147,7 +157,7 @@
       @endif
     </section>
 
-    <section id="gardeners" class="scroll-mt-32 pt-14">
+    <section id="gardeners" class="phone-services-section phone-services-catalog scroll-mt-32 pt-14">
       <div class="mb-6 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div>
           <p class="text-sm font-black uppercase tracking-[0.2em] text-[#ebe3a7]">Catalog</p>
@@ -179,7 +189,8 @@
             profileHref: gardener.profileHref,
             isFavorite: gardener.isFavorite,
             isPremium: gardener.isPremium,
-            isAvailable: gardener.isAvailable
+            isAvailable: gardener.isAvailable,
+            variant: 'phone'
           })
         @else
           <div class="rounded-[1.25rem] border border-[#416543]/12 bg-white/82 p-8 text-center shadow-xl backdrop-blur-2xl xl:col-span-3">

@@ -795,6 +795,455 @@ function initAppNavbarMenus() {
   })
 }
 
+function initPhoneNavbarScroll() {
+  const navbar = document.querySelector('[data-phone-navbar]')
+  const bottomNavbar = document.querySelector('[data-phone-bottom-nav]')
+  const drawerToggle = document.querySelector('[data-phone-nav-toggle]')
+  const toolsMenu = document.querySelector('[data-phone-tools-menu]')
+
+  if (!navbar || navbar.dataset.phoneNavbarScrollReady === 'true') return
+
+  let lastScrollY = window.scrollY
+  let frameRequested = false
+  let bottomInteractionTimer = null
+  let restoreBottomDimmedAfterInteraction = false
+  navbar.dataset.phoneNavbarScrollReady = 'true'
+
+  const showTopNavbar = () => {
+    navbar.classList.remove('phone-navbar-hidden')
+  }
+  const temporarilyShowBottomNavbar = () => {
+    restoreBottomDimmedAfterInteraction =
+      restoreBottomDimmedAfterInteraction ||
+      bottomNavbar?.classList.contains('phone-bottom-nav-dimmed')
+
+    bottomNavbar?.classList.remove('phone-bottom-nav-dimmed')
+    bottomNavbar?.classList.add('phone-bottom-nav-interacting')
+
+    if (bottomInteractionTimer) {
+      window.clearTimeout(bottomInteractionTimer)
+    }
+    bottomInteractionTimer = window.setTimeout(() => {
+      bottomNavbar?.classList.remove('phone-bottom-nav-interacting')
+      bottomNavbar?.classList.toggle(
+        'phone-bottom-nav-dimmed',
+        restoreBottomDimmedAfterInteraction
+      )
+      restoreBottomDimmedAfterInteraction = false
+      bottomInteractionTimer = null
+    }, 900)
+  }
+  const updateNavbar = () => {
+    const currentScrollY = Math.max(window.scrollY, 0)
+    const delta = currentScrollY - lastScrollY
+    const drawerOpen = drawerToggle?.checked === true
+
+    if (Math.abs(delta) > 3) {
+      if (bottomInteractionTimer) {
+        window.clearTimeout(bottomInteractionTimer)
+        bottomInteractionTimer = null
+      }
+      restoreBottomDimmedAfterInteraction = false
+      bottomNavbar?.classList.remove('phone-bottom-nav-interacting')
+    }
+
+    if (drawerOpen || currentScrollY <= 18 || delta < -6) {
+      showTopNavbar()
+    } else if (delta > 6 && currentScrollY > 80) {
+      navbar.classList.add('phone-navbar-hidden')
+    }
+
+    if (currentScrollY <= 18 || delta < -3) {
+      bottomNavbar?.classList.remove('phone-bottom-nav-dimmed')
+    } else if (delta > 3) {
+      bottomNavbar?.classList.add('phone-bottom-nav-dimmed')
+    }
+
+    lastScrollY = currentScrollY
+    frameRequested = false
+  }
+
+  window.addEventListener(
+    'scroll',
+    () => {
+      if (toolsMenu?.open) {
+        toolsMenu.removeAttribute('open')
+      }
+      if (frameRequested) return
+      frameRequested = true
+      window.requestAnimationFrame(updateNavbar)
+    },
+    { passive: true }
+  )
+
+  drawerToggle?.addEventListener('change', showTopNavbar)
+  toolsMenu?.addEventListener('toggle', () => {
+    if (toolsMenu.open) {
+      showTopNavbar()
+      temporarilyShowBottomNavbar()
+    }
+  })
+  bottomNavbar?.addEventListener('pointerdown', temporarilyShowBottomNavbar)
+  bottomNavbar?.addEventListener('focusin', temporarilyShowBottomNavbar)
+}
+
+function initPhoneNowBar() {
+  const nowBar = document.querySelector('[data-phone-now-bar]')
+  const cycleButton = nowBar?.querySelector('[data-now-bar-cycle]')
+  const panels = Array.from(nowBar?.querySelectorAll('[data-now-bar-panel]') || [])
+
+  if (
+    !nowBar ||
+    !cycleButton ||
+    panels.length < 2 ||
+    nowBar.dataset.phoneNowBarReady === 'true'
+  ) {
+    return
+  }
+
+  nowBar.dataset.phoneNowBarReady = 'true'
+  const rotationDelay = 7200
+  let activeIndex = 0
+  let rotationTimer = null
+  let pointerId = null
+  let pointerStartX = 0
+  let pointerStartY = 0
+  let pointerMoved = false
+
+  const progress = nowBar.querySelector('.phone-now-bar-progress')
+  const weatherMain = nowBar.querySelector('[data-now-bar-weather-main]')
+  const weatherDetail = nowBar.querySelector('[data-now-bar-weather-detail]')
+  const weatherIcon = nowBar.querySelector('[data-now-bar-weather-icon]')
+  const panelLabels = ['Show weather', 'Show requests', 'Show Plant Bud']
+
+  const showPanel = (index) => {
+    activeIndex = (index + panels.length) % panels.length
+    nowBar.dataset.nowBarIndex = String(activeIndex)
+
+    panels.forEach((panel, panelIndex) => {
+      const active = panelIndex === activeIndex
+      panel.classList.toggle('is-active', active)
+      panel.setAttribute('aria-hidden', String(!active))
+    })
+    cycleButton.setAttribute('aria-label', panelLabels[activeIndex] || 'Change Now Bar')
+  }
+
+  const restartProgress = () => {
+    if (!progress) return
+
+    progress.classList.remove('is-running')
+    void progress.offsetWidth
+    progress.classList.add('is-running')
+  }
+
+  const stopRotation = () => {
+    if (rotationTimer) {
+      window.clearTimeout(rotationTimer)
+      rotationTimer = null
+    }
+    progress?.classList.remove('is-running')
+  }
+
+  const startRotation = () => {
+    stopRotation()
+    restartProgress()
+    rotationTimer = window.setTimeout(() => {
+      showPanel(activeIndex + 1)
+      startRotation()
+    }, rotationDelay)
+  }
+
+  const weatherCopy = (code, temperature) => {
+    if ([95, 96, 99].includes(code)) {
+      return { tip: 'Storm nearby, move pots inside', condition: 'Storm', symbol: 'storm' }
+    }
+    if ([51, 53, 55, 56, 57, 61, 63, 65, 80, 81, 82].includes(code)) {
+      return { tip: 'Rain today, skip watering', condition: 'Rain', symbol: 'rain' }
+    }
+    if ([45, 48].includes(code)) {
+      return { tip: 'High humidity, check leaves', condition: 'Misty', symbol: 'cloud' }
+    }
+    if (temperature >= 32) {
+      return { tip: 'Strong heat, check the soil', condition: 'Very hot', symbol: 'sun' }
+    }
+    if (temperature >= 28 && [0, 1, 2].includes(code)) {
+      return { tip: 'Mucho sol, revisa el riego', condition: 'Sunny', symbol: 'sun' }
+    }
+    if (temperature <= 16) {
+      return { tip: 'Cool weather, water less', condition: 'Cool', symbol: 'cloud' }
+    }
+    if ([0, 1].includes(code)) {
+      return { tip: 'Good light, rotate your pots', condition: 'Clear', symbol: 'sun' }
+    }
+    if ([2, 3].includes(code)) {
+      return { tip: 'Cloudy day, avoid overwatering', condition: 'Cloudy', symbol: 'cloud' }
+    }
+    return { tip: 'Observe the soil before watering', condition: 'Local weather', symbol: 'sun' }
+  }
+
+  const setWeatherIcon = (symbol) => {
+    if (!weatherIcon) return
+
+    const paths = {
+      sun: '<circle cx="12" cy="12" r="3.5" stroke-width="2"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke-width="2" stroke-linecap="round"/>',
+      cloud: '<path d="M7 18h10a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.2 8.5 4.75 4.75 0 0 0 7 18Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+      rain: '<path d="M7 15h10a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.2 5.5 4.75 4.75 0 0 0 7 15Z" stroke-width="2"/><path d="m8 18-1 2m5-2-1 2m5-2-1 2" stroke-width="2" stroke-linecap="round"/>',
+      storm: '<path d="M7 14h10a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.2 4.5 4.75 4.75 0 0 0 7 14Z" stroke-width="2"/><path d="m13 15-3 4h3l-2 3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+    }
+    const svg = weatherIcon.querySelector('svg')
+    if (svg) svg.innerHTML = paths[symbol] || paths.sun
+  }
+
+  const renderWeather = (payload, locationLabel) => {
+    const temperature = Math.round(Number(payload?.current?.temperature_2m))
+    const code = Number(payload?.current?.weather_code)
+    const description = weatherCopy(code, temperature)
+
+    if (weatherMain) {
+      weatherMain.textContent = description.tip
+    }
+    if (weatherDetail) {
+      weatherDetail.textContent = Number.isFinite(temperature)
+        ? `${temperature} C - ${locationLabel}`
+        : `${description.condition} - ${locationLabel}`
+    }
+    setWeatherIcon(description.symbol)
+  }
+
+  const loadWeather = async () => {
+    const cacheKey = 'plantBudNowBarWeather'
+    try {
+      const cached = JSON.parse(window.localStorage.getItem(cacheKey) || 'null')
+      if (cached?.expiresAt > Date.now()) {
+        renderWeather(cached.payload, cached.locationLabel)
+        return
+      }
+    } catch {
+      window.localStorage.removeItem(cacheKey)
+    }
+
+    let latitude = 13.6929
+    let longitude = -89.2182
+    let locationLabel = 'San Salvador'
+
+    try {
+      if (navigator.permissions && navigator.geolocation) {
+        const permission = await navigator.permissions.query({ name: 'geolocation' })
+        if (permission.state === 'granted') {
+          const position = await new Promise((resolve, reject) =>
+            navigator.geolocation.getCurrentPosition(resolve, reject, {
+              enableHighAccuracy: false,
+              timeout: 4000,
+              maximumAge: 30 * 60 * 1000,
+            })
+          )
+          latitude = position.coords.latitude
+          longitude = position.coords.longitude
+          locationLabel = 'Your location'
+        }
+      }
+    } catch {
+      locationLabel = 'San Salvador'
+    }
+
+    try {
+      const query = new URLSearchParams({
+        latitude: String(latitude),
+        longitude: String(longitude),
+        current: 'temperature_2m,weather_code',
+        timezone: 'auto',
+      })
+      const response = await fetch(`https://api.open-meteo.com/v1/forecast?${query}`)
+      if (!response.ok) throw new Error('Weather unavailable')
+      const payload = await response.json()
+      renderWeather(payload, locationLabel)
+      window.localStorage.setItem(
+        cacheKey,
+        JSON.stringify({
+          payload,
+          locationLabel,
+          expiresAt: Date.now() + 20 * 60 * 1000,
+        })
+      )
+    } catch {
+      if (weatherMain) weatherMain.textContent = 'Weather unavailable'
+      if (weatherDetail) weatherDetail.textContent = locationLabel
+    }
+  }
+
+  cycleButton.addEventListener('click', () => {
+    if (pointerMoved) {
+      pointerMoved = false
+      return
+    }
+    showPanel(activeIndex + 1)
+    startRotation()
+  })
+
+  cycleButton.addEventListener('pointerdown', (event) => {
+    pointerId = event.pointerId
+    pointerStartX = event.clientX
+    pointerStartY = event.clientY
+    pointerMoved = false
+    cycleButton.setPointerCapture?.(event.pointerId)
+  })
+  cycleButton.addEventListener('pointermove', (event) => {
+    if (event.pointerId !== pointerId) return
+    const deltaX = event.clientX - pointerStartX
+    const deltaY = event.clientY - pointerStartY
+    if (Math.abs(deltaX) < 34 || Math.abs(deltaX) < Math.abs(deltaY) * 1.25) return
+
+    pointerMoved = true
+    showPanel(activeIndex + (deltaX < 0 ? 1 : -1))
+    startRotation()
+    pointerId = null
+    cycleButton.releasePointerCapture?.(event.pointerId)
+  })
+  cycleButton.addEventListener('pointerup', () => {
+    pointerId = null
+  })
+  cycleButton.addEventListener('pointercancel', () => {
+    pointerId = null
+    pointerMoved = false
+  })
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      stopRotation()
+      return
+    }
+    startRotation()
+  })
+
+  showPanel(0)
+  startRotation()
+  loadWeather()
+}
+
+function initPhoneToolsMenu() {
+  const toolsMenu = document.querySelector('[data-phone-tools-menu]')
+
+  if (!toolsMenu || toolsMenu.dataset.phoneToolsMenuReady === 'true') return
+
+  toolsMenu.dataset.phoneToolsMenuReady = 'true'
+  document.addEventListener('pointerdown', (event) => {
+    if (!toolsMenu.open || toolsMenu.contains(event.target)) return
+
+    toolsMenu.removeAttribute('open')
+  })
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      toolsMenu.removeAttribute('open')
+    }
+  })
+}
+
+function initPhoneDrawerSwipe() {
+  const drawer = document.querySelector('[data-phone-nav-drawer]')
+  const toggle = document.querySelector('[data-phone-nav-toggle]')
+
+  if (!drawer || !toggle || drawer.dataset.phoneDrawerSwipeReady === 'true') return
+
+  drawer.dataset.phoneDrawerSwipeReady = 'true'
+  let pointerId = null
+  let startX = 0
+  let startY = 0
+  let startTime = 0
+  let dragX = 0
+  let directionLocked = false
+  let horizontalGesture = false
+  let lockedScrollY = 0
+
+  const syncPageLock = () => {
+    if (toggle.checked) {
+      if (document.body.classList.contains('phone-drawer-page-locked')) return
+
+      lockedScrollY = Math.max(window.scrollY, 0)
+      document.body.classList.add('phone-drawer-page-locked')
+      document.body.style.setProperty('--phone-drawer-scroll-offset', `-${lockedScrollY}px`)
+      return
+    }
+
+    if (!document.body.classList.contains('phone-drawer-page-locked')) return
+
+    document.body.classList.remove('phone-drawer-page-locked')
+    document.body.style.removeProperty('--phone-drawer-scroll-offset')
+    window.scrollTo({ top: lockedScrollY, behavior: 'instant' })
+  }
+
+  const resetDrawer = () => {
+    pointerId = null
+    dragX = 0
+    directionLocked = false
+    horizontalGesture = false
+    drawer.classList.remove('phone-nav-drawer-dragging')
+    drawer.style.removeProperty('transform')
+  }
+
+  drawer.addEventListener('pointerdown', (event) => {
+    if (!toggle.checked || event.button !== 0 || pointerId !== null) return
+
+    pointerId = event.pointerId
+    startX = event.clientX
+    startY = event.clientY
+    startTime = performance.now()
+    dragX = 0
+    directionLocked = false
+    horizontalGesture = false
+    drawer.setPointerCapture?.(event.pointerId)
+  })
+
+  drawer.addEventListener('pointermove', (event) => {
+    if (event.pointerId !== pointerId) return
+
+    const deltaX = event.clientX - startX
+    const deltaY = event.clientY - startY
+
+    if (!directionLocked && Math.max(Math.abs(deltaX), Math.abs(deltaY)) > 8) {
+      directionLocked = true
+      horizontalGesture = Math.abs(deltaX) > Math.abs(deltaY) * 1.15 && deltaX < 0
+      if (horizontalGesture) drawer.classList.add('phone-nav-drawer-dragging')
+    }
+
+    if (!horizontalGesture) return
+
+    dragX = Math.min(0, deltaX)
+    drawer.style.transform = `translate3d(${dragX}px, 0, 0)`
+    event.preventDefault()
+  })
+
+  const finishSwipe = (event) => {
+    if (event.pointerId !== pointerId) return
+
+    const elapsed = Math.max(performance.now() - startTime, 1)
+    const velocity = Math.abs(dragX) / elapsed
+    const shouldClose = horizontalGesture && (dragX < -72 || velocity > 0.55)
+
+    drawer.releasePointerCapture?.(event.pointerId)
+    drawer.classList.remove('phone-nav-drawer-dragging')
+
+    if (shouldClose) {
+      toggle.checked = false
+      toggle.dispatchEvent(new Event('change', { bubbles: true }))
+      window.requestAnimationFrame(() => drawer.style.removeProperty('transform'))
+      pointerId = null
+      dragX = 0
+      directionLocked = false
+      horizontalGesture = false
+      return
+    }
+
+    resetDrawer()
+  }
+
+  drawer.addEventListener('pointerup', finishSwipe)
+  drawer.addEventListener('pointercancel', finishSwipe)
+  toggle.addEventListener('change', () => {
+    syncPageLock()
+    if (!toggle.checked && pointerId === null) resetDrawer()
+  })
+  syncPageLock()
+}
+
 function bindRelationUnfollowForm(form) {
   if (form.dataset.relationUnfollowReady === 'true') return
 
@@ -1153,6 +1602,7 @@ function initCommunityPage() {
   if (!page) return
 
   initCommunityNavbar(page)
+  initCommunityMobileTools(page)
   page.querySelectorAll('[data-community-post-form]').forEach(bindCommunityPostForm)
   page.querySelectorAll('[data-community-search-form]').forEach(bindCommunitySearchForm)
   page.querySelectorAll('[data-community-file-trigger]').forEach(bindCommunityFileTrigger)
@@ -1166,6 +1616,65 @@ function initCommunityPage() {
   page.querySelectorAll('[data-follow-form]').forEach(bindCommunityFollowForm)
   page.querySelectorAll('[data-favorite-account-form]').forEach(bindFavoriteAccountForm)
   page.querySelectorAll('[data-share-post]').forEach(bindCommunityShareButton)
+}
+
+function initCommunityMobileTools(page) {
+  const tools = page.querySelector('[data-community-mobile-tools]')
+  const track = tools?.querySelector('[data-community-mobile-tools-track]')
+  const cards = Array.from(track?.querySelectorAll('.community-mobile-tool-card') || [])
+  const dots = Array.from(tools?.querySelectorAll('[data-community-mobile-tools-dot]') || [])
+
+  if (!tools || !track || !cards.length || tools.dataset.communityMobileToolsReady === 'true') {
+    return
+  }
+
+  let frameRequested = false
+  const setActiveDot = (index) => {
+    dots.forEach((dot, dotIndex) => {
+      const active = dotIndex === index
+      dot.classList.toggle('is-active', active)
+      dot.setAttribute('aria-current', active ? 'true' : 'false')
+    })
+  }
+  const updateActiveDot = () => {
+    const trackCenter = track.scrollLeft + track.clientWidth / 2
+    let activeIndex = 0
+    let shortestDistance = Number.POSITIVE_INFINITY
+
+    cards.forEach((card, index) => {
+      const cardCenter = card.offsetLeft + card.offsetWidth / 2
+      const distance = Math.abs(cardCenter - trackCenter)
+
+      if (distance < shortestDistance) {
+        shortestDistance = distance
+        activeIndex = index
+      }
+    })
+
+    setActiveDot(activeIndex)
+    frameRequested = false
+  }
+
+  track.addEventListener(
+    'scroll',
+    () => {
+      if (frameRequested) return
+      frameRequested = true
+      window.requestAnimationFrame(updateActiveDot)
+    },
+    { passive: true }
+  )
+  dots.forEach((dot, index) => {
+    dot.addEventListener('click', () => {
+      track.scrollTo({
+        left: cards[index].offsetLeft - track.offsetLeft,
+        behavior: 'smooth',
+      })
+      setActiveDot(index)
+    })
+  })
+  tools.dataset.communityMobileToolsReady = 'true'
+  updateActiveDot()
 }
 
 function initCommunityNavbar(page) {
@@ -3539,6 +4048,10 @@ async function initApp() {
   initProfileRelationsModal()
   initProfilePostPreview()
   initAppNavbarMenus()
+  initPhoneNavbarScroll()
+  initPhoneNowBar()
+  initPhoneDrawerSwipe()
+  initPhoneToolsMenu()
   initCommunityPage()
   initPlantCatalogSearch()
   initGardenerSearch()

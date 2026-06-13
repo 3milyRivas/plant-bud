@@ -244,6 +244,55 @@ export async function getUnreadNotificationCount(user: User) {
   return notifications.filter((notification) => notification.isUnread).length
 }
 
+export async function getNowBarRequestSummary(user: User) {
+  const activeStatuses: ServiceRequest['status'][] = ['pending', 'accepted', 'scheduled']
+  let requests: ServiceRequest[] = []
+
+  if (user.role === 'gardener') {
+    const profile = await GardenerProfile.query().where('userId', user.id).first()
+    requests = profile
+      ? await ServiceRequest.query()
+          .where('gardenerProfileId', profile.id)
+          .whereIn('status', activeStatuses)
+          .whereNull('gardenerHiddenAt')
+          .orderBy('updatedAt', 'desc')
+      : []
+  } else if (user.role === 'nursery') {
+    const profile = await NurseryProfile.query().where('userId', user.id).first()
+    requests = profile
+      ? await ServiceRequest.query()
+          .where('nurseryProfileId', profile.id)
+          .whereIn('status', activeStatuses)
+          .whereNull('gardenerHiddenAt')
+          .orderBy('updatedAt', 'desc')
+      : []
+  } else {
+    requests = await ServiceRequest.query()
+      .where('clientUserId', user.id)
+      .whereIn('status', activeStatuses)
+      .whereNull('clientHiddenAt')
+      .orderBy('updatedAt', 'desc')
+  }
+
+  const latest = requests[0] || null
+  const labels: Record<ServiceRequest['status'], string> = {
+    pending: user.role === 'client' ? 'Waiting for gardener' : 'Needs your response',
+    accepted: 'Request accepted',
+    scheduled: latest?.scheduledFor
+      ? `Visit ${latest.scheduledFor.toFormat('MMM d')}`
+      : 'Visit scheduled',
+    completed: 'Completed',
+    cancelled: 'Cancelled',
+  }
+
+  return {
+    count: requests.length,
+    label: latest ? labels[latest.status] : 'No active requests',
+    status: latest?.status || 'empty',
+    href: '/requested',
+  }
+}
+
 export async function markNotificationsSeen(user: User) {
   await user.load('accountProfile')
   if (!user.accountProfile) return

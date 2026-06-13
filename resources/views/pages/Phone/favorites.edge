@@ -3,107 +3,106 @@
 <title>Plant Bud - Saved</title>
 @endslot
 
-<div class="min-h-screen text-[#113e14]" data-community-page data-favorites-page>
+<div class="phone-saved-page min-h-screen overflow-x-hidden text-[#113e14]" data-community-page data-favorites-page data-phone-saved>
   @!component('components/community/top-navbar', {
     viewer,
     active: 'favorites',
     section: 'Saved posts'
   })
 
-  <main class="mx-auto grid w-full max-w-[1280px] grid-cols-1 gap-7 px-4 pb-24 pt-7 lg:grid-cols-[minmax(0,1fr)_20rem] lg:px-8" data-community-layout="compact">
-    <section class="min-w-0 space-y-6" data-community-main>
-      <div class="relative overflow-hidden rounded-[2rem] border border-white/20 bg-[#113e14]/90 p-7 text-white shadow-[0_28px_80px_rgba(17,62,20,0.28)] backdrop-blur-2xl md:p-9">
-        <div class="absolute -right-16 -top-20 h-56 w-56 rounded-full bg-[#a8b841]/20 blur-2xl"></div>
-        <div class="absolute -bottom-24 right-28 h-48 w-48 rounded-full bg-[#dca15d]/20 blur-2xl"></div>
-        <div class="relative flex flex-wrap items-end justify-between gap-6">
-          <div>
-            <p class="text-xs font-black uppercase tracking-[0.22em] text-[#ebe3a7]">Your private collection</p>
-            <h1 class="mt-3 font-abril text-5xl leading-tight md:text-6xl">Saved posts</h1>
-            <p class="mt-4 max-w-2xl text-sm font-semibold leading-7 text-white/72">
-              Keep useful ideas, plant inspiration, and community advice together in one place.
-            </p>
-          </div>
-          <div class="flex flex-wrap items-center gap-3">
-            <div class="rounded-[1.25rem] border border-white/12 bg-white/10 px-5 py-3 text-center">
-              <p class="text-3xl font-black" data-saved-total>{{ viewer.stats.saved }}</p>
-              <p class="text-[10px] font-black uppercase tracking-[0.16em] text-white/55">Saved</p>
+  <main class="phone-saved-main mx-auto w-full px-3 pb-24" data-community-layout="compact">
+    <section class="min-w-0 space-y-5" data-community-main>
+      <header class="phone-saved-hero relative overflow-hidden rounded-[1.8rem] border border-white/20 bg-[#113e14]/94 px-5 pb-5 pt-6 text-white shadow-[0_24px_65px_rgba(17,62,20,0.25)]">
+        <div class="absolute -right-12 -top-16 h-44 w-44 rounded-full bg-[#a8b841]/22 blur-2xl"></div>
+        <div class="absolute -bottom-20 left-1/3 h-36 w-36 rounded-full bg-[#dca15d]/20 blur-2xl"></div>
+
+        <div class="relative">
+          <div class="flex items-start justify-between gap-4">
+            <div class="min-w-0">
+              <p class="text-[10px] font-black uppercase tracking-[0.2em] text-[#ebe3a7]">Your private collection</p>
+              <h1 class="mt-2 font-abril text-[2.7rem] leading-[0.96]">Saved posts</h1>
+              <p class="mt-3 max-w-[17rem] text-xs font-semibold leading-5 text-white/72">
+                Keep inspiration and useful plant advice ready for later.
+              </p>
             </div>
-            <a href="/community" class="rounded-full bg-[#dca15d] px-5 py-3 text-sm font-black text-[#113e14] shadow-lg transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]">Explore feed</a>
+
+            <div class="phone-saved-count flex h-[4.4rem] w-[4.4rem] flex-none flex-col items-center justify-center rounded-[1.35rem] border border-white/15 bg-white/10 text-center backdrop-blur-xl">
+              <strong class="text-2xl font-black leading-none" data-saved-total>{{ viewer.stats.saved }}</strong>
+              <span class="mt-1 text-[8px] font-black uppercase tracking-[0.14em] text-white/58">Saved</span>
+            </div>
           </div>
-        </div>
-      </div>
 
-      <div class="flex flex-col gap-3 px-1 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p class="text-xs font-black uppercase tracking-[0.18em] text-[#ebe3a7]">Collection</p>
-          <h2 class="mt-1 text-2xl font-black text-white">Posts worth returning to</h2>
-        </div>
-        <span class="rounded-full bg-white/16 px-4 py-2 text-xs font-black text-white backdrop-blur-xl">{{ posts.length }} posts</span>
-      </div>
-
-      <div class="space-y-6" data-community-feed>
-        @each(post in posts)
-          @!component('components/community-post-card', { post, viewer, surface: 'saved' })
-        @else
-          <div class="rounded-[1.75rem] border border-white/50 bg-[#f5f2df]/92 p-12 text-center shadow-[0_20px_60px_rgba(17,62,20,0.18)] backdrop-blur-xl">
-            <h2 class="text-3xl font-black text-[#113e14]">No saved posts yet</h2>
-            <p class="mt-3 text-sm font-bold leading-6 text-[#416543]">
-              Save community posts and they will appear here.
-            </p>
-            <a href="/community" class="mt-6 inline-flex rounded-full bg-[#113e14] px-6 py-3 text-sm font-black text-[#ebe3a7] transition hover:-translate-y-0.5 hover:bg-[#416543]">
-              Explore community
+          <div class="mt-5 grid grid-cols-2 gap-2">
+            <a href="/community" class="flex min-h-11 items-center justify-center rounded-2xl bg-[#dca15d] px-4 py-3 text-center text-xs font-black text-[#113e14] shadow-lg transition active:scale-[0.98]">
+              Explore feed
+            </a>
+            <a href="/profile" class="flex min-h-11 items-center justify-center rounded-2xl border border-white/14 bg-white/10 px-4 py-3 text-center text-xs font-black text-white backdrop-blur-xl transition active:scale-[0.98]">
+              Open profile
             </a>
           </div>
-        @end
-      </div>
-    </section>
+        </div>
+      </header>
 
-    <aside class="block" data-community-sidebar>
-      <div class="space-y-4 lg:sticky lg:top-28">
-        <details open class="rounded-[1.5rem] border border-white/50 bg-[#f5f2df]/92 p-5 text-[#113e14] shadow-xl backdrop-blur-xl">
-          <summary class="flex cursor-pointer list-none items-center justify-between">
-            <h2 class="text-lg font-black">Your community</h2>
-            <span class="text-xs font-bold text-[#416543]">private</span>
-          </summary>
-          <div class="mt-4 grid grid-cols-1 gap-3 text-center sm:grid-cols-2">
-            <div class="rounded-2xl bg-[#a8b841]/16 p-4">
-              <p class="text-2xl font-black" data-saved-total>{{ viewer.stats.saved }}</p>
-              <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#416543]">Saved</p>
+      @if(suggestions.length)
+        <section class="phone-saved-suggestions" aria-labelledby="saved-suggestions-title">
+          <div class="mb-3 flex items-end justify-between gap-3 px-1">
+            <div>
+              <p class="text-[9px] font-black uppercase tracking-[0.18em] text-[#ebe3a7]">Discover</p>
+              <h2 id="saved-suggestions-title" class="mt-0.5 text-lg font-black text-white">People worth following</h2>
             </div>
-            <div class="rounded-2xl bg-[#dca15d]/16 p-4">
-              <p class="text-2xl font-black">{{ viewer.stats.posts }}</p>
-              <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#416543]">Posts</p>
-            </div>
+            <span class="text-[10px] font-bold text-white/62">Swipe</span>
           </div>
-        </details>
 
-        <details open class="rounded-[1.5rem] border border-white/50 bg-[#ebe3a7]/92 p-5 text-[#113e14] shadow-xl backdrop-blur-xl">
-          <summary class="flex cursor-pointer list-none items-center justify-between">
-            <h2 class="text-sm font-black">Suggestions</h2>
-            <span class="text-xs font-bold text-[#416543]">new</span>
-          </summary>
-          <div class="mt-4 space-y-3">
+          <div class="phone-saved-suggestion-rail flex snap-x snap-mandatory gap-3 overflow-x-auto px-1 pb-2">
             @each(user in suggestions)
-              <a href="/users/{{ user.username }}" class="flex items-center gap-3 rounded-2xl bg-white/48 p-3 transition hover:-translate-y-0.5 hover:bg-white/80">
+              <a href="/users/{{ user.username }}" class="phone-saved-suggestion-card flex w-[12.75rem] flex-none snap-start items-center gap-3 rounded-[1.25rem] border border-white/48 bg-[#f5f2df]/94 p-3 shadow-lg backdrop-blur-xl">
                 @if(user.avatarUrl)
-                  <img src="{{ user.avatarUrl }}" alt="" class="h-10 w-10 rounded-full object-cover">
+                  <img src="{{ user.avatarUrl }}" alt="" class="h-11 w-11 flex-none rounded-full object-cover">
                 @else
-                  <span class="flex h-10 w-10 items-center justify-center rounded-full bg-[#113e14] text-sm font-black text-[#ebe3a7]">
+                  <span class="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-[#113e14] text-sm font-black text-[#ebe3a7]">
                     {{ user.initial }}
                   </span>
                 @endif
                 <span class="min-w-0">
                   <span class="block truncate text-sm font-black">{{ user.displayName }}</span>
-                  <span class="block truncate text-xs font-bold text-[#416543]">{{ user.roleLabel }} - {{ '@' + user.username }}{{ user.isPremium ? ' - Premium' : '' }}</span>
+                  <span class="mt-0.5 block truncate text-[10px] font-bold text-[#416543]">{{ '@' + user.username }}</span>
+                  <span class="mt-1 inline-flex rounded-full bg-[#dca15d]/18 px-2 py-0.5 text-[8px] font-black uppercase tracking-[0.1em] text-[#416543]">{{ user.roleLabel }}</span>
                 </span>
               </a>
-            @else
-              <p class="text-xs font-semibold text-[#416543]">No suggestions right now.</p>
             @end
           </div>
-        </details>
-      </div>
-    </aside>
+        </section>
+      @endif
+
+      <section class="phone-saved-collection" aria-labelledby="saved-collection-title">
+        <div class="mb-3 flex items-end justify-between gap-3 px-1">
+          <div>
+            <p class="text-[9px] font-black uppercase tracking-[0.18em] text-[#ebe3a7]">Collection</p>
+            <h2 id="saved-collection-title" class="mt-0.5 text-xl font-black text-white">Ready when you need them</h2>
+          </div>
+          <span class="flex-none rounded-full bg-white/14 px-3 py-1.5 text-[10px] font-black text-white backdrop-blur-xl">{{ posts.length }} posts</span>
+        </div>
+
+        <div class="phone-saved-feed space-y-4" data-community-feed>
+          @each(post in posts)
+            @!component('components/community-post-card', { post, viewer, surface: 'saved' })
+          @else
+            <div class="phone-saved-empty rounded-[1.6rem] border border-white/55 bg-[#f5f2df]/94 px-6 py-9 text-center shadow-[0_18px_55px_rgba(17,62,20,0.18)] backdrop-blur-xl">
+              <div class="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-[#ebe3a7] shadow-inner">
+                <img src="/resources/images/phone-icons/Saved.png" alt="" class="h-9 w-9 object-contain">
+              </div>
+              <h2 class="mt-5 text-2xl font-black">Your collection is waiting</h2>
+              <p class="mx-auto mt-2 max-w-[15rem] text-sm font-bold leading-6 text-[#416543]">
+                Save a community post and it will stay ready here.
+              </p>
+              <a href="/community" class="mt-5 inline-flex rounded-full bg-[#113e14] px-6 py-3 text-sm font-black text-[#ebe3a7] shadow-lg transition active:scale-[0.98]">
+                Find inspiration
+              </a>
+            </div>
+          @end
+        </div>
+      </section>
+    </section>
   </main>
 </div>
 

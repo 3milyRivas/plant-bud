@@ -10,7 +10,7 @@
 @let(bannerUrl = accountProfile?.bannerUrl)
 @let(memberSince = user.createdAt ? user.createdAt.toFormat('LLL yyyy') : 'Recently')
 
-<div class="relative z-10 min-h-dvh overflow-hidden bg-[#416543] text-[#113e14]">
+<div class="phone-profile-page relative z-10 min-h-dvh overflow-hidden bg-[#416543] text-[#113e14]" data-phone-profile="own" data-profile-role="{{ roleProfileKind }}">
   <div class="fixed inset-0 pointer-events-none">
     <img src="/resources/images/welcome/header3.png" alt="" class="h-full w-full object-cover opacity-25">
     <div class="absolute inset-0 bg-gradient-to-b from-[#113e14]/80 via-[#416543]/80 to-[#416543]"></div>
@@ -29,7 +29,7 @@
     planLabel: accountProfile.planLabel,
   })
 
-  <main class="relative z-10 mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))] px-4 pb-16 pt-4 sm:px-5 lg:px-10">
+  <main class="phone-profile-main relative z-10 mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))] px-4 pb-16 pt-4 sm:px-5 lg:px-10">
     @if(flashMessages.get('success'))
       <div class="mb-5 rounded-[1.5rem] border border-white/10 bg-white/15 px-5 py-4 text-sm font-bold text-[#ebe3a7] shadow-xl backdrop-blur-2xl">
         {{ flashMessages.get('success') }}
@@ -41,7 +41,7 @@
       </div>
     @endif
 
-    <section class="{{ roleProfileKind === 'nursery' ? 'nursery-profile-hero' : '' }} isolate overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/10 shadow-[0_30px_90px_rgba(0,0,0,0.22)] backdrop-blur-3xl">
+    <section class="phone-profile-hero {{ roleProfileKind === 'nursery' ? 'nursery-profile-hero' : '' }} isolate overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/10 shadow-[0_30px_90px_rgba(0,0,0,0.22)] backdrop-blur-3xl" data-phone-profile-hero>
       <div class="relative h-52 overflow-hidden sm:h-64 lg:h-72">
         @if(bannerUrl)
           <img src="{{ bannerUrl }}" alt="" class="absolute inset-0 block h-full max-h-full w-full object-cover">
@@ -52,7 +52,7 @@
 
       <div class="px-6 pb-8 pt-6 sm:px-8 sm:pt-8">
         <div class="grid gap-7 lg:grid-cols-[180px_minmax(0,1fr)] lg:items-center">
-          <div class="relative mx-auto h-32 w-32 sm:h-40 sm:w-40 lg:mx-0">
+          <div class="phone-profile-avatar-wrap relative mx-auto h-32 w-32 sm:h-40 sm:w-40 lg:mx-0">
             <div class="{{ roleProfileKind === 'nursery' ? 'nursery-profile-avatar-ring' : '' }} absolute -inset-1 rounded-full bg-[#ebe3a7] shadow-[0_18px_55px_rgba(0,0,0,0.28)]"></div>
             @if(avatarUrl)
               <img src="{{ avatarUrl }}" alt="" class="{{ roleProfileKind === 'nursery' ? 'nursery-profile-avatar' : '' }} relative h-full w-full rounded-full border-4 border-white object-cover">
@@ -63,7 +63,7 @@
             @endif
           </div>
 
-          <div class="min-w-0 text-center lg:text-left">
+          <div class="phone-profile-identity min-w-0 text-center lg:text-left">
             <div class="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
               <div class="min-w-0">
                 <div class="flex flex-wrap items-center justify-center gap-2 lg:justify-start">
@@ -79,7 +79,7 @@
                 </p>
               </div>
 
-              <div class="mx-auto flex w-full max-w-sm flex-col gap-3 lg:mx-0 xl:w-72 xl:shrink-0">
+              <div class="phone-profile-actions mx-auto flex w-full max-w-sm flex-col gap-3 lg:mx-0 xl:w-72 xl:shrink-0">
                 <a href="/profile/settings" class="flex min-h-12 w-full items-center justify-center rounded-full bg-[#ebe3a7] px-6 py-3 text-sm font-black text-[#113e14] shadow-lg transition hover:-translate-y-0.5 hover:bg-[#dca15d]">
                   Edit profile
                 </a>
@@ -106,7 +106,7 @@
           </div>
         </div>
 
-        <div class="mt-8 grid overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/10 text-center text-white sm:grid-cols-4">
+        <div class="phone-profile-stats mt-8 grid overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/10 text-center text-white sm:grid-cols-4">
           <div class="p-4">
             <p class="text-2xl font-black">{{ stats.posts }}</p>
             <p class="text-[0.68rem] font-black uppercase tracking-[0.14em] text-[#ebe3a7]">Posts</p>
@@ -136,7 +136,7 @@
     </section>
 
     @if(roleProfileKind === 'gardener' || roleProfileKind === 'nursery')
-      <section class="{{ roleProfileKind === 'nursery' ? 'nursery-profile-panel' : '' }} mt-6 overflow-hidden rounded-[2.25rem] border border-white/25 bg-[#ebe3a7]/95 text-[#113e14] shadow-[0_24px_70px_rgba(0,0,0,0.18)]">
+      <section class="phone-profile-role-panel {{ roleProfileKind === 'nursery' ? 'nursery-profile-panel' : '' }} mt-6 overflow-hidden rounded-[2.25rem] border border-white/25 bg-[#ebe3a7]/95 text-[#113e14] shadow-[0_24px_70px_rgba(0,0,0,0.18)]">
         <div class="flex flex-col gap-5 border-b border-[#416543]/12 px-6 py-6 sm:flex-row sm:items-center sm:justify-between lg:px-8">
           <div>
             <p class="text-xs font-black uppercase tracking-[0.2em] text-[#416543]">
@@ -263,7 +263,7 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 gap-3 rounded-[2rem] border border-white/10 bg-white/12 p-4 text-center text-white shadow-xl backdrop-blur-2xl sm:grid-cols-3">
+        <div class="phone-profile-engagement grid grid-cols-1 gap-3 rounded-[2rem] border border-white/10 bg-white/12 p-4 text-center text-white shadow-xl backdrop-blur-2xl sm:grid-cols-3">
           <div>
             <p class="text-2xl font-black">{{ stats.likes }}</p>
             <p class="text-[0.68rem] font-bold uppercase tracking-[0.12em] text-[#ebe3a7]">Likes</p>
@@ -291,7 +291,7 @@
         </div>
 
         @if(recentPosts.length)
-          <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
+          <div class="phone-profile-post-grid grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
             @each(post in recentPosts)
               <button
                 type="button"

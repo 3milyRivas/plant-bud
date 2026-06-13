@@ -22,6 +22,49 @@ let locked = new WeakSet()
 let history = []
 let redoStack = []
 let isRestoring = false
+let activeInteraction = null
+let interactionFrame = 0
+let pendingInteractionEvent = null
+
+const isPhoneViewport = () => window.matchMedia('(max-width: 767px)').matches
+const clamp = (value, min, max) => Math.min(Math.max(value, min), Math.max(min, max))
+
+function setMobileStudioPanel(panelName) {
+  if (!isPhoneViewport()) return
+
+  document.querySelectorAll('[data-designer-studio-tab]').forEach(tab => {
+    const isActive = tab.dataset.designerStudioTab === panelName
+    tab.classList.toggle('is-active', isActive)
+    tab.setAttribute('aria-selected', String(isActive))
+  })
+
+  document.querySelectorAll('[data-designer-studio-panel]').forEach(panel => {
+    const isActive = panel.dataset.designerStudioPanel === panelName
+    panel.classList.toggle('is-active', isActive)
+    panel.hidden = !isActive
+  })
+}
+
+function initMobileStudio() {
+  if (!isPhoneViewport()) return
+
+  const assetsSlot = document.querySelector('[data-designer-assets-slot]')
+  const editSlot = document.querySelector('[data-designer-edit-slot]')
+  const searchSection = document.querySelector('.phone-designer-search')
+  const inventorySection = document.querySelector('.phone-designer-inventory')
+  const editSection = document.querySelector('.phone-designer-edit')
+
+  if (!assetsSlot || !editSlot || !searchSection || !inventorySection || !editSection) return
+
+  assetsSlot.append(searchSection, inventorySection)
+  editSlot.append(editSection)
+
+  document.querySelectorAll('[data-designer-studio-tab]').forEach(tab => {
+    tab.addEventListener('click', () => setMobileStudioPanel(tab.dataset.designerStudioTab))
+  })
+
+  setMobileStudioPanel('assets')
+}
 
 const canvas = document.getElementById("canvas-container")
 const img = document.getElementById("baseImage")
@@ -35,6 +78,13 @@ fileInput.addEventListener("change", (e) => {
 })
 
 initPhoneUpload({ input: fileInput, onFile: handleFile, tool: 'designer' })
+
+let canvasResizeFrame = 0
+window.addEventListener('resize', () => {
+  if (!baseImage?.naturalWidth) return
+  cancelAnimationFrame(canvasResizeFrame)
+  canvasResizeFrame = requestAnimationFrame(fitCanvasToImage)
+})
 
 canvas.addEventListener("dragover", (e) => {
     if (hasBaseImage) return
@@ -76,16 +126,18 @@ function handleFile(file) {
 function fitCanvasToImage() {
     if (!baseImage?.naturalWidth) return
 
-    const maxW = 1100
-    const maxH = window.innerHeight * 0.75
+    const isPhone = window.matchMedia('(max-width: 767px)').matches
+    const workspaceWidth = document.getElementById('workspace')?.clientWidth || 0
+    const maxW = isPhone ? Math.max(280, workspaceWidth - 2) : 1100
+    const maxH = window.innerHeight * (isPhone ? 0.72 : 0.75)
 
     const w = baseImage.naturalWidth
     const h = baseImage.naturalHeight
-
-    const scale = Math.min(maxW / w, maxH / h, 1)
+    const scale = Math.min(maxW / w, maxH / h, isPhone ? Number.POSITIVE_INFINITY : 1)
 
     container.style.width = (w * scale) + "px"
     container.style.height = (h * scale) + "px"
+    container.dataset.imageFit = 'natural'
 }
 
 function syncCanvasBackground() {
@@ -134,7 +186,10 @@ function snapshot() {
 
 function saveState() {
   if (isRestoring) return
-  history.push(snapshot())
+  const state = snapshot()
+  if (history[history.length - 1] === state) return
+  history.push(state)
+  if (history.length > 80) history.shift()
   redoStack = []
 }
 
@@ -151,6 +206,7 @@ function restore(stateStr) {
 
     el.src = d.src
     el.className = 'draggable absolute w-[110px] h-[110px] select-none'
+    el.draggable = false
 
     el.style.left = d.left
     el.style.top = d.top
@@ -207,23 +263,6 @@ function togglePlaceholder() {
   }
 }
 
-upload?.addEventListener('change', e => {
-  const file = e.target.files?.[0]
-  if (!file) return
-
-  const reader = new FileReader()
-  reader.onload = () => {
-    baseImage.onload = () => {
-      togglePlaceholder()
-      hasBaseImage = true
-      fitCanvasToImage()
-      syncCanvasBackground()
-    }
-    baseImage.src = reader.result
-  }
-  reader.readAsDataURL(file)
-})
-
 function optimizeSearchQuery(q) {
   const s = q.toLowerCase().trim()
   const plants = ['tree','mango','palm','banana','coconut','plant','flower','rose','orchid','fern','bush','shrub']
@@ -240,11 +279,13 @@ function filterBadResults(photos) {
 function openSearchModal() {
   searchModal.classList.remove('hidden')
   searchModal.classList.add('flex')
+  searchModal.setAttribute('aria-hidden', 'false')
 }
 
 function closeSearchModal() {
   searchModal.classList.add('hidden')
   searchModal.classList.remove('flex')
+  searchModal.setAttribute('aria-hidden', 'true')
 }
 
 function blockIfNoBase() {
@@ -297,6 +338,7 @@ async function removeBackground(url) {
   if (blockIfNoBase()) return
 
   loadingText.classList.remove('hidden')
+  loadingText.setAttribute('aria-hidden', 'false')
 
   try {
     const resp = await fetch('/designer/remove-background', {
@@ -318,6 +360,7 @@ async function removeBackground(url) {
     alert(error.message || 'Garden designer backend error')
   } finally {
     loadingText.classList.add('hidden')
+    loadingText.setAttribute('aria-hidden', 'true')
   }
 }
 
@@ -342,11 +385,21 @@ function loadFromInventory(src) {
 
 function addElement(src) {
   const el = document.createElement('img')
+  const itemSize = isPhoneViewport()
+    ? clamp(container.clientWidth * 0.3, 72, 112)
+    : 110
+  const left = Math.max(0, (container.clientWidth - itemSize) / 2)
+  const top = Math.max(0, (container.clientHeight - itemSize) / 2)
 
   el.src = src
   el.className = 'draggable absolute w-[110px] h-[110px] select-none'
-  el.style.left = '120px'
-  el.style.top = '120px'
+  el.draggable = false
+  el.style.left = `${left}px`
+  el.style.top = `${top}px`
+  el.style.width = `${itemSize}px`
+  el.style.height = `${itemSize}px`
+  el.width = Math.round(itemSize)
+  el.height = Math.round(itemSize)
   el.style.zIndex = ++zIndexCounter
 
   el.dataset.rotation = "0"
@@ -363,34 +416,93 @@ function addElement(src) {
   saveState()
 }
 
+function stopActiveInteraction({ save = true } = {}) {
+  if (!activeInteraction) return
+
+  if (interactionFrame) {
+    cancelAnimationFrame(interactionFrame)
+    interactionFrame = 0
+  }
+
+  if (pendingInteractionEvent) {
+    activeInteraction.update(pendingInteractionEvent)
+    pendingInteractionEvent = null
+  }
+
+  activeInteraction.controller.abort()
+  activeInteraction.target.classList.remove('is-manipulating')
+  document.documentElement.classList.remove('designer-is-manipulating')
+  activeInteraction = null
+
+  if (save) saveState()
+}
+
+function startPointerInteraction(event, target, update) {
+  stopActiveInteraction({ save: false })
+
+  const controller = new AbortController()
+  const pointerId = event.pointerId
+  activeInteraction = { controller, pointerId, target, update }
+  target.classList.add('is-manipulating')
+  document.documentElement.classList.add('designer-is-manipulating')
+
+  try {
+    target.setPointerCapture(pointerId)
+  } catch {
+    // Window listeners still complete the gesture when capture is unavailable.
+  }
+
+  const queueUpdate = pointerEvent => {
+    if (!activeInteraction || pointerEvent.pointerId !== pointerId) return
+    pointerEvent.preventDefault()
+    pendingInteractionEvent = pointerEvent
+
+    if (interactionFrame) return
+    interactionFrame = requestAnimationFrame(() => {
+      interactionFrame = 0
+      if (!activeInteraction || !pendingInteractionEvent) return
+      const nextEvent = pendingInteractionEvent
+      pendingInteractionEvent = null
+      activeInteraction.update(nextEvent)
+    })
+  }
+
+  const finish = pointerEvent => {
+    if (!activeInteraction || pointerEvent.pointerId !== pointerId) return
+    stopActiveInteraction()
+  }
+
+  window.addEventListener('pointermove', queueUpdate, { signal: controller.signal, passive: false })
+  window.addEventListener('pointerup', finish, { signal: controller.signal })
+  window.addEventListener('pointercancel', finish, { signal: controller.signal })
+  target.addEventListener('lostpointercapture', finish, { signal: controller.signal })
+}
+
 function makeInteractive(el) {
-  let ox = 0, oy = 0
+  el.draggable = false
 
-  el.addEventListener('pointerdown', e => {
-    if (locked.has(el)) return
+  el.addEventListener('pointerdown', event => {
+    if (locked.has(el) || event.button > 0) return
 
-    e.preventDefault()
+    event.preventDefault()
+    event.stopPropagation()
     select(el)
 
-    el.setPointerCapture(e.pointerId)
+    const startX = event.clientX
+    const startY = event.clientY
+    const startLeft = el.offsetLeft
+    const startTop = el.offsetTop
 
-    ox = e.clientX - el.offsetLeft
-    oy = e.clientY - el.offsetTop
+    startPointerInteraction(event, el, pointerEvent => {
+      const maxLeft = container.clientWidth - el.offsetWidth
+      const maxTop = container.clientHeight - el.offsetHeight
+      const nextLeft = clamp(startLeft + pointerEvent.clientX - startX, 0, maxLeft)
+      const nextTop = clamp(startTop + pointerEvent.clientY - startY, 0, maxTop)
 
-    const move = ev => {
-      el.style.left = `${ev.clientX - ox}px`
-      el.style.top = `${ev.clientY - oy}px`
+      el.style.left = `${nextLeft}px`
+      el.style.top = `${nextTop}px`
       updateControls()
-    }
-
-    const up = () => {
-      document.removeEventListener('pointermove', move)
-      document.removeEventListener('pointerup', up)
-      saveState()
-    }
-
-    document.addEventListener('pointermove', move)
-    document.addEventListener('pointerup', up)
+    })
   })
 }
 
@@ -399,6 +511,7 @@ function select(el) {
   selected = el
   el.classList.add('ring-4','ring-[#dca15d]')
   showControls(el)
+  setMobileStudioPanel('edit')
 }
 
 function showControls(target) {
@@ -407,40 +520,51 @@ function showControls(target) {
 
   deleteBtn = document.createElement('button')
   deleteBtn.textContent = '×'
-  deleteBtn.className = 'absolute z-[999] w-6 h-6 bg-red-500 text-white rounded-full'
+  deleteBtn.type = 'button'
+  deleteBtn.setAttribute('aria-label', 'Delete selected asset')
+  deleteBtn.className = 'designer-selection-control designer-selection-delete absolute z-[999] bg-red-500 text-white rounded-full'
 
   resizer = document.createElement('div')
-  resizer.className = 'absolute z-[999] w-3 h-3 bg-[#dca15d]'
+  resizer.setAttribute('role', 'button')
+  resizer.setAttribute('aria-label', 'Resize selected asset')
+  resizer.className = 'designer-selection-control designer-selection-resize absolute z-[999] bg-[#dca15d]'
 
   deleteBtn.onclick = e => {
     e.stopPropagation()
+    stopActiveInteraction({ save: false })
     target.remove()
     clearSelection()
     saveState()
   }
+  deleteBtn.onpointerdown = e => e.stopPropagation()
 
-  let sx=0, sy=0, sw=0, sh=0
+  resizer.onpointerdown = event => {
+    if (event.button > 0) return
+    event.preventDefault()
+    event.stopPropagation()
 
-  resizer.onpointerdown = e => {
-    sx = e.clientX
-    sy = e.clientY
-    sw = target.offsetWidth
-    sh = target.offsetHeight
+    const startX = event.clientX
+    const startY = event.clientY
+    const startWidth = target.offsetWidth
+    const startHeight = target.offsetHeight
+    const aspectRatio = startWidth / Math.max(startHeight, 1)
+    const minSize = isPhoneViewport() ? 48 : 36
+    const maxWidth = Math.max(minSize, container.clientWidth - target.offsetLeft)
+    const maxHeight = Math.max(minSize, container.clientHeight - target.offsetTop)
 
-    const move = ev => {
-      target.style.width = `${sw + (ev.clientX - sx)}px`
-      target.style.height = `${sh + (ev.clientY - sy)}px`
+    startPointerInteraction(event, resizer, pointerEvent => {
+      const horizontalDelta = pointerEvent.clientX - startX
+      const verticalDelta = (pointerEvent.clientY - startY) * aspectRatio
+      const delta = Math.abs(horizontalDelta) > Math.abs(verticalDelta)
+        ? horizontalDelta
+        : verticalDelta
+      const width = clamp(startWidth + delta, minSize, Math.min(maxWidth, maxHeight * aspectRatio))
+      const height = width / aspectRatio
+
+      target.style.width = `${width}px`
+      target.style.height = `${height}px`
       updateControls()
-    }
-
-    const up = () => {
-      document.removeEventListener('pointermove', move)
-      document.removeEventListener('pointerup', up)
-      saveState()
-    }
-
-    document.addEventListener('pointermove', move)
-    document.addEventListener('pointerup', up)
+    })
   }
 
   container.appendChild(deleteBtn)
@@ -455,19 +579,21 @@ function updateControls() {
   const y = selected.offsetTop
   const w = selected.offsetWidth
   const h = selected.offsetHeight
+  const controlInset = isPhoneViewport() ? 20 : 14
 
   if (deleteBtn) {
-    deleteBtn.style.left = `${x + w - 10}px`
-    deleteBtn.style.top = `${y - 10}px`
+    deleteBtn.style.left = `${x + w - controlInset}px`
+    deleteBtn.style.top = `${y + controlInset}px`
   }
 
   if (resizer) {
-    resizer.style.left = `${x + w - 6}px`
-    resizer.style.top = `${y + h - 6}px`
+    resizer.style.left = `${x + w - controlInset}px`
+    resizer.style.top = `${y + h - controlInset}px`
   }
 }
 
 function clearSelection() {
+  stopActiveInteraction({ save: false })
   selected?.classList.remove('ring-4')
   selected = null
   deleteBtn?.remove()
@@ -508,8 +634,16 @@ function flipYSelected() {
 function duplicateSelected() {
   if (!selected) return
   const copy = selected.cloneNode(true)
-  copy.style.left = (selected.offsetLeft + 20) + "px"
-  copy.style.top = (selected.offsetTop + 20) + "px"
+  copy.style.left = clamp(
+    selected.offsetLeft + 20,
+    0,
+    container.clientWidth - selected.offsetWidth
+  ) + "px"
+  copy.style.top = clamp(
+    selected.offsetTop + 20,
+    0,
+    container.clientHeight - selected.offsetHeight
+  ) + "px"
   copy.style.zIndex = ++zIndexCounter
   applyTransform(copy)
   makeInteractive(copy)
@@ -556,12 +690,11 @@ async function sendToBackend() {
   canvas.width = baseImage.naturalWidth
   canvas.height = baseImage.naturalHeight
 
-  const scaleX = baseImage.naturalWidth / baseImage.offsetWidth
-  const scaleY = baseImage.naturalHeight / baseImage.offsetHeight
+  const scaleX = baseImage.naturalWidth / Math.max(container.clientWidth, 1)
+  const scaleY = baseImage.naturalHeight / Math.max(container.clientHeight, 1)
 
   ctx.imageSmoothingEnabled = true
   ctx.imageSmoothingQuality = "high"
-
   ctx.drawImage(baseImage, 0, 0, canvas.width, canvas.height)
 
   const elements = [...container.querySelectorAll('.draggable')]
@@ -635,6 +768,7 @@ window.toggleLock = toggleLock
 window.sendToBackend = sendToBackend
 
 baseImage?.addEventListener('load', togglePlaceholder)
+initMobileStudio()
 togglePlaceholder()
 renderInventory()
 saveState()

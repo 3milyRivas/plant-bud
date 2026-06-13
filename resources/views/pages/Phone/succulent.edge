@@ -7,7 +7,7 @@
 'resources/js/menu-plants.js'
 ])
 
-<div class="relative overflow-x-hidden">
+<div class="phone-catalog-page relative overflow-x-hidden" data-phone-catalog="succulent">
     @!component('components/header-plants', {
     title: "Discover Succulent Plants",
     text: "Explore elegant tropical species, connect with gardeners and create beautiful green spaces.",
@@ -19,10 +19,10 @@
     careHref: '/care3',
     })
 
-    <div class="flex justify-center mt-4 px-4 sm:px-6">
-        <div class="flex justify-center mt-8 w-full max-w-[min(68rem,calc(100vw-2rem))]">
+    <div class="flex justify-center mt-4 px-4 sm:px-0">
+        <div class="flex justify-center mt-8 w-full max-w-[58rem] px-0 sm:px-5">
             <div data-catalog-switch-bar
-                class="relative flex w-full items-center justify-center gap-3 rounded-[1.4rem] border border-[#416543]/12 bg-white/72 px-3 py-3 shadow-[0_18px_55px_rgba(17,62,20,0.14)] backdrop-blur-2xl">
+                class="relative flex w-full max-w-[min(58rem,calc(100vw-2rem))] flex-wrap items-center justify-center gap-3 rounded-[1.4rem] border border-[#416543]/12 bg-white/72 px-3 py-3 shadow-[0_18px_55px_rgba(17,62,20,0.14)] backdrop-blur-2xl">
 
                 <button onclick="toggleMenu()" data-catalog-section-toggle
                     class="relative z-50 flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-[#416543]/12 bg-[#f5f2df] shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#ebe3a7]">
@@ -84,11 +84,11 @@
         </div>
     </div>
 
-    <div class="flex justify-center pt-20 pb-20 px-4 sm:px-6 lg:px-10">
-        <div class="max-w-[min(1500px,calc(100vw-2rem))] w-full mx-auto">
+    <div class="flex justify-center pt-20 pb-20 px-4 sm:px-0">
+        <div class="max-w-[1500px] w-full px-4 sm:px-10 mx-auto flex justify-center">
             @each((plants, familyName, index) in succulentPlants)
             <div id="{{ familyName }}"
-                class="category-section grid justify-center gap-12 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 {{ index != 0 ? 'hidden' : '' }}">
+                class="category-section grid justify-center gap-8 md:gap-10 lg:gap-12 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 {{ index != 0 ? 'hidden' : '' }}">
                 @each((plant, plantIndex) in plants)
                 <div id="plant-{{ familyName }}-{{ plantIndex }}"
                     class="plant-catalog-anchor scroll-mt-32 rounded-[42px] transition-all duration-500"

@@ -1,0 +1,45 @@
+<div class="fixed inset-0 z-[100003] hidden items-center justify-center overflow-y-auto bg-[#113e14]/72 px-4 py-6 backdrop-blur-md" data-phone-camera-modal aria-hidden="true">
+  <div class="my-auto w-full max-w-lg overflow-hidden rounded-[2rem] border border-white/45 bg-white/96 text-[#113e14] shadow-2xl">
+    <div class="flex items-start justify-between gap-4 border-b border-[#416543]/12 bg-[#113e14] px-5 py-4 text-[#ebe3a7]">
+      <div>
+        <p class="text-xs font-black uppercase tracking-[0.18em] text-[#a8b841]" data-phone-camera-tool-label>Plant Bud</p>
+        <h2 class="mt-1 text-xl font-black" data-phone-camera-title>Take a photo</h2>
+      </div>
+      <button type="button" class="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-white/10 text-lg font-black transition hover:bg-white/16" data-phone-camera-close aria-label="Close camera review">x</button>
+    </div>
+
+    <div class="p-5">
+      <div class="overflow-hidden rounded-[1.5rem] border border-[#416543]/12 bg-[#113e14]">
+        <video class="hidden max-h-[58vh] min-h-64 w-full object-contain" data-phone-camera-video autoplay muted playsinline aria-label="Live camera preview"></video>
+        <img class="hidden max-h-[58vh] min-h-64 w-full object-contain" data-phone-camera-preview alt="Photo taken with the camera">
+        <div class="grid min-h-64 place-items-center px-6 text-center text-sm font-black text-[#ebe3a7]" data-phone-camera-status>
+          Starting camera...
+        </div>
+      </div>
+      <p class="mt-4 text-center text-sm font-semibold leading-6 text-[#416543]" data-phone-camera-help>
+        Keep the plant or garden inside the frame and hold the phone steady.
+      </p>
+      <p class="mt-4 hidden text-center text-sm font-semibold leading-6 text-[#416543]" data-phone-camera-review-help>
+        Check that the image is clear. You can take another one as many times as needed before adding it to the tool.
+      </p>
+
+      <div class="mt-5" data-phone-camera-live-actions>
+        <button type="button" class="w-full rounded-full bg-[#dca15d] px-4 py-3 text-sm font-black text-[#113e14] shadow-md transition active:scale-[0.98]" data-phone-camera-capture>
+          Take photo
+        </button>
+      </div>
+
+      <div class="mt-5 hidden grid-cols-2 gap-3" data-phone-camera-review-actions>
+        <button type="button" class="rounded-full border border-[#416543]/20 bg-white px-4 py-3 text-sm font-black text-[#113e14] transition hover:bg-[#416543]/8" data-phone-camera-retake>
+          Retake photo
+        </button>
+        <button type="button" class="rounded-full bg-[#dca15d] px-4 py-3 text-sm font-black text-[#113e14] shadow-md transition hover:-translate-y-0.5 hover:bg-[#ebe3a7]" data-phone-camera-use>
+          Use this photo
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <canvas class="hidden" data-phone-camera-canvas aria-hidden="true"></canvas>
+  <input type="file" accept="image/*" capture="environment" class="hidden" data-phone-camera-input aria-hidden="true">
+</div>

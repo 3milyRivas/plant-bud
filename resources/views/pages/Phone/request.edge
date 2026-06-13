@@ -8,7 +8,7 @@
 @let(avatarUrl = viewerAvatarUrl)
 @let(avatarInitial = displayName ? Array.from(displayName)[0].toLocaleUpperCase('en') : 'P')
 
-<div class="relative z-10 min-h-dvh overflow-hidden text-[#113e14]">
+<div class="phone-service-request-page relative z-10 min-h-dvh overflow-hidden text-[#113e14]" data-phone-service-request>
   @!component('components/app-navbar', {
     section: 'Request service',
     active: 'services',
@@ -21,7 +21,7 @@
   })
 
   <main class="relative z-10 mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))] px-4 pb-24 pt-8 sm:px-5 lg:px-10">
-    <div class="mb-7 flex flex-wrap items-end justify-between gap-4">
+    <div class="phone-service-request-heading mb-7 flex flex-wrap items-end justify-between gap-4" data-phone-first-content>
       <div>
         <p class="text-sm font-black uppercase tracking-[0.2em] text-[#ebe3a7]">Gardener services</p>
         <h1 class="mt-2 font-abril text-4xl leading-tight text-white md:text-5xl">Plan your request</h1>
@@ -31,8 +31,14 @@
       </a>
     </div>
 
-    <section class="grid gap-7 lg:grid-cols-[0.88fr_1.12fr] lg:items-start">
-      <aside class="overflow-hidden rounded-[2rem] border border-white/22 bg-[#113e14]/90 text-white shadow-[0_28px_85px_rgba(17,62,20,0.30)] backdrop-blur-2xl">
+    <nav class="phone-request-steps" aria-label="Request progress">
+      <span><strong>1</strong> Gardener</span>
+      <span><strong>2</strong> Details</span>
+      <span><strong>3</strong> Payment</span>
+    </nav>
+
+    <section class="phone-service-request-layout grid gap-7 lg:grid-cols-[0.88fr_1.12fr] lg:items-start">
+      <aside class="phone-request-provider overflow-hidden rounded-[2rem] border border-white/22 bg-[#113e14]/90 text-white shadow-[0_28px_85px_rgba(17,62,20,0.30)] backdrop-blur-2xl">
         <div class="relative bg-[linear-gradient(145deg,rgba(168,184,65,0.24),rgba(220,161,93,0.18),rgba(235,227,167,0.12))] p-6">
           <div class="absolute -right-10 -top-12 h-40 w-40 rounded-full bg-[#dca15d]/20 blur-2xl"></div>
           <a href="{{ gardener.profileHref }}" class="relative mx-auto w-full max-w-md flex min-h-[22rem] items-center justify-center overflow-hidden rounded-[1.75rem] border border-white/20 bg-[#f5f2df]/10 p-3 shadow-2xl">
@@ -100,7 +106,7 @@
     })
         <div class="mb-8 border-b border-[#416543]/12 pb-7">
           <p class="text-xs font-black uppercase tracking-[0.2em] text-[#416543]">Request details</p>
-          <h2 class="mt-2 text-4xl font-black">Tell {{ gardener.name }} what you need</h2>
+            <h2 class="mt-2 text-4xl font-black">Tell {{ gardener.name }} what you need</h2>
           <p class="mt-3 max-w-2xl text-sm font-semibold leading-6 text-[#416543]">Share enough context for the gardener to understand the space, timing, and type of help you are looking for.</p>
       </div>
 
@@ -294,7 +300,7 @@
           <span class="text-sm font-bold leading-6 text-[#416543]">I confirm this is a genuine service request and I intend to coordinate the work with this gardener.</span>
         </label>
 
-        <div class="mt-8 flex flex-col gap-3 border-t border-[#416543]/12 pt-6 sm:flex-row sm:items-center sm:justify-between">
+        <div class="phone-request-submit mt-8 flex flex-col gap-3 border-t border-[#416543]/12 pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p class="max-w-sm text-xs font-bold leading-5 text-[#416543]/75">Your contact details are shared with the gardener and your payment remains protected until both parties confirm completion.</p>
           <button type="submit" class="w-full rounded-full bg-[#113e14] px-8 py-3 text-sm font-black text-[#ebe3a7] shadow-lg transition hover:-translate-y-0.5 hover:bg-[#416543] sm:w-auto" data-request-submit>
           Send request

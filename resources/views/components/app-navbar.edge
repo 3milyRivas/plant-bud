@@ -1,3 +1,6 @@
+@if(frontend === 'Phone')
+  @!component('components/phone-navbar', $props)
+@else
 @let(section = $props.get('section') ?? 'Plant Bud')
 @let(homeHref = $props.get('homeHref') ?? (auth.user ? '/homepage' : '/'))
 @let(defaultItems = [
@@ -57,7 +60,7 @@
     label: 'Community',
     icon: '/resources/images/homepagee/comunity.png',
     eyebrow: 'People and activity',
-    activeKeys: ['community', 'favorites', 'notification'],
+    activeKeys: ['community', 'favorites'],
     children: [
       {
         href: '/community',
@@ -303,3 +306,4 @@
     </div>
   @endif
 </header>
+@endif

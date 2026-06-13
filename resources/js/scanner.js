@@ -74,6 +74,7 @@ function setFile(file) {
     preview.src = event.target.result
     preview.classList.remove('hidden')
     dropText.classList.add('hidden')
+    setStatus('Photo ready to analyze')
   }
 
   reader.readAsDataURL(file)
@@ -1042,6 +1043,12 @@ scanBtn?.addEventListener('click', async () => {
     setLoading(false)
     resultsBox.classList.remove('hidden')
     renderScan(data)
+    if (window.matchMedia('(max-width: 767px)').matches) {
+      document.querySelector('.phone-scanner-results')?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
+    }
   } catch (error) {
     setLoading(false)
     emptyState.classList.remove('hidden')

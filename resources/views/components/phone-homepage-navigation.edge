@@ -1,0 +1,28 @@
+@let(eyebrow = $props.get('eyebrow') ?? 'Continue in Plant Bud')
+@let(title = $props.get('title') ?? 'Everything stays connected')
+@let(items = $props.get('items') ?? [])
+
+<section class="phone-homepage-section phone-homepage-navigation">
+  <div class="phone-homepage-section-heading">
+    <div>
+      <p>{{ eyebrow }}</p>
+      <h2>{{ title }}</h2>
+    </div>
+    <img src="/resources/images/essential/logo.png" alt="" class="h-11 w-11 object-contain">
+  </div>
+
+  <nav class="phone-homepage-navigation-grid" aria-label="{{ eyebrow }}">
+    @each(item in items)
+      <a href="{{ item.href }}">
+        <span class="phone-homepage-navigation-icon">
+          <img src="{{ item.icon }}" alt="">
+        </span>
+        <span class="min-w-0">
+          <strong>{{ item.label }}</strong>
+          <small>{{ item.description }}</small>
+        </span>
+        <span class="phone-homepage-navigation-arrow" aria-hidden="true">›</span>
+      </a>
+    @end
+  </nav>
+</section>

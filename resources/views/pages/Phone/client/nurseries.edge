@@ -9,8 +9,8 @@
   dynamic: true,
 })
 
-<main class="nursery-directory relative z-10 min-h-screen overflow-hidden text-[#113e14]">
-  <section class="px-4 pb-12 pt-32 sm:px-8 lg:pt-36">
+<main class="phone-nursery-directory nursery-directory relative z-10 min-h-screen overflow-hidden text-[#113e14]" data-phone-nurseries>
+  <section class="phone-nursery-hero-section px-4 pb-12 pt-6 sm:px-8 lg:pt-8">
     <div class="nursery-hero relative mx-auto grid w-full max-w-[min(90rem,calc(100vw-2rem))] overflow-hidden rounded-[44px] border border-white/16 bg-[#113e14]/88 shadow-[0_30px_90px_rgba(17,62,20,0.3)] lg:grid-cols-[1.08fr_0.92fr]">
       <div class="relative z-10 flex flex-col justify-center px-7 py-14 sm:px-12 lg:px-16 lg:py-20">
         <div class="absolute -left-16 top-12 h-40 w-40 rounded-full bg-[#a8b841]/16 blur-2xl"></div>
@@ -23,6 +23,12 @@
         <p class="relative mt-6 max-w-xl text-base font-semibold leading-7 text-white/70">
           Discover nursery accounts, meet the people behind them, and explore every location from one calmer directory.
         </p>
+
+        <nav class="phone-nursery-shortcuts relative mt-6 flex gap-2 overflow-x-auto pb-1" aria-label="Nursery directory sections">
+          <a href="#nursery-map">Map</a>
+          <a href="#favorite-nurseries">Favorites</a>
+          <a href="#nursery-accounts">All nurseries</a>
+        </nav>
 
         <form action="/nurseries#nursery-accounts" method="GET" class="relative z-50 mt-9 w-full max-w-full rounded-[26px] border border-white/18 bg-white/10 p-3 shadow-2xl backdrop-blur-xl" data-nursery-search autocomplete="off">
           <label for="nurserySearch" class="sr-only">Search nursery accounts</label>
@@ -57,7 +63,7 @@
     </div>
   </section>
 
-  <section id="nursery-map" class="scroll-mt-28 px-4 py-12 sm:px-8">
+  <section id="nursery-map" class="phone-nursery-section phone-nursery-map-section scroll-mt-28 px-4 py-12 sm:px-8">
     <div class="mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))]">
       <div class="mb-7 flex flex-col justify-between gap-4 text-white sm:flex-row sm:items-end">
         <div>
@@ -113,7 +119,7 @@
     </div>
   </section>
 
-  <section id="favorite-nurseries" class="scroll-mt-28 px-4 py-12 sm:px-8">
+  <section id="favorite-nurseries" class="phone-nursery-section phone-nursery-favorites scroll-mt-28 px-4 py-12 sm:px-8">
     <div class="mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))]">
       <div class="mb-7 flex flex-col justify-between gap-4 text-white sm:flex-row sm:items-end">
         <div>
@@ -131,9 +137,9 @@
       </div>
 
       @if(favoriteNurseries.length)
-        <div class="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+        <div class="phone-nursery-favorite-list grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           @each(nursery in favoriteNurseries)
-            <article class="group relative overflow-hidden rounded-[32px] border border-white/16 bg-[#f8f5e7] p-5 text-[#113e14] shadow-[0_18px_50px_rgba(17,62,20,0.2)] transition hover:-translate-y-1">
+            <article class="phone-nursery-favorite-card group relative overflow-hidden rounded-[32px] border border-white/16 bg-[#f8f5e7] p-5 text-[#113e14] shadow-[0_18px_50px_rgba(17,62,20,0.2)] transition hover:-translate-y-1">
               <div class="absolute -right-12 -top-16 h-36 w-36 rounded-full bg-[#dca15d]/18 transition duration-500 group-hover:scale-125"></div>
               <div class="relative flex items-start gap-4">
                 @if(nursery.image)
@@ -183,8 +189,8 @@
     </div>
   </section>
 
-  <section id="nursery-accounts" class="scroll-mt-28 px-4 py-16 sm:px-8">
-    <div class="mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))] rounded-[46px] bg-[#ebe3a7] px-5 py-10 shadow-[0_25px_70px_rgba(17,62,20,0.22)] sm:px-9 lg:px-12">
+  <section id="nursery-accounts" class="phone-nursery-section phone-nursery-accounts scroll-mt-28 px-4 py-16 sm:px-8">
+    <div class="phone-nursery-accounts-shell mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))] rounded-[46px] bg-[#ebe3a7] px-5 py-10 shadow-[0_25px_70px_rgba(17,62,20,0.22)] sm:px-9 lg:px-12">
       <div class="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
         <div>
           <p class="text-xs font-black uppercase tracking-[0.2em] text-[#a0602f]">People and businesses</p>
@@ -235,7 +241,7 @@
                 </div>
               </div>
 
-              <div class="relative mt-5 grid grid-cols-3 gap-2">
+              <div class="nursery-account-metrics relative mt-5 grid grid-cols-3 gap-2">
                 <div class="rounded-2xl bg-[#113e14]/6 px-3 py-3">
                   <span class="block text-[9px] font-black uppercase tracking-wider text-[#416543]/60">Location</span>
                   <strong class="mt-1 block truncate text-xs">{{ nursery.location }}</strong>
@@ -250,7 +256,7 @@
                 </div>
               </div>
 
-              <div class="relative mt-5 grid gap-3 border-t border-[#113e14]/10 pt-4 sm:grid-cols-[1fr_auto]">
+              <div class="nursery-account-footer relative mt-5 grid gap-3 border-t border-[#113e14]/10 pt-4 sm:grid-cols-[1fr_auto]">
                 <p class="min-w-0 truncate text-xs font-bold text-[#416543]">{{ nursery.hours }}</p>
                 <div class="flex shrink-0 items-center gap-2">
                   @if(canUseFavorites && !nursery.isOwnProfile)
@@ -299,7 +305,7 @@
     </div>
   </section>
 
-  <section class="px-4 pb-24 pt-8 sm:px-8">
+  <section class="phone-nursery-section phone-nursery-guide px-4 pb-24 pt-8 sm:px-8">
     <div class="mx-auto max-w-[1120px]">
       <div class="mb-8 text-center text-white">
         <p class="text-xs font-black uppercase tracking-[0.2em] text-[#ebe3a7]">More places to visit</p>

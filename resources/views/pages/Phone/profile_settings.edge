@@ -28,7 +28,7 @@
 @let(gardenerStatusValue = old.is_available ?? (roleProfile?.isAvailable ? '1' : '0'))
 @let(nurseryStatusValue = old.is_active ?? (roleProfile?.isActive ? '1' : '0'))
 
-<div class="relative z-10 min-h-dvh overflow-hidden bg-[#416543] text-[#113e14]" data-profile-page>
+<div class="phone-profile-settings relative z-10 min-h-dvh overflow-hidden bg-[#416543] text-[#113e14]" data-profile-page data-phone-profile="settings" data-profile-role="{{ roleProfileKind }}">
   <div class="fixed inset-0 pointer-events-none">
     <img src="/resources/images/welcome/header3.png" alt="" class="h-full w-full object-cover opacity-20">
     <div class="absolute inset-0 bg-gradient-to-b from-[#113e14]/85 via-[#416543]/80 to-[#416543]"></div>
@@ -47,8 +47,8 @@
     planLabel: accountProfile.planLabel,
   })
 
-  <main class="relative z-10 mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))] px-4 pb-36 pt-4 sm:px-5 lg:px-10">
-    <section class="mb-6 rounded-[2rem] border border-white/12 bg-[#113e14]/78 p-6 text-white shadow-2xl backdrop-blur-2xl">
+  <main class="phone-profile-settings-main relative z-10 mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))] px-4 pb-36 pt-4 sm:px-5 lg:px-10">
+    <section class="phone-profile-settings-header mb-6 rounded-[2rem] border border-white/12 bg-[#113e14]/78 p-6 text-white shadow-2xl backdrop-blur-2xl">
       <div class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p class="text-xs font-black uppercase tracking-[0.2em] text-[#ebe3a7]">Profile workspace</p>
@@ -74,12 +74,12 @@
       route: 'profile.update',
       method: 'POST',
       enctype: 'multipart/form-data',
-      class: 'grid gap-6 lg:grid-cols-[0.85fr_1.15fr]',
+      class: 'phone-profile-settings-form grid gap-6 lg:grid-cols-[0.85fr_1.15fr]',
       id: 'profile-settings-form',
       'data-profile-settings-form': true
     })
       <section class="space-y-6">
-        <div class="overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/12 shadow-[0_30px_90px_rgba(0,0,0,0.22)] backdrop-blur-3xl">
+        <div class="phone-profile-settings-preview overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/12 shadow-[0_30px_90px_rgba(0,0,0,0.22)] backdrop-blur-3xl">
           <div class="relative h-56 overflow-hidden">
             <div id="banner-fallback" class="{{ bannerUrl ? 'hidden' : 'absolute inset-0' }}">
               <div class="absolute inset-0 bg-[#f7f6ea]"></div>
@@ -349,7 +349,7 @@
         @endif
 
         @if(roleProfileKind === 'nursery')
-          <div id="professional-settings" class="scroll-mt-28 rounded-[2.5rem] bg-[#ebe3a7]/95 p-6 shadow-[0_24px_70px_rgba(0,0,0,0.18)]">
+          <div id="professional-settings" class="phone-nursery-settings scroll-mt-28 rounded-[2.5rem] bg-[#ebe3a7]/95 p-6 shadow-[0_24px_70px_rgba(0,0,0,0.18)]">
             <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <p class="text-sm font-black uppercase tracking-[0.18em] text-[#416543]">Nursery storefront</p>
@@ -594,7 +594,7 @@
     @end
 
     @if(roleProfileKind === 'nursery')
-      <section id="catalog-settings" class="mt-8 scroll-mt-28 overflow-hidden rounded-[2.75rem] border border-white/20 bg-[#f5f1d6] text-[#113e14] shadow-[0_30px_90px_rgba(0,0,0,0.24)]">
+      <section id="catalog-settings" class="phone-nursery-catalog-settings mt-8 scroll-mt-28 overflow-hidden rounded-[2.75rem] border border-white/20 bg-[#f5f1d6] text-[#113e14] shadow-[0_30px_90px_rgba(0,0,0,0.24)]">
         <div class="relative overflow-hidden bg-[#113e14] px-6 py-8 text-white sm:px-8">
           <div class="absolute -right-16 -top-20 h-64 w-64 rounded-full bg-[#dca15d]/20 blur-3xl"></div>
           <div class="relative flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
@@ -701,7 +701,7 @@
                   </div>
                   <div class="space-y-3 p-4">
                   @each(product in categoryProducts)
-                    <details class="group overflow-hidden rounded-[1.5rem] border border-[#416543]/10 bg-white shadow-sm">
+                    <details class="phone-nursery-inventory-item group overflow-hidden rounded-[1.5rem] border border-[#416543]/10 bg-white shadow-sm">
                   <summary class="flex cursor-pointer list-none items-center gap-4 p-4">
                     <div class="h-20 w-20 shrink-0 overflow-hidden rounded-2xl bg-[#dfe8cf]">
                       @if(product.imageUrl)

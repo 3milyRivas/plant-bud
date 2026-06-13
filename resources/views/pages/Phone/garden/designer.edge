@@ -3,13 +3,7 @@
 <title>Plant Bud - 2D Designer</title>
 @endslot
 
-<div class="relative min-h-screen overflow-hidden">
-    <img src="/resources/images/welcome/header3.png"
-        class="absolute inset-0 h-full w-full object-cover opacity-24 mix-blend-soft-light pointer-events-none select-none"
-        alt="">
-    <div class="absolute inset-0 bg-[#113e14]/34 pointer-events-none"></div>
-    <div class="absolute inset-0 bg-gradient-to-br from-[#416543]/28 via-transparent to-[#113e14]/42 pointer-events-none"></div>
-
+<div class="phone-designer-page relative min-h-screen overflow-hidden" data-phone-designer>
     @!component('components/app-navbar', {
         section: '2D Garden designer',
         active: 'designer',
@@ -18,12 +12,14 @@
     })
     <input id="upload" type="file" accept="image/*" class="hidden">
 
-    <main class="relative z-10 pt-10 pb-10 px-4 sm:px-6 lg:px-10 select-none">
-        @!component('components/tool-action-panel', { mode: 'designer' })
+    <main class="relative z-10 px-4 pb-10 pt-4 sm:px-6 lg:px-10 select-none">
+        <div data-phone-first-content>
+            @!component('components/tool-action-panel', { mode: 'designer' })
+        </div>
 
-        <div class="w-full max-w-[min(90rem,calc(100vw-2rem))] mx-auto grid grid-cols-1 xl:grid-cols-[320px_1fr] gap-8 min-h-[calc(100vh-11rem)]">
+        <div class="phone-designer-layout w-full max-w-[min(90rem,calc(100vw-2rem))] mx-auto grid grid-cols-1 xl:grid-cols-[320px_1fr] gap-8 min-h-[calc(100vh-11rem)]">
 
-            <aside class="relative min-w-0">
+            <aside class="phone-designer-controls relative min-w-0">
                 <div class="absolute -inset-2 bg-white/10 blur-2xl rounded-[2.5rem] opacity-70"></div>
 
                 <div
@@ -32,7 +28,7 @@
 
                     <div class="relative space-y-8">
 
-                        <section>
+                        <section class="phone-designer-control-section phone-designer-search">
                             <p class="text-xs font-black uppercase tracking-[0.22em] text-[#ebe3a7]">Step 1</p>
                             <h2 class="mt-2 text-white text-xl font-black">Find design assets</h2>
                             <div class="w-14 h-1 bg-[#dca15d] rounded-full mt-3 mb-5"></div>
@@ -52,7 +48,7 @@
                             </p>
                         </section>
 
-                        <section>
+                        <section class="phone-designer-control-section phone-designer-inventory">
                             <p class="text-xs font-black uppercase tracking-[0.22em] text-[#ebe3a7]">Step 2</p>
                             <h2 class="mt-2 text-white text-xl font-black">Build your inventory</h2>
                             <div class="w-14 h-1 bg-[#dca15d] rounded-full mt-3 mb-5"></div>
@@ -69,7 +65,7 @@
                             </div>
                         </section>
 
-                        <section>
+                        <section class="phone-designer-control-section phone-designer-edit">
                             <p class="text-xs font-black uppercase tracking-[0.22em] text-[#ebe3a7]">Step 3</p>
                             <h2 class="mt-2 text-white text-xl font-black">Edit selected item</h2>
                             <div class="w-14 h-1 bg-[#dca15d] rounded-full mt-3 mb-5"></div>
@@ -187,7 +183,7 @@
                 </div>
             </aside>
 
-            <section class="relative">
+            <section class="phone-designer-workspace relative">
                 <div class="absolute -inset-2 bg-white/10 blur-2xl rounded-[3rem] opacity-70"></div>
 
                 <div
@@ -198,18 +194,24 @@
                     <div class="relative flex flex-col h-full">
 
                         <div class="flex items-center justify-between gap-4 mb-6">
-                            <div>
+                            <div class="phone-designer-workspace-heading">
                                 <p class="text-sm font-black uppercase tracking-[0.22em] text-[#416543]">Plant Bud 2D Studio</p>
                                 <h2 class="mt-2 text-3xl md:text-4xl font-black text-[#113e14]">
                                     Garden Workspace
                                 </h2>
-                                <p class="text-[#416543] font-semibold mt-2">
+                                <p class="phone-designer-desktop-guide text-[#416543] font-semibold mt-2">
                                     Upload a base photo, add inventory items, then drag, resize, rotate, and layer them.
                                 </p>
+                                <div class="phone-designer-workspace-guide" aria-label="Designer quick guide">
+                                    <span><strong>1</strong>Add photo</span>
+                                    <span><strong>2</strong>Place assets</span>
+                                    <span><strong>3</strong>Touch to edit</span>
+                                </div>
                             </div>
                         </div>
 
                         <div
+                            data-designer-workspace-shell
                             class="flex-1 min-h-[420px] sm:min-h-[520px] md:min-h-[600px] rounded-[2.5rem] bg-[#416543]/8 border border-[#416543]/12 p-4 lg:p-6 overflow-auto">
 
                             <div id="workspace" class="w-full h-full flex items-center justify-center">
@@ -245,6 +247,31 @@
 
                         </div>
 
+                        <section class="phone-designer-studio-dock" data-designer-mobile-studio>
+                            <div class="phone-designer-studio-tabs" role="tablist" aria-label="Designer controls">
+                                <button type="button" class="is-active" role="tab" aria-selected="true"
+                                    data-designer-studio-tab="assets">
+                                    <span class="phone-designer-studio-tab-icon">+</span>
+                                    Add assets
+                                </button>
+                                <button type="button" role="tab" aria-selected="false"
+                                    data-designer-studio-tab="edit">
+                                    <span class="phone-designer-studio-tab-icon">PB</span>
+                                    Edit item
+                                </button>
+                            </div>
+
+                            <div class="phone-designer-studio-panel is-active" role="tabpanel"
+                                data-designer-studio-panel="assets">
+                                <div data-designer-assets-slot></div>
+                            </div>
+
+                            <div class="phone-designer-studio-panel" role="tabpanel"
+                                data-designer-studio-panel="edit" hidden>
+                                <div data-designer-edit-slot></div>
+                            </div>
+                        </section>
+
                     </div>
 
                 </div>
@@ -253,7 +280,7 @@
         </div>
     </main>
 
-    <div id="searchModal" class="hidden fixed inset-0 z-[70]">
+    <div id="searchModal" class="hidden fixed inset-0 z-[100005]" aria-hidden="true">
         <div class="absolute inset-0 bg-black/75 backdrop-blur-md" onclick="closeSearchModal()"></div>
 
         <div class="absolute inset-0 flex items-center justify-center p-4">
@@ -276,11 +303,13 @@
     </div>
 
     <div id="loadingText"
-        class="fixed bottom-6 left-1/2 -translate-x-1/2 hidden z-50 bg-[#113e14]/86 backdrop-blur-2xl border border-[#ebe3a7]/14 rounded-full px-6 py-4 text-[#ebe3a7] font-bold">
-        Processing...
+        class="designer-processing-toast fixed left-1/2 hidden items-center gap-3 rounded-full border border-[#ebe3a7]/20 bg-[#113e14]/94 px-5 py-3 text-sm font-black text-[#ebe3a7] shadow-[0_18px_45px_rgba(4,24,7,0.34)] backdrop-blur-2xl"
+        role="status" aria-live="polite" aria-hidden="true">
+        <span class="designer-processing-spinner" aria-hidden="true"></span>
+        <span>Preparing your asset...</span>
     </div>
 
 </div>
-@!component('components/phone-upload-modal')
+@!component('components/phone-camera-modal')
 @vite(['resources/js/garden.js'])
 @end

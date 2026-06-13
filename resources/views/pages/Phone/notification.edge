@@ -3,14 +3,14 @@
 <title>Plant Bud - Notifications</title>
 @endslot
 
-<div class="min-h-screen overflow-x-hidden text-[#113e14]" data-community-page>
+<div class="phone-notifications-page min-h-screen overflow-x-hidden text-[#113e14]" data-community-page data-phone-notifications>
   @!component('components/community/top-navbar', {
     viewer,
     active: 'notification',
     section: 'Notifications'
   })
 
-  <main class="mx-auto grid w-full max-w-[1280px] grid-cols-1 gap-7 px-4 pb-24 pt-7 sm:px-6 lg:px-8 xl:grid-cols-[minmax(0,1fr)_21rem] xl:items-start" data-community-layout>
+  <main class="phone-notifications-main mx-auto grid w-full max-w-[1280px] grid-cols-1 gap-7 px-4 pb-24 pt-7 sm:px-6 lg:px-8 xl:grid-cols-[minmax(0,1fr)_21rem] xl:items-start" data-community-layout>
     <section class="min-w-0 space-y-6" data-community-main>
       @if(flashMessages.get('success'))
         <div class="rounded-[1.25rem] border border-[#a8b841]/35 bg-[#ebe3a7]/94 px-5 py-4 text-sm font-black text-[#113e14] shadow-xl" role="status">
@@ -18,7 +18,7 @@
         </div>
       @endif
 
-      <div class="relative overflow-hidden rounded-[2rem] border border-white/20 bg-[#113e14]/90 p-7 text-white shadow-[0_28px_80px_rgba(17,62,20,0.28)] backdrop-blur-2xl md:p-9">
+      <div class="phone-notifications-hero relative overflow-hidden rounded-[2rem] border border-white/20 bg-[#113e14]/90 p-7 text-white shadow-[0_28px_80px_rgba(17,62,20,0.28)] backdrop-blur-2xl md:p-9">
         <div class="absolute -right-16 -top-20 h-56 w-56 rounded-full bg-[#dca15d]/22 blur-2xl"></div>
         <div class="absolute -bottom-24 right-28 h-48 w-48 rounded-full bg-[#a8b841]/18 blur-2xl"></div>
         <div class="relative flex flex-wrap items-end justify-between gap-6">
@@ -29,8 +29,8 @@
               Keep up with followers, conversations, reactions, reviews, and service requests.
             </p>
           </div>
-          <div class="flex items-center gap-3">
-            <div class="rounded-[1.25rem] border border-white/12 bg-white/10 px-5 py-3 text-center">
+          <div class="phone-notifications-actions flex items-center gap-3">
+            <div class="phone-notifications-count rounded-[1.25rem] border border-white/12 bg-white/10 px-5 py-3 text-center">
               <p class="text-3xl font-black">{{ unreadCount }}</p>
               <p class="text-[10px] font-black uppercase tracking-[0.16em] text-white/55">New</p>
             </div>
@@ -46,14 +46,14 @@
         </div>
       </div>
 
-      <div class="rounded-[1.75rem] border border-white/45 bg-[#f5f2df]/90 p-3 shadow-[0_20px_65px_rgba(17,62,20,0.18)] backdrop-blur-xl sm:p-4">
-        <div class="space-y-3">
+      <div class="phone-notifications-list-shell rounded-[1.75rem] border border-white/45 bg-[#f5f2df]/90 p-3 shadow-[0_20px_65px_rgba(17,62,20,0.18)] backdrop-blur-xl sm:p-4">
+        <div class="phone-notifications-list space-y-3">
           @each(notification in notifications)
-            <a href="{{ notification.href }}" class="{{ notification.isUnread ? 'border-[#dca15d]/45 bg-[#fffaf0] ring-1 ring-[#dca15d]/15' : 'border-[#416543]/8 bg-white/72' }} group relative flex flex-col items-start gap-4 rounded-[1.25rem] border p-4 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-[#dca15d]/35 hover:bg-white hover:shadow-lg sm:flex-row sm:items-center sm:justify-between" aria-label="{{ notification.isUnread ? 'Unread notification: ' : '' }}{{ notification.title }}. {{ notification.body }}">
+            <a href="{{ notification.href }}" class="phone-notification-card {{ notification.isUnread ? 'is-unread border-[#dca15d]/45 bg-[#fffaf0] ring-1 ring-[#dca15d]/15' : 'border-[#416543]/8 bg-white/72' }} group relative flex flex-col items-start gap-4 rounded-[1.25rem] border p-4 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-[#dca15d]/35 hover:bg-white hover:shadow-lg sm:flex-row sm:items-center sm:justify-between" aria-label="{{ notification.isUnread ? 'Unread notification: ' : '' }}{{ notification.title }}. {{ notification.body }}">
               @if(notification.isUnread)
                 <span class="absolute left-1.5 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full bg-[#dca15d]" aria-hidden="true"></span>
               @endif
-              <div class="flex min-w-0 flex-1 items-center gap-3">
+              <div class="phone-notification-content flex min-w-0 flex-1 items-center gap-3">
                 @if(notification.actor && notification.actor.avatarUrl)
                   <img src="{{ notification.actor.avatarUrl }}" alt="" class="h-14 w-14 flex-none rounded-2xl border-2 border-white object-cover shadow-md">
                 @elseif(notification.actor)
@@ -71,7 +71,7 @@
                 </span>
               </div>
 
-              <div class="flex flex-none flex-wrap items-center gap-3">
+              <div class="phone-notification-meta flex flex-none flex-wrap items-center gap-3">
                 <span class="rounded-full bg-[#ebe3a7]/55 px-3 py-1.5 text-xs font-black text-[#416543]">{{ notification.createdAtHuman }}</span>
                 @if(notification.thumbnailUrl)
                   <img src="{{ notification.thumbnailUrl }}" alt="" class="h-12 w-12 rounded-xl object-cover">
@@ -91,7 +91,7 @@
       </div>
     </section>
 
-    <aside class="block min-w-0 xl:block" data-community-sidebar>
+    <aside class="phone-notifications-sidebar block min-w-0 xl:block" data-community-sidebar>
       <div class="space-y-4 xl:sticky xl:top-28">
         <details open class="rounded-[1.5rem] border border-white/50 bg-[#f5f2df]/92 p-5 text-[#113e14] shadow-xl backdrop-blur-xl">
           <summary class="flex cursor-pointer list-none items-center justify-between">
