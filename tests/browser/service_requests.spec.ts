@@ -384,6 +384,7 @@ test.group('Service request workflow', (group) => {
   })
 
   test('unavailable gardener profiles remain visible in the catalog and search', async ({
+    browserContext,
     visit,
   }) => {
     const gardenerUser = await User.create({
@@ -411,8 +412,13 @@ test.group('Service request workflow', (group) => {
       ratingCount: 0,
     })
 
+    await browserContext.loginAs(gardenerUser)
     const page = await visit('/maintenance')
-    await page.getByText('Hidden Gardener', { exact: true }).first().waitFor()
+    await page
+      .locator('#gardeners')
+      .getByText('Hidden Gardener', { exact: true })
+      .first()
+      .waitFor()
     await page.locator('[data-gardener-search-input]').fill('hidden.gardener')
     await page
       .locator('[data-gardener-search-results]')

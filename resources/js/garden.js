@@ -1,4 +1,4 @@
-import { initPhoneUpload } from './phone_upload.js'
+import { initPhoneUpload, preparePhoneImage } from './phone_upload.js'
 
 const upload = document.getElementById('upload')
 const baseImage = document.getElementById('baseImage')
@@ -71,6 +71,11 @@ const img = document.getElementById("baseImage")
 const fileInput = document.getElementById("upload")
 
 let hasBaseImage = false
+let activeBaseImageUrl = null
+let baseImageLoadToken = 0
+const designerDraftDatabase = 'plant-bud-designer'
+const designerDraftStore = 'drafts'
+const designerDraftKey = 'base-image'
 
 fileInput.addEventListener("change", (e) => {
     const file = e.target.files[0]
@@ -78,12 +83,16 @@ fileInput.addEventListener("change", (e) => {
 })
 
 initPhoneUpload({ input: fileInput, onFile: handleFile, tool: 'designer' })
+restoreDesignerImage()
 
 let canvasResizeFrame = 0
 window.addEventListener('resize', () => {
   if (!baseImage?.naturalWidth) return
   cancelAnimationFrame(canvasResizeFrame)
-  canvasResizeFrame = requestAnimationFrame(fitCanvasToImage)
+  canvasResizeFrame = requestAnimationFrame(() => {
+    fitCanvasToImage()
+    syncCanvasBackground()
+  })
 })
 
 canvas.addEventListener("dragover", (e) => {
@@ -107,12 +116,29 @@ canvas.addEventListener("drop", (e) => {
     if (file) handleFile(file)
 })
 
-function handleFile(file) {
+async function handleFile(file, { persist = true } = {}) {
     if (!file.type.startsWith("image/")) return
 
-    const url = URL.createObjectURL(file)
+    const loadToken = ++baseImageLoadToken
+    if (persist && isPhoneViewport()) await persistDesignerImage(file)
+    const preparedFile = await prepareBaseImage(file)
+
+    if (loadToken !== baseImageLoadToken) return
+    if (persist && preparedFile !== file && isPhoneViewport()) {
+        await persistDesignerImage(preparedFile)
+    }
+
+    const url = URL.createObjectURL(preparedFile)
+    const previousUrl = activeBaseImageUrl
 
     img.onload = () => {
+        if (loadToken !== baseImageLoadToken) {
+            URL.revokeObjectURL(url)
+            return
+        }
+
+        activeBaseImageUrl = url
+        if (previousUrl) URL.revokeObjectURL(previousUrl)
         placeholder.classList.add("hidden")
         img.classList.remove("hidden")
         hasBaseImage = true
@@ -120,7 +146,73 @@ function handleFile(file) {
         syncCanvasBackground()
     }
 
+    img.onerror = () => {
+        URL.revokeObjectURL(url)
+    }
+
     img.src = url
+}
+
+async function prepareBaseImage(file) {
+    if (!isPhoneViewport()) return file
+
+    return preparePhoneImage(file)
+}
+
+async function restoreDesignerImage() {
+    if (!isPhoneViewport() || baseImage?.naturalWidth) return
+
+    const file = await readDesignerImage()
+    if (file) handleFile(file, { persist: false })
+}
+
+async function persistDesignerImage(file) {
+    try {
+        const database = await openDesignerDatabase()
+        const transaction = database.transaction(designerDraftStore, 'readwrite')
+        transaction.objectStore(designerDraftStore).put(file, designerDraftKey)
+        await finishDesignerTransaction(transaction)
+        database.close()
+    } catch {
+        // The designer remains usable when private browsing blocks IndexedDB.
+    }
+}
+
+async function readDesignerImage() {
+    try {
+        const database = await openDesignerDatabase()
+        const transaction = database.transaction(designerDraftStore, 'readonly')
+        const request = transaction.objectStore(designerDraftStore).get(designerDraftKey)
+        const file = await new Promise((resolve, reject) => {
+            request.onsuccess = () => resolve(request.result || null)
+            request.onerror = () => reject(request.error)
+        })
+        database.close()
+        return file
+    } catch {
+        return null
+    }
+}
+
+function openDesignerDatabase() {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open(designerDraftDatabase, 1)
+        request.onupgradeneeded = () => {
+            if (!request.result.objectStoreNames.contains(designerDraftStore)) {
+                request.result.createObjectStore(designerDraftStore)
+            }
+        }
+        request.onsuccess = () => resolve(request.result)
+        request.onerror = () => reject(request.error)
+    })
+}
+
+function finishDesignerTransaction(transaction) {
+    return new Promise((resolve, reject) => {
+        transaction.oncomplete = resolve
+        transaction.onerror = () => reject(transaction.error)
+        transaction.onabort = () => reject(transaction.error)
+    })
 }
 
 function fitCanvasToImage() {
@@ -144,6 +236,11 @@ function syncCanvasBackground() {
     if (!baseImage?.src) return
 
     let bg = document.getElementById("image-bg")
+
+    if (isPhoneViewport()) {
+        bg?.remove()
+        return
+    }
 
     if (!bg) {
         bg = document.createElement("div")

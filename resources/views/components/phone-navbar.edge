@@ -12,7 +12,7 @@
 @let(bottomItems = [
   { key: 'homepage', href: homeHref, label: 'Home', icon: '/resources/images/phone-icons/Home.png', activeKeys: ['homepage'] },
   { key: 'community', href: '/community', label: 'Community', icon: '/resources/images/phone-icons/Community.png', activeKeys: ['community', 'favorites'] },
-  { key: 'services', href: '/maintenance', label: 'Services', icon: '/resources/images/phone-icons/Services.png', activeKeys: ['services', 'requested', 'nurseries', 'nursery'] },
+  { key: 'services', href: '/maintenance', label: 'Services', icon: '/resources/images/phone-icons/Services.png', activeKeys: ['services', 'requested', 'dashboard', 'nurseries', 'nursery'] },
   { key: 'profile', href: profileHref, label: 'Profile', icon: null, activeKeys: ['profile', 'profile-settings'] },
 ])
 @let(drawerItems = [
@@ -132,6 +132,17 @@
     </div>
 
     <nav class="mt-5 space-y-1.5" aria-label="More Plant Bud links">
+      @if(auth.user?.role === 'gardener')
+        <a href="/gardener/dashboard" class="flex items-center gap-4 rounded-[1.15rem] px-3 py-3 transition active:scale-[0.98] active:bg-[#ebe3a7]">
+          <span class="grid h-11 w-11 flex-none place-items-center rounded-2xl bg-[#dca15d]/22">
+            <img src="/resources/images/phone-icons/Services.png" alt="" class="h-6 w-6 object-contain">
+          </span>
+          <span class="min-w-0">
+            <strong class="block text-sm font-black">Gardener dashboard</strong>
+            <small class="mt-0.5 block truncate text-[11px] font-bold text-[#416543]/70">Schedule, clients, and earnings</small>
+          </span>
+        </a>
+      @endif
       @each(item in drawerItems)
         <a href="{{ item.href }}" class="flex items-center gap-4 rounded-[1.15rem] px-3 py-3 transition active:scale-[0.98] active:bg-[#ebe3a7]">
           <span class="grid h-11 w-11 flex-none place-items-center rounded-2xl bg-[#ebe3a7]/65">

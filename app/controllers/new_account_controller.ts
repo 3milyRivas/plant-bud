@@ -24,6 +24,7 @@ type SignupRole = 'client' | 'gardener' | 'nursery'
 
 const NURSERY_USERNAME_PREFIX = 'nursery_'
 const SIGNUP_USERNAME_MAX_LENGTH = 15
+const RESERVED_OWNER_EMAIL = 'davidalfredomenjivar@gmail.com'
 const RESERVED_HANDLE_KEYS = new Set([
   'admin',
   'administrator',
@@ -341,7 +342,11 @@ export default class NewAccountController {
     const phoneExists = normalized.phone ? await User.findBy('phone', normalized.phone) : null
     const duiExists = normalized.dui ? await User.findBy('dui', normalized.dui) : null
 
-    if (emailExists) errors.email = ['Email already exists']
+    if (normalized.email === RESERVED_OWNER_EMAIL) {
+      errors.email = ['This email is reserved for the protected owner account']
+    } else if (emailExists) {
+      errors.email = ['Email already exists']
+    }
     if (usernameExists) errors.username = ['Username already exists']
     if (nurseryExists) errors.nursery_name = ['Nursery name already exists']
     if (nurseryNameConflictsWithUser) {

@@ -2,6 +2,7 @@ let activePoll = null
 let activeCamera = null
 let cameraPreviewUrl = null
 let cameraStream = null
+let cameraFileToken = 0
 
 export function initPhoneUpload({ input, onFile, tool = 'plant-bud' }) {
   if (!input || typeof onFile !== 'function') return
@@ -50,10 +51,18 @@ function bindCameraModal() {
   const usePhoto = modal.querySelector('[data-phone-camera-use]')
 
   modal.dataset.phoneCameraReady = 'true'
-  cameraInput?.addEventListener('change', () => {
+  cameraInput?.addEventListener('change', async () => {
     const file = cameraInput.files?.[0]
 
-    if (file) reviewCameraPhoto(file)
+    if (!file) return
+
+    const token = ++cameraFileToken
+    setCameraStatus('Preparing photo...')
+    const preparedFile = await preparePhoneImage(file)
+
+    if (token === cameraFileToken && activeCamera) {
+      reviewCameraPhoto(preparedFile, { previewSafe: preparedFile !== file })
+    }
   })
   capture?.addEventListener('click', captureCameraPhoto)
   retake?.addEventListener('click', startCameraPreview)
@@ -76,6 +85,7 @@ function openCameraModal() {
   modal.classList.remove('hidden')
   modal.classList.add('flex')
   modal.setAttribute('aria-hidden', 'false')
+  document.documentElement.classList.add('phone-camera-is-open')
   document.body.classList.add('overflow-hidden')
 }
 
@@ -95,6 +105,7 @@ async function startCameraPreview() {
   stopCameraStream()
   releaseCameraPreview()
   activeCamera.file = null
+  activeCamera.previewSafe = false
   preview?.classList.add('hidden')
   preview?.removeAttribute('src')
   video.classList.add('hidden')
@@ -113,14 +124,7 @@ async function startCameraPreview() {
   }
 
   try {
-    cameraStream = await navigator.mediaDevices.getUserMedia({
-      video: {
-        facingMode: { ideal: 'environment' },
-        width: { ideal: 1920 },
-        height: { ideal: 1080 },
-      },
-      audio: false,
-    })
+    cameraStream = await openRearCamera()
     video.srcObject = cameraStream
     await video.play()
     status?.classList.add('hidden')
@@ -128,6 +132,33 @@ async function startCameraPreview() {
   } catch {
     launchCameraInput()
   }
+}
+
+async function openRearCamera() {
+  const baseVideo = {
+    width: { ideal: 1920 },
+    height: { ideal: 1080 },
+  }
+
+  try {
+    return await navigator.mediaDevices.getUserMedia({
+      video: {
+        ...baseVideo,
+        facingMode: { exact: 'environment' },
+      },
+      audio: false,
+    })
+  } catch (error) {
+    if (error?.name !== 'OverconstrainedError' && error?.name !== 'NotFoundError') throw error
+  }
+
+  return navigator.mediaDevices.getUserMedia({
+    video: {
+      ...baseVideo,
+      facingMode: { ideal: 'environment' },
+    },
+    audio: false,
+  })
 }
 
 function captureCameraPhoto() {
@@ -146,7 +177,8 @@ function captureCameraPhoto() {
     (blob) => {
       if (!blob) return
       reviewCameraPhoto(
-        new File([blob], `plant-bud-camera-${Date.now()}.jpg`, { type: 'image/jpeg' })
+        new File([blob], `plant-bud-camera-${Date.now()}.jpg`, { type: 'image/jpeg' }),
+        { previewSafe: true }
       )
     },
     'image/jpeg',
@@ -163,7 +195,7 @@ function launchCameraInput() {
   cameraInput.click()
 }
 
-function reviewCameraPhoto(file) {
+function reviewCameraPhoto(file, { previewSafe = false } = {}) {
   const modal = document.querySelector('[data-phone-camera-modal]')
   const video = modal?.querySelector('[data-phone-camera-video]')
   const preview = modal?.querySelector('[data-phone-camera-preview]')
@@ -179,11 +211,19 @@ function reviewCameraPhoto(file) {
   stopCameraStream()
   releaseCameraPreview()
   activeCamera.file = file
-  cameraPreviewUrl = URL.createObjectURL(file)
-  preview.src = cameraPreviewUrl
+  activeCamera.previewSafe = previewSafe
+  if (previewSafe) {
+    cameraPreviewUrl = URL.createObjectURL(file)
+    preview.src = cameraPreviewUrl
+    preview.classList.remove('hidden')
+  } else {
+    preview.removeAttribute('src')
+    preview.classList.add('hidden')
+    if (status) status.textContent = 'Photo ready'
+    status?.classList.remove('hidden')
+  }
   video?.classList.add('hidden')
-  status?.classList.add('hidden')
-  preview.classList.remove('hidden')
+  if (previewSafe) status?.classList.add('hidden')
   if (title) title.textContent = 'Review your photo'
   help?.classList.add('hidden')
   reviewHelp?.classList.remove('hidden')
@@ -196,13 +236,17 @@ function reviewCameraPhoto(file) {
   document.body.classList.add('overflow-hidden')
 }
 
-function confirmCameraPhoto() {
+async function confirmCameraPhoto() {
   if (!activeCamera?.file) return
+  if (!activeCamera.previewSafe) {
+    setCameraStatus('This photo format could not be prepared safely. Retake the photo.')
+    return
+  }
 
   const { input, onFile, file } = activeCamera
 
   setInputFile(input, file)
-  onFile(file)
+  await onFile(file)
   closeCameraReview()
 }
 
@@ -218,7 +262,9 @@ function closeCameraReview() {
   if (cameraInput) cameraInput.value = ''
   if (preview) preview.removeAttribute('src')
   releaseCameraPreview()
+  cameraFileToken += 1
   activeCamera = null
+  document.documentElement.classList.remove('phone-camera-is-open')
   document.body.classList.remove('overflow-hidden')
 }
 
@@ -235,6 +281,165 @@ function releaseCameraPreview() {
 
   URL.revokeObjectURL(cameraPreviewUrl)
   cameraPreviewUrl = null
+}
+
+function setCameraStatus(message) {
+  const modal = document.querySelector('[data-phone-camera-modal]')
+  const status = modal?.querySelector('[data-phone-camera-status]')
+  const preview = modal?.querySelector('[data-phone-camera-preview]')
+  const video = modal?.querySelector('[data-phone-camera-video]')
+
+  if (status) status.textContent = message
+  status?.classList.remove('hidden')
+  preview?.classList.add('hidden')
+  video?.classList.add('hidden')
+}
+
+export async function preparePhoneImage(file) {
+  if (!file?.type?.startsWith('image/')) return file
+
+  const bitmapFile = await resizeWithImageBitmap(file)
+  if (bitmapFile !== file) return bitmapFile
+
+  const ImageDecoderClass = globalThis.ImageDecoder
+  if (typeof ImageDecoderClass !== 'function' || typeof file.stream !== 'function') {
+    return resizeWithImageElement(file)
+  }
+
+  let decoder = null
+  let frame = null
+
+  try {
+    decoder = new ImageDecoderClass({
+      data: file.stream(),
+      type: file.type,
+    })
+    await decoder.tracks.ready
+
+    const track = decoder.tracks.selectedTrack
+    const width = track?.codedWidth || 0
+    const height = track?.codedHeight || 0
+
+    if (!width || !height) return file
+
+    const maxEdge = 1600
+    const maxPixels = 2_500_000
+    const scale = Math.min(
+      1,
+      maxEdge / Math.max(width, height),
+      Math.sqrt(maxPixels / Math.max(width * height, 1))
+    )
+
+    const outputWidth = Math.max(1, Math.round(width * scale))
+    const outputHeight = Math.max(1, Math.round(height * scale))
+    const result = await decoder.decode({
+      frameIndex: 0,
+      completeFramesOnly: true,
+      desiredWidth: outputWidth,
+      desiredHeight: outputHeight,
+    })
+    frame = result.image
+
+    const output = document.createElement('canvas')
+    output.width = outputWidth
+    output.height = outputHeight
+
+    const context = output.getContext('2d', { alpha: false })
+    if (!context) return file
+
+    context.drawImage(frame, 0, 0, outputWidth, outputHeight)
+    const blob = await new Promise(resolve => output.toBlob(resolve, 'image/jpeg', 0.88))
+
+    if (!blob) return file
+
+    return new File([blob], cameraFileName(file.name), {
+      type: 'image/jpeg',
+      lastModified: file.lastModified || Date.now(),
+    })
+  } catch {
+    return resizeWithImageElement(file)
+  } finally {
+    frame?.close?.()
+    decoder?.close?.()
+  }
+}
+
+async function resizeWithImageBitmap(file) {
+  if (typeof createImageBitmap !== 'function') return file
+
+  let bitmap = null
+
+  try {
+    bitmap = await createImageBitmap(file, {
+      imageOrientation: 'from-image',
+      resizeWidth: 1280,
+      resizeQuality: 'high',
+    })
+
+    const scale = Math.min(1, 1600 / Math.max(bitmap.width, bitmap.height))
+    const width = Math.max(1, Math.round(bitmap.width * scale))
+    const height = Math.max(1, Math.round(bitmap.height * scale))
+    const output = document.createElement('canvas')
+    output.width = width
+    output.height = height
+    const context = output.getContext('2d', { alpha: false })
+    if (!context) return file
+
+    context.drawImage(bitmap, 0, 0, width, height)
+    const blob = await new Promise(resolve => output.toBlob(resolve, 'image/jpeg', 0.86))
+
+    return blob
+      ? new File([blob], cameraFileName(file.name), {
+          type: 'image/jpeg',
+          lastModified: file.lastModified || Date.now(),
+        })
+      : file
+  } catch {
+    return file
+  } finally {
+    bitmap?.close?.()
+  }
+}
+
+async function resizeWithImageElement(file) {
+  const sourceUrl = URL.createObjectURL(file)
+
+  try {
+    const image = await new Promise((resolve, reject) => {
+      const element = new Image()
+      element.onload = () => resolve(element)
+      element.onerror = reject
+      element.src = sourceUrl
+    })
+    const maxEdge = 1600
+    const maxPixels = 2_500_000
+    const scale = Math.min(
+      1,
+      maxEdge / Math.max(image.naturalWidth, image.naturalHeight),
+      Math.sqrt(maxPixels / Math.max(image.naturalWidth * image.naturalHeight, 1))
+    )
+    const output = document.createElement('canvas')
+    output.width = Math.max(1, Math.round(image.naturalWidth * scale))
+    output.height = Math.max(1, Math.round(image.naturalHeight * scale))
+    const context = output.getContext('2d', { alpha: false })
+    if (!context) return file
+
+    context.drawImage(image, 0, 0, output.width, output.height)
+    const blob = await new Promise(resolve => output.toBlob(resolve, 'image/jpeg', 0.88))
+
+    return blob
+      ? new File([blob], cameraFileName(file.name), { type: 'image/jpeg' })
+      : file
+  } catch {
+    return file
+  } finally {
+    URL.revokeObjectURL(sourceUrl)
+  }
+}
+
+function cameraFileName(name) {
+  const base = String(name || `plant-bud-camera-${Date.now()}`).replace(/\.[^.]+$/, '')
+  return `${base}.jpg`
 }
 
 function bindUploadMenus() {

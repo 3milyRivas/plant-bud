@@ -6,6 +6,7 @@ import router from '@adonisjs/core/services/router'
 
 const CommunityController = () => import('#controllers/community_controller')
 const GardenDesignerController = () => import('#controllers/garden_designers_controller')
+const GardenerDashboardController = () => import('#controllers/gardener_dashboard_controller')
 const HomepagesController = () => import('#controllers/homepages_controller')
 const NewAccountController = () => import('#controllers/new_account_controller')
 const NurseriesController = () => import('#controllers/nurseries_controller')
@@ -17,16 +18,9 @@ const PlantsSearchController = () => import('#controllers/plants_search_controll
 const ProfilesController = () => import('#controllers/profiles_controller')
 const ServicesController = () => import('#controllers/services_controller')
 const SessionController = () => import('#controllers/session_controller')
+const AdminController = () => import('#controllers/admin_controller')
 
 router.on('/').render('pages/welcome').as('home')
-router.on('/register').render('pages/register').as('register')
-router.on('/ornamental').render('pages/ornamental', { ornamentalPlants })
-router.on('/horticultural').render('pages/horticultural', { horticulturalPlants })
-router.on('/succulent').render('pages/succulent', { succulentPlants })
-router.get('/plants/search', [PlantsSearchController, 'search']).as('plants.search')
-router.on('/care1').render('pages/client/Plants/care1')
-router.on('/care2').render('pages/client/Plants/care2')
-router.on('/care3').render('pages/client/Plants/care3')
 
 router
   .group(() => {
@@ -44,6 +38,15 @@ router
 
 router
   .group(() => {
+    router.on('/register').render('pages/register').as('register')
+    router.on('/ornamental').render('pages/ornamental', { ornamentalPlants })
+    router.on('/horticultural').render('pages/horticultural', { horticulturalPlants })
+    router.on('/succulent').render('pages/succulent', { succulentPlants })
+    router.get('/plants/search', [PlantsSearchController, 'search']).as('plants.search')
+    router.on('/care1').render('pages/client/Plants/care1')
+    router.on('/care2').render('pages/client/Plants/care2')
+    router.on('/care3').render('pages/client/Plants/care3')
+
     router.post('/logout', [SessionController, 'destroy']).as('session.destroy')
     router.get('/homepage', [HomepagesController, 'index']).as('homepage')
 
@@ -144,29 +147,53 @@ router
 
     router.get('/requested', [ServicesController, 'requested']).as('services.requested')
     router
+      .get('/gardener/dashboard', [GardenerDashboardController, 'index'])
+      .as('gardener.dashboard')
+      .use(middleware.role(['gardener']))
+    router
       .post('/requested/:id/action', [ServicesController, 'updateRequest'])
       .as('services.requests.update')
     router
       .post('/requested/:id/delete', [ServicesController, 'dismissCompletedRequest'])
       .as('services.requests.dismiss')
+
+    router.get('/maintenance', [ServicesController, 'index']).as('maintenance')
+    router
+      .get('/maintenance/suggestions', [ServicesController, 'suggestions'])
+      .as('maintenance.suggestions')
+    router.get('/request', ({ response }) => response.redirect('/maintenance')).as('request')
+    router.get('/request/:id', [ServicesController, 'show']).as('request.show')
+
+    router.get('/nurseries', [NurseriesController, 'index']).as('nurseries.index')
+    router
+      .get('/nurseries/suggestions', [NurseriesController, 'suggestions'])
+      .as('nurseries.suggestions')
+
+    router
+      .get('/profile/media/:userId/:kind/:fileName', [ProfilesController, 'media'])
+      .as('profile.media.public')
+    router
+      .get('/nursery-catalog/media/:userId/:fileName', [NurseryCatalogController, 'media'])
+      .as('nursery_catalog.media')
   })
   .use(middleware.auth())
 
-router.get('/maintenance', [ServicesController, 'index']).as('maintenance')
 router
-  .get('/maintenance/suggestions', [ServicesController, 'suggestions'])
-  .as('maintenance.suggestions')
-router.get('/request', ({ response }) => response.redirect('/maintenance')).as('request')
-router.get('/request/:id', [ServicesController, 'show']).as('request.show')
+  .group(() => {
+    router.get('/admin', [AdminController, 'index']).as('admin.index')
+    router.post('/admin/users', [AdminController, 'createUser']).as('admin.users.create')
+    router
+      .post('/admin/users/:id/access', [AdminController, 'updateAccess'])
+      .as('admin.users.access')
+    router.post('/admin/users/:id/delete', [AdminController, 'deleteUser']).as('admin.users.delete')
+    router.post('/admin/posts/:id/delete', [AdminController, 'deletePost']).as('admin.posts.delete')
+  })
+  .use([middleware.auth(), middleware.admin()])
+
 router
   .post('/request/:id', [ServicesController, 'store'])
   .as('request.store')
   .use([middleware.auth(), middleware.role(['client'])])
-
-router.get('/nurseries', [NurseriesController, 'index']).as('nurseries.index')
-router
-  .get('/nurseries/suggestions', [NurseriesController, 'suggestions'])
-  .as('nurseries.suggestions')
 
 router.post('/phone-upload/sessions', [PhoneUploadsController, 'create']).as('phone_uploads.create')
 router
@@ -177,10 +204,3 @@ router
   .as('phone_uploads.image')
 router.get('/phone-upload/:token', [PhoneUploadsController, 'show']).as('phone_uploads.show')
 router.post('/phone-upload/:token', [PhoneUploadsController, 'upload']).as('phone_uploads.upload')
-
-router
-  .get('/profile/media/:userId/:kind/:fileName', [ProfilesController, 'media'])
-  .as('profile.media.public')
-router
-  .get('/nursery-catalog/media/:userId/:fileName', [NurseryCatalogController, 'media'])
-  .as('nursery_catalog.media')

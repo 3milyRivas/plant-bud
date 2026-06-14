@@ -10,7 +10,7 @@
     label: 'Tools',
     icon: '/resources/images/homepagee/scanner.png',
     eyebrow: 'Create and diagnose',
-    activeKeys: ['scanner', 'designer', 'ornamental', 'horticultural', 'succulent'],
+    activeKeys: ['scanner', 'designer', 'dashboard', 'ornamental', 'horticultural', 'succulent'],
     children: [
       {
         href: '/scanner',
@@ -21,6 +21,12 @@
         href: '/designer',
         label: 'Designer',
         description: 'Plan a garden layout in 2D.',
+      },
+      {
+        href: '/gardener/dashboard',
+        label: 'Gardener dashboard',
+        description: 'Review your work board, schedule, and earnings.',
+        gardenerOnly: true,
       },
     ],
   },
@@ -191,7 +197,7 @@
                       <p class="mt-1 text-lg font-black leading-tight text-[#113e14]">{{ item.label }}</p>
                     </div>
                     @each(child in item.children)
-                      @if(!child.phoneOnly || frontend === 'Phone')
+                      @if((!child.phoneOnly || frontend === 'Phone') && (!child.gardenerOnly || auth.user?.role === 'gardener'))
                         <a href="{{ child.href }}" class="mt-2 block rounded-[1rem] px-4 py-3 transition hover:bg-[#416543]/10">
                           <span class="block text-sm font-black text-[#113e14]">{{ child.label }}</span>
                           @if(child.description)

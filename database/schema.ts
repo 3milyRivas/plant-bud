@@ -65,6 +65,29 @@ export class AccountProfileSchema extends BaseModel {
   declare websiteUrl: string | null
 }
 
+export class AdminAuditLogSchema extends BaseModel {
+  static $columns = ['action', 'actorEmail', 'actorUserId', 'createdAt', 'id', 'ipAddress', 'summary', 'targetId', 'targetType'] as const
+  $columns = AdminAuditLogSchema.$columns
+  @column()
+  declare action: string
+  @column()
+  declare actorEmail: string
+  @column()
+  declare actorUserId: number | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare ipAddress: string | null
+  @column()
+  declare summary: string
+  @column()
+  declare targetId: string | null
+  @column()
+  declare targetType: string
+}
+
 export class CommunityPostSchema extends BaseModel {
   static $columns = ['body', 'createdAt', 'id', 'mediaType', 'mediaUrl', 'updatedAt', 'userId', 'visibility'] as const
   $columns = CommunityPostSchema.$columns
@@ -546,8 +569,10 @@ export class SessionSchema extends BaseModel {
 }
 
 export class UserSchema extends BaseModel {
-  static $columns = ['createdAt', 'dui', 'email', 'firstName', 'id', 'lastName', 'password', 'phone', 'profilePicture', 'role', 'updatedAt', 'username'] as const
+  static $columns = ['accessLevel', 'createdAt', 'dui', 'email', 'firstName', 'id', 'lastName', 'password', 'phone', 'profilePicture', 'role', 'updatedAt', 'username'] as const
   $columns = UserSchema.$columns
+  @column()
+  declare accessLevel: string
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime | null
   @column()

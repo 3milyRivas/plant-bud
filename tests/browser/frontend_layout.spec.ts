@@ -9,9 +9,20 @@ test.group('Frontend layout', (group) => {
   group.each.setup(() => testUtils.db().withGlobalTransaction())
 
   test('nursery directory stays organized and touch-friendly on phones', async ({
+    browserContext,
     visit,
     assert,
   }) => {
+    const user = await User.create({
+      first_name: 'Nursery',
+      last_name: 'Visitor',
+      username: 'nursery.directory.visitor',
+      email: 'nursery.directory.visitor@example.com',
+      password: 'PlantBud123!',
+      role: 'client',
+    })
+    await browserContext.loginAs(user)
+
     const page = await visit('/nurseries')
     await page.setViewportSize({ width: 390, height: 844 })
     await page.setExtraHTTPHeaders({ 'sec-ch-ua-mobile': '?1' })
@@ -116,6 +127,7 @@ test.group('Frontend layout', (group) => {
   })
 
   test('login renders and signup remains scrollable on a laptop viewport', async ({
+    browserContext,
     visit,
     assert,
   }) => {
@@ -153,6 +165,16 @@ test.group('Frontend layout', (group) => {
       })
 
     assert.isTrue(mobileScrollMoved)
+
+    const registeredUser = await User.create({
+      first_name: 'Register',
+      last_name: 'Viewer',
+      username: 'register.viewer',
+      email: 'register.viewer@example.com',
+      password: 'PlantBud123!',
+      role: 'client',
+    })
+    await browserContext.loginAs(registeredUser)
 
     const registerPage = await visit('/register')
     await registerPage.setViewportSize({ width: 1280, height: 560 })
@@ -478,9 +500,20 @@ test.group('Frontend layout', (group) => {
   })
 
   test('catalog families and their care guides are organized for phones', async ({
+    browserContext,
     visit,
     assert,
   }) => {
+    const user = await User.create({
+      first_name: 'Catalog',
+      last_name: 'Viewer',
+      username: 'catalog.viewer',
+      email: 'catalog.viewer@example.com',
+      password: 'PlantBud123!',
+      role: 'client',
+    })
+    await browserContext.loginAs(user)
+
     const catalogs = [
       { path: '/ornamental', kind: 'ornamental' },
       { path: '/horticultural', kind: 'horticultural' },
@@ -1281,10 +1314,19 @@ test.group('Frontend layout', (group) => {
     const designerChooserPromise = designerPage.waitForEvent('filechooser')
     await designerPage.getByRole('button', { name: 'Open camera' }).click()
     await (await designerChooserPromise).setFiles(photo)
-    await designerPage
-      .locator('[data-phone-camera-modal]')
-      .getByRole('button', { name: 'Use this photo' })
-      .click()
+    const designerReview = designerPage.locator('[data-phone-camera-modal]')
+    const designerUsePhoto = designerReview.getByRole('button', { name: 'Use this photo' })
+    await designerUsePhoto.waitFor()
+    const designerReviewUrl = designerPage.url()
+    await designerPage.waitForTimeout(1500)
+    assert.equal(designerPage.url(), designerReviewUrl)
+    assert.isTrue(await designerUsePhoto.isVisible())
+    assert.isTrue(
+      await designerPage
+        .locator('html')
+        .evaluate((element) => element.classList.contains('phone-camera-is-open'))
+    )
+    await designerUsePhoto.click()
     await designerPage.locator('#baseImage').waitFor({ state: 'visible' })
     await designerPage.locator('#canvas-container[data-image-fit="natural"]').waitFor()
     const canvasBox = await designerPage.locator('#canvas-container').boundingBox()
@@ -1323,6 +1365,44 @@ test.group('Frontend layout', (group) => {
       await designerPage.locator('#canvas-container').getAttribute('data-image-fit'),
       'natural'
     )
+
+    const largeCameraPhoto = {
+      name: 'large-camera-photo.svg',
+      mimeType: 'image/svg+xml',
+      buffer: Buffer.from(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="4032" height="3024"><rect width="100%" height="100%" fill="#416543"/></svg>'
+      ),
+    }
+    const designerUrl = designerPage.url()
+    await designerPage.getByRole('button', { name: 'Upload image' }).click()
+    const largePhotoChooserPromise = designerPage.waitForEvent('filechooser')
+    await designerPage.getByRole('button', { name: 'Open camera' }).click()
+    await (await largePhotoChooserPromise).setFiles(largeCameraPhoto)
+    const largePhotoReview = designerPage.locator('[data-phone-camera-modal]')
+    await largePhotoReview.getByRole('heading', { name: 'Review your photo' }).waitFor()
+    await largePhotoReview.getByRole('button', { name: 'Use this photo' }).click()
+    await designerPage.waitForFunction(() => {
+      const image = (globalThis as any).document.querySelector('#baseImage')
+      return Boolean(image?.naturalWidth && image.naturalWidth <= 2048)
+    })
+    await designerPage.waitForTimeout(750)
+    assert.equal(designerPage.url(), designerUrl)
+    const largeBaseImageVisible = await designerPage.locator('#baseImage').isVisible()
+    assert.isTrue(largeBaseImageVisible)
+    assert.isAtMost(
+      await designerPage
+        .locator('#baseImage')
+        .evaluate((image: { naturalWidth: number }) => image.naturalWidth),
+      2048
+    )
+    assert.equal(await designerPage.locator('#image-bg').count(), 0)
+    await designerPage.reload()
+    await designerPage.waitForFunction(() => {
+      const image = (globalThis as any).document.querySelector('#baseImage')
+      return Boolean(image?.naturalWidth)
+    })
+    assert.equal(designerPage.url(), designerUrl)
+    assert.isTrue(await designerPage.locator('#baseImage').isVisible())
 
     const assetDataUrl =
       'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII='

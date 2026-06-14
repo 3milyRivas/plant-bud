@@ -5,8 +5,6 @@ type ParamValue = string | number | bigint | boolean
 export type ScannedRoutes = {
   ALL: {
     'home': { paramsTuple?: []; params?: {} }
-    'register': { paramsTuple?: []; params?: {} }
-    'plants.search': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
     'session.store': { paramsTuple?: []; params?: {} }
     'signup.client': { paramsTuple?: []; params?: {} }
@@ -14,6 +12,8 @@ export type ScannedRoutes = {
     'signup.nursery': { paramsTuple?: []; params?: {} }
     'new_account.store': { paramsTuple?: []; params?: {} }
     'new_account.demo_guest': { paramsTuple?: []; params?: {} }
+    'register': { paramsTuple?: []; params?: {} }
+    'plants.search': { paramsTuple?: []; params?: {} }
     'session.destroy': { paramsTuple?: []; params?: {} }
     'homepage': { paramsTuple?: []; params?: {} }
     'plans.index': { paramsTuple?: []; params?: {} }
@@ -53,31 +53,37 @@ export type ScannedRoutes = {
     'nursery_catalog.products.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'nursery_catalog.products.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'services.requested': { paramsTuple?: []; params?: {} }
+    'gardener.dashboard': { paramsTuple?: []; params?: {} }
     'services.requests.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'services.requests.dismiss': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'maintenance': { paramsTuple?: []; params?: {} }
     'maintenance.suggestions': { paramsTuple?: []; params?: {} }
     'request': { paramsTuple?: []; params?: {} }
     'request.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
-    'request.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'nurseries.index': { paramsTuple?: []; params?: {} }
     'nurseries.suggestions': { paramsTuple?: []; params?: {} }
+    'profile.media.public': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'userId': ParamValue,'kind': ParamValue,'fileName': ParamValue} }
+    'nursery_catalog.media': { paramsTuple: [ParamValue,ParamValue]; params: {'userId': ParamValue,'fileName': ParamValue} }
+    'admin.index': { paramsTuple?: []; params?: {} }
+    'admin.users.create': { paramsTuple?: []; params?: {} }
+    'admin.users.access': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.users.delete': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.posts.delete': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'request.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'phone_uploads.create': { paramsTuple?: []; params?: {} }
     'phone_uploads.status': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'phone_uploads.image': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'phone_uploads.show': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'phone_uploads.upload': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
-    'profile.media.public': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'userId': ParamValue,'kind': ParamValue,'fileName': ParamValue} }
-    'nursery_catalog.media': { paramsTuple: [ParamValue,ParamValue]; params: {'userId': ParamValue,'fileName': ParamValue} }
   }
   GET: {
     'home': { paramsTuple?: []; params?: {} }
-    'register': { paramsTuple?: []; params?: {} }
-    'plants.search': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
     'signup.client': { paramsTuple?: []; params?: {} }
     'signup.gardener': { paramsTuple?: []; params?: {} }
     'signup.nursery': { paramsTuple?: []; params?: {} }
+    'register': { paramsTuple?: []; params?: {} }
+    'plants.search': { paramsTuple?: []; params?: {} }
     'homepage': { paramsTuple?: []; params?: {} }
     'plans.index': { paramsTuple?: []; params?: {} }
     'garden_designer.show': { paramsTuple?: []; params?: {} }
@@ -95,26 +101,28 @@ export type ScannedRoutes = {
     'profile.settings': { paramsTuple?: []; params?: {} }
     'profile.media': { paramsTuple: [ParamValue,ParamValue]; params: {'kind': ParamValue,'fileName': ParamValue} }
     'services.requested': { paramsTuple?: []; params?: {} }
+    'gardener.dashboard': { paramsTuple?: []; params?: {} }
     'maintenance': { paramsTuple?: []; params?: {} }
     'maintenance.suggestions': { paramsTuple?: []; params?: {} }
     'request': { paramsTuple?: []; params?: {} }
     'request.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'nurseries.index': { paramsTuple?: []; params?: {} }
     'nurseries.suggestions': { paramsTuple?: []; params?: {} }
+    'profile.media.public': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'userId': ParamValue,'kind': ParamValue,'fileName': ParamValue} }
+    'nursery_catalog.media': { paramsTuple: [ParamValue,ParamValue]; params: {'userId': ParamValue,'fileName': ParamValue} }
+    'admin.index': { paramsTuple?: []; params?: {} }
     'phone_uploads.status': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'phone_uploads.image': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'phone_uploads.show': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
-    'profile.media.public': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'userId': ParamValue,'kind': ParamValue,'fileName': ParamValue} }
-    'nursery_catalog.media': { paramsTuple: [ParamValue,ParamValue]; params: {'userId': ParamValue,'fileName': ParamValue} }
   }
   HEAD: {
     'home': { paramsTuple?: []; params?: {} }
-    'register': { paramsTuple?: []; params?: {} }
-    'plants.search': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
     'signup.client': { paramsTuple?: []; params?: {} }
     'signup.gardener': { paramsTuple?: []; params?: {} }
     'signup.nursery': { paramsTuple?: []; params?: {} }
+    'register': { paramsTuple?: []; params?: {} }
+    'plants.search': { paramsTuple?: []; params?: {} }
     'homepage': { paramsTuple?: []; params?: {} }
     'plans.index': { paramsTuple?: []; params?: {} }
     'garden_designer.show': { paramsTuple?: []; params?: {} }
@@ -132,17 +140,19 @@ export type ScannedRoutes = {
     'profile.settings': { paramsTuple?: []; params?: {} }
     'profile.media': { paramsTuple: [ParamValue,ParamValue]; params: {'kind': ParamValue,'fileName': ParamValue} }
     'services.requested': { paramsTuple?: []; params?: {} }
+    'gardener.dashboard': { paramsTuple?: []; params?: {} }
     'maintenance': { paramsTuple?: []; params?: {} }
     'maintenance.suggestions': { paramsTuple?: []; params?: {} }
     'request': { paramsTuple?: []; params?: {} }
     'request.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'nurseries.index': { paramsTuple?: []; params?: {} }
     'nurseries.suggestions': { paramsTuple?: []; params?: {} }
+    'profile.media.public': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'userId': ParamValue,'kind': ParamValue,'fileName': ParamValue} }
+    'nursery_catalog.media': { paramsTuple: [ParamValue,ParamValue]; params: {'userId': ParamValue,'fileName': ParamValue} }
+    'admin.index': { paramsTuple?: []; params?: {} }
     'phone_uploads.status': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'phone_uploads.image': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'phone_uploads.show': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
-    'profile.media.public': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'userId': ParamValue,'kind': ParamValue,'fileName': ParamValue} }
-    'nursery_catalog.media': { paramsTuple: [ParamValue,ParamValue]; params: {'userId': ParamValue,'fileName': ParamValue} }
   }
   POST: {
     'session.store': { paramsTuple?: []; params?: {} }
@@ -172,6 +182,10 @@ export type ScannedRoutes = {
     'nursery_catalog.products.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'services.requests.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'services.requests.dismiss': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.users.create': { paramsTuple?: []; params?: {} }
+    'admin.users.access': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.users.delete': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.posts.delete': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'request.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'phone_uploads.create': { paramsTuple?: []; params?: {} }
     'phone_uploads.upload': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }

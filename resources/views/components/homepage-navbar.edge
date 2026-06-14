@@ -14,7 +14,7 @@
       label: 'Tools',
       icon: '/resources/images/homepagee/scanner.png',
       eyebrow: 'Create and diagnose',
-      activeKeys: ['scanner', 'designer'],
+      activeKeys: ['scanner', 'designer', 'dashboard'],
       children: [
         {
           href: '/scanner',
@@ -25,6 +25,12 @@
           href: '/designer',
           label: 'Designer',
           description: 'Plan a garden layout in 2D.',
+        },
+        {
+          href: '/gardener/dashboard',
+          label: 'Gardener dashboard',
+          description: 'Review your work board, schedule, and earnings.',
+          gardenerOnly: true,
         },
       ],
     },

@@ -49,4 +49,5 @@ export const middleware = router.named({
   guest: () => import('#middleware/guest_middleware'),
   auth: () => import('#middleware/auth_middleware'),
   role: () => import('#middleware/role_middleware'), // ✅ aquí va correctamente
+  admin: () => import('#middleware/admin_middleware'),
 })
