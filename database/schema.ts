@@ -139,6 +139,33 @@ export class FollowSchema extends BaseModel {
   declare updatedAt: DateTime | null
 }
 
+export class GardenProjectSchema extends BaseModel {
+  static $columns = ['baseImageName', 'createdAt', 'description', 'id', 'inventoryJson', 'itemCount', 'lastOpenedAt', 'name', 'stateJson', 'updatedAt', 'userId'] as const
+  $columns = GardenProjectSchema.$columns
+  @column()
+  declare baseImageName: string | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column()
+  declare description: string | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare inventoryJson: string
+  @column()
+  declare itemCount: number
+  @column.dateTime()
+  declare lastOpenedAt: DateTime | null
+  @column()
+  declare name: string
+  @column()
+  declare stateJson: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare userId: number
+}
+
 export class GardenerProfileSchema extends BaseModel {
   static $columns = ['availabilitySchedule', 'bio', 'createdAt', 'experienceYears', 'headline', 'hourlyRate', 'id', 'isAvailable', 'paymentMethods', 'payoutCardBrand', 'payoutCardLastFour', 'payoutCardholderName', 'payoutPaypalEmail', 'portfolioUrl', 'publicPhone', 'ratingAverage', 'ratingCount', 'serviceArea', 'servicesOffered', 'updatedAt', 'userId'] as const
   $columns = GardenerProfileSchema.$columns

@@ -59,6 +59,19 @@ function initAuthForms() {
   const authPages = document.querySelectorAll('[data-auth-page]')
 
   authPages.forEach((page) => {
+    if (page.dataset.authPrivacyReady !== 'true') {
+      page.dataset.authPrivacyReady = 'true'
+      window.addEventListener('pageshow', (event) => {
+        if (!event.persisted) return
+
+        page.querySelectorAll('[data-auth-form]').forEach((form) => {
+          form.querySelectorAll('input:not([type="hidden"])').forEach((input) => {
+            input.value = ''
+          })
+        })
+      })
+    }
+
     page.querySelectorAll('[data-password-toggle]').forEach((button) => {
       if (button.dataset.passwordToggleReady === 'true') return
 
@@ -156,6 +169,48 @@ function initProfilePage() {
   })
 
   initAvatarCropper(page)
+}
+
+function initDesignerProjectDeleteModal() {
+  const modal = document.querySelector('[data-designer-delete-modal]')
+  const form = modal?.querySelector('[data-designer-delete-form]')
+  const projectName = modal?.querySelector('[data-designer-delete-project-name]')
+  const cancelButtons = modal?.querySelectorAll('[data-designer-delete-cancel]') || []
+  const openButtons = document.querySelectorAll('[data-designer-project-delete]')
+
+  if (!modal || !form || !projectName || !openButtons.length) return
+
+  let trigger = null
+  let previousBodyOverflow = ''
+
+  const closeModal = () => {
+    modal.hidden = true
+    modal.setAttribute('aria-hidden', 'true')
+    document.body.style.overflow = previousBodyOverflow
+    trigger?.focus()
+    trigger = null
+  }
+
+  const openModal = (button) => {
+    const action = button.dataset.deleteAction
+
+    if (!action) return
+
+    trigger = button
+    form.setAttribute('action', action)
+    projectName.textContent = button.dataset.projectName || 'This garden'
+    previousBodyOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    modal.hidden = false
+    modal.setAttribute('aria-hidden', 'false')
+    modal.querySelector('[data-designer-delete-cancel]:not(.designer-delete-backdrop)')?.focus()
+  }
+
+  openButtons.forEach((button) => button.addEventListener('click', () => openModal(button)))
+  cancelButtons.forEach((button) => button.addEventListener('click', closeModal))
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !modal.hidden) closeModal()
+  })
 }
 
 function initPaymentMethodControls(page) {
@@ -967,7 +1022,7 @@ function initPhoneNowBar() {
       return { tip: 'Strong heat, check the soil', condition: 'Very hot', symbol: 'sun' }
     }
     if (temperature >= 28 && [0, 1, 2].includes(code)) {
-      return { tip: 'Mucho sol, revisa el riego', condition: 'Sunny', symbol: 'sun' }
+      return { tip: 'Strong sunshine, check watering', condition: 'Sunny', symbol: 'sun' }
     }
     if (temperature <= 16) {
       return { tip: 'Cool weather, water less', condition: 'Cool', symbol: 'cloud' }
@@ -4045,6 +4100,7 @@ function initNurseryCatalogPagination() {
 async function initApp() {
   initAuthForms()
   initProfilePage()
+  initDesignerProjectDeleteModal()
   initProfileRelationsModal()
   initProfilePostPreview()
   initAppNavbarMenus()

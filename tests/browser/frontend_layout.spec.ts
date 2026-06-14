@@ -1,5 +1,6 @@
 import AccountProfile from '#models/account_profile'
 import Follow from '#models/follow'
+import GardenProject from '#models/garden_project'
 import GardenerProfile from '#models/gardener_profile'
 import User from '#models/user'
 import testUtils from '@adonisjs/core/services/test_utils'
@@ -88,14 +89,17 @@ test.group('Frontend layout', (group) => {
     assert.isAtLeast(collage.x, 0)
     assert.isAtMost(collage.x + collage.width, 390)
     assert.isTrue(
-      await root.locator('.phone-welcome-v2-hero-gallery article').first().evaluate((card) => {
-        const style = card.ownerDocument.defaultView?.getComputedStyle(card)
-        return (
-          style?.alignItems === 'center' &&
-          style.justifyContent === 'center' &&
-          style.textAlign === 'center'
-        )
-      })
+      await root
+        .locator('.phone-welcome-v2-hero-gallery article')
+        .first()
+        .evaluate((card) => {
+          const style = card.ownerDocument.defaultView?.getComputedStyle(card)
+          return (
+            style?.alignItems === 'center' &&
+            style.justifyContent === 'center' &&
+            style.textAlign === 'center'
+          )
+        })
     )
     assert.isAtMost(
       await root
@@ -123,11 +127,10 @@ test.group('Frontend layout', (group) => {
       ),
       true
     )
-    assert.equal(await root.locator('a[href="/register"]').count() >= 3, true)
+    assert.equal((await root.locator('a[href="/register"]').count()) >= 3, true)
   })
 
   test('login renders and signup remains scrollable on a laptop viewport', async ({
-    browserContext,
     visit,
     assert,
   }) => {
@@ -135,6 +138,23 @@ test.group('Frontend layout', (group) => {
     await loginPage.setViewportSize({ width: 1280, height: 720 })
     await loginPage.reload()
     await loginPage.getByRole('heading', { name: 'Welcome back' }).waitFor()
+    const loginVisualState = await loginPage.locator('[data-auth-page]').evaluate((root) => {
+      const card = root.querySelector('.auth-card')!
+      const logo = root.querySelector('img[src*="pb-logo"]')!
+      const submit = root.querySelector('button[type="submit"]')!
+      const styles = root.ownerDocument.defaultView!
+
+      return {
+        cardAnimation: styles.getComputedStyle(card).animationName,
+        cardBackground: styles.getComputedStyle(card).backgroundColor,
+        logoTransform: styles.getComputedStyle(logo).transform,
+        submitBackground: styles.getComputedStyle(submit).backgroundColor,
+      }
+    })
+    assert.equal(loginVisualState.cardAnimation, 'none')
+    assert.equal(loginVisualState.cardBackground, 'rgba(250, 248, 235, 0.98)')
+    assert.equal(loginVisualState.logoTransform, 'none')
+    assert.equal(loginVisualState.submitBackground, 'rgb(220, 161, 93)')
 
     const signupPage = await visit('/signup/gardener')
     await signupPage.setViewportSize({ width: 1280, height: 720 })
@@ -166,16 +186,6 @@ test.group('Frontend layout', (group) => {
 
     assert.isTrue(mobileScrollMoved)
 
-    const registeredUser = await User.create({
-      first_name: 'Register',
-      last_name: 'Viewer',
-      username: 'register.viewer',
-      email: 'register.viewer@example.com',
-      password: 'PlantBud123!',
-      role: 'client',
-    })
-    await browserContext.loginAs(registeredUser)
-
     const registerPage = await visit('/register')
     await registerPage.setViewportSize({ width: 1280, height: 560 })
     await registerPage.reload()
@@ -191,17 +201,15 @@ test.group('Frontend layout', (group) => {
 
     await registerPage.setViewportSize({ width: 1280, height: 900 })
     await registerPage.reload()
-    const registerViewport = await registerPage.locator('[data-register-page]').evaluate((element) => ({
-      width: element.clientWidth,
-      height: element.clientHeight,
-    }))
+    const registerViewport = await registerPage
+      .locator('[data-register-page]')
+      .evaluate((element) => ({
+        width: element.clientWidth,
+        height: element.clientHeight,
+      }))
     const centeredRegister = await registerPage.locator('[data-register-content]').boundingBox()
     assert.isNotNull(centeredRegister)
-    assert.closeTo(
-      centeredRegister!.x + centeredRegister!.width / 2,
-      registerViewport.width / 2,
-      3
-    )
+    assert.closeTo(centeredRegister!.x + centeredRegister!.width / 2, registerViewport.width / 2, 3)
     assert.closeTo(
       centeredRegister!.y + centeredRegister!.height / 2,
       registerViewport.height / 2,
@@ -367,9 +375,7 @@ test.group('Frontend layout', (group) => {
         'phone-navbar-notification--counted'
       )
       assert.equal(
-        (
-          await routePage.locator('[data-phone-notification-count]').textContent()
-        )?.trim(),
+        (await routePage.locator('[data-phone-notification-count]').textContent())?.trim(),
         '1'
       )
     }
@@ -396,9 +402,9 @@ test.group('Frontend layout', (group) => {
 
     const readPage = await visit('/community')
     assert.equal(
-      await readPage.locator('[data-pb-navbar-account] a[aria-label^="Notifications"]').getAttribute(
-        'aria-label'
-      ),
+      await readPage
+        .locator('[data-pb-navbar-account] a[aria-label^="Notifications"]')
+        .getAttribute('aria-label'),
       'Notifications'
     )
     assert.notMatch(await readPage.title(), /^\(\d+\) /)
@@ -452,9 +458,9 @@ test.group('Frontend layout', (group) => {
     await plansPage.reload()
     const plansRoot = plansPage.locator('[data-phone-plans]')
     await plansRoot.waitFor()
-    const summaryTops = await plansRoot.locator('.phone-plans-summary > div').evaluateAll(
-      (items) => items.map((item) => Math.round(item.getBoundingClientRect().top))
-    )
+    const summaryTops = await plansRoot
+      .locator('.phone-plans-summary > div')
+      .evaluateAll((items) => items.map((item) => Math.round(item.getBoundingClientRect().top)))
     assert.equal(summaryTops.length, 3)
     assert.equal(new Set(summaryTops).size, 1)
     const premiumBox = await plansRoot.locator('.phone-plan-card--premium').boundingBox()
@@ -482,7 +488,9 @@ test.group('Frontend layout', (group) => {
     assert.equal(
       await notificationRoot
         .locator('.phone-notifications-sidebar')
-        .evaluate((sidebar) => sidebar.ownerDocument.defaultView?.getComputedStyle(sidebar).display),
+        .evaluate(
+          (sidebar) => sidebar.ownerDocument.defaultView?.getComputedStyle(sidebar).display
+        ),
       'none'
     )
     assert.equal(await notificationRoot.locator('.phone-notification-card').count(), 1)
@@ -542,35 +550,35 @@ test.group('Frontend layout', (group) => {
       const cards = root.locator('.category-section:not(.hidden) .plant-catalog-card')
       assert.isAbove(await cards.count(), 1)
       const cardLayout = await cards.first().evaluate((card) => {
-          const image = card.querySelector('img')
-          const action = card.querySelector('a')
-          const cardBox = card.getBoundingClientRect()
-          const imageBox = image?.getBoundingClientRect()
-          const actionBox = action?.getBoundingClientRect()
-          return {
-            fits: Boolean(
+        const image = card.querySelector('img')
+        const action = card.querySelector('a')
+        const cardBox = card.getBoundingClientRect()
+        const imageBox = image?.getBoundingClientRect()
+        const actionBox = action?.getBoundingClientRect()
+        return {
+          fits: Boolean(
             image &&
-              action &&
-              imageBox &&
-              actionBox &&
-              card.scrollWidth <= card.clientWidth &&
-              imageBox.left >= cardBox.left &&
-              imageBox.right <= cardBox.right &&
-              actionBox.left >= cardBox.left &&
-              actionBox.right <= cardBox.right &&
-              actionBox.bottom <= cardBox.bottom + 1
-            ),
-            card: { left: cardBox.left, right: cardBox.right, bottom: cardBox.bottom },
-            image: imageBox
-              ? { left: imageBox.left, right: imageBox.right, bottom: imageBox.bottom }
-              : null,
-            action: actionBox
-              ? { left: actionBox.left, right: actionBox.right, bottom: actionBox.bottom }
-              : null,
-            scrollWidth: card.scrollWidth,
-            clientWidth: card.clientWidth,
-          }
-        })
+            action &&
+            imageBox &&
+            actionBox &&
+            card.scrollWidth <= card.clientWidth &&
+            imageBox.left >= cardBox.left &&
+            imageBox.right <= cardBox.right &&
+            actionBox.left >= cardBox.left &&
+            actionBox.right <= cardBox.right &&
+            actionBox.bottom <= cardBox.bottom + 1
+          ),
+          card: { left: cardBox.left, right: cardBox.right, bottom: cardBox.bottom },
+          image: imageBox
+            ? { left: imageBox.left, right: imageBox.right, bottom: imageBox.bottom }
+            : null,
+          action: actionBox
+            ? { left: actionBox.left, right: actionBox.right, bottom: actionBox.bottom }
+            : null,
+          scrollWidth: card.scrollWidth,
+          clientWidth: card.clientWidth,
+        }
+      })
       catalogCardWidths.push((await cards.first().boundingBox())!.width)
       assert.isTrue(
         cardLayout.fits,
@@ -628,9 +636,12 @@ test.group('Frontend layout', (group) => {
           .evaluate((track) => track.scrollWidth > track.clientWidth)
       )
       assert.equal(
-        await page.locator('.phone-care-species').evaluate(
-          (section) => section.ownerDocument.defaultView?.getComputedStyle(section).backgroundColor
-        ),
+        await page
+          .locator('.phone-care-species')
+          .evaluate(
+            (section) =>
+              section.ownerDocument.defaultView?.getComputedStyle(section).backgroundColor
+          ),
         'rgb(65, 101, 67)'
       )
       assert.isTrue(
@@ -639,23 +650,28 @@ test.group('Frontend layout', (group) => {
           .evaluate((track) => track.scrollWidth > track.clientWidth)
       )
       assert.equal(
-        await page.locator('.care-focus-panel').evaluate(
-          (panel) => panel.ownerDocument.defaultView?.getComputedStyle(panel).borderRadius
-        ),
+        await page
+          .locator('.care-focus-panel')
+          .evaluate(
+            (panel) => panel.ownerDocument.defaultView?.getComputedStyle(panel).borderRadius
+          ),
         '20px'
       )
       assert.equal(
-        await page.locator('body').evaluate(
-          (body) => body.ownerDocument.defaultView?.getComputedStyle(body).overflowX
-        ),
+        await page
+          .locator('body')
+          .evaluate((body) => body.ownerDocument.defaultView?.getComputedStyle(body).overflowX),
         'hidden'
       )
       assert.equal(await page.locator('.care-closing').count(), 1)
       assert.equal(await page.locator('.care-closing a[href="/nurseries"]').count(), 1)
       assert.match(
-        await page.locator('.care-closing > .grid').evaluate(
-          (closing) => closing.ownerDocument.defaultView?.getComputedStyle(closing).gridTemplateColumns || ''
-        ),
+        await page
+          .locator('.care-closing > .grid')
+          .evaluate(
+            (closing) =>
+              closing.ownerDocument.defaultView?.getComputedStyle(closing).gridTemplateColumns || ''
+          ),
         /\S+/
       )
     }
@@ -681,6 +697,15 @@ test.group('Frontend layout', (group) => {
       rewardPoints: 0,
       scannerMonthlyLimit: 5,
     })
+    const desktopDesignerProject = await GardenProject.create({
+      userId: user.id,
+      name: 'Desktop garden',
+      description: 'Desktop designer layout test',
+      stateJson: JSON.stringify({ els: [], zIndexCounter: 10, layerCounter: 0 }),
+      inventoryJson: '[]',
+      baseImageName: null,
+      itemCount: 0,
+    })
 
     await browserContext.loginAs(user)
 
@@ -688,9 +713,7 @@ test.group('Frontend layout', (group) => {
     await communityPage.setExtraHTTPHeaders({ 'sec-ch-ua-mobile': '?0' })
     await communityPage.setViewportSize({ width: 1440, height: 900 })
     await communityPage.reload()
-    await communityPage
-      .locator('[data-pb-navbar-account] a[aria-label^="Notifications"]')
-      .waitFor()
+    await communityPage.locator('[data-pb-navbar-account] a[aria-label^="Notifications"]').waitFor()
 
     const servicesMenu = communityPage.locator('[data-app-nav-menu]').filter({
       has: communityPage.getByText('Services', { exact: true }),
@@ -708,20 +731,30 @@ test.group('Frontend layout', (group) => {
     await scannerPage.getByRole('button', { name: 'Upload image' }).click()
     await scannerPage.locator('[data-phone-upload-trigger]').first().waitFor()
     await scannerPage.getByRole('button', { name: 'Analyze plant' }).waitFor()
-    await scannerPage
-      .locator('[data-pb-navbar-account] a[aria-label^="Notifications"]')
-      .waitFor()
+    await scannerPage.locator('[data-pb-navbar-account] a[aria-label^="Notifications"]').waitFor()
 
     const designerPage = await visit('/designer')
     await designerPage.setExtraHTTPHeaders({ 'sec-ch-ua-mobile': '?0' })
     await designerPage.reload()
+    await designerPage.getByRole('heading', { name: 'Garden projects' }).waitFor()
+    await designerPage.getByRole('link', { name: 'Open Desktop garden' }).waitFor()
+    await designerPage.goto(`/designer/projects/${desktopDesignerProject.id}`)
     await designerPage.getByRole('button', { name: 'Upload image' }).waitFor()
     await designerPage.getByRole('button', { name: 'Upload image' }).click()
     await designerPage.locator('[data-phone-upload-trigger]').first().waitFor()
     await designerPage.getByRole('button', { name: 'Download design' }).waitFor()
-    await designerPage
-      .locator('[data-pb-navbar-account] a[aria-label^="Notifications"]')
-      .waitFor()
+    await designerPage.getByRole('button', { name: 'Original' }).waitFor()
+    await designerPage.getByRole('button', { name: 'Grid' }).waitFor()
+    assert.equal(await designerPage.locator('[data-designer-zoom-label]').textContent(), '100%')
+    assert.equal(await designerPage.locator('#designerLayers').count(), 1)
+    assert.equal(await designerPage.locator('.designer-asset-search-hints button').count(), 3)
+    assert.equal(
+      await designerPage
+        .locator('.designer-asset-search-panel')
+        .evaluate((panel) => panel.ownerDocument.defaultView?.getComputedStyle(panel).color),
+      'rgb(17, 62, 20)'
+    )
+    await designerPage.locator('[data-pb-navbar-account] a[aria-label^="Notifications"]').waitFor()
   })
 
   test('free scanner prominently shows remaining uses and the monthly reset date', async ({
@@ -818,13 +851,13 @@ test.group('Frontend layout', (group) => {
       const roleNavigation = homepage.locator('.phone-homepage-navigation-grid')
       assert.equal(await roleNavigation.locator(':scope > a').count(), 4)
       assert.isFalse(
-        await homepage.evaluate((root) => root.scrollWidth > root.ownerDocument.documentElement.clientWidth)
+        await homepage.evaluate(
+          (root) => root.scrollWidth > root.ownerDocument.documentElement.clientWidth
+        )
       )
 
       if (role === 'client') {
-        const plantPath = homepage
-          .locator('[data-phone-homepage-track="explore"] > a')
-          .first()
+        const plantPath = homepage.locator('[data-phone-homepage-track="explore"] > a').first()
         const plantPathBox = await plantPath.boundingBox()
         const plantPathImageBox = await plantPath.locator(':scope > img').boundingBox()
         assert.isNotNull(plantPathBox)
@@ -930,12 +963,20 @@ test.group('Frontend layout', (group) => {
     assert.equal(featuredLayout[0].actionsTop, featuredLayout[1].actionsTop)
     const catalogCards = servicesRoot.locator('.phone-services-catalog .phone-provider-card')
     assert.isAtLeast(await catalogCards.count(), 2)
-    const catalogBoxes = await catalogCards.first().locator('xpath=..').locator(':scope > .phone-provider-card').evaluateAll((cards) =>
-      cards.map((card) => {
-        const box = card.getBoundingClientRect()
-        return { top: Math.round(box.top), width: Math.round(box.width), height: Math.round(box.height) }
-      })
-    )
+    const catalogBoxes = await catalogCards
+      .first()
+      .locator('xpath=..')
+      .locator(':scope > .phone-provider-card')
+      .evaluateAll((cards) =>
+        cards.map((card) => {
+          const box = card.getBoundingClientRect()
+          return {
+            top: Math.round(box.top),
+            width: Math.round(box.width),
+            height: Math.round(box.height),
+          }
+        })
+      )
     assert.equal(catalogBoxes[0].top, catalogBoxes[1].top)
     assert.closeTo(catalogBoxes[0].width, catalogBoxes[1].width, 2)
     assert.equal(catalogBoxes[0].height, catalogBoxes[1].height)
@@ -943,9 +984,10 @@ test.group('Frontend layout', (group) => {
     assert.equal(await catalogCards.first().locator('.provider-card-metrics > span').count(), 4)
     assert.isTrue(await catalogCards.first().locator('.provider-card-services').isVisible())
     assert.isFalse(
-      await catalogCards.first().locator('.provider-card-scroll').evaluate(
-        (content) => content.scrollHeight > content.clientHeight + 1
-      )
+      await catalogCards
+        .first()
+        .locator('.provider-card-scroll')
+        .evaluate((content) => content.scrollHeight > content.clientHeight + 1)
     )
     assert.isFalse(
       await catalogCards.first().evaluate((card) => card.scrollHeight > card.clientHeight + 1)
@@ -1025,9 +1067,7 @@ test.group('Frontend layout', (group) => {
       await ownProfile.setExtraHTTPHeaders({ 'sec-ch-ua-mobile': '?1' })
       await ownProfile.setViewportSize({ width: 390, height: 844 })
       await ownProfile.reload()
-      const ownRoot = ownProfile.locator(
-        `[data-phone-profile="own"][data-profile-role="${role}"]`
-      )
+      const ownRoot = ownProfile.locator(`[data-phone-profile="own"][data-profile-role="${role}"]`)
       await ownRoot.waitFor()
       const ownHero = ownRoot.locator('[data-phone-profile-hero]')
       assert.isAtMost((await ownHero.locator(':scope > div').first().boundingBox())!.height, 160)
@@ -1124,9 +1164,11 @@ test.group('Frontend layout', (group) => {
       }
 
       if (user.role === 'gardener') {
-        const actionBoxes = await publicRoot.locator('.phone-profile-actions > *').evaluateAll(
-          (actions) => actions.map((action) => Math.round(action.getBoundingClientRect().top))
-        )
+        const actionBoxes = await publicRoot
+          .locator('.phone-profile-actions > *')
+          .evaluateAll((actions) =>
+            actions.map((action) => Math.round(action.getBoundingClientRect().top))
+          )
         assert.equal(actionBoxes.length, 3)
         assert.isBelow(actionBoxes[0], actionBoxes[1])
         assert.equal(actionBoxes[1], actionBoxes[2])
@@ -1135,7 +1177,10 @@ test.group('Frontend layout', (group) => {
       const postGrid = publicRoot.locator('.phone-profile-post-grid')
       if (await postGrid.count()) {
         assert.match(
-          await postGrid.evaluate((grid) => grid.ownerDocument.defaultView?.getComputedStyle(grid).gridTemplateColumns || ''),
+          await postGrid.evaluate(
+            (grid) =>
+              grid.ownerDocument.defaultView?.getComputedStyle(grid).gridTemplateColumns || ''
+          ),
           /\S+\s+\S+\s+\S+/
         )
       }
@@ -1143,7 +1188,10 @@ test.group('Frontend layout', (group) => {
       const catalogGrid = publicRoot.locator('[data-nursery-catalog-list]')
       if (await catalogGrid.count()) {
         assert.match(
-          await catalogGrid.evaluate((grid) => grid.ownerDocument.defaultView?.getComputedStyle(grid).gridTemplateColumns || ''),
+          await catalogGrid.evaluate(
+            (grid) =>
+              grid.ownerDocument.defaultView?.getComputedStyle(grid).gridTemplateColumns || ''
+          ),
           /\S+\s+\S+/
         )
       }
@@ -1170,6 +1218,15 @@ test.group('Frontend layout', (group) => {
       rewardPoints: 0,
       scannerMonthlyLimit: 5,
     })
+    const mobileDesignerProject = await GardenProject.create({
+      userId: user.id,
+      name: 'Mobile garden',
+      description: 'Mobile designer camera test',
+      stateJson: JSON.stringify({ els: [], zIndexCounter: 10, layerCounter: 0 }),
+      inventoryJson: '[]',
+      baseImageName: null,
+      itemCount: 0,
+    })
     await browserContext.loginAs(user)
 
     const photo = {
@@ -1193,7 +1250,9 @@ test.group('Frontend layout', (group) => {
     assert.isAtMost(scannerContentBox!.y - (scannerNavbarBox!.y + scannerNavbarBox!.height), 36)
     assert.equal(await scannerPage.locator('.phone-tool-flow span').count(), 3)
     const scannerActionBoxes = await scannerPage
-      .locator('[data-tool-action-panel] .tool-action-secondary, [data-tool-action-panel] .tool-action-primary')
+      .locator(
+        '[data-tool-action-panel] .tool-action-secondary, [data-tool-action-panel] .tool-action-primary'
+      )
       .evaluateAll((buttons) =>
         buttons.map((button) => {
           const box = button.getBoundingClientRect()
@@ -1202,7 +1261,10 @@ test.group('Frontend layout', (group) => {
       )
     assert.equal(scannerActionBoxes[0].top, scannerActionBoxes[1].top)
     assert.closeTo(scannerActionBoxes[0].width, scannerActionBoxes[1].width, 2)
-    assert.isAtLeast((await scannerPage.locator('[data-scanner-preview]').boundingBox())!.height, 260)
+    assert.isAtLeast(
+      (await scannerPage.locator('[data-scanner-preview]').boundingBox())!.height,
+      260
+    )
     const resultOrder = await scannerPage
       .locator(
         '.scan-result-overview, .scan-result-action, .scan-result-causes, .scan-result-guide, .scan-result-matches, .scan-result-education, .scan-result-taxonomy'
@@ -1215,16 +1277,13 @@ test.group('Frontend layout', (group) => {
     assert.deepEqual(resultOrder, [2, 3, 8, 6, 4, 7, 5])
     const premiumDashboard = scannerPage.locator('#premiumInsightsBox')
     assert.equal(await premiumDashboard.locator('.premium-dashboard-section').count(), 5)
-    assert.deepEqual(
-      await premiumDashboard.locator('.premium-dashboard-label').allTextContents(),
-      [
-        'Current signals',
-        'Progress over time',
-        'Change since the previous scan',
-        'Interpretation and follow-up',
-        'Personalized insights',
-      ]
-    )
+    assert.deepEqual(await premiumDashboard.locator('.premium-dashboard-label').allTextContents(), [
+      'Current signals',
+      'Progress over time',
+      'Change since the previous scan',
+      'Interpretation and follow-up',
+      'Personalized insights',
+    ])
     assert.match(
       await premiumDashboard
         .locator('.premium-dashboard-metrics')
@@ -1265,13 +1324,22 @@ test.group('Frontend layout', (group) => {
     await scannerPage.locator('#previewImage:not(.hidden)').waitFor()
     await scannerPage.getByText('Photo ready to analyze', { exact: true }).waitFor()
 
-    const designerPage = await visit('/designer')
+    const projectLibrary = await visit('/designer')
+    await projectLibrary.setViewportSize({ width: 390, height: 844 })
+    await projectLibrary.setExtraHTTPHeaders({ 'sec-ch-ua-mobile': '?1' })
+    await projectLibrary.reload()
+    await projectLibrary.getByRole('heading', { name: 'Garden projects' }).waitFor()
+    await projectLibrary.getByRole('link', { name: 'Open Mobile garden' }).waitFor()
+
+    const designerPage = await visit(`/designer/projects/${mobileDesignerProject.id}`)
     await designerPage.setViewportSize({ width: 390, height: 844 })
     await designerPage.setExtraHTTPHeaders({ 'sec-ch-ua-mobile': '?1' })
     await designerPage.reload()
     assert.equal(await designerPage.locator('[data-phone-drawer-open-zone]').count(), 0)
     const designerNavbarBox = await designerPage.locator('[data-phone-navbar] > div').boundingBox()
-    const designerContentBox = await designerPage.locator('[data-phone-first-content]').boundingBox()
+    const designerContentBox = await designerPage
+      .locator('[data-phone-first-content]')
+      .boundingBox()
     assert.isNotNull(designerNavbarBox)
     assert.isNotNull(designerContentBox)
     assert.isAtLeast(designerContentBox!.y - (designerNavbarBox!.y + designerNavbarBox!.height), 8)
@@ -1300,9 +1368,12 @@ test.group('Frontend layout', (group) => {
     const labeledTools = designerPage.locator('.phone-designer-edit .designer-tool-button')
     assert.equal(await labeledTools.count(), 12)
     assert.isTrue(
-      await labeledTools.first().evaluate(
-        (button) => button.ownerDocument.defaultView?.getComputedStyle(button, '::after').content !== 'none'
-      )
+      await labeledTools
+        .first()
+        .evaluate(
+          (button) =>
+            button.ownerDocument.defaultView?.getComputedStyle(button, '::after').content !== 'none'
+        )
     )
     await designerPage.getByRole('button', { name: 'Upload image' }).click()
     await designerPage.getByText('Upload from this device', { exact: true }).waitFor()
@@ -1338,27 +1409,25 @@ test.group('Frontend layout', (group) => {
     assert.isAtMost(canvasBox!.width, workspaceShellBox!.width)
     assert.isAtLeast(canvasBox!.height, 280)
     assert.equal(await designerPage.locator('.phone-designer-workspace-guide span').count(), 3)
-    const imageDimensions = await designerPage.locator('#baseImage').evaluate(
-      (image: { naturalWidth: number; naturalHeight: number }) => ({
+    const imageDimensions = await designerPage
+      .locator('#baseImage')
+      .evaluate((image: { naturalWidth: number; naturalHeight: number }) => ({
         width: image.naturalWidth,
         height: image.naturalHeight,
-      })
-    )
-    const canvasDimensions = await designerPage.locator('#canvas-container').evaluate(
-      (canvas) => ({
-        width: canvas.clientWidth,
-        height: canvas.clientHeight,
-      })
-    )
+      }))
+    const canvasDimensions = await designerPage.locator('#canvas-container').evaluate((canvas) => ({
+      width: canvas.clientWidth,
+      height: canvas.clientHeight,
+    }))
     assert.closeTo(
       canvasDimensions.width / canvasDimensions.height,
       imageDimensions.width / imageDimensions.height,
       0.01
     )
     assert.equal(
-      await designerPage.locator('.phone-designer-desktop-guide').evaluate(
-        (guide) => guide.ownerDocument.defaultView?.getComputedStyle(guide).display
-      ),
+      await designerPage
+        .locator('.phone-designer-desktop-guide')
+        .evaluate((guide) => guide.ownerDocument.defaultView?.getComputedStyle(guide).display),
       'none'
     )
     assert.equal(
@@ -1406,16 +1475,37 @@ test.group('Frontend layout', (group) => {
 
     const assetDataUrl =
       'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII='
-    await designerPage.evaluate(
-      (src) => (globalThis as any).loadFromInventory(src),
-      assetDataUrl
-    )
+    await designerPage.evaluate((src) => (globalThis as any).loadFromInventory(src), assetDataUrl)
     const designAsset = designerPage.locator('#canvas-container .draggable').first()
     await designAsset.waitFor({ state: 'visible' })
+    assert.equal(await designerPage.locator('.designer-layer-row').count(), 1)
     assert.equal(
-      await designerPage
-        .locator('[data-designer-studio-tab="edit"]')
-        .getAttribute('aria-selected'),
+      await designerPage.locator('[data-designer-layer-count]').first().textContent(),
+      '1'
+    )
+    await designerPage.getByRole('button', { name: 'Original' }).click()
+    assert.equal(
+      await designerPage.getByRole('button', { name: 'Original' }).getAttribute('aria-pressed'),
+      'true'
+    )
+    assert.equal(
+      await designAsset.evaluate(
+        (element) => element.ownerDocument.defaultView?.getComputedStyle(element).visibility
+      ),
+      'hidden'
+    )
+    await designerPage.getByRole('button', { name: 'Original' }).click()
+    await designerPage.getByRole('button', { name: 'Grid' }).click()
+    assert.equal(
+      await designerPage.getByRole('button', { name: 'Grid' }).getAttribute('aria-pressed'),
+      'true'
+    )
+    await designerPage.getByRole('button', { name: 'Zoom in' }).click()
+    assert.equal(await designerPage.locator('[data-designer-zoom-label]').textContent(), '110%')
+    await designerPage.getByRole('button', { name: 'Fit' }).click()
+    assert.equal(await designerPage.locator('[data-designer-zoom-label]').textContent(), '100%')
+    assert.equal(
+      await designerPage.locator('[data-designer-studio-tab="edit"]').getAttribute('aria-selected'),
       'true'
     )
     assert.equal(
@@ -1424,24 +1514,21 @@ test.group('Frontend layout', (group) => {
     )
     assert.equal(await designerPage.locator('[data-designer-selection-status]').count(), 0)
     assert.equal(
-      await labeledTools.first().evaluate(
-        (button) =>
-          button.ownerDocument.defaultView?.getComputedStyle(button).backgroundColor
-      ),
+      await labeledTools
+        .first()
+        .evaluate(
+          (button) => button.ownerDocument.defaultView?.getComputedStyle(button).backgroundColor
+        ),
       'rgb(17, 62, 20)'
     )
     await designerPage.locator('[data-designer-studio-tab="assets"]').click()
     assert.equal(
-      await designerPage
-        .locator('[data-designer-studio-panel="assets"]')
-        .getAttribute('hidden'),
+      await designerPage.locator('[data-designer-studio-panel="assets"]').getAttribute('hidden'),
       null
     )
     await designAsset.click()
     assert.equal(
-      await designerPage
-        .locator('[data-designer-studio-tab="edit"]')
-        .getAttribute('aria-selected'),
+      await designerPage.locator('[data-designer-studio-tab="edit"]').getAttribute('aria-selected'),
       'true'
     )
 
@@ -1467,8 +1554,37 @@ test.group('Frontend layout', (group) => {
     assert.isNotNull(mobileCanvasBox)
     assert.isAtLeast(movedAssetBox!.x, mobileCanvasBox!.x)
     assert.isAtLeast(movedAssetBox!.y, mobileCanvasBox!.y)
-    assert.isAtMost(movedAssetBox!.x + movedAssetBox!.width, mobileCanvasBox!.x + mobileCanvasBox!.width)
-    assert.isAtMost(movedAssetBox!.y + movedAssetBox!.height, mobileCanvasBox!.y + mobileCanvasBox!.height)
+    assert.isAtMost(
+      movedAssetBox!.x + movedAssetBox!.width,
+      mobileCanvasBox!.x + mobileCanvasBox!.width
+    )
+    assert.isAtMost(
+      movedAssetBox!.y + movedAssetBox!.height,
+      mobileCanvasBox!.y + mobileCanvasBox!.height
+    )
+
+    await designerPage.mouse.move(
+      movedAssetBox!.x + movedAssetBox!.width / 2,
+      movedAssetBox!.y + movedAssetBox!.height / 2
+    )
+    await designerPage.mouse.down()
+    await designerPage.mouse.move(
+      mobileCanvasBox!.x - movedAssetBox!.width,
+      mobileCanvasBox!.y - movedAssetBox!.height,
+      { steps: 8 }
+    )
+    await designerPage.mouse.up()
+    const overflowingAssetBox = await designAsset.boundingBox()
+    assert.isNotNull(overflowingAssetBox)
+    assert.isBelow(overflowingAssetBox!.x, mobileCanvasBox!.x)
+    assert.isBelow(overflowingAssetBox!.y, mobileCanvasBox!.y)
+    assert.isAbove(overflowingAssetBox!.x + overflowingAssetBox!.width, mobileCanvasBox!.x + 20)
+    assert.isAbove(overflowingAssetBox!.y + overflowingAssetBox!.height, mobileCanvasBox!.y + 20)
+
+    const deleteControlBox = await designerPage.locator('.designer-selection-delete').boundingBox()
+    assert.isNotNull(deleteControlBox)
+    assert.isAtLeast(deleteControlBox!.x, mobileCanvasBox!.x)
+    assert.isAtLeast(deleteControlBox!.y, mobileCanvasBox!.y)
 
     const resizeHandle = designerPage.locator('.designer-selection-resize')
     const resizeHandleBox = await resizeHandle.boundingBox()
@@ -1486,6 +1602,19 @@ test.group('Frontend layout', (group) => {
     )
     await designerPage.mouse.up()
     assert.isAbove((await designAsset.boundingBox())!.width, movedAssetBox!.width)
+    const savedAssetWidth = (await designAsset.boundingBox())!.width
+    await designerPage.waitForFunction(() => {
+      const status = (globalThis as any).document.querySelector('[data-designer-save-status]')
+      return status?.textContent === 'Saved to Plant Bud'
+    })
+    await designerPage.reload()
+    await designerPage.waitForFunction(() => {
+      const image = (globalThis as any).document.querySelector('#baseImage')
+      const asset = (globalThis as any).document.querySelector('#canvas-container .draggable')
+      return Boolean(image?.naturalWidth && asset)
+    })
+    assert.equal(await designerPage.locator('.designer-layer-row').count(), 1)
+    assert.closeTo((await designAsset.boundingBox())!.width, savedAssetWidth, 3)
 
     const processingToast = designerPage.locator('#loadingText')
     await processingToast.evaluate((toast) => toast.classList.remove('hidden'))
@@ -1496,12 +1625,34 @@ test.group('Frontend layout', (group) => {
     assert.closeTo(processingBox!.x + processingBox!.width / 2, 195, 2)
     assert.isAtMost(processingBox!.y + processingBox!.height + 8, processingNavbarBox!.y)
 
-    const searchModal = designerPage.locator('#searchModal')
-    await searchModal.evaluate((modal) => {
-      modal.classList.remove('hidden')
-      modal.classList.add('flex')
-      modal.setAttribute('aria-hidden', 'false')
+    let assetSearchUrl = ''
+    await designerPage.route('**/designer/search-assets?**', async (route) => {
+      assetSearchUrl = route.request().url()
+      await route.fulfill({
+        contentType: 'application/json',
+        body: JSON.stringify({
+          intent: 'table',
+          source: 'pexels',
+          photos: Array.from({ length: 24 }, (_, index) => ({
+            id: index + 1,
+            alt: `Garden table ${index + 1}`,
+            cleanBackground: true,
+            src: {
+              medium: assetDataUrl,
+              large2x: assetDataUrl,
+              original: assetDataUrl,
+            },
+          })),
+        }),
+      })
     })
+    await designerPage.locator('[data-designer-search-suggestion="garden table"]').click()
+    const searchModal = designerPage.locator('#searchModal')
+    await searchModal.locator('.designer-search-result').first().waitFor()
+    assert.include(assetSearchUrl, 'query=garden%20table')
+    assert.include(assetSearchUrl, 'per_page=40')
+    assert.equal(await searchModal.locator('.designer-search-result').count(), 20)
+    await searchModal.getByText('20 table options', { exact: true }).waitFor()
     const searchPanel = searchModal.locator(':scope > div:last-child > div')
     const searchPanelBox = await searchPanel.boundingBox()
     const bottomNavbar = designerPage.locator('[data-phone-bottom-nav]')
@@ -1589,9 +1740,13 @@ test.group('Frontend layout', (group) => {
     assert.isNotNull(bottomNavbarBox)
     assert.isAtMost(emptyBox!.x + emptyBox!.width, 390)
     assert.isAtLeast(
-      await page.locator('body').evaluate((body) =>
-        Number.parseFloat(body.ownerDocument.defaultView?.getComputedStyle(body).paddingBottom || '0')
-      ),
+      await page
+        .locator('body')
+        .evaluate((body) =>
+          Number.parseFloat(
+            body.ownerDocument.defaultView?.getComputedStyle(body).paddingBottom || '0'
+          )
+        ),
       80
     )
   })
@@ -1626,7 +1781,7 @@ test.group('Frontend layout', (group) => {
         contentType: 'application/json',
         body: JSON.stringify({
           current: {
-            temperature_2m: 27,
+            temperature_2m: 29,
             weather_code: 1,
           },
         }),
@@ -1656,15 +1811,15 @@ test.group('Frontend layout', (group) => {
     assert.equal(await nowBar.getAttribute('data-now-bar-index'), '0')
     assert.isTrue(await nowBar.locator('[data-now-bar-panel="brand"]').isVisible())
     assert.isTrue(
-      await nowBar.locator('.phone-now-bar-progress').evaluate((progress) =>
-        progress.classList.contains('is-running')
-      )
+      await nowBar
+        .locator('.phone-now-bar-progress')
+        .evaluate((progress) => progress.classList.contains('is-running'))
     )
 
     await nowBar.getByRole('button', { name: 'Show weather' }).click()
     assert.equal(await nowBar.getAttribute('data-now-bar-index'), '1')
-    await nowBar.getByText('Good light, rotate your pots', { exact: true }).waitFor()
-    await nowBar.getByText('27 C - San Salvador', { exact: true }).waitFor()
+    await nowBar.getByText('Strong sunshine, check watering', { exact: true }).waitFor()
+    await nowBar.getByText('29 C - San Salvador', { exact: true }).waitFor()
     assert.equal(
       await nowBar.locator('.phone-now-bar-progress').evaluate((progress) => {
         const animation = progress.ownerDocument.defaultView?.getComputedStyle(
@@ -1692,18 +1847,20 @@ test.group('Frontend layout', (group) => {
     const mobileTools = page.locator('[data-community-mobile-tools]')
     await mobileTools.getByRole('heading', { name: 'Useful spaces' }).waitFor()
     const toolsTrack = mobileTools.locator('[data-community-mobile-tools-track]')
-    assert.isTrue(
-      await toolsTrack.evaluate((track) => track.scrollWidth > track.clientWidth)
-    )
+    assert.isTrue(await toolsTrack.evaluate((track) => track.scrollWidth > track.clientWidth))
     const mobileToolDetails = mobileTools.locator('.community-mobile-tool-details')
     assert.equal(await mobileToolDetails.count(), 4)
     assert.equal(await mobileToolDetails.locator('[open]').count(), 0)
-    const listButtonPositions = await mobileToolDetails.locator('summary').evaluateAll((buttons) =>
-      buttons.map((button) => Math.round(button.getBoundingClientRect().top))
-    )
+    const listButtonPositions = await mobileToolDetails
+      .locator('summary')
+      .evaluateAll((buttons) =>
+        buttons.map((button) => Math.round(button.getBoundingClientRect().top))
+      )
     assert.equal(new Set(listButtonPositions).size, 1)
     await mobileToolDetails.nth(1).locator('summary').click()
-    assert.isTrue(await mobileToolDetails.nth(1).evaluate((details) => details.hasAttribute('open')))
+    assert.isTrue(
+      await mobileToolDetails.nth(1).evaluate((details) => details.hasAttribute('open'))
+    )
     await mobileTools.getByRole('link', { name: 'Scanner', exact: true }).waitFor()
     const trendingDot = mobileTools.getByRole('button', { name: 'Show Trending hashtags' })
     await trendingDot.click()
@@ -1734,7 +1891,10 @@ test.group('Frontend layout', (group) => {
     await toolsPanel.getByText('Choose your workspace', { exact: true }).waitFor()
     await toolsPanel.getByRole('link', { name: /Scanner/ }).waitFor()
     await toolsPanel.getByRole('link', { name: /Designer/ }).waitFor()
-    await page.locator('main').first().click({ position: { x: 10, y: 10 } })
+    await page
+      .locator('main')
+      .first()
+      .click({ position: { x: 10, y: 10 } })
     await toolsPanel.waitFor({ state: 'hidden' })
     await bottomNav.getByLabel('Scanner and designer', { exact: true }).click()
     await toolsPanel.waitFor()
@@ -1749,9 +1909,9 @@ test.group('Frontend layout', (group) => {
     await drawer.getByRole('button', { name: 'Log out' }).waitFor()
     assert.equal(await drawer.locator('[data-phone-drawer-account-actions]').count(), 1)
     assert.isTrue(
-      await page.locator('body').evaluate((body) =>
-        body.classList.contains('phone-drawer-page-locked')
-      )
+      await page
+        .locator('body')
+        .evaluate((body) => body.classList.contains('phone-drawer-page-locked'))
     )
 
     const drawerBox = await drawer.boundingBox()
@@ -1780,9 +1940,9 @@ test.group('Frontend layout', (group) => {
     await page.waitForTimeout(350)
     assert.isFalse(await page.locator('[data-phone-nav-toggle]').isChecked())
     assert.isFalse(
-      await page.locator('body').evaluate((body) =>
-        body.classList.contains('phone-drawer-page-locked')
-      )
+      await page
+        .locator('body')
+        .evaluate((body) => body.classList.contains('phone-drawer-page-locked'))
     )
 
     assert.equal(await page.locator('[data-phone-drawer-open-zone]').count(), 0)

@@ -7,6 +7,7 @@ import AccountProfile from '#models/account_profile'
 import CommunityPost from '#models/community_post'
 import Follow from '#models/follow'
 import GardenerProfile from '#models/gardener_profile'
+import GardenProject from '#models/garden_project'
 import NurseryProfile from '#models/nursery_profile'
 import PlantScan from '#models/plant_scan'
 import ServiceRequest from '#models/service_request'
@@ -87,6 +88,9 @@ export default class User extends withAuthFinder(hash, {
 
   @hasMany(() => PlantScan)
   declare plantScans: HasMany<typeof PlantScan>
+
+  @hasMany(() => GardenProject)
+  declare gardenProjects: HasMany<typeof GardenProject>
 
   get fullName() {
     return `${this.first_name} ${this.last_name}`.trim()

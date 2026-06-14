@@ -3,7 +3,8 @@ import { redirectBackWithFormErrors } from '#services/form_errors'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class SessionController {
-  async create({ view }: HttpContext) {
+  async create({ response, view }: HttpContext) {
+    this.preventAuthPageCaching(response)
     return view.render('pages/auth/login')
   }
 
@@ -36,9 +37,18 @@ export default class SessionController {
     }
   }
 
-  async destroy({ auth, response }: HttpContext) {
+  async destroy({ auth, response, session }: HttpContext) {
     await auth.use('web').logout()
+    session.clear()
+    session.regenerate()
+    this.preventAuthPageCaching(response)
 
     return response.redirect().toRoute('session.create')
+  }
+
+  private preventAuthPageCaching(response: HttpContext['response']) {
+    response.header('Cache-Control', 'no-store, no-cache, must-revalidate, private')
+    response.header('Pragma', 'no-cache')
+    response.header('Expires', '0')
   }
 }

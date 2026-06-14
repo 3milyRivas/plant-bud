@@ -26,6 +26,7 @@ router
   .group(() => {
     router.get('/login', [SessionController, 'create']).as('session.create')
     router.post('/login', [SessionController, 'store']).as('session.store')
+    router.on('/register').render('pages/register').as('register')
     router.get('/signup/client', [NewAccountController, 'createClient']).as('signup.client')
     router.get('/signup/gardener', [NewAccountController, 'createGardener']).as('signup.gardener')
     router.get('/signup/nursery', [NewAccountController, 'createNursery']).as('signup.nursery')
@@ -38,7 +39,6 @@ router
 
 router
   .group(() => {
-    router.on('/register').render('pages/register').as('register')
     router.on('/ornamental').render('pages/ornamental', { ornamentalPlants })
     router.on('/horticultural').render('pages/horticultural', { horticulturalPlants })
     router.on('/succulent').render('pages/succulent', { succulentPlants })
@@ -54,7 +54,28 @@ router
     router.post('/plans/premium', [PlansController, 'buyPremium']).as('plans.buy')
     router.post('/plans/cancel', [PlansController, 'cancelPremium']).as('plans.cancel')
 
-    router.get('/designer', [GardenDesignerController, 'show']).as('garden_designer.show')
+    router.get('/designer', [GardenDesignerController, 'index']).as('garden_designer.index')
+    router
+      .post('/designer/projects', [GardenDesignerController, 'store'])
+      .as('garden_designer.projects.store')
+    router
+      .get('/designer/projects/:id', [GardenDesignerController, 'show'])
+      .as('garden_designer.projects.show')
+    router
+      .patch('/designer/projects/:id', [GardenDesignerController, 'update'])
+      .as('garden_designer.projects.update')
+    router
+      .post('/designer/projects/:id/image', [GardenDesignerController, 'storeImage'])
+      .as('garden_designer.projects.image')
+    router
+      .post('/designer/projects/:id/duplicate', [GardenDesignerController, 'duplicate'])
+      .as('garden_designer.projects.duplicate')
+    router
+      .post('/designer/projects/:id/delete', [GardenDesignerController, 'destroy'])
+      .as('garden_designer.projects.destroy')
+    router
+      .get('/designer/projects/:id/media', [GardenDesignerController, 'media'])
+      .as('garden_designer.projects.media')
     router
       .get('/designer/search-assets', [GardenDesignerController, 'searchAssets'])
       .as('garden_designer.search_assets')

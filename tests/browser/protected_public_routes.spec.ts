@@ -4,7 +4,6 @@ import testUtils from '@adonisjs/core/services/test_utils'
 import { test } from '@japa/runner'
 
 const protectedGetRoutes = [
-  '/register',
   '/ornamental',
   '/horticultural',
   '/succulent',
@@ -61,7 +60,7 @@ test.group('Protected catalog and directory routes', (group) => {
     for (const user of users) {
       await browserContext.loginAs(user)
 
-      for (const path of ['/register', '/ornamental', '/maintenance', '/nurseries']) {
+      for (const path of ['/ornamental', '/maintenance', '/nurseries']) {
         const page = await visit(path)
         assert.notInclude(page.url(), '/login')
       }

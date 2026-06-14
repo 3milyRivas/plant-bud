@@ -1,15 +1,9 @@
 @layout()
 @slot('title')
-<title>Plant Bud - 2D Designer</title>
+<title>{{ project.name }} - Plant Bud Designer</title>
 @endslot
 
-<div class="relative min-h-screen overflow-hidden">
-    <img src="/resources/images/welcome/header3.png"
-        class="absolute inset-0 h-full w-full object-cover opacity-24 mix-blend-soft-light pointer-events-none select-none"
-        alt="">
-    <div class="absolute inset-0 bg-[#113e14]/34 pointer-events-none"></div>
-    <div class="absolute inset-0 bg-gradient-to-br from-[#416543]/28 via-transparent to-[#113e14]/42 pointer-events-none"></div>
-
+<div class="relative min-h-screen overflow-hidden" data-designer-project-id="{{ project.id }}">
     @!component('components/app-navbar', {
         section: '2D Garden designer',
         active: 'designer',
@@ -32,12 +26,12 @@
 
                     <div class="relative space-y-8">
 
-                        <section>
+                        <section class="designer-asset-search-panel">
                             <p class="text-xs font-black uppercase tracking-[0.22em] text-[#ebe3a7]">Step 1</p>
                             <h2 class="mt-2 text-white text-xl font-black">Find design assets</h2>
                             <div class="w-14 h-1 bg-[#dca15d] rounded-full mt-3 mb-5"></div>
 
-                            <div class="relative">
+                            <div class="designer-asset-search-field relative">
                                 <input id="searchInput" type="text" placeholder="Search plants or furniture..."
                                     class="w-full bg-white/10 border border-white/14 rounded-full pl-5 pr-24 py-3 text-sm text-white placeholder:text-white/48 font-semibold outline-none focus:ring-2 focus:ring-[#a8b841]/50">
 
@@ -48,8 +42,13 @@
                             </div>
 
                             <p class="text-white/60 text-sm font-semibold leading-relaxed mt-3">
-                                Search plants or furniture, then choose items to place on the workspace.
+                                Use specific names like “garden table” or “palm”. Clean backgrounds are prioritized automatically.
                             </p>
+                            <div class="designer-asset-search-hints" aria-label="Search suggestions">
+                                <button type="button" data-designer-search-suggestion="garden table">Garden table</button>
+                                <button type="button" data-designer-search-suggestion="outdoor chair">Outdoor chair</button>
+                                <button type="button" data-designer-search-suggestion="palm plant">Palm</button>
+                            </div>
                         </section>
 
                         <section>
@@ -130,6 +129,31 @@
                                 </div>
                             </div>
 
+                            <div class="designer-precision-controls" data-designer-precision-controls>
+                                <label>
+                                    <span>Size</span>
+                                    <input type="range" min="40" max="420" step="2" value="110"
+                                        data-designer-size aria-label="Selected item size">
+                                    <output data-designer-size-value>110 px</output>
+                                </label>
+                                <label>
+                                    <span>Rotation</span>
+                                    <input type="range" min="-180" max="180" step="1" value="0"
+                                        data-designer-rotation aria-label="Selected item rotation">
+                                    <output data-designer-rotation-value>0 deg</output>
+                                </label>
+                                <label>
+                                    <span>Opacity</span>
+                                    <input type="range" min="10" max="100" step="5" value="100"
+                                        data-designer-opacity aria-label="Selected item opacity">
+                                    <output data-designer-opacity-value>100%</output>
+                                </label>
+                                <div class="designer-align-actions" aria-label="Align selected item">
+                                    <button type="button" data-designer-align="horizontal">Center horizontally</button>
+                                    <button type="button" data-designer-align="vertical">Center vertically</button>
+                                </div>
+                            </div>
+
                             <div class="hidden">
 
                                 <div class="grid grid-cols-2 gap-2">
@@ -183,6 +207,18 @@
                             </div>
                         </section>
 
+                        <section class="designer-layers-section">
+                            <div class="designer-section-heading">
+                                <div>
+                                    <p class="text-xs font-black uppercase tracking-[0.22em] text-[#ebe3a7]">Workspace</p>
+                                    <h2 class="mt-2 text-white text-xl font-black">Layers</h2>
+                                </div>
+                                <span class="designer-layer-count" data-designer-layer-count>0</span>
+                            </div>
+                            <p class="designer-section-copy">Select, hide or lock every object without hunting for it on the canvas.</p>
+                            <div id="designerLayers" class="designer-layers-list" aria-label="Design layers"></div>
+                        </section>
+
                     </div>
                 </div>
             </aside>
@@ -197,7 +233,7 @@
 
                     <div class="relative flex flex-col h-full">
 
-                        <div class="flex items-center justify-between gap-4 mb-6">
+                        <div class="flex items-center justify-between gap-4 mb-4">
                             <div>
                                 <p class="text-sm font-black uppercase tracking-[0.22em] text-[#416543]">Plant Bud 2D Studio</p>
                                 <h2 class="mt-2 text-3xl md:text-4xl font-black text-[#113e14]">
@@ -209,7 +245,28 @@
                             </div>
                         </div>
 
+                        <div class="designer-command-bar" data-designer-command-bar>
+                            <a href="/designer" class="designer-projects-back">Projects</a>
+                            <div class="designer-project-identity">
+                                <label for="designerProjectName">Project</label>
+                                <input id="designerProjectName" type="text" value="{{ project.name }}" maxlength="80"
+                                    aria-label="Designer project name">
+                                <span data-designer-save-status>Saved locally</span>
+                            </div>
+                            <div class="designer-command-actions">
+                                <button type="button" data-designer-compare aria-pressed="false">Original</button>
+                                <button type="button" data-designer-grid aria-pressed="false">Grid</button>
+                                <div class="designer-zoom-control" aria-label="Canvas zoom">
+                                    <button type="button" data-designer-zoom-out aria-label="Zoom out">-</button>
+                                    <span data-designer-zoom-label>100%</span>
+                                    <button type="button" data-designer-zoom-in aria-label="Zoom in">+</button>
+                                </div>
+                                <button type="button" data-designer-reset-view>Fit</button>
+                            </div>
+                        </div>
+
                         <div
+                            data-designer-workspace-shell
                             class="flex-1 min-h-[420px] sm:min-h-[520px] md:min-h-[600px] rounded-[2.5rem] bg-[#416543]/8 border border-[#416543]/12 p-4 lg:p-6 overflow-auto">
 
                             <div id="workspace" class="w-full h-full flex items-center justify-center">
@@ -219,7 +276,7 @@
                                     <div id="canvas-container"
                                         class="relative isolate overflow-hidden inline-flex items-center justify-center bg-white border border-[#416543]/14 rounded-[2rem] shadow-[0_18px_50px_rgba(17,62,20,0.16)] select-none">
 
-                                        <img id="baseImage"
+                                        <img id="baseImage" src="{{ project.mediaUrl || '' }}"
                                             class="relative z-0 block max-w-full max-h-[75vh] w-auto h-auto object-contain pointer-events-none select-none"
                                             alt="">
 
@@ -259,16 +316,20 @@
         <div class="absolute inset-0 flex items-center justify-center p-4">
 
             <div
-                class="relative w-full max-w-[min(90rem,calc(100vw-2rem))] max-h-[90vh] bg-[#113e14]/92 backdrop-blur-3xl border border-[#ebe3a7]/12 rounded-[3rem] overflow-hidden">
+                class="designer-search-dialog relative w-full max-w-[min(90rem,calc(100vw-2rem))] max-h-[90vh] overflow-hidden">
 
                 <div class="relative flex items-center justify-between px-8 py-6 border-b border-[#ebe3a7]/12">
-                    <h3 class="text-2xl font-black text-white">Search Results</h3>
+                    <div>
+                        <p>Plant Bud Asset Finder</p>
+                        <h3 class="text-2xl font-black">Search Results</h3>
+                        <small data-designer-search-count>Choose an object to prepare its cutout</small>
+                    </div>
                     <button onclick="closeSearchModal()"
                         class="w-10 h-10 rounded-full bg-[#ebe3a7]/10 text-white hover:bg-[#ebe3a7]/16">×</button>
                 </div>
 
                 <div id="searchResults"
-                    class="p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 overflow-y-auto max-h-[calc(90vh-7rem)]">
+                    class="designer-search-results overflow-y-auto max-h-[calc(90vh-8rem)]">
                 </div>
 
             </div>
@@ -282,5 +343,7 @@
 
 </div>
 @!component('components/phone-upload-modal')
+<div class="hidden" data-designer-csrf>{{ csrfField() }}</div>
+<script type="application/json" id="designerProjectData">{{{ projectJson }}}</script>
 @vite(['resources/js/garden.js'])
 @end

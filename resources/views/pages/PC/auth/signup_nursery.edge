@@ -78,7 +78,7 @@
 
                         <div class="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white/70 to-transparent"></div>
 
-                        @form({ route: 'new_account.store', method: 'POST' })
+                        @form({ route: 'new_account.store', method: 'POST', autocomplete: 'off', 'data-auth-form': 'signup' })
 
                         <input type="hidden" name="role" value="nursery">
 
@@ -94,7 +94,7 @@
 
                                 @!input.control({
                                     placeholder: 'Enter nursery name',
-                                    value: flashMessages.get('old')?.nursery_name,
+                                    value: flashMessages.get('authOld')?.nursery_name,
                                     id: 'nursery_name',
                                     autocomplete: 'off',
                                     maxlength: 22,
@@ -120,7 +120,8 @@
 
                                 @!input.control({
                                     placeholder: 'Full name',
-                                    value: flashMessages.get('old')?.owner_name,
+                                    value: flashMessages.get('authOld')?.owner_name,
+                                    autocomplete: 'off',
                                     maxlength: 22,
                                     'data-required-message': 'Owner or manager name is required',
                                     class: 'w-full h-12 px-4 rounded-2xl bg-[#ebe3a7]/95 text-[#113e14] placeholder:text-[#416543]/70 font-semibold border border-transparent focus:outline-none focus:ring-2 focus:ring-[#a8b841] shadow-sm'
@@ -144,7 +145,8 @@
                                 @!input.control({
                                     type: 'email',
                                     placeholder: 'Type your email address',
-                                    value: flashMessages.get('old')?.email,
+                                    value: flashMessages.get('authOld')?.email,
+                                    autocomplete: 'off',
                                     'data-required-message': 'Email is required',
                                     class: 'w-full h-12 px-4 rounded-2xl bg-[#ebe3a7]/95 text-[#113e14] placeholder:text-[#416543]/70 font-semibold border border-transparent focus:outline-none focus:ring-2 focus:ring-[#a8b841] shadow-sm'
                                 })
@@ -168,7 +170,8 @@
 
                                     @!input.control({
                                         placeholder: '0000-0000',
-                                        value: flashMessages.get('old')?.phone,
+                                        value: flashMessages.get('authOld')?.phone,
+                                        autocomplete: 'off',
                                         'data-required-message': 'Phone number is required',
                                         'data-phone-input': true,
                                         class: 'w-full h-12 px-4 rounded-2xl bg-[#ebe3a7]/95 text-[#113e14] placeholder:text-[#416543]/70 font-semibold border border-transparent focus:outline-none focus:ring-2 focus:ring-[#a8b841] shadow-sm'
@@ -191,7 +194,8 @@
 
                                     @!input.control({
                                         placeholder: '01234567-8',
-                                        value: flashMessages.get('old')?.owner_dui,
+                                        value: flashMessages.get('authOld')?.owner_dui,
+                                        autocomplete: 'off',
                                         'data-required-message': 'Owner DUI is required',
                                         'data-dui-input': true,
                                         class: 'w-full h-12 px-4 rounded-2xl bg-[#ebe3a7]/95 text-[#113e14] placeholder:text-[#416543]/70 font-semibold border border-transparent focus:outline-none focus:ring-2 focus:ring-[#a8b841] shadow-sm'
@@ -220,6 +224,7 @@
                                         type: 'password',
                                         placeholder: 'Create a password',
                                         id: 'password',
+                                        autocomplete: 'new-password',
                                         'data-required-message': 'Password is required',
                                         class: 'w-full h-12 pl-4 pr-12 rounded-2xl bg-[#ebe3a7]/95 text-[#113e14] placeholder:text-[#416543]/70 font-semibold border border-transparent focus:outline-none focus:ring-2 focus:ring-[#a8b841] shadow-sm'
                                     })
@@ -249,6 +254,7 @@
                                         type: 'password',
                                         placeholder: 'Repeat your password',
                                         id: 'passwordConfirmation',
+                                        autocomplete: 'new-password',
                                         'data-required-message': 'Password confirmation is required',
                                         'data-confirm-with': 'password',
                                         class: 'w-full h-12 pl-4 pr-12 rounded-2xl bg-[#ebe3a7]/95 text-[#113e14] placeholder:text-[#416543]/70 font-semibold border border-transparent focus:outline-none focus:ring-2 focus:ring-[#a8b841] shadow-sm'

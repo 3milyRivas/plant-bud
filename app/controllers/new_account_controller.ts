@@ -68,15 +68,18 @@ type NormalizedSignup = {
 }
 
 export default class NewAccountController {
-  async createClient({ view }: HttpContext) {
+  async createClient({ response, view }: HttpContext) {
+    this.preventAuthPageCaching(response)
     return view.render('pages/auth/signup_client')
   }
 
-  async createGardener({ view }: HttpContext) {
+  async createGardener({ response, view }: HttpContext) {
+    this.preventAuthPageCaching(response)
     return view.render('pages/auth/signup_gardener')
   }
 
-  async createNursery({ view }: HttpContext) {
+  async createNursery({ response, view }: HttpContext) {
+    this.preventAuthPageCaching(response)
     return view.render('pages/auth/signup_nursery')
   }
 
@@ -169,10 +172,16 @@ export default class NewAccountController {
         auth: ['Signup failed'],
       })
 
-      session.flash('old', safeOldInput(request.all()))
+      session.flash('authOld', safeOldInput(request.all()))
 
       return response.redirect().back()
     }
+  }
+
+  private preventAuthPageCaching(response: HttpContext['response']) {
+    response.header('Cache-Control', 'no-store, no-cache, must-revalidate, private')
+    response.header('Pragma', 'no-cache')
+    response.header('Expires', '0')
   }
 
   async createDemoGuest({ response, auth, session }: HttpContext) {
@@ -298,9 +307,7 @@ export default class NewAccountController {
       if (!normalized.ownerName) errors.owner_name = ['Owner or manager name is required']
     }
 
-    if (normalized.role === 'gardener' || normalized.role === 'nursery') {
-      if (!normalized.phone) errors.phone = ['Phone number is required']
-    }
+    if (!normalized.phone) errors.phone = ['Phone number is required']
 
     if (normalized.phone && !/^[0-9]{4}-[0-9]{4}$/.test(normalized.phone)) {
       errors.phone = ['Phone must use the format 0000-0000']

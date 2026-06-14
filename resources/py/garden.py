@@ -4,32 +4,23 @@ import io
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from PIL import Image
-from rembg import new_session, remove
+
+from background_removal import (
+    auto_crop_alpha,
+    center_on_canvas,
+    create_background_session,
+    remove_background,
+)
 
 app = Flask(__name__)
 CORS(app)
 
-session = new_session("u2net")
+session = create_background_session()
+
 
 def decode(data_url):
     return base64.b64decode(data_url.split(",")[1])
 
-def auto_crop_alpha(img):
-    bbox = img.getbbox()
-    if bbox:
-        return img.crop(bbox)
-    return img
-
-def center_on_canvas(img, size=1024):
-    canvas = Image.new("RGBA", (size, size), (0, 0, 0, 0))
-
-    img.thumbnail((int(size * 0.8), int(size * 0.8)))
-
-    x = (size - img.width) // 2
-    y = (size - img.height) // 2
-
-    canvas.paste(img, (x, y), img)
-    return canvas
 
 @app.route('/remove-background', methods=['POST'])
 @app.route('/process', methods=['POST'])
@@ -40,12 +31,7 @@ def process():
 
         input_img = Image.open(io.BytesIO(image_bytes)).convert("RGBA")
 
-        buffer = io.BytesIO()
-        input_img.save(buffer, format="PNG")
-
-        output_bytes = remove(buffer.getvalue(), session=session)
-
-        output_img = Image.open(io.BytesIO(output_bytes)).convert("RGBA")
+        output_img = remove_background(input_img, session)
 
         output_img = auto_crop_alpha(output_img)
 

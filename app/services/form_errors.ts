@@ -13,7 +13,13 @@ type ValidationMessage = {
 export function redirectBackWithFormErrors(ctx: FormContext, errors: FieldErrors) {
   ctx.session.flash('inputErrorsBag', errors)
   ctx.session.flash('errors', errors)
-  ctx.session.flash('old', safeOldInput(ctx.request.all()))
+  const oldInput = safeOldInput(ctx.request.all())
+
+  if (isAuthenticationForm(ctx.request)) {
+    ctx.session.flash('authOld', oldInput)
+  } else {
+    ctx.session.flash('old', oldInput)
+  }
 
   return ctx.response.redirect().back()
 }
@@ -49,6 +55,11 @@ export function validationExceptionToFieldErrors(error: unknown) {
   }
 
   return Object.keys(errors).length ? errors : { auth: ['Please check the highlighted fields'] }
+}
+
+function isAuthenticationForm(request: FormContext['request']) {
+  const path = request.url().split('?')[0]
+  return path === '/login' || path === '/signup'
 }
 
 function isValidationException(error: unknown): error is { code: string; messages: unknown } {

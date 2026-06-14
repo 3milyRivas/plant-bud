@@ -63,7 +63,7 @@
                     <div class="auth-card is-alive auth-panel-in relative bg-[#113e14]/82 text-white backdrop-blur-3xl border border-[#ebe3a7]/12 rounded-[1.5rem] px-6 py-7 sm:px-7 sm:py-8 md:px-8 md:py-9 shadow-[0_30px_100px_rgba(0,0,0,0.30)] overflow-hidden">
                         <div class="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white/70 to-transparent"></div>
 
-                        @form({ route: 'new_account.store', method: 'POST' })
+                        @form({ route: 'new_account.store', method: 'POST', autocomplete: 'off', 'data-auth-form': 'signup' })
                         <input type="hidden" name="role" value="client">
 
                         <div class="space-y-5">
@@ -75,7 +75,8 @@
                                     id: 'username',
                                     name: 'username',
                                     placeholder: 'Choose a username',
-                                    value: flashMessages.get('old')?.username,
+                                    value: flashMessages.get('authOld')?.username,
+                                    autocomplete: 'off',
                                     maxlength: 15,
                                     minlength: 3,
                                     'data-required-message': 'Username is required',
@@ -91,7 +92,8 @@
                                 @!field.label({ text: 'Display Name', class: 'block text-[#ebe3a7] font-black text-sm mb-2 tracking-wide' })
                                 @!input.control({
                                     placeholder: 'Name shown in your profile',
-                                    value: flashMessages.get('old')?.display_name,
+                                    value: flashMessages.get('authOld')?.display_name,
+                                    autocomplete: 'off',
                                     maxlength: 22,
                                     minlength: 2,
                                     'data-required-message': 'Display name is required',
@@ -107,9 +109,27 @@
                                 @!input.control({
                                     type: 'email',
                                     placeholder: 'Type your email address',
-                                    value: flashMessages.get('old')?.email,
+                                    value: flashMessages.get('authOld')?.email,
+                                    autocomplete: 'off',
                                     'data-required-message': 'Email is required',
                                     class: 'w-full h-12 px-4 rounded-2xl bg-[#ebe3a7]/95 text-[#113e14] placeholder:text-[#416543]/70 font-semibold border border-transparent focus:outline-none focus:ring-2 focus:ring-[#a8b841] shadow-sm'
+                                })
+                                @!field.error({ class: 'text-red-200 font-bold text-xs mt-2' })
+                                @end
+                            </div>
+
+                            <div>
+                                @field.root({ name: 'phone' })
+                                @!field.label({ text: 'Phone Number', class: 'block text-[#ebe3a7] font-black text-sm mb-2 tracking-wide' })
+                                @!input.control({
+                                    type: 'tel',
+                                    placeholder: '0000-0000',
+                                    value: flashMessages.get('authOld')?.phone,
+                                    autocomplete: 'tel',
+                                    inputmode: 'numeric',
+                                    'data-required-message': 'Phone number is required',
+                                    'data-phone-input': true,
+                                    class: 'w-full h-12 px-4 rounded-2xl bg-[#ebe3a7]/95 text-[#113e14] placeholder:text-[#416543]/70 font-semibold border border-transparent focus:outline-none focus:ring-2 focus:ring-[#dca15d] shadow-sm'
                                 })
                                 @!field.error({ class: 'text-red-200 font-bold text-xs mt-2' })
                                 @end
@@ -123,6 +143,7 @@
                                         type: 'password',
                                         id: 'password',
                                         placeholder: 'Create a password',
+                                        autocomplete: 'new-password',
                                         'data-required-message': 'Password is required',
                                         class: 'w-full h-12 pl-4 pr-12 rounded-2xl bg-[#ebe3a7]/95 text-[#113e14] placeholder:text-[#416543]/70 font-semibold border border-transparent focus:outline-none focus:ring-2 focus:ring-[#a8b841] shadow-sm'
                                     })
@@ -140,6 +161,7 @@
                                         type: 'password',
                                         id: 'passwordConfirmation',
                                         placeholder: 'Repeat your password',
+                                        autocomplete: 'new-password',
                                         'data-required-message': 'Password confirmation is required',
                                         'data-confirm-with': 'password',
                                         class: 'w-full h-12 pl-4 pr-12 rounded-2xl bg-[#ebe3a7]/95 text-[#113e14] placeholder:text-[#416543]/70 font-semibold border border-transparent focus:outline-none focus:ring-2 focus:ring-[#a8b841] shadow-sm'

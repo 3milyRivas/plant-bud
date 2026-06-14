@@ -63,7 +63,7 @@
                     <div class="phone-auth-card auth-card is-alive auth-panel-in relative bg-[#113e14]/82 text-white backdrop-blur-3xl border border-[#ebe3a7]/12 rounded-[1.5rem] px-5 py-6 sm:px-6 sm:py-7 md:px-7 md:py-8 shadow-[0_30px_100px_rgba(0,0,0,0.30)] overflow-hidden">
                         <div class="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white/70 to-transparent"></div>
 
-                        @form({ route: 'new_account.store', method: 'POST' })
+                        @form({ route: 'new_account.store', method: 'POST', autocomplete: 'off', 'data-auth-form': 'signup' })
                         <input type="hidden" name="role" value="gardener">
 
                         <div class="space-y-5">
@@ -74,7 +74,7 @@
                                 <div class="relative">
                                     @!input.control({
                                         placeholder: 'Choose a username',
-                                        value: flashMessages.get('old')?.username,
+                                        value: flashMessages.get('authOld')?.username,
                                         id: 'username',
                                         autocomplete: 'off',
                                         maxlength: 15,
@@ -94,7 +94,8 @@
                                 @!field.label({ text: 'Display Name', class: 'block text-[#ebe3a7] font-black text-sm mb-2 tracking-wide' })
                                 @!input.control({
                                     placeholder: 'Name shown in your gardener profile',
-                                    value: flashMessages.get('old')?.display_name,
+                                    value: flashMessages.get('authOld')?.display_name,
+                                    autocomplete: 'off',
                                     maxlength: 22,
                                     minlength: 2,
                                     'data-required-message': 'Display name is required',
@@ -110,7 +111,8 @@
                                 @!input.control({
                                     type: 'email',
                                     placeholder: 'Type your email address',
-                                    value: flashMessages.get('old')?.email,
+                                    value: flashMessages.get('authOld')?.email,
+                                    autocomplete: 'off',
                                     'data-required-message': 'Email is required',
                                     class: 'w-full h-12 px-4 rounded-2xl bg-[#ebe3a7]/95 text-[#113e14] placeholder:text-[#416543]/70 font-semibold border border-transparent focus:outline-none focus:ring-2 focus:ring-[#a8b841] shadow-sm'
                                 })
@@ -124,7 +126,8 @@
                                     @!field.label({ text: 'Phone Number', class: 'block text-[#ebe3a7] font-black text-sm mb-2 tracking-wide' })
                                     @!input.control({
                                         placeholder: '0000-0000',
-                                        value: flashMessages.get('old')?.phone,
+                                        value: flashMessages.get('authOld')?.phone,
+                                        autocomplete: 'off',
                                         'data-required-message': 'Phone number is required',
                                         'data-phone-input': true,
                                         class: 'w-full h-12 px-4 rounded-2xl bg-[#ebe3a7]/95 text-[#113e14] placeholder:text-[#416543]/70 font-semibold border border-transparent focus:outline-none focus:ring-2 focus:ring-[#a8b841] shadow-sm'
@@ -138,7 +141,8 @@
                                     @!field.label({ text: 'DUI', class: 'block text-[#ebe3a7] font-black text-sm mb-2 tracking-wide' })
                                     @!input.control({
                                         placeholder: '01234567-8',
-                                        value: flashMessages.get('old')?.dui,
+                                        value: flashMessages.get('authOld')?.dui,
+                                        autocomplete: 'off',
                                         'data-required-message': 'DUI is required',
                                         'data-dui-input': true,
                                         class: 'w-full h-12 px-4 rounded-2xl bg-[#ebe3a7]/95 text-[#113e14] placeholder:text-[#416543]/70 font-semibold border border-transparent focus:outline-none focus:ring-2 focus:ring-[#a8b841] shadow-sm'
@@ -156,6 +160,7 @@
                                         type: 'password',
                                         placeholder: 'Create a password',
                                         id: 'password',
+                                        autocomplete: 'new-password',
                                         'data-required-message': 'Password is required',
                                         class: 'w-full h-12 pl-4 pr-12 rounded-2xl bg-[#ebe3a7]/95 text-[#113e14] placeholder:text-[#416543]/70 font-semibold border border-transparent focus:outline-none focus:ring-2 focus:ring-[#a8b841] shadow-sm'
                                     })
@@ -173,6 +178,7 @@
                                         type: 'password',
                                         placeholder: 'Repeat your password',
                                         id: 'passwordConfirmation',
+                                        autocomplete: 'new-password',
                                         'data-required-message': 'Password confirmation is required',
                                         'data-confirm-with': 'password',
                                         class: 'w-full h-12 pl-4 pr-12 rounded-2xl bg-[#ebe3a7]/95 text-[#113e14] placeholder:text-[#416543]/70 font-semibold border border-transparent focus:outline-none focus:ring-2 focus:ring-[#a8b841] shadow-sm'
