@@ -9,6 +9,7 @@ storage/profile_uploads
 storage/community_uploads
 storage/phone_uploads
 storage/garden_projects
+storage/nursery_catalog
 
 # Secrets
 .env
