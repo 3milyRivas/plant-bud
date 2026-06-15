@@ -47,6 +47,7 @@ window.showCategory = function(event, categoryId) {
     buttons.forEach(button => {
 
         button.classList.remove(
+            "is-active",
             "bg-[#113e14]",
             "text-white",
             "shadow-md"
@@ -55,6 +56,7 @@ window.showCategory = function(event, categoryId) {
         button.classList.add(
             "text-[#2D2B2B]"
         );
+        button.setAttribute("aria-pressed", "false");
     });
 
 
@@ -62,6 +64,7 @@ window.showCategory = function(event, categoryId) {
 
     if (activeButton) {
         activeButton.classList.add(
+            "is-active",
             "bg-[#113e14]",
             "text-white",
             "shadow-md"
@@ -70,6 +73,7 @@ window.showCategory = function(event, categoryId) {
         activeButton.classList.remove(
             "text-[#2D2B2B]"
         );
+        activeButton.setAttribute("aria-pressed", "true");
     }
 };
 

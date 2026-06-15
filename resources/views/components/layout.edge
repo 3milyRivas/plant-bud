@@ -5,6 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#113e14" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Plant Bud" />
     <meta name="description" content="Plant Bud makes plant care easier with practical guidance, smart tools, trusted gardening services, local nurseries, and a welcoming green community." />
     <link rel="canonical" href="{{ canonicalUrl }}" />
 
@@ -17,8 +21,8 @@
     <meta property="og:image" content="{{ socialImageUrl }}" />
     <meta property="og:image:secure_url" content="{{ socialImageUrl }}" />
     <meta property="og:image:type" content="image/png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+    <meta property="og:image:width" content="1672" />
+    <meta property="og:image:height" content="941" />
     <meta property="og:image:alt" content="Plant Bud, a friendlier way to care for plants and grow greener spaces" />
 
     <meta name="twitter:card" content="summary_large_image" />
@@ -37,11 +41,13 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="manifest" href="/site.webmanifest">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite('resources/js/pwa.js')
     @stack('dumper')
 </head>
 
 <body
-    class="bg-[#416543]">
+    class="bg-[#416543]"
+    data-frontend="{{ frontend }}">
     <div class="leaves pointer-events-none fixed inset-0 overflow-hidden z-0">
         <svg class="leaf" viewBox="0 0 24 24">
             <path d="M12 2C8 6 4 10 4 14a8 8 0 0016 0c0-4-4-8-8-12z" />

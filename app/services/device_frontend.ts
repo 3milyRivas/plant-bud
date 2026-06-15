@@ -10,7 +10,12 @@ const ipadDesktopPattern = /macintosh/i
 const ipadMobileTokenPattern = /mobile\/[\w]+/i
 
 function headerValue(headers: RequestHeaders, name: string) {
-  const value = headers[name] ?? headers[name.toLowerCase()]
+  const normalizedName = name.toLowerCase()
+  const matchingHeader = Object.entries(headers).find(
+    ([headerName]) => headerName.toLowerCase() === normalizedName
+  )
+  const value = matchingHeader?.[1]
+
   return Array.isArray(value) ? value.join(' ') : value || ''
 }
 

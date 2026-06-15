@@ -88,7 +88,8 @@ function start(name, command, args, options = {}) {
 
     if (name === 'designer-ai') {
       console.warn(`[designer-ai] stopped with code ${code}. The web app will keep running.`)
-      console.warn('[designer-ai] Run "npm run setup:python" if background removal is unavailable.')
+      console.warn('[designer-ai] No model will be downloaded during startup.')
+      console.warn('[designer-ai] Run "npm run setup:python" to prepare background removal.')
       return
     }
 
@@ -115,7 +116,9 @@ if (python) {
   start('designer-ai', python.command, [...python.prefix, 'resources/py/garden.py'])
 } else {
   console.warn('[designer-ai] Python 3.10, 3.11, or 3.12 was not found.')
-  console.warn('[designer-ai] Install Python 3.12 and run "npm run setup:python" before using background removal.')
+  console.warn(
+    '[designer-ai] Install Python 3.12 and run "npm run setup:python" before using background removal.'
+  )
 }
 
 start('web', process.execPath, ['ace', 'serve', '--hmr'], {

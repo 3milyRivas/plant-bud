@@ -6,11 +6,24 @@ from rembg import new_session
 from rembg.bg import alpha_matting_cutout
 
 
-DEFAULT_MODEL = "birefnet-general"
+DEFAULT_MODEL = "u2net"
 FALLBACK_MODEL = "u2net"
 
 
-def create_background_session():
+def model_home():
+    return os.path.expanduser(
+        os.environ.get(
+            "U2NET_HOME",
+            os.path.join(os.environ.get("XDG_DATA_HOME", "~"), ".u2net"),
+        )
+    )
+
+
+def model_path(model_name):
+    return os.path.join(model_home(), f"{model_name}.onnx")
+
+
+def create_background_session(allow_download=False):
     requested_model = os.environ.get("PLANT_BUD_BACKGROUND_MODEL", DEFAULT_MODEL).strip()
     model_names = [requested_model]
     if requested_model != FALLBACK_MODEL:
@@ -18,10 +31,19 @@ def create_background_session():
 
     last_error = None
     for model_name in model_names:
+        if not allow_download and not os.path.isfile(model_path(model_name)):
+            continue
+
         try:
             return new_session(model_name)
         except Exception as exc:
             last_error = exc
+
+    if not allow_download:
+        raise RuntimeError(
+            "No prepared background-removal model was found. "
+            "Run `npm run setup:python` to install it."
+        )
 
     raise RuntimeError("No background-removal model could be loaded") from last_error
 

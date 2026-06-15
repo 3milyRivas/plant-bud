@@ -507,7 +507,7 @@ export default class GardenDesignerController {
         resolve({
           error: 'Python AI environment was not found',
           detail:
-            'Install Python 3.12, run npm run setup, and restart npm run dev before using background removal.',
+            'Install Python 3.12 and run npm run setup:python before using background removal.',
         })
         return
       }

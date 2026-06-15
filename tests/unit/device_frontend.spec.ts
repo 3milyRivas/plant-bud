@@ -50,10 +50,45 @@ test.group('Device frontend selection', () => {
     )
   })
 
+  test('reads request headers without depending on their casing', ({ assert }) => {
+    assert.equal(
+      detectDeviceFrontend({
+        'User-Agent':
+          'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 Mobile/15E148 Safari/604.1',
+        'Sec-CH-UA-Mobile': '?0',
+      }),
+      'Phone'
+    )
+  })
+
+  test('keeps desktop operating systems on the PC frontend', ({ assert }) => {
+    assert.equal(
+      detectDeviceFrontend({
+        'user-agent':
+          'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/136.0 Safari/537.36',
+      }),
+      'PC'
+    )
+    assert.equal(
+      detectDeviceFrontend({
+        'user-agent':
+          'Mozilla/5.0 (X11; CrOS x86_64 15917.71.0) AppleWebKit/537.36 Chrome/136.0 Safari/537.36',
+        'sec-ch-ua-mobile': ['?0'],
+      }),
+      'PC'
+    )
+  })
+
+  test('uses PC when device headers are missing or unknown', ({ assert }) => {
+    assert.equal(detectDeviceFrontend({}), 'PC')
+    assert.equal(detectDeviceFrontend({ 'user-agent': 'PlantBudDesktop/1.0' }), 'PC')
+  })
+
   test('routes only page templates to the selected frontend', ({ assert }) => {
     assert.equal(resolvePageTemplate('pages/welcome', 'PC'), 'pages/PC/welcome')
     assert.equal(resolvePageTemplate('pages/welcome', 'Phone'), 'pages/Phone/welcome')
     assert.equal(resolvePageTemplate('components/app-navbar', 'Phone'), 'components/app-navbar')
     assert.equal(resolvePageTemplate('pages/PC/welcome', 'Phone'), 'pages/PC/welcome')
+    assert.equal(resolvePageTemplate('pages\\welcome', 'Phone'), 'pages/Phone/welcome')
   })
 })

@@ -9,6 +9,44 @@ import { test } from '@japa/runner'
 test.group('Frontend layout', (group) => {
   group.each.setup(() => testUtils.db().withGlobalTransaction())
 
+  test('advertises the PWA while preserving the selected frontend', async ({ visit, assert }) => {
+    const desktopPage = await visit('/')
+    assert.equal(
+      await desktopPage.locator('link[rel="manifest"]').getAttribute('href'),
+      '/site.webmanifest'
+    )
+    assert.equal(await desktopPage.locator('body').getAttribute('data-frontend'), 'PC')
+    assert.equal(await desktopPage.locator('[data-pwa-install]').count(), 0)
+
+    const phonePage = await visit('/')
+    await phonePage.setExtraHTTPHeaders({ 'sec-ch-ua-mobile': '?1' })
+    await phonePage.reload()
+
+    assert.equal(
+      await phonePage.locator('link[rel="manifest"]').getAttribute('href'),
+      '/site.webmanifest'
+    )
+    assert.equal(await phonePage.locator('body').getAttribute('data-frontend'), 'Phone')
+    assert.equal(
+      await phonePage.locator('meta[name="apple-mobile-web-app-capable"]').getAttribute('content'),
+      'yes'
+    )
+    assert.equal(await phonePage.locator('[data-pwa-install]').count(), 0)
+  })
+
+  test('preserves device selection on not found pages', async ({ visit, assert }) => {
+    const desktopPage = await visit('/missing-plant-bud-page')
+    assert.equal(await desktopPage.locator('body').getAttribute('data-frontend'), 'PC')
+    assert.equal(await desktopPage.locator('link[rel="manifest"]').count(), 1)
+
+    const phonePage = await visit('/missing-plant-bud-page')
+    await phonePage.setExtraHTTPHeaders({ 'sec-ch-ua-mobile': '?1' })
+    await phonePage.reload()
+
+    assert.equal(await phonePage.locator('body').getAttribute('data-frontend'), 'Phone')
+    assert.equal(await phonePage.locator('[data-pwa-install]').count(), 0)
+  })
+
   test('nursery directory stays organized and touch-friendly on phones', async ({
     browserContext,
     visit,

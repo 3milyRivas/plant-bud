@@ -145,8 +145,8 @@
 
                 <div
                     class="relative h-full overflow-hidden bg-white/92 backdrop-blur-2xl border border-white/55 rounded-[3rem] p-6 text-[#113e14] shadow-[0_30px_80px_rgba(17,62,20,0.18)] lg:p-10">
-                    <div class="absolute right-0 top-0 h-full w-1 bg-[#dca15d]/55"></div>
-                    <div class="absolute left-0 top-0 h-28 w-full bg-gradient-to-b from-[#ebe3a7]/34 to-transparent pointer-events-none"></div>
+                    <div class="scanner-results-edge absolute right-0 top-0 h-full w-1 bg-[#dca15d]/55"></div>
+                    <div class="scanner-results-wash absolute left-0 top-0 h-28 w-full bg-gradient-to-b from-[#ebe3a7]/34 to-transparent pointer-events-none"></div>
 
                     <div class="relative mb-6">
                         <p class="text-sm font-black uppercase tracking-[0.22em] text-[#416543]">Plant Bud Lens</p>
@@ -160,51 +160,38 @@
                     </div>
 
                     <div id="emptyState" class="text-center py-16 text-[#416543]">
-                        <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#ebe3a7] text-2xl font-black text-[#113e14]">PB</div>
-                        <p class="mt-5 text-2xl font-black text-[#113e14]">No scan yet</p>
-                        <p class="text-sm mt-2 font-semibold">Upload a plant image, then choose Analyze plant above.</p>
+                        <div class="scanner-empty-illustration">
+                            <img src="/resources/images/essential/logo.png" alt="Plant Bud">
+                        </div>
+                        <p class="mt-5 text-2xl font-black text-[#113e14]">Your plant report will appear here</p>
+                        <p class="text-sm mt-2 font-semibold">Choose a clear photo and run the analysis to see identification, health, and care guidance.</p>
                     </div>
 
                     <div id="resultsBox" class="hidden space-y-6" data-scanner-results>
                         <div class="scan-result-summary overflow-hidden rounded-2xl border border-[#416543]/12 bg-[#113e14] p-6 text-white shadow-sm">
-                            <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                                <div>
+                            <div class="scan-summary-layout flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                                <div class="mobile-scan-portrait" aria-hidden="true">
+                                    <img id="resultPlantImage" alt="">
+                                    <span id="mobileHealthStatus">Analyzed</span>
+                                </div>
+                                <div class="scan-summary-copy">
                                     <p class="text-sm font-black uppercase tracking-[0.18em] text-[#ebe3a7]">Scan summary</p>
                                     <h3 id="commonName" class="mt-2 text-3xl font-black">-</h3>
                                     <p id="scientificName" class="mt-1 text-sm font-semibold text-white/68">-</p>
                                 </div>
+                                <div class="mobile-confidence-orbit" id="mobileConfidenceOrbit">
+                                    <span id="mobileConfidence">-</span>
+                                    <small>confidence</small>
+                                </div>
                                 <div id="summaryChips" class="flex flex-wrap gap-2"></div>
                             </div>
                             <p id="scanSummaryText" class="mt-5 max-w-3xl text-sm font-semibold leading-6 text-white/72"></p>
-                            <div id="sourceLinks" class="mt-4 flex flex-wrap gap-2"></div>
+                            <div class="scan-summary-actions mt-4 flex flex-wrap gap-2">
+                                <div id="sourceLinks" class="flex flex-wrap gap-2"></div>
+                            </div>
                         </div>
 
-                        @if(isPremium)
-                            <div id="historyDashboard" class="premium-history-dashboard {{ scanHistory.length ? '' : 'hidden' }} rounded-2xl border border-[#416543]/12 bg-[#416543]/8 p-4 text-[#113e14] shadow-sm">
-                                <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                                    <div>
-                                        <div class="flex flex-wrap items-center gap-2">
-                                            <p class="text-xs font-black uppercase tracking-[0.16em] text-[#416543]">Premium tracking</p>
-                                            <span class="rounded-full bg-[#ebe3a7] px-3 py-1 text-xs font-black text-[#113e14]">Saved history</span>
-                                        </div>
-                                        <h3 class="mt-1 text-xl font-black">Care timeline</h3>
-                                    </div>
-                                    <button type="button" id="historyDashboardToggle" class="self-start rounded-full bg-[#113e14] px-4 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#ebe3a7] transition hover:bg-[#416543] md:self-center" aria-expanded="false" aria-controls="historyDashboardContent">
-                                        Show dashboard
-                                    </button>
-                                </div>
-                                <div id="historyDashboardContent" class="premium-history-content hidden">
-                                    <p class="premium-dashboard-label">History at a glance</p>
-                                    <div id="historyStats" class="premium-history-stats mt-4 grid gap-3 md:grid-cols-3"></div>
-                                    <div class="premium-history-trend">
-                                        <p class="premium-dashboard-label">Recent care trend</p>
-                                        <div id="historyTrendMini" class="mt-3 rounded-2xl bg-white/70 p-4"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
-
-                        <div class="scan-result-overview grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div id="resultOverview" class="scan-result-overview grid grid-cols-1 md:grid-cols-3 gap-6" data-result-section>
                             <div class="bg-[#ebe3a7]/45 border border-[#416543]/12 rounded-2xl p-6 shadow-sm">
                                 <p class="text-[#416543] text-sm font-bold">Common name</p>
                                 <p id="commonNameCard" class="text-[#113e14] text-2xl font-black mt-2">-</p>
@@ -221,49 +208,89 @@
                             </div>
                         </div>
 
+                        <section id="resultMatches" class="scan-result-matches rounded-2xl border border-[#416543]/12 bg-[#416543]/8 p-6 shadow-sm" data-result-section>
+                            <div class="scan-section-heading">
+                                <span>01</span>
+                                <div>
+                                    <small>Visual alternatives and confidence</small>
+                                    <h3>Other AI matches</h3>
+                                </div>
+                            </div>
+                            <div id="matches" class="mt-4 grid grid-cols-2 gap-4 md:grid-cols-3"></div>
+                        </section>
+
                         <div class="scan-result-split grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-                            <div class="scan-result-action bg-white border border-[#416543]/12 rounded-2xl p-6 shadow-sm">
+                            <details id="resultAction" class="scan-result-action scan-result-disclosure bg-white border border-[#416543]/12 rounded-2xl p-6 shadow-sm" data-scan-disclosure data-mobile-open data-result-section open>
+                                <summary class="scan-disclosure-summary">
+                                    <span><small>Recommended next step</small><strong>Action plan</strong></span>
+                                    <span class="scan-disclosure-icon" aria-hidden="true"></span>
+                                </summary>
+                                <div class="scan-disclosure-content">
                                 <p class="text-[#113e14] font-black mb-3">Action plan</p>
                                 <div id="actionPlan" class="space-y-3 text-sm font-semibold leading-6 text-[#416543]"></div>
-                            </div>
+                                </div>
+                            </details>
 
-                            <div class="scan-result-taxonomy bg-[#416543]/8 border border-[#416543]/12 rounded-2xl p-6 shadow-sm">
+                            <details id="resultTechnical" class="scan-result-taxonomy scan-result-disclosure bg-[#416543]/8 border border-[#416543]/12 rounded-2xl p-6 shadow-sm" data-scan-disclosure data-result-section open>
+                                <summary class="scan-disclosure-summary">
+                                    <span><small>Family, genus and rank</small><strong>Technical identity</strong></span>
+                                    <span class="scan-disclosure-icon" aria-hidden="true"></span>
+                                </summary>
+                                <div class="scan-disclosure-content">
                                 <p class="text-[#113e14] font-black mb-3">Taxonomy snapshot</p>
                                 <div id="taxonomyGrid" class="grid gap-3 sm:grid-cols-2"></div>
-                            </div>
+                                </div>
+                            </details>
                         </div>
 
-                        <div class="scan-result-matches bg-[#416543]/8 border border-[#416543]/12 rounded-2xl p-6 shadow-sm">
-                            <p class="text-[#416543] text-sm font-black mb-3">AI Matches</p>
-                            <div id="matches" class="grid grid-cols-2 md:grid-cols-3 gap-4"></div>
-                        </div>
-
-                        <div class="scan-result-causes bg-white border border-[#416543]/12 rounded-2xl p-6 shadow-sm">
+                        <details id="resultHealth" class="scan-result-causes scan-result-disclosure bg-white border border-[#416543]/12 rounded-2xl p-6 shadow-sm" data-scan-disclosure data-result-section open>
+                            <summary class="scan-disclosure-summary">
+                                <span><small>Stress signals and treatments</small><strong>Possible problems</strong></span>
+                                <span class="scan-disclosure-icon" aria-hidden="true"></span>
+                            </summary>
+                            <div class="scan-disclosure-content">
                             <p class="text-[#416543] text-sm font-black mb-3">Possible causes</p>
                             <ul id="causes" class="text-[#113e14]/78 list-disc ml-5 space-y-1"></ul>
                             <div id="diseaseCards" class="mt-4 grid gap-3 md:grid-cols-2"></div>
-                        </div>
+                            </div>
+                        </details>
 
-                        <div class="scan-result-education bg-[#ebe3a7]/42 border border-[#416543]/12 rounded-2xl p-6 shadow-sm">
+                        <details id="resultKnowledge" class="scan-result-education scan-result-disclosure bg-[#ebe3a7]/42 border border-[#416543]/12 rounded-2xl p-6 shadow-sm" data-scan-disclosure data-result-section open>
+                            <summary class="scan-disclosure-summary">
+                                <span><small>Description, facts and context</small><strong>Learn about this plant</strong></span>
+                                <span class="scan-disclosure-icon" aria-hidden="true"></span>
+                            </summary>
+                            <div class="scan-disclosure-content">
                             <p class="text-[#113e14] font-black mb-3">Plant education</p>
                             <div id="education" class="text-[#113e14]/78 space-y-3 text-sm"></div>
-                        </div>
+                            </div>
+                        </details>
 
-                        <div class="scan-result-guide bg-[#416543]/8 border border-[#416543]/12 rounded-2xl p-6 shadow-sm">
+                        <details id="resultCare" class="scan-result-guide scan-result-disclosure bg-[#416543]/8 border border-[#416543]/12 rounded-2xl p-6 shadow-sm" data-scan-disclosure data-result-section open>
+                            <summary class="scan-disclosure-summary">
+                                <span><small>Water, light, soil and propagation</small><strong>Everyday care guide</strong></span>
+                                <span class="scan-disclosure-icon" aria-hidden="true"></span>
+                            </summary>
+                            <div class="scan-disclosure-content">
                             <p class="text-[#113e14] font-black mb-3">Care guide</p>
                             <ul id="tips" class="text-[#416543] list-disc ml-5 space-y-1"></ul>
-                        </div>
+                            </div>
+                        </details>
 
-                        <div id="premiumInsightsBox" class="premium-scan-dashboard hidden bg-[#113e14] border border-[#416543]/12 rounded-2xl p-6 text-white shadow-sm">
-                            <div class="premium-scan-header flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                        <details id="premiumInsightsBox" class="premium-scan-dashboard scan-result-disclosure hidden bg-[#113e14] border border-[#416543]/12 rounded-2xl p-6 text-white shadow-sm" data-scan-disclosure open>
+                            <summary class="premium-scan-header flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                                 <div>
                                     <p class="text-sm font-black uppercase tracking-[0.18em] text-[#ebe3a7]">Premium dashboard</p>
                                     <h3 class="mt-2 text-2xl font-black">Saved scan intelligence</h3>
                                     <p class="mt-2 text-sm font-semibold leading-6 text-white/62">Understand the current condition, compare progress, and plan the next check.</p>
                                 </div>
-                                <span id="careScore" class="rounded-full bg-[#ebe3a7] px-4 py-2 text-sm font-black text-[#113e14]">-</span>
-                            </div>
+                                <span class="flex items-center gap-2">
+                                    <span id="careScore" class="rounded-full bg-[#ebe3a7] px-4 py-2 text-sm font-black text-[#113e14]">-</span>
+                                    <span class="scan-disclosure-icon scan-disclosure-icon-light" aria-hidden="true"></span>
+                                </span>
+                            </summary>
 
+                            <div class="scan-disclosure-content">
                             <section class="premium-dashboard-section">
                                 <p class="premium-dashboard-label">Current signals</p>
                                 <div id="premiumDashboard" class="premium-dashboard-metrics mt-3 grid gap-3 md:grid-cols-4"></div>
@@ -298,7 +325,8 @@
                                 <p class="premium-dashboard-label">Personalized insights</p>
                                 <div id="premiumCards" class="premium-dashboard-cards mt-3 grid gap-3 md:grid-cols-2"></div>
                             </section>
-                        </div>
+                            </div>
+                        </details>
 
                         @if(!isPremium)
                             <div id="freeUpgradeBox" class="bg-[#113e14] border border-[#416543]/12 rounded-2xl p-6 text-white shadow-sm">
@@ -319,9 +347,9 @@
 <form id="scannerHistoryDeleteToken" class="hidden" aria-hidden="true">
     {{ csrfField() }}
 </form>
-<div id="scanHistoryModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-[#113e14]/86 p-5 backdrop-blur-xl" aria-hidden="true">
-    <div class="max-h-[90vh] w-full max-w-5xl overflow-y-auto rounded-[2rem] bg-[#fffaf0] p-5 text-[#113e14] shadow-[0_30px_90px_rgba(0,0,0,0.34)] md:p-7">
-        <div class="flex items-start justify-between gap-4">
+<div id="scanHistoryModal" class="scan-history-modal fixed inset-0 z-50 hidden items-center justify-center bg-[#113e14]/86 p-5 backdrop-blur-xl" aria-hidden="true">
+    <div class="scan-history-dialog max-h-[90vh] w-full max-w-5xl overflow-y-auto rounded-[2rem] bg-[#fffaf0] p-5 text-[#113e14] shadow-[0_30px_90px_rgba(0,0,0,0.34)] md:p-7">
+        <div class="scan-history-header flex items-start justify-between gap-4">
             <div>
                 <p class="text-xs font-black uppercase tracking-[0.18em] text-[#416543]">Saved scan detail</p>
                 <h2 id="historyModalTitle" class="mt-1 text-3xl font-black">Scan</h2>
@@ -337,7 +365,7 @@
             </div>
         </div>
 
-        <div id="historyModalBody" class="mt-6 space-y-5"></div>
+        <div id="historyModalBody" class="scan-history-body mt-6 space-y-5"></div>
     </div>
 </div>
 @!component('components/phone-camera-modal')

@@ -13,7 +13,7 @@ export default class DeviceFrontendMiddleware {
     view.share({
       frontend,
       canonicalUrl: new URL(request.url(), `${baseUrl}/`).toString(),
-      socialImageUrl: `${baseUrl}/social/plant-bud-social.png`,
+      socialImageUrl: `${baseUrl}/profiles/banner.png`,
     })
     view.render = (template, state) => render(resolvePageTemplate(template, frontend), state)
     view.renderSync = (template, state) =>
