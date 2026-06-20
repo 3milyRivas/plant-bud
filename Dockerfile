@@ -16,16 +16,17 @@ FROM node-deps AS node-deps-prod
 RUN npm prune --omit=dev
 
 FROM base AS python-deps
+RUN apk add --no-cache py3-pip
+
 COPY requirements.txt ./
-RUN apk add --no-cache py3-pip && \
-    python -m venv .venv && \
+RUN python -m venv .venv && \
     .venv/bin/pip install --upgrade pip && \
     .venv/bin/pip install -r requirements.txt
 
 FROM python-deps AS python-rembg-model-warmup
 ENV U2NET_HOME=/app/.u2net
 
-COPY ./resources/py/warmup_rembg.py ./resources/py/warmup_rembg.py
+COPY ./resources/py/ ./resources/py/
 RUN .venv/bin/python resources/py/warmup_rembg.py
 
 FROM base AS production
