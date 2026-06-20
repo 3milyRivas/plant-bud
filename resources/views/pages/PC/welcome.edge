@@ -1,0 +1,361 @@
+@layout()
+@slot('title')
+<title>Welcome to Plant Bud</title>
+@endslot
+@vite(['resources/js/tips.js'])
+
+<div class="relative z-10 min-h-dvh overflow-hidden text-white">
+  <header class="fixed top-0 left-0 w-full z-50 px-4 sm:px-6 lg:px-10 py-6">
+    <div
+      class="w-full max-w-[min(90rem,calc(100vw-2rem))] mx-auto bg-white/10 backdrop-blur-xl border border-white/10 rounded-full px-4 py-4 sm:px-6 flex items-center justify-between shadow-[0_10px_40px_rgba(0,0,0,0.15)]">
+      <div class="flex items-center gap-4 px-3 rounded-full">
+        <img decoding="async" src="resources/images/essential/logo.png"
+          class="w-18 hover:rotate-6 transition duration-500" alt="">
+      </div>
+
+      <div class="hidden md:flex items-center justify-center flex-1 px-8">
+        <div class="relative max-w-2xl w-full">
+          <div
+            class="absolute -inset-2 bg-gradient-to-r from-transparent via-[#ebe3a7]/12 to-transparent blur-3xl rounded-full opacity-90">
+          </div>
+          <div
+            class="relative px-7 py-3.5 rounded-full bg-white/[0.08] backdrop-blur-2xl border border-white/10 shadow-[0_18px_45px_rgba(0,0,0,0.18)] overflow-hidden">
+            <div
+              class="absolute inset-0 rounded-full bg-gradient-to-r from-white/[0.02] via-white/[0.12] to-white/[0.02]">
+            </div>
+            <div class="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent">
+            </div>
+            <div
+              class="absolute left-5 top-1/2 -translate-y-1/2 flex items-center justify-center w-7 h-7 rounded-full bg-[#ebe3a7]/15 border border-[#ebe3a7]/20 shadow-[0_0_20px_rgba(235,227,167,0.15)]">
+              <div
+                class="w-2 h-2 rounded-full bg-[#ebe3a7] shadow-[0_0_10px_rgba(235,227,167,0.7)] animate-pulse">
+              </div>
+            </div>
+            <p class="relative pl-10 pr-2 text-sm font-semibold text-center leading-tight">
+              <span class="text-white/55 font-black tracking-[0.14em] mr-2">
+                TIP
+              </span>
+              <span id="plant-tip"
+                class="text-[#ebe3a7] font-bold tracking-[0.02em] [text-shadow:0_0_8px_rgba(255,255,255,0.06)]">
+                Loading tip...
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <a href="/login" class="hidden sm:flex text-white font-semibold hover:text-[#ebe3a7] transition">Login</a>
+        <a href="/register"
+          class="bg-[#dca15d] text-[#113e14] font-black px-6 py-3 rounded-full shadow-lg transition-all duration-300 hover:scale-105 hover:bg-[#ebe3a7]">
+          Get Started
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <section class="relative flex min-h-[88svh] items-center overflow-hidden px-5 pb-24 pt-36 sm:px-6 lg:px-10 lg:pt-40">
+    <img decoding="async" src="/resources/images/welcome/header3.png" class="absolute inset-0 h-full w-full object-cover" alt="">
+    <div class="absolute inset-0 bg-[#0A210D]/55"></div>
+    <div class="absolute inset-0"></div>
+    <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#416543] to-transparent"></div>
+
+    <div class="relative z-10 mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))] grid gap-14 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
+      <div class="max-w-3xl text-center lg:text-left">
+        <div class="mb-7 inline-flex items-center gap-3 rounded-full border border-white/15 bg-white/10 px-5 py-3 shadow-xl backdrop-blur-xl">
+          <span class="welcome-signal h-2.5 w-2.5 rounded-full bg-[#a8b841] shadow-[0_0_16px_rgba(168,184,65,0.58)]"></span>
+          <span class="text-xs font-black uppercase tracking-[0.24em] text-white/80">Green spaces start here</span>
+        </div>
+
+        <h1 class="text-balance text-5xl font-black leading-[0.97] drop-shadow-2xl sm:text-6xl md:text-7xl xl:text-[92px]">
+          Grow Your <span class="welcome-gradient-text">Plants</span><br>
+          Live a <span class="text-[#ebe3a7]">Better Life</span>
+        </h1>
+
+        <p class="mx-auto mt-8 max-w-2xl text-lg font-semibold leading-8 text-white/84 sm:text-xl lg:mx-0">
+          Plant Bud is a friendly place to learn about plant care, discover green habits, and feel inspired to bring nature into everyday spaces.
+        </p>
+
+        <div class="mt-10 flex justify-center lg:justify-start">
+          <a href="/register"
+            class="inline-flex items-center gap-3 rounded-full bg-[#dca15d] px-8 py-4 text-sm font-black text-[#113e14] shadow-[0_18px_45px_rgba(0,0,0,0.28)] transition hover:-translate-y-1 hover:scale-[1.02] hover:bg-[#ebe3a7] sm:px-10 sm:py-5">
+            Start Now
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path d="M5 12h14"></path>
+              <path d="M13 5l7 7-7 7"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="welcome-breath relative mx-auto w-full max-w-xl">
+        <div class="absolute left-1/2 top-1/2 h-[28rem] w-[28rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#ebe3a7]/12 blur-3xl"></div>
+        <div class="relative grid gap-5 sm:grid-cols-[0.78fr_1fr] sm:items-end">
+          <div class="space-y-5">
+            <div class="welcome-soft-card is-alive welcome-tilt-soft rounded-[2rem] border border-white/15 bg-white/12 p-5 shadow-2xl backdrop-blur-2xl">
+              <p class="text-sm font-black uppercase tracking-[0.2em] text-[#ebe3a7]">Plant Bud</p>
+              <p class="mt-4 text-3xl font-black leading-tight">Care feels easier when the journey feels warm.</p>
+            </div>
+            <img decoding="async" src="/resources/images/homepagee/plant-4.png" class="welcome-float-soft h-72 w-full rounded-[2rem] object-cover shadow-2xl" alt="">
+          </div>
+
+          <div class="space-y-5">
+            <img decoding="async" src="/resources/images/welcome/section2.jpg" class="welcome-tilt-soft h-[24rem] w-full rounded-[2.25rem] object-cover shadow-2xl" alt="">
+            <div class="welcome-soft-card is-alive welcome-tilt-soft rounded-[2rem] bg-[#113e14]/78 p-6 text-white shadow-2xl">
+              <p class="text-sm font-black uppercase tracking-[0.2em] text-[#ebe3a7]">Small habit</p>
+              <p class="mt-3 text-2xl font-black leading-tight">Healthy plants often begin with simple routines.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="relative z-10 text-white">
+    <section class="relative px-4 pb-16 pt-28 sm:px-6 lg:px-10">
+      <div class="welcome-reveal mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))] rounded-[1.5rem] bg-[#ebe3a7]/92 p-5 text-[#113e14] shadow-[0_18px_55px_rgba(0,0,0,0.18)] backdrop-blur-xl md:p-6">
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-4">
+          <div class="rounded-[1.15rem] bg-white/74 p-5 shadow-sm md:col-span-1">
+            <p class="text-sm font-black uppercase tracking-[0.2em] text-[#416543]">Real green data</p>
+            <h2 class="mt-3 text-2xl font-black leading-tight">Nature is bigger than we imagine.</h2>
+          </div>
+
+          @each(stat in [
+            { value: '390,900', label: 'known plant species', note: 'Estimated by Royal Botanic Gardens, Kew.' },
+            { value: '7,039', label: 'edible plant species', note: 'Documented in Kew useful plant data.' },
+            { value: '31%', label: 'of land is forest', note: 'About 4.06 billion hectares worldwide.' }
+          ])
+            <div class="welcome-soft-card welcome-hover rounded-[1.15rem] border border-[#a8b841]/35 bg-white/58 p-5 shadow-sm">
+              <p class="text-3xl font-black text-[#113e14]">{{ stat.value }}</p>
+              <p class="mt-3 text-sm font-black uppercase leading-5 tracking-[0.16em] text-[#416543]">{{ stat.label }}</p>
+              <p class="mt-2 text-sm font-semibold leading-6 text-[#416543]">{{ stat.note }}</p>
+            </div>
+          @endeach
+        </div>
+      </div>
+    </section>
+
+    <section class="px-4 py-16 sm:px-6 lg:px-10">
+      <div class="mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))] grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+        <div class="welcome-drift">
+          <p class="text-sm font-black uppercase tracking-[0.24em] text-[#ebe3a7]">What is Plant Bud?</p>
+          <h2 class="mt-4 text-balance text-4xl font-black leading-tight md:text-6xl">
+            A warm place to begin a <span class="welcome-gradient-text">greener routine.</span>
+          </h2>
+          <p class="mt-6 text-lg font-semibold leading-8 text-white/74">
+            Plant Bud introduces plant care with simple guidance, friendly inspiration, and a clearer way to understand everyday green spaces.
+          </p>
+        </div>
+
+        <div class="grid gap-5 sm:grid-cols-2">
+          @each(item in [
+            { image: 'benefit1.png', title: 'Learn clearly', text: 'Care information organized for real daily routines.' },
+            { image: 'benefit3.png', title: 'Build habits', text: 'Water, light, soil, and observation become easier to repeat.' },
+            { image: 'benefit4.png', title: 'Improve spaces', text: 'Rooms, desks, balconies, and patios can feel healthier.' },
+            { image: 'benefit5.png', title: 'Grow with purpose', text: 'Plant care connects beauty, patience, and well-being.' }
+          ])
+            <div class="welcome-soft-card is-alive rounded-[1.35rem] border border-white/12 bg-[#113e14]/34 p-6 shadow-[0_14px_45px_rgba(0,0,0,0.14)] backdrop-blur-xl">
+              <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#ebe3a7] shadow-lg">
+                <img loading="lazy" decoding="async" src="/resources/images/welcome/{{ item.image }}" class="h-10 w-10 object-contain" alt="">
+              </div>
+              <h3 class="mt-5 text-2xl font-black text-white">{{ item.title }}</h3>
+              <p class="mt-3 text-sm font-semibold leading-6 text-white/68">{{ item.text }}</p>
+            </div>
+          @endeach
+        </div>
+      </div>
+    </section>
+
+    <section class="px-4 py-16 sm:px-6 lg:px-10">
+      <div class="mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))]">
+        <div class="welcome-slip mb-10 max-w-full sm:max-w-3xl">
+          <p class="text-sm font-black uppercase tracking-[0.24em] text-[#ebe3a7]">What Plant Bud includes</p>
+          <h2 class="mt-4 text-balance text-4xl font-black leading-tight md:text-6xl">
+            Everything starts with <span class="welcome-gradient-text">understanding your plant.</span>
+          </h2>
+          <p class="mt-5 text-lg font-semibold leading-8 text-white/70">
+            Plant learning, care direction, green services, and inspiration in one simple experience.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          @each(feature in [
+            { image: 'benefit1.png', kicker: 'Plant knowledge', title: 'Care guides that feel clear', text: 'Watering, sunlight, soil, humidity, plant families, and warning signs in one place.' },
+            { image: 'benefit2.png', kicker: 'Expert connection', title: 'A bridge to green help', text: 'A path toward gardeners, nurseries, and plant-focused support when care gets harder.' },
+            { image: 'benefit5.png', kicker: 'Green community', title: 'Inspiration from real growth', text: 'Routines, gardens, recoveries, and ideas can feel easier to share and follow.' }
+          ])
+            <div class="welcome-premium-card is-alive welcome-stagger rounded-[1.5rem] border border-white/12 bg-white/8 p-7 shadow-[0_14px_45px_rgba(0,0,0,0.14)] backdrop-blur-xl">
+              <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#ebe3a7] shadow-lg">
+                <img loading="lazy" decoding="async" src="/resources/images/welcome/{{ feature.image }}" class="h-10 w-10 object-contain" alt="">
+              </div>
+              <p class="mt-6 text-sm font-black uppercase tracking-[0.18em] text-[#ebe3a7]">{{ feature.kicker }}</p>
+              <h3 class="mt-3 text-3xl font-black leading-tight text-white">{{ feature.title }}</h3>
+              <p class="mt-4 text-sm font-semibold leading-6 text-white/68">{{ feature.text }}</p>
+            </div>
+          @endeach
+        </div>
+      </div>
+    </section>
+
+    <section class="px-4 py-16 sm:px-6 lg:px-10">
+      <div class="mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))] grid gap-8 lg:grid-cols-[0.88fr_1.12fr] lg:items-stretch">
+        <div class="welcome-tilt-soft rounded-[1.5rem] bg-[#ebe3a7] p-8 text-[#113e14] shadow-[0_18px_55px_rgba(0,0,0,0.18)] backdrop-blur-xl">
+          <p class="text-sm font-black uppercase tracking-[0.24em] text-[#416543]">Problems it helps solve</p>
+          <h2 class="mt-5 text-balance text-4xl font-black leading-tight md:text-5xl">
+            From what is wrong?
+            <span class="block text-[#416543]">to what should I do next?</span>
+          </h2>
+          <div class="mt-6 flex items-center gap-3">
+            <span class="h-2 w-10 rounded-full bg-[#dca15d]"></span>
+            <span class="h-2 w-2 rounded-full bg-[#a8b841]"></span>
+            <span class="h-px flex-1 bg-[#416543]/24"></span>
+          </div>
+          <p class="mt-5 text-base font-semibold leading-7 text-[#416543] md:text-lg">
+            Many plant problems start with uncertainty. Plant Bud turns confusing symptoms into calmer next steps.
+          </p>
+        </div>
+
+        <div class="grid gap-4 sm:grid-cols-2">
+          @each(problem in [
+            { step: '01', title: 'Yellow leaves', text: 'Review water, light, nutrients, and drainage.' },
+            { step: '02', title: 'Overwatering fear', text: 'Check soil, pots, and roots before adding more.' },
+            { step: '03', title: 'Wrong placement', text: 'Understand sunlight and space needs faster.' },
+            { step: '04', title: 'No care routine', text: 'Turn care into small repeatable habits.' }
+          ])
+            <div class="welcome-premium-card welcome-hover welcome-stagger rounded-[1.35rem] border border-[#ebe3a7]/14 bg-[#113e14]/54 p-6 shadow-[0_14px_45px_rgba(0,0,0,0.14)] backdrop-blur-xl">
+              <p class="text-sm font-black text-[#dca15d]">{{ problem.step }}</p>
+              <h3 class="mt-3 text-2xl font-black text-white">{{ problem.title }}</h3>
+              <p class="mt-3 text-sm font-semibold leading-6 text-white/68">{{ problem.text }}</p>
+            </div>
+          @endeach
+        </div>
+      </div>
+    </section>
+
+    <section class="px-4 py-16 sm:px-6 lg:px-10">
+      <div class="mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))]">
+        <div class="welcome-scale mb-10 text-center">
+          <p class="text-sm font-black uppercase tracking-[0.24em] text-[#ebe3a7]">Services and benefits</p>
+          <h2 class="mx-auto mt-4 max-w-4xl text-balance text-4xl font-black leading-tight md:text-6xl">
+            Built for <span class="welcome-gradient-text">people, plants, and green businesses.</span>
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          @each(service in [
+            { title: 'For plant owners', text: 'Understand symptoms and organize care.' },
+            { title: 'For gardeners', text: 'Show expertise and build trust.' },
+            { title: 'For nurseries', text: 'Present plants and guide customers.' },
+            { title: 'For communities', text: 'Encourage greener shared spaces.' }
+          ])
+            <div class="welcome-premium-card is-alive welcome-stagger rounded-[1.35rem] border border-[#ebe3a7]/12 bg-[#113e14]/58 p-6 text-white shadow-[0_14px_45px_rgba(0,0,0,0.16)] backdrop-blur-xl">
+              <span class="inline-flex h-2 w-12 rounded-full bg-[#a8b841]"></span>
+              <h3 class="mt-5 text-2xl font-black leading-tight">{{ service.title }}</h3>
+              <p class="mt-3 text-sm font-semibold leading-6 text-white/70">{{ service.text }}</p>
+            </div>
+          @endeach
+        </div>
+      </div>
+    </section>
+
+    <section class="px-4 py-16 sm:px-6 lg:px-10">
+      <div class="mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))]">
+        <div class="welcome-drift mb-10 max-w-full sm:max-w-3xl">
+          <p class="text-sm font-black uppercase tracking-[0.24em] text-[#ebe3a7]">Why plants matter</p>
+          <h2 class="mt-4 text-balance text-4xl font-black leading-tight md:text-6xl">
+            Good plant care starts with noticing small signals.
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div class="welcome-soft-card is-alive rounded-[1.45rem] bg-[#113e14]/58 p-7 text-white shadow-[0_14px_45px_rgba(0,0,0,0.16)] backdrop-blur-xl">
+            <p class="text-sm font-black uppercase tracking-[0.2em] text-[#ebe3a7]">Leaves</p>
+            <h3 class="mt-4 text-3xl font-black leading-tight">Color changes usually speak first.</h3>
+            <p class="mt-4 text-sm font-semibold leading-6 text-white/70">
+              Yellow, brown, or pale leaves often invite people to review light, water, soil, humidity, and drainage.
+            </p>
+          </div>
+
+          <div class="welcome-soft-card welcome-hover rounded-[1.45rem] bg-[#ebe3a7]/92 p-7 text-[#113e14] shadow-[0_14px_45px_rgba(0,0,0,0.14)] backdrop-blur-xl">
+            <p class="text-sm font-black uppercase tracking-[0.2em] text-[#416543]">Roots</p>
+            <h3 class="mt-4 text-3xl font-black leading-tight">Roots need oxygen as well as moisture.</h3>
+            <p class="mt-4 text-sm font-semibold leading-6 text-[#416543]">
+              Good drainage helps prevent root stress, one of the most common hidden causes of plant decline.
+            </p>
+          </div>
+
+          <div class="welcome-soft-card is-alive rounded-[1.45rem] bg-[#113e14]/58 p-7 text-white shadow-[0_14px_45px_rgba(0,0,0,0.16)] backdrop-blur-xl">
+            <p class="text-sm font-black uppercase tracking-[0.2em] text-[#ebe3a7]">Well-being</p>
+            <h3 class="mt-4 text-3xl font-black leading-tight">Green spaces can support healthier cities.</h3>
+            <p class="mt-4 text-sm font-semibold leading-6 text-white/70">
+              WHO reviews connect urban green space improvements with positive health, social, and environmental outcomes.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="px-4 py-16 sm:px-6 lg:px-10">
+      <div class="mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))] grid gap-6 lg:grid-cols-2">
+        @each(card in [
+          { image: 'mission.png', title: 'Mission', text: 'To inspire people to care for plants through simple knowledge, warmer habits, and sustainable green spaces.' },
+          { image: 'vision.png', title: 'Vision', text: 'To make plant care feel natural in everyday life, from small homes to growing communities.' }
+        ])
+          <div class="welcome-soft-card is-alive welcome-tilt-soft rounded-[1.45rem] bg-[#113e14]/58 p-7 text-white shadow-[0_14px_45px_rgba(0,0,0,0.16)] backdrop-blur-xl">
+            <div class="flex h-20 w-20 items-center justify-center rounded-3xl bg-white shadow-lg">
+              <img loading="lazy" decoding="async" src="/resources/images/welcome/{{ card.image }}" class="h-12 w-12 object-contain" alt="">
+            </div>
+            <h3 class="mt-6 text-4xl font-black">{{ card.title }}</h3>
+            <p class="mt-4 text-lg font-semibold leading-8 text-white/70">{{ card.text }}</p>
+          </div>
+        @endeach
+      </div>
+    </section>
+
+    <section class="px-4 py-16 sm:px-6 lg:px-10">
+      <div class="mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))]">
+        <div class="welcome-scale mb-10 text-center">
+          <p class="text-sm font-black uppercase tracking-[0.24em] text-[#ebe3a7]">Values</p>
+          <h2 class="mx-auto mt-4 max-w-4xl text-balance text-4xl font-black leading-tight md:text-6xl">
+            A friendlier way to stay close to nature.
+          </h2>
+        </div>
+
+        <div class="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+          @each(value in [
+            { image: 'value1.png', name: 'Empathy' },
+            { image: 'value2.png', name: 'Responsibility' },
+            { image: 'value3.png', name: 'Sustainability' },
+            { image: 'value4.png', name: 'Passion' }
+          ])
+            <div class="welcome-soft-card welcome-hover rounded-[1.35rem] border border-white/12 bg-white/8 p-6 text-center shadow-[0_14px_45px_rgba(0,0,0,0.14)] backdrop-blur-xl">
+              <div class="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-[#ebe3a7] shadow-lg">
+                <img loading="lazy" decoding="async" src="/resources/images/welcome/{{ value.image }}" class="h-11 w-11 object-contain" alt="">
+              </div>
+              <p class="mt-6 text-2xl font-black text-white">{{ value.name }}</p>
+            </div>
+          @endeach
+        </div>
+      </div>
+    </section>
+
+    <section class="px-4 pb-20 pt-8 sm:px-6 lg:px-10">
+      <div class="welcome-scale mx-auto max-w-5xl rounded-[1.5rem] bg-[#113e14]/88 px-7 py-9 text-center text-white shadow-[0_18px_55px_rgba(0,0,0,0.18)] backdrop-blur-xl md:px-10">
+        <p class="text-sm font-black uppercase tracking-[0.24em] text-[#ebe3a7]">Join the green journey</p>
+        <h2 class="mx-auto mt-4 max-w-3xl text-balance text-3xl font-black leading-tight md:text-5xl">
+          Choose to be the Plant's Best Bud.
+        </h2>
+        <p class="mx-auto mt-5 max-w-2xl text-base font-semibold leading-7 text-white/70 md:text-lg">
+          Create your account and start building a healthier relationship with plants, spaces, and everyday care.
+        </p>
+        <div class="mt-7">
+          <a href="/register"
+            class="inline-flex rounded-full bg-[#dca15d] px-8 py-3.5 text-sm font-black text-[#113e14] shadow-lg transition hover:-translate-y-1 hover:bg-[#a8b841]">
+            Get Started
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+@end

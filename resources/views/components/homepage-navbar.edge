@@ -14,7 +14,7 @@
       label: 'Tools',
       icon: '/resources/images/homepagee/scanner.png',
       eyebrow: 'Create and diagnose',
-      activeKeys: ['scanner', 'designer'],
+      activeKeys: ['scanner', 'designer', 'dashboard'],
       children: [
         {
           href: '/scanner',
@@ -27,9 +27,10 @@
           description: 'Plan a garden layout in 2D.',
         },
         {
-          href: '/ornamental',
-          label: 'Catalog',
-          description: 'Explore plant collections and care guides.',
+          href: '/gardener/dashboard',
+          label: 'Gardener dashboard',
+          description: 'Review your work board, schedule, and earnings.',
+          gardenerOnly: true,
         },
       ],
     },
@@ -56,6 +57,11 @@
           label: 'Nurseries',
           description: 'Browse plant sellers and catalogs.',
         },
+        {
+          href: '/ornamental',
+          label: 'Catalog',
+          description: 'Explore plant collections and care guides.',
+        },
       ],
     },
     {
@@ -64,7 +70,7 @@
       label: 'Community',
       icon: '/resources/images/homepagee/comunity.png',
       eyebrow: 'People and activity',
-      activeKeys: ['community', 'favorites', 'notification'],
+      activeKeys: ['community', 'favorites'],
       children: [
         {
           href: '/community',
@@ -80,6 +86,7 @@
           href: '/notification',
           label: 'Notifications',
           description: 'Recent follows and interactions.',
+          phoneOnly: true,
         },
       ],
     },

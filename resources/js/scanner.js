@@ -17,26 +17,35 @@ const historyPanel = document.getElementById('historyPanel')
 const historyToggle = document.getElementById('historyToggle')
 const historyContent = document.getElementById('historyContent')
 const historyMoreToggle = document.getElementById('historyMoreToggle')
-const historyDashboard = document.getElementById('historyDashboard')
-const historyDashboardToggle = document.getElementById('historyDashboardToggle')
-const historyDashboardContent = document.getElementById('historyDashboardContent')
-const historyStats = document.getElementById('historyStats')
-const historyTrendMini = document.getElementById('historyTrendMini')
 const historyModal = document.getElementById('scanHistoryModal')
 const historyModalTitle = document.getElementById('historyModalTitle')
 const historyModalMeta = document.getElementById('historyModalMeta')
 const historyModalBody = document.getElementById('historyModalBody')
 const historyModalClose = document.getElementById('historyModalClose')
 const historyScanDelete = document.getElementById('historyScanDelete')
+const resultPlantImage = document.getElementById('resultPlantImage')
+const mobileHealthStatus = document.getElementById('mobileHealthStatus')
+const mobileConfidence = document.getElementById('mobileConfidence')
+const mobileConfidenceOrbit = document.getElementById('mobileConfidenceOrbit')
 
 let selectedPlantFile = null
+let currentScanData = null
 let scanHistory = readInitialHistory()
 let scannerPlan = readScannerPlan()
 let activeHistoryScanId = null
 let historyPanelExpanded = false
 let historyShowingAll = false
-let historyDashboardExpanded = false
 const HISTORY_PREVIEW_LIMIT = 3
+const mobileScannerQuery = window.matchMedia('(max-width: 767px)')
+
+function syncScannerDisclosures(event) {
+  document.querySelectorAll('[data-scan-disclosure]').forEach((disclosure) => {
+    disclosure.open = event.matches ? disclosure.hasAttribute('data-mobile-open') : true
+  })
+}
+
+syncScannerDisclosures(mobileScannerQuery)
+mobileScannerQuery.addEventListener('change', syncScannerDisclosures)
 
 function readInitialHistory() {
   const node = document.getElementById('scannerHistoryData')
@@ -74,6 +83,7 @@ function setFile(file) {
     preview.src = event.target.result
     preview.classList.remove('hidden')
     dropText.classList.add('hidden')
+    setStatus('Photo ready to analyze')
   }
 
   reader.readAsDataURL(file)
@@ -100,7 +110,9 @@ function setStatus(text) {
 function updateUsage(usage) {
   if (!usage) return
 
-  const label = usage.unlimited ? 'Scanner: unlimited' : `Uses left: ${usage.remaining}/${usage.limit}`
+  const label = usage.unlimited
+    ? 'Scanner: unlimited'
+    : `Uses left: ${usage.remaining}/${usage.limit}`
   const asideLabel = usage.unlimited
     ? 'Unlimited scans this month'
     : `${usage.remaining} of ${usage.limit} scans left this month`
@@ -110,6 +122,28 @@ function updateUsage(usage) {
   })
 
   if (usageText) usageText.textContent = asideLabel
+  document.querySelectorAll('[data-scanner-remaining]').forEach((item) => {
+    item.textContent = usage.unlimited ? 'Unlimited' : String(usage.remaining)
+  })
+  document.querySelectorAll('[data-scanner-remaining-summary]').forEach((item) => {
+    item.textContent = usage.unlimited
+      ? 'Unlimited analyses available'
+      : `${usage.remaining} of ${usage.limit} analyses available`
+  })
+  document.querySelectorAll('[data-scanner-reset]').forEach((item) => {
+    item.textContent = usage.unlimited
+      ? 'No monthly reset needed'
+      : `Restores on ${usage.resetLabel || 'the first day of next month'}`
+  })
+  document.querySelectorAll('[data-scanner-reset-date]').forEach((item) => {
+    item.textContent = usage.resetLabel || 'the first day of next month'
+  })
+  document.querySelectorAll('[data-scanner-progress]').forEach((item) => {
+    const percent = usage.unlimited
+      ? 100
+      : (Number(usage.remaining) / Number(usage.limit || 1)) * 100
+    item.style.width = `${Math.max(0, Math.min(percent, 100))}%`
+  })
 }
 
 function showLimitState(data) {
@@ -361,11 +395,15 @@ function renderSources(plantInfo) {
   }
 
   if (plantInfo?.external_ids?.gbif) {
-    items.push(`<span class="rounded-full bg-white/12 px-4 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#ebe3a7]">GBIF ${escapeHtml(plantInfo.external_ids.gbif)}</span>`)
+    items.push(
+      `<span class="rounded-full bg-white/12 px-4 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#ebe3a7]">GBIF ${escapeHtml(plantInfo.external_ids.gbif)}</span>`
+    )
   }
 
   if (plantInfo?.external_ids?.inaturalist) {
-    items.push(`<span class="rounded-full bg-white/12 px-4 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#ebe3a7]">iNaturalist ${escapeHtml(plantInfo.external_ids.inaturalist)}</span>`)
+    items.push(
+      `<span class="rounded-full bg-white/12 px-4 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#ebe3a7]">iNaturalist ${escapeHtml(plantInfo.external_ids.inaturalist)}</span>`
+    )
   }
 
   target.innerHTML = items.join('')
@@ -381,8 +419,12 @@ function renderMatches(matches) {
       const url = escapeHtml(match.google_search || '#')
       const image = escapeHtml(match.image || '')
       const name = escapeHtml(match.name || 'Unknown')
-      const commonName = match.common_name ? `<span class="block text-xs font-bold text-[#416543]">${escapeHtml(match.common_name)}</span>` : ''
-      const family = match.family ? `<span class="block text-xs font-semibold text-[#416543]/70">${escapeHtml(match.family)}</span>` : ''
+      const commonName = match.common_name
+        ? `<span class="block text-xs font-bold text-[#416543]">${escapeHtml(match.common_name)}</span>`
+        : ''
+      const family = match.family
+        ? `<span class="block text-xs font-semibold text-[#416543]/70">${escapeHtml(match.family)}</span>`
+        : ''
       const confidence = escapeHtml(match.confidence ?? 0)
 
       return `
@@ -532,6 +574,7 @@ function renderPremiumInsights(insights) {
 }
 
 function renderScan(data) {
+  currentScanData = data
   const plantInfo = data.plant_info || {}
   const commonName = data.common_name || plantInfo.common_name || data.species || '-'
   const scientificName = data.scientific_name || plantInfo.scientific_name || data.species || '-'
@@ -553,6 +596,25 @@ function renderScan(data) {
   document.getElementById('scanSummaryText').innerText =
     data.plant_education?.description || `${scientificName} was identified from this image.`
 
+  if (resultPlantImage && preview?.src) {
+    resultPlantImage.src = preview.src
+    resultPlantImage.alt = commonName
+  }
+
+  if (mobileHealthStatus) {
+    mobileHealthStatus.textContent =
+      healthStatus === 'healthy' ? 'Healthy plant' : healthStatus || 'Analyzed'
+  }
+
+  if (mobileConfidence) {
+    mobileConfidence.textContent = `${data.confidence ?? '-'}%`
+  }
+
+  mobileConfidenceOrbit?.style.setProperty(
+    '--scan-confidence',
+    `${clampPercent(data.confidence) * 3.6}deg`
+  )
+
   setStatus(data.health?.status || 'done')
   renderSummaryChips(data)
   renderSources(plantInfo)
@@ -569,6 +631,12 @@ function renderScan(data) {
 
   if (Array.isArray(data.scan_history)) {
     renderHistory(data.scan_history)
+  }
+
+  if (mobileScannerQuery.matches) {
+    document.querySelectorAll('[data-scan-disclosure]').forEach((disclosure) => {
+      disclosure.open = disclosure.hasAttribute('data-mobile-open')
+    })
   }
 }
 
@@ -603,7 +671,6 @@ function renderHistory(scans) {
 
   if (!isPremiumScanner()) {
     historyPanel?.classList.add('hidden')
-    historyDashboard?.classList.add('hidden')
     if (historyList) historyList.innerHTML = ''
     return
   }
@@ -623,13 +690,6 @@ function renderHistory(scans) {
   }
 
   historyEmpty?.classList.toggle('hidden', hasHistory)
-  historyDashboard?.classList.toggle('hidden', !hasHistory)
-  historyDashboardContent?.classList.toggle('hidden', !historyDashboardExpanded)
-  historyDashboardToggle?.setAttribute('aria-expanded', String(historyDashboardExpanded))
-
-  if (historyDashboardToggle) {
-    historyDashboardToggle.textContent = historyDashboardExpanded ? 'Hide dashboard' : 'Show dashboard'
-  }
 
   if (historyList) {
     const visibleScans = historyShowingAll
@@ -667,47 +727,6 @@ function renderHistory(scans) {
       ? 'Show fewer records'
       : `Show ${hiddenCount} more records`
   }
-
-  renderHistoryDashboard()
-}
-
-function renderHistoryDashboard() {
-  if (!historyStats || !historyTrendMini) return
-
-  if (!scanHistory.length || !isPremiumScanner()) {
-    historyStats.innerHTML = ''
-    historyTrendMini.innerHTML = ''
-    return
-  }
-
-  const healthy = scanHistory.filter((scan) => scan.health_status === 'healthy').length
-  const latest = scanHistory[0]
-  const uniquePlants = new Set(scanHistory.map((scan) => scan.scientific_name || scan.species)).size
-  const averageCare = Math.round(
-    scanHistory.reduce((total, scan) => total + Number(scan.metrics?.care_score || 0), 0) /
-      scanHistory.length
-  )
-
-  historyStats.innerHTML = [
-    lightMetricCard('Saved scans', scanHistory.length, `${uniquePlants} tracked plants`),
-    lightMetricCard('Healthy scans', healthy, `${scanHistory.length - healthy} need attention or review`),
-    lightMetricCard('Latest score', latest?.metrics?.care_score ?? averageCare, latest?.metrics?.care_label || 'Current signal'),
-  ].join('')
-
-  historyTrendMini.innerHTML = renderTimelineBars(
-    scanHistory
-      .slice(0, 8)
-      .reverse()
-      .map((scan) => ({
-        label: scan.created_at_label,
-        species: getDisplayName(scan),
-        health_status: scan.health_status,
-        confidence: scan.confidence,
-        care_score: scan.metrics?.care_score || scan.confidence,
-      })),
-    false,
-    { limit: 4 }
-  )
 }
 
 function renderTimelineBars(items, dark = false, options = {}) {
@@ -744,7 +763,9 @@ function renderTimelineBars(items, dark = false, options = {}) {
         hiddenCount
           ? `<div>
               <button type="button" data-expandable-toggle class="mt-1 rounded-full ${
-                dark ? 'bg-white/10 text-[#ebe3a7] hover:bg-white/18' : 'bg-[#113e14] text-[#ebe3a7] hover:bg-[#416543]'
+                dark
+                  ? 'bg-white/10 text-[#ebe3a7] hover:bg-white/18'
+                  : 'bg-[#113e14] text-[#ebe3a7] hover:bg-[#416543]'
               } px-4 py-2 text-xs font-black transition">
                 Show ${hiddenCount} more
               </button>
@@ -860,16 +881,19 @@ async function deleteActiveHistoryScan() {
       body.set('_csrf', csrfToken)
     }
 
-    const response = await fetch(`/scanner/scans/${encodeURIComponent(activeHistoryScanId)}/delete`, {
-      method: 'POST',
-      credentials: 'same-origin',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/x-www-form-urlencoded',
-        ...(csrfToken ? { 'X-CSRF-TOKEN': csrfToken } : {}),
-      },
-      body,
-    })
+    const response = await fetch(
+      `/scanner/scans/${encodeURIComponent(activeHistoryScanId)}/delete`,
+      {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/x-www-form-urlencoded',
+          ...(csrfToken ? { 'X-CSRF-TOKEN': csrfToken } : {}),
+        },
+        body,
+      }
+    )
     const contentType = response.headers.get('content-type') || ''
     const data = contentType.includes('application/json')
       ? await response.json().catch(() => ({}))
@@ -912,7 +936,7 @@ function renderHistoryDetail(scan) {
   const premium = scan.premium_insights
 
   return `
-    <div class="grid gap-4 md:grid-cols-3">
+    <div class="history-detail-metrics grid gap-4 md:grid-cols-3">
       ${lightMetricCard('Care score', scan.metrics?.care_score ?? '-', scan.metrics?.care_label || '')}
       ${lightMetricCard('Health score', scan.metrics?.health_score ?? '-', scan.metrics?.health_score_label || 'Approximate plant condition')}
       ${lightMetricCard('Confidence', `${scan.confidence}%`, scan.reliability_level || '')}
@@ -920,19 +944,19 @@ function renderHistoryDetail(scan) {
 
     ${
       premium && isPremiumScanner()
-        ? `<div class="rounded-2xl bg-[#113e14] p-5 text-white">
+        ? `<div class="history-detail-premium rounded-2xl bg-[#113e14] p-5 text-white">
             <p class="text-xs font-black uppercase tracking-[0.18em] text-[#ebe3a7]">Premium comparison</p>
             <div class="mt-4">${renderBeforeAfter(premium.before_after, true)}</div>
             <div class="mt-5">${renderTimelineBars(premium.timeline || [], true)}</div>
           </div>`
-        : `<div class="rounded-2xl border border-[#416543]/12 bg-white/70 p-5">
+        : `<div class="history-detail-premium rounded-2xl border border-[#416543]/12 bg-white/70 p-5">
             <p class="font-black">Premium detail unavailable</p>
             <p class="mt-2 text-sm font-semibold leading-6 text-[#416543]">This saved scan has the basic record. Premium scans include before/after scoring and timeline intelligence.</p>
           </div>`
     }
 
-    <div class="grid gap-5 lg:grid-cols-[0.95fr_1.05fr]">
-      <div class="rounded-2xl border border-[#416543]/12 bg-white/70 p-5">
+    <div class="history-detail-main grid gap-5 lg:grid-cols-[0.95fr_1.05fr]">
+      <div class="history-detail-card rounded-2xl border border-[#416543]/12 bg-white/70 p-5">
         <p class="font-black">What the scan found</p>
         <p class="mt-2 text-sm font-semibold leading-6 text-[#416543]">${escapeHtml(
           education.description || 'No detailed description was saved for this scan.'
@@ -942,7 +966,7 @@ function renderHistoryDetail(scan) {
         </ul>
       </div>
 
-      <div class="rounded-2xl border border-[#416543]/12 bg-[#ebe3a7]/60 p-5">
+      <div class="history-detail-card rounded-2xl border border-[#416543]/12 bg-[#ebe3a7]/60 p-5">
         <p class="font-black">Action plan</p>
         <p class="mt-2 text-sm font-black text-[#416543]">${escapeHtml(scan.action_plan?.priority || 'Review scan')}</p>
         <p class="mt-1 text-xs font-bold uppercase tracking-[0.12em] text-[#416543]/70">${escapeHtml(
@@ -954,7 +978,7 @@ function renderHistoryDetail(scan) {
       </div>
     </div>
 
-    <div class="rounded-2xl border border-[#416543]/12 bg-white/70 p-5">
+    <div class="history-detail-matches rounded-2xl border border-[#416543]/12 bg-white/70 p-5">
       <p class="font-black">Top matches</p>
       <div class="mt-4 grid gap-3 md:grid-cols-3">
         ${arrayOf(scan.matches)
@@ -980,7 +1004,9 @@ if (input) {
   initPhoneUpload({ input, onFile: setFile, tool: 'scanner' })
 }
 
-document.getElementById('previewBox')?.addEventListener('dragover', (event) => event.preventDefault())
+document
+  .getElementById('previewBox')
+  ?.addEventListener('dragover', (event) => event.preventDefault())
 document.getElementById('previewBox')?.addEventListener('drop', (event) => {
   event.preventDefault()
   setFile(event.dataTransfer.files[0])
@@ -1022,6 +1048,12 @@ scanBtn?.addEventListener('click', async () => {
     setLoading(false)
     resultsBox.classList.remove('hidden')
     renderScan(data)
+    if (window.matchMedia('(max-width: 767px)').matches) {
+      document.querySelector('.phone-scanner-results')?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
+    }
   } catch (error) {
     setLoading(false)
     emptyState.classList.remove('hidden')
@@ -1037,10 +1069,6 @@ historyToggle?.addEventListener('click', () => {
 })
 historyMoreToggle?.addEventListener('click', () => {
   historyShowingAll = !historyShowingAll
-  renderHistory(scanHistory)
-})
-historyDashboardToggle?.addEventListener('click', () => {
-  historyDashboardExpanded = !historyDashboardExpanded
   renderHistory(scanHistory)
 })
 historyModal?.addEventListener('click', (event) => {

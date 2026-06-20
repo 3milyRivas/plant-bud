@@ -9,6 +9,93 @@ import { DateTime } from 'luxon'
 test.group('Service request workflow', (group) => {
   group.each.setup(() => testUtils.db().withGlobalTransaction())
 
+  test('each participant can remove a completed request from only their own list', async ({
+    browserContext,
+    visit,
+    assert,
+  }) => {
+    const client = await User.create({
+      first_name: 'Clean',
+      last_name: 'Client',
+      username: 'clean.request.client',
+      email: 'clean.request.client@example.com',
+      password: 'PlantBud123!',
+      role: 'client',
+    })
+    await AccountProfile.create({
+      userId: client.id,
+      displayName: 'Clean Client',
+      subscriptionPlan: 'free',
+      rewardPoints: 0,
+      scannerMonthlyLimit: 5,
+    })
+    const gardenerUser = await User.create({
+      first_name: 'Clean',
+      last_name: 'Gardener',
+      username: 'clean.request.gardener',
+      email: 'clean.request.gardener@example.com',
+      password: 'PlantBud123!',
+      role: 'gardener',
+    })
+    await AccountProfile.create({
+      userId: gardenerUser.id,
+      displayName: 'Clean Gardener',
+      subscriptionPlan: 'free',
+      rewardPoints: 0,
+      scannerMonthlyLimit: 5,
+    })
+    const gardener = await GardenerProfile.create({
+      userId: gardenerUser.id,
+      headline: 'Completed service specialist',
+      serviceArea: 'San Salvador',
+      paymentMethods: 'Cash',
+      isAvailable: true,
+      experienceYears: 4,
+      ratingAverage: 5,
+      ratingCount: 1,
+    })
+    const completedAt = DateTime.now()
+    const serviceRequest = await ServiceRequest.create({
+      clientUserId: client.id,
+      gardenerProfileId: gardener.id,
+      serviceType: 'maintenance',
+      status: 'completed',
+      notes: 'Completed request ready to be removed from each personal list.',
+      budget: 50,
+      paymentStatus: 'released',
+      paymentMethod: 'cash',
+      finalAmount: 50,
+      completedAt,
+      verifiedAt: completedAt,
+      clientConfirmedAt: completedAt,
+      gardenerConfirmedAt: completedAt,
+      rewardPointsAwarded: 0,
+    })
+
+    await browserContext.loginAs(client)
+    const clientPage = await visit('/requested')
+    await clientPage
+      .getByRole('button', { name: 'Remove completed request from list' })
+      .click()
+    await clientPage.waitForURL('**/requested')
+    await clientPage.getByRole('heading', { name: 'No requests yet' }).waitFor()
+
+    await serviceRequest.refresh()
+    assert.isNotNull(serviceRequest.clientHiddenAt)
+    assert.isNull(serviceRequest.gardenerHiddenAt)
+
+    await browserContext.loginAs(gardenerUser)
+    const gardenerPage = await visit('/requested')
+    await gardenerPage
+      .getByRole('button', { name: 'Remove completed request from list' })
+      .click()
+    await gardenerPage.waitForURL('**/requested')
+    await gardenerPage.getByRole('heading', { name: 'Your service inbox is clear' }).waitFor()
+
+    await serviceRequest.refresh()
+    assert.isNotNull(serviceRequest.gardenerHiddenAt)
+  })
+
   test('clients can redeem up to 20 percent and cancelled requests return the points', async ({
     browserContext,
     visit,
@@ -68,7 +155,11 @@ test.group('Service request workflow', (group) => {
     await page
       .locator('textarea[name="notes"]')
       .fill('Complete garden maintenance requested with a points discount.')
-    await page.locator('input[name="paypal_email"]').fill('points.client@example.com')
+    assert.equal(
+      await page.locator('input[name="paypal_email"]').inputValue(),
+      'testplantbud@gmail.com'
+    )
+    assert.isFalse(await page.locator('input[name="paypal_email"]').isEditable())
     await page.locator('input[name="intent_confirmed"]').check()
 
     const discountSelect = page.locator('select[name="discount_steps"]')
@@ -86,16 +177,20 @@ test.group('Service request workflow', (group) => {
     await page.getByRole('button', { name: 'Protect payment & send request' }).click()
     await page.waitForURL(`**/request/${gardener.id}`)
     assert.equal(
-      await ServiceRequest.query().where('clientUserId', clientUser.id).count('* as total').then(
-        (rows) => Number(rows[0].$extras.total)
-      ),
+      await ServiceRequest.query()
+        .where('clientUserId', clientUser.id)
+        .count('* as total')
+        .then((rows) => Number(rows[0].$extras.total)),
       0
     )
     await clientProfile.refresh()
     assert.equal(clientProfile.rewardPoints, 1200)
 
     await page.locator('input[name="payment_method"][value="paypal"]').check()
-    await page.locator('input[name="paypal_email"]').fill('points.client@example.com')
+    assert.equal(
+      await page.locator('input[name="paypal_email"]').inputValue(),
+      'testplantbud@gmail.com'
+    )
     await page.locator('select[name="discount_steps"]').selectOption('2')
     await page.locator('input[name="location"]').evaluate((input) => {
       input.setCustomValidity('')
@@ -289,6 +384,7 @@ test.group('Service request workflow', (group) => {
   })
 
   test('unavailable gardener profiles remain visible in the catalog and search', async ({
+    browserContext,
     visit,
   }) => {
     const gardenerUser = await User.create({
@@ -316,8 +412,13 @@ test.group('Service request workflow', (group) => {
       ratingCount: 0,
     })
 
+    await browserContext.loginAs(gardenerUser)
     const page = await visit('/maintenance')
-    await page.getByText('Hidden Gardener', { exact: true }).first().waitFor()
+    await page
+      .locator('#gardeners')
+      .getByText('Hidden Gardener', { exact: true })
+      .first()
+      .waitFor()
     await page.locator('[data-gardener-search-input]').fill('hidden.gardener')
     await page
       .locator('[data-gardener-search-results]')
@@ -370,9 +471,7 @@ test.group('Service request workflow', (group) => {
 
     await browserContext.loginAs(clientUser)
     const publicProfilePage = await visit(`/users/${gardenerUser.username}`)
-    await publicProfilePage
-      .getByRole('link', { name: 'Request service' })
-      .waitFor()
+    await publicProfilePage.getByRole('link', { name: 'Request service' }).waitFor()
     assert.equal(
       await publicProfilePage.getByRole('link', { name: 'Request service' }).getAttribute('href'),
       `/request/${gardener.id}`
@@ -399,10 +498,12 @@ test.group('Service request workflow', (group) => {
     await requestPage
       .locator('textarea[name="notes"]')
       .fill('Prune and refresh the balcony plants.')
-    await requestPage.locator('input[name="cardholder_name"]').fill('Premium Client')
-    await requestPage.locator('input[name="card_number"]').fill('1234567890123456')
-    await requestPage.locator('input[name="card_expiry"]').fill('1230')
-    await requestPage.locator('input[name="card_cvc"]').fill('123')
+    assert.equal(
+      await requestPage.locator('input[name="card_number"]').inputValue(),
+      '0000 0000 0000 0000'
+    )
+    assert.equal(await requestPage.locator('input[name="card_expiry"]').inputValue(), '03/67')
+    assert.equal(await requestPage.locator('input[name="card_cvc"]').inputValue(), '123')
     await requestPage.locator('select[name="discount_steps"]').selectOption('1')
     await requestPage.locator('input[name="intent_confirmed"]').check()
     await requestPage.getByRole('button', { name: 'Protect payment & send request' }).click()
@@ -419,8 +520,8 @@ test.group('Service request workflow', (group) => {
     assert.equal(serviceRequest.pointsRedeemed, 500)
     assert.equal(serviceRequest.discountPercent, 10)
     assert.equal(Number(serviceRequest.discountAmount), 15)
-    assert.equal(serviceRequest.paymentBrand, 'Card')
-    assert.equal(serviceRequest.paymentLastFour, '3456')
+    assert.equal(serviceRequest.paymentBrand, 'Demo Card')
+    assert.equal(serviceRequest.paymentLastFour, '0000')
     assert.equal(Number(serviceRequest.latitude), 13.701852)
     assert.equal(Number(serviceRequest.longitude), -89.224227)
 
@@ -573,10 +674,10 @@ test.group('Service request workflow', (group) => {
     await page
       .locator('textarea[name="notes"]')
       .fill('Trim the garden and inspect the irrigation system.')
-    await page.locator('input[name="cardholder_name"]').fill('Strict Client')
-    await page.locator('input[name="card_number"]').fill('4242424242424242')
-    await page.locator('input[name="card_expiry"]').fill('1230')
-    await page.locator('input[name="card_cvc"]').fill('123')
+    assert.equal(
+      await page.locator('input[name="card_number"]').inputValue(),
+      '0000 0000 0000 0000'
+    )
     await page.locator('input[name="intent_confirmed"]').check()
     await page.locator('input[name="scheduled_for"]').evaluate((dateInput) => {
       dateInput.disabled = true

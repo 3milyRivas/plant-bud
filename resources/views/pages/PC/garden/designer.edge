@@ -1,0 +1,349 @@
+@layout()
+@slot('title')
+<title>{{ project.name }} - Plant Bud Designer</title>
+@endslot
+
+<div class="relative min-h-screen overflow-hidden" data-designer-project-id="{{ project.id }}">
+    @!component('components/app-navbar', {
+        section: '2D Garden designer',
+        active: 'designer',
+        maxWidth: 'max-w-[min(1500px,calc(100vw-2rem))]',
+        planLabel: subscription?.planLabel ?? 'Premium',
+    })
+    <input id="upload" type="file" accept="image/*" class="hidden">
+
+    <main class="relative z-10 pt-10 pb-10 px-4 sm:px-6 lg:px-10 select-none">
+        @!component('components/tool-action-panel', { mode: 'designer' })
+
+        <div class="w-full max-w-[min(90rem,calc(100vw-2rem))] mx-auto grid grid-cols-1 xl:grid-cols-[320px_1fr] gap-8 min-h-[calc(100vh-11rem)]">
+
+            <aside class="relative min-w-0">
+                <div class="absolute -inset-2 bg-white/10 blur-2xl rounded-[2.5rem] opacity-70"></div>
+
+                <div
+                    class="relative h-full bg-white/12 backdrop-blur-2xl border border-white/18 rounded-[2.5rem] p-6 shadow-[0_24px_70px_rgba(0,0,0,0.16)] overflow-hidden">
+                    <div class="absolute inset-x-6 top-0 h-1 rounded-b-full bg-[#a8b841]/60"></div>
+
+                    <div class="relative space-y-8">
+
+                        <section class="designer-asset-search-panel">
+                            <p class="text-xs font-black uppercase tracking-[0.22em] text-[#ebe3a7]">Step 1</p>
+                            <h2 class="mt-2 text-white text-xl font-black">Find design assets</h2>
+                            <div class="w-14 h-1 bg-[#dca15d] rounded-full mt-3 mb-5"></div>
+
+                            <div class="designer-asset-search-field relative">
+                                <input id="searchInput" type="text" placeholder="Search plants or furniture..."
+                                    class="w-full bg-white/10 border border-white/14 rounded-full pl-5 pr-24 py-3 text-sm text-white placeholder:text-white/48 font-semibold outline-none focus:ring-2 focus:ring-[#a8b841]/50">
+
+                                <button type="button" onclick="searchPexels()"
+                                    class="absolute right-1.5 top-1/2 -translate-y-1/2 bg-[#dca15d] text-[#113e14] font-black px-4 py-2 text-xs rounded-full hover:bg-[#ebe3a7] transition-all duration-300">
+                                    Search
+                                </button>
+                            </div>
+
+                            <p class="text-white/60 text-sm font-semibold leading-relaxed mt-3">
+                                Use specific names like “garden table” or “palm”. Clean backgrounds are prioritized automatically.
+                            </p>
+                            <div class="designer-asset-search-hints" aria-label="Search suggestions">
+                                <button type="button" data-designer-search-suggestion="garden table">Garden table</button>
+                                <button type="button" data-designer-search-suggestion="outdoor chair">Outdoor chair</button>
+                                <button type="button" data-designer-search-suggestion="palm plant">Palm</button>
+                            </div>
+                        </section>
+
+                        <section>
+                            <p class="text-xs font-black uppercase tracking-[0.22em] text-[#ebe3a7]">Step 2</p>
+                            <h2 class="mt-2 text-white text-xl font-black">Build your inventory</h2>
+                            <div class="w-14 h-1 bg-[#dca15d] rounded-full mt-3 mb-5"></div>
+
+                            <div id="inventory"
+                                class="grid grid-cols-1 gap-3 sm:grid-cols-2 max-h-[340px] overflow-y-auto pr-1 select-none">
+
+                                <div class="col-span-1 sm:col-span-2 text-center py-8 rounded-3xl bg-white/10 border border-white/14">
+                                    <p class="text-white/55 text-sm font-semibold">
+                                        No assets yet. Search above or upload your own image.
+                                    </p>
+                                </div>
+
+                            </div>
+                        </section>
+
+                        <section>
+                            <p class="text-xs font-black uppercase tracking-[0.22em] text-[#ebe3a7]">Step 3</p>
+                            <h2 class="mt-2 text-white text-xl font-black">Edit selected item</h2>
+                            <div class="w-14 h-1 bg-[#dca15d] rounded-full mt-3 mb-5"></div>
+
+                            <div class="designer-tool-groups">
+                                <div class="designer-tool-group designer-tool-group--wide">
+                                    @each(tool in [
+                                        { action: 'clearSelection()', icon: 'deselect.png', label: 'Deselect item' },
+                                        { action: 'duplicateSelected()', icon: 'copy.png', label: 'Copy item' },
+                                        { action: 'deleteSelected()', icon: 'delete.png', label: 'Delete item' },
+                                        { action: 'clearAll()', icon: 'clear.png', label: 'Clear workspace' }
+                                    ])
+                                        <button type="button" onclick="{{ tool.action }}" class="designer-tool-button"
+                                            aria-label="{{ tool.label }}" title="{{ tool.label }}">
+                                            <img src="/resources/images/designer-tools/{{ tool.icon }}" alt="">
+                                        </button>
+                                    @end
+                                </div>
+
+                                <div class="designer-tool-row">
+                                    <div class="designer-tool-group">
+                                        @each(tool in [
+                                            { action: 'undo()', icon: 'undo.png', label: 'Undo' },
+                                            { action: 'redo()', icon: 'redo.png', label: 'Redo' }
+                                        ])
+                                            <button type="button" onclick="{{ tool.action }}" class="designer-tool-button"
+                                                aria-label="{{ tool.label }}" title="{{ tool.label }}">
+                                                <img src="/resources/images/designer-tools/{{ tool.icon }}" alt="">
+                                            </button>
+                                        @end
+                                    </div>
+
+                                    <div class="designer-tool-group">
+                                        @each(tool in [
+                                            { action: 'bringFront()', icon: 'front.png', label: 'Bring to front' },
+                                            { action: 'sendBack()', icon: 'back.png', label: 'Send to back' }
+                                        ])
+                                            <button type="button" onclick="{{ tool.action }}" class="designer-tool-button"
+                                                aria-label="{{ tool.label }}" title="{{ tool.label }}">
+                                                <img src="/resources/images/designer-tools/{{ tool.icon }}" alt="">
+                                            </button>
+                                        @end
+                                    </div>
+                                </div>
+
+                                <div class="designer-tool-group designer-tool-group--wide">
+                                    @each(tool in [
+                                        { action: 'rotateSelected()', icon: 'rotate.png', label: 'Rotate item' },
+                                        { action: 'flipSelected()', icon: 'flip-x.png', label: 'Flip horizontally' },
+                                        { action: 'flipYSelected()', icon: 'flip-y.png', label: 'Flip vertically' },
+                                        { action: 'toggleLock()', icon: 'lock.png', label: 'Lock or unlock item' }
+                                    ])
+                                        <button type="button" onclick="{{ tool.action }}" class="designer-tool-button"
+                                            aria-label="{{ tool.label }}" title="{{ tool.label }}">
+                                            <img src="/resources/images/designer-tools/{{ tool.icon }}" alt="">
+                                        </button>
+                                    @end
+                                </div>
+                            </div>
+
+                            <div class="designer-precision-controls" data-designer-precision-controls>
+                                <label>
+                                    <span>Size</span>
+                                    <input type="range" min="40" max="420" step="2" value="110"
+                                        data-designer-size aria-label="Selected item size">
+                                    <output data-designer-size-value>110 px</output>
+                                </label>
+                                <label>
+                                    <span>Rotation</span>
+                                    <input type="range" min="-180" max="180" step="1" value="0"
+                                        data-designer-rotation aria-label="Selected item rotation">
+                                    <output data-designer-rotation-value>0 deg</output>
+                                </label>
+                                <label>
+                                    <span>Opacity</span>
+                                    <input type="range" min="10" max="100" step="5" value="100"
+                                        data-designer-opacity aria-label="Selected item opacity">
+                                    <output data-designer-opacity-value>100%</output>
+                                </label>
+                                <div class="designer-align-actions" aria-label="Align selected item">
+                                    <button type="button" data-designer-align="horizontal">Center horizontally</button>
+                                    <button type="button" data-designer-align="vertical">Center vertically</button>
+                                </div>
+                            </div>
+
+                            <div class="hidden">
+
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button onclick="clearSelection()"
+                                        class="bg-white/10 hover:bg-white/14 text-white py-3 rounded-xl font-bold transition">⊙
+                                        Deselect</button>
+                                    <button onclick="clearAll()"
+                                        class="bg-white/10 hover:bg-white/14 text-white py-3 rounded-xl font-bold transition">🧹
+                                        Clear</button>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button onclick="duplicateSelected()"
+                                        class="bg-white/10 hover:bg-white/14 text-white py-3 rounded-xl font-bold transition">📄
+                                        Copy</button>
+                                    <button onclick="deleteSelected()"
+                                        class="bg-white/10 hover:bg-white/14 text-white py-3 rounded-xl font-bold transition">🗑
+                                        Delete</button>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button onclick="undo()"
+                                        class="bg-[#dca15d] text-[#113e14] font-black py-3 rounded-xl hover:bg-[#ebe3a7] transition">↶ Undo</button>
+                                    <button onclick="redo()"
+                                        class="bg-[#dca15d] text-[#113e14] font-black py-3 rounded-xl hover:bg-[#ebe3a7] transition">↷ Redo</button>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-2 p-2 rounded-xl bg-white/8 border border-white/10">
+                                    <button onclick="rotateSelected()"
+                                        class="bg-[#113e14]/26 hover:bg-[#113e14]/36 text-white py-3 rounded-xl font-bold transition">⟳
+                                        Rotate</button>
+                                    <button onclick="flipSelected()"
+                                        class="bg-[#113e14]/26 hover:bg-[#113e14]/36 text-white py-3 rounded-xl font-bold transition">⇋ Flip
+                                        X</button>
+                                    <button onclick="flipYSelected()"
+                                        class="bg-[#113e14]/26 hover:bg-[#113e14]/36 text-white py-3 rounded-xl font-bold transition">⇅ Flip
+                                        Y</button>
+                                    <button onclick="toggleLock()"
+                                        class="bg-[#113e14]/26 hover:bg-[#113e14]/36 text-white py-3 rounded-xl font-bold transition">🔒
+                                        Lock</button>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-2 p-2 rounded-xl bg-white/8 border border-white/10">
+                                    <button onclick="bringFront()"
+                                        class="bg-[#113e14]/26 hover:bg-[#113e14]/36 text-white py-3 rounded-xl font-bold transition">⬆
+                                        Front</button>
+                                    <button onclick="sendBack()"
+                                        class="bg-[#113e14]/26 hover:bg-[#113e14]/36 text-white py-3 rounded-xl font-bold transition">⬇ Back</button>
+                                </div>
+
+                            </div>
+                        </section>
+
+                        <section class="designer-layers-section">
+                            <div class="designer-section-heading">
+                                <div>
+                                    <p class="text-xs font-black uppercase tracking-[0.22em] text-[#ebe3a7]">Workspace</p>
+                                    <h2 class="mt-2 text-white text-xl font-black">Layers</h2>
+                                </div>
+                                <span class="designer-layer-count" data-designer-layer-count>0</span>
+                            </div>
+                            <p class="designer-section-copy">Select, hide or lock every object without hunting for it on the canvas.</p>
+                            <div id="designerLayers" class="designer-layers-list" aria-label="Design layers"></div>
+                        </section>
+
+                    </div>
+                </div>
+            </aside>
+
+            <section class="relative">
+                <div class="absolute -inset-2 bg-white/10 blur-2xl rounded-[3rem] opacity-70"></div>
+
+                <div
+                    class="relative h-full bg-white/92 backdrop-blur-2xl border border-white/55 rounded-[3rem] p-5 text-[#113e14] shadow-[0_24px_70px_rgba(17,62,20,0.18)] overflow-hidden lg:p-7">
+                    <div class="absolute right-0 top-0 h-full w-1 bg-[#dca15d]/55"></div>
+                    <div class="absolute left-0 top-0 h-28 w-full bg-gradient-to-b from-[#ebe3a7]/34 to-transparent pointer-events-none"></div>
+
+                    <div class="relative flex flex-col h-full">
+
+                        <div class="flex items-center justify-between gap-4 mb-4">
+                            <div>
+                                <p class="text-sm font-black uppercase tracking-[0.22em] text-[#416543]">Plant Bud 2D Studio</p>
+                                <h2 class="mt-2 text-3xl md:text-4xl font-black text-[#113e14]">
+                                    Garden Workspace
+                                </h2>
+                                <p class="text-[#416543] font-semibold mt-2">
+                                    Upload a base photo, add inventory items, then drag, resize, rotate, and layer them.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="designer-command-bar" data-designer-command-bar>
+                            <a href="/designer" class="designer-projects-back">Projects</a>
+                            <div class="designer-project-identity">
+                                <label for="designerProjectName">Project</label>
+                                <input id="designerProjectName" type="text" value="{{ project.name }}" maxlength="80"
+                                    aria-label="Designer project name">
+                                <span data-designer-save-status>Saved locally</span>
+                            </div>
+                            <div class="designer-command-actions">
+                                <button type="button" data-designer-compare aria-pressed="false">Original</button>
+                                <button type="button" data-designer-grid aria-pressed="false">Grid</button>
+                                <div class="designer-zoom-control" aria-label="Canvas zoom">
+                                    <button type="button" data-designer-zoom-out aria-label="Zoom out">-</button>
+                                    <span data-designer-zoom-label>100%</span>
+                                    <button type="button" data-designer-zoom-in aria-label="Zoom in">+</button>
+                                </div>
+                                <button type="button" data-designer-reset-view>Fit</button>
+                            </div>
+                        </div>
+
+                        <div
+                            data-designer-workspace-shell
+                            class="flex-1 min-h-[420px] sm:min-h-[520px] md:min-h-[600px] rounded-[2.5rem] bg-[#416543]/8 border border-[#416543]/12 p-4 lg:p-6 overflow-auto">
+
+                            <div id="workspace" class="w-full h-full flex items-center justify-center">
+
+                                <div class="canvas-placeholder">
+
+                                    <div id="canvas-container"
+                                        class="relative isolate overflow-hidden inline-flex items-center justify-center bg-white border border-[#416543]/14 rounded-[2rem] shadow-[0_18px_50px_rgba(17,62,20,0.16)] select-none">
+
+                                        <img id="baseImage" src="{{ project.mediaUrl || '' }}"
+                                            class="relative z-0 block max-w-full max-h-[75vh] w-auto h-auto object-contain pointer-events-none select-none"
+                                            alt="">
+
+                                        <div id="canvas-placeholder"
+                                            class="absolute inset-0 flex items-center justify-center text-center p-10 pointer-events-none z-20">
+
+                                            <div>
+                                                <img src="/resources/images/essential/logo.png" alt="Plant Bud" class="mx-auto mb-5 h-16 w-16 rounded-full object-contain">
+                                                <h3 class="text-[#113e14] text-3xl font-black">
+                                                    Upload a Garden Photo
+                                                </h3>
+                                                <p class="text-[#416543] font-semibold mt-3 max-w-md">
+                                                    Use Upload image above first. Then search assets and place them on top of the photo.
+                                                </p>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <div id="searchModal" class="hidden fixed inset-0 z-[1000000]">
+        <div class="absolute inset-0 bg-black/75 backdrop-blur-md" onclick="closeSearchModal()"></div>
+
+        <div class="absolute inset-0 flex items-center justify-center p-4">
+
+            <div
+                class="designer-search-dialog relative w-full max-w-[min(90rem,calc(100vw-2rem))] max-h-[90vh] overflow-hidden">
+
+                <div class="relative flex items-center justify-between px-8 py-6 border-b border-[#ebe3a7]/12">
+                    <div>
+                        <p>Plant Bud Asset Finder</p>
+                        <h3 class="text-2xl font-black">Search Results</h3>
+                        <small data-designer-search-count>Choose an object to prepare its cutout</small>
+                    </div>
+                    <button onclick="closeSearchModal()"
+                        class="w-10 h-10 rounded-full bg-[#ebe3a7]/10 text-white hover:bg-[#ebe3a7]/16">×</button>
+                </div>
+
+                <div id="searchResults"
+                    class="designer-search-results overflow-y-auto max-h-[calc(90vh-8rem)]">
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="loadingText"
+        class="fixed bottom-6 left-1/2 -translate-x-1/2 hidden z-50 bg-[#113e14]/86 backdrop-blur-2xl border border-[#ebe3a7]/14 rounded-full px-6 py-4 text-[#ebe3a7] font-bold">
+        Processing...
+    </div>
+
+</div>
+@!component('components/phone-upload-modal')
+<div class="hidden" data-designer-csrf>{{ csrfField() }}</div>
+<script type="application/json" id="designerProjectData">{{{ projectJson }}}</script>
+@vite(['resources/js/garden.js'])
+@end

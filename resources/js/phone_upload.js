@@ -1,9 +1,14 @@
 let activePoll = null
+let activeCamera = null
+let cameraPreviewUrl = null
+let cameraStream = null
+let cameraFileToken = 0
 
 export function initPhoneUpload({ input, onFile, tool = 'plant-bud' }) {
   if (!input || typeof onFile !== 'function') return
 
   bindUploadMenus()
+  bindCameraModal()
 
   document.querySelectorAll(`[data-phone-upload-trigger][data-phone-upload-input="#${input.id}"]`).forEach((button) => {
     if (button.dataset.phoneUploadReady === 'true') return
@@ -19,6 +24,422 @@ export function initPhoneUpload({ input, onFile, tool = 'plant-bud' }) {
       })
     })
   })
+
+  document.querySelectorAll(`[data-phone-camera-trigger][data-phone-upload-input="#${input.id}"]`).forEach((button) => {
+    if (button.dataset.phoneCameraReady === 'true') return
+
+    button.dataset.phoneCameraReady = 'true'
+    button.addEventListener('click', () => {
+      closeUploadMenus()
+      openDeviceCamera({
+        input,
+        onFile,
+        toolLabel: button.dataset.phoneUploadToolLabel || 'Plant Bud',
+      })
+    })
+  })
+}
+
+function bindCameraModal() {
+  const modal = document.querySelector('[data-phone-camera-modal]')
+
+  if (!modal || modal.dataset.phoneCameraReady === 'true') return
+
+  const cameraInput = modal.querySelector('[data-phone-camera-input]')
+  const capture = modal.querySelector('[data-phone-camera-capture]')
+  const retake = modal.querySelector('[data-phone-camera-retake]')
+  const usePhoto = modal.querySelector('[data-phone-camera-use]')
+
+  modal.dataset.phoneCameraReady = 'true'
+  cameraInput?.addEventListener('change', async () => {
+    const file = cameraInput.files?.[0]
+
+    if (!file) return
+
+    const token = ++cameraFileToken
+    setCameraStatus('Preparing photo...')
+    const preparedFile = await preparePhoneImage(file)
+
+    if (token === cameraFileToken && activeCamera) {
+      reviewCameraPhoto(preparedFile, { previewSafe: preparedFile !== file })
+    }
+  })
+  capture?.addEventListener('click', captureCameraPhoto)
+  retake?.addEventListener('click', startCameraPreview)
+  usePhoto?.addEventListener('click', confirmCameraPhoto)
+}
+
+function openDeviceCamera({ input, onFile, toolLabel }) {
+  activeCamera = { input, onFile, toolLabel, file: null }
+  openCameraModal()
+  startCameraPreview()
+}
+
+function openCameraModal() {
+  const modal = document.querySelector('[data-phone-camera-modal]')
+  const label = modal?.querySelector('[data-phone-camera-tool-label]')
+
+  if (!modal || !activeCamera) return
+
+  if (label) label.textContent = activeCamera.toolLabel
+  modal.classList.remove('hidden')
+  modal.classList.add('flex')
+  modal.setAttribute('aria-hidden', 'false')
+  document.documentElement.classList.add('phone-camera-is-open')
+  document.body.classList.add('overflow-hidden')
+}
+
+async function startCameraPreview() {
+  const modal = document.querySelector('[data-phone-camera-modal]')
+  const video = modal?.querySelector('[data-phone-camera-video]')
+  const preview = modal?.querySelector('[data-phone-camera-preview]')
+  const status = modal?.querySelector('[data-phone-camera-status]')
+  const title = modal?.querySelector('[data-phone-camera-title]')
+  const help = modal?.querySelector('[data-phone-camera-help]')
+  const reviewHelp = modal?.querySelector('[data-phone-camera-review-help]')
+  const liveActions = modal?.querySelector('[data-phone-camera-live-actions]')
+  const reviewActions = modal?.querySelector('[data-phone-camera-review-actions]')
+
+  if (!modal || !video || !activeCamera) return
+
+  stopCameraStream()
+  releaseCameraPreview()
+  activeCamera.file = null
+  activeCamera.previewSafe = false
+  preview?.classList.add('hidden')
+  preview?.removeAttribute('src')
+  video.classList.add('hidden')
+  status?.classList.remove('hidden')
+  if (status) status.textContent = 'Starting camera...'
+  if (title) title.textContent = 'Take a photo'
+  help?.classList.remove('hidden')
+  reviewHelp?.classList.add('hidden')
+  liveActions?.classList.remove('hidden')
+  reviewActions?.classList.add('hidden')
+  reviewActions?.classList.remove('grid')
+
+  if (!navigator.mediaDevices?.getUserMedia) {
+    launchCameraInput()
+    return
+  }
+
+  try {
+    cameraStream = await openRearCamera()
+    video.srcObject = cameraStream
+    await video.play()
+    status?.classList.add('hidden')
+    video.classList.remove('hidden')
+  } catch {
+    launchCameraInput()
+  }
+}
+
+async function openRearCamera() {
+  const baseVideo = {
+    width: { ideal: 1920 },
+    height: { ideal: 1080 },
+  }
+
+  try {
+    return await navigator.mediaDevices.getUserMedia({
+      video: {
+        ...baseVideo,
+        facingMode: { exact: 'environment' },
+      },
+      audio: false,
+    })
+  } catch (error) {
+    if (error?.name !== 'OverconstrainedError' && error?.name !== 'NotFoundError') throw error
+  }
+
+  return navigator.mediaDevices.getUserMedia({
+    video: {
+      ...baseVideo,
+      facingMode: { ideal: 'environment' },
+    },
+    audio: false,
+  })
+}
+
+function captureCameraPhoto() {
+  const modal = document.querySelector('[data-phone-camera-modal]')
+  const video = modal?.querySelector('[data-phone-camera-video]')
+  const canvas = modal?.querySelector('[data-phone-camera-canvas]')
+
+  if (!video || !canvas || !video.videoWidth || !video.videoHeight) return
+
+  const maxSide = 2048
+  const scale = Math.min(1, maxSide / Math.max(video.videoWidth, video.videoHeight))
+  canvas.width = Math.max(1, Math.round(video.videoWidth * scale))
+  canvas.height = Math.max(1, Math.round(video.videoHeight * scale))
+  canvas.getContext('2d')?.drawImage(video, 0, 0, canvas.width, canvas.height)
+  canvas.toBlob(
+    (blob) => {
+      if (!blob) return
+      reviewCameraPhoto(
+        new File([blob], `plant-bud-camera-${Date.now()}.jpg`, { type: 'image/jpeg' }),
+        { previewSafe: true }
+      )
+    },
+    'image/jpeg',
+    0.9
+  )
+}
+
+function launchCameraInput() {
+  const cameraInput = document.querySelector('[data-phone-camera-input]')
+
+  if (!cameraInput || !activeCamera) return
+
+  cameraInput.value = ''
+  cameraInput.click()
+}
+
+function reviewCameraPhoto(file, { previewSafe = false } = {}) {
+  const modal = document.querySelector('[data-phone-camera-modal]')
+  const video = modal?.querySelector('[data-phone-camera-video]')
+  const preview = modal?.querySelector('[data-phone-camera-preview]')
+  const status = modal?.querySelector('[data-phone-camera-status]')
+  const title = modal?.querySelector('[data-phone-camera-title]')
+  const help = modal?.querySelector('[data-phone-camera-help]')
+  const reviewHelp = modal?.querySelector('[data-phone-camera-review-help]')
+  const liveActions = modal?.querySelector('[data-phone-camera-live-actions]')
+  const reviewActions = modal?.querySelector('[data-phone-camera-review-actions]')
+
+  if (!modal || !preview || !activeCamera) return
+
+  stopCameraStream()
+  releaseCameraPreview()
+  activeCamera.file = file
+  activeCamera.previewSafe = previewSafe
+  if (previewSafe) {
+    cameraPreviewUrl = URL.createObjectURL(file)
+    preview.src = cameraPreviewUrl
+    preview.classList.remove('hidden')
+  } else {
+    preview.removeAttribute('src')
+    preview.classList.add('hidden')
+    if (status) status.textContent = 'Photo ready'
+    status?.classList.remove('hidden')
+  }
+  video?.classList.add('hidden')
+  if (previewSafe) status?.classList.add('hidden')
+  if (title) title.textContent = 'Review your photo'
+  help?.classList.add('hidden')
+  reviewHelp?.classList.remove('hidden')
+  liveActions?.classList.add('hidden')
+  reviewActions?.classList.remove('hidden')
+  reviewActions?.classList.add('grid')
+  modal.classList.remove('hidden')
+  modal.classList.add('flex')
+  modal.setAttribute('aria-hidden', 'false')
+  document.body.classList.add('overflow-hidden')
+}
+
+async function confirmCameraPhoto() {
+  if (!activeCamera?.file) return
+  if (!activeCamera.previewSafe) {
+    setCameraStatus('This photo format could not be prepared safely. Retake the photo.')
+    return
+  }
+
+  const { input, onFile, file } = activeCamera
+
+  setInputFile(input, file)
+  await onFile(file)
+  closeCameraReview()
+}
+
+function closeCameraReview() {
+  const modal = document.querySelector('[data-phone-camera-modal]')
+  const cameraInput = modal?.querySelector('[data-phone-camera-input]')
+  const preview = modal?.querySelector('[data-phone-camera-preview]')
+
+  stopCameraStream()
+  modal?.classList.add('hidden')
+  modal?.classList.remove('flex')
+  modal?.setAttribute('aria-hidden', 'true')
+  if (cameraInput) cameraInput.value = ''
+  if (preview) preview.removeAttribute('src')
+  releaseCameraPreview()
+  cameraFileToken += 1
+  activeCamera = null
+  document.documentElement.classList.remove('phone-camera-is-open')
+  document.body.classList.remove('overflow-hidden')
+}
+
+function stopCameraStream() {
+  cameraStream?.getTracks().forEach((track) => track.stop())
+  cameraStream = null
+
+  const video = document.querySelector('[data-phone-camera-video]')
+  if (video) video.srcObject = null
+}
+
+function releaseCameraPreview() {
+  if (!cameraPreviewUrl) return
+
+  URL.revokeObjectURL(cameraPreviewUrl)
+  cameraPreviewUrl = null
+}
+
+function setCameraStatus(message) {
+  const modal = document.querySelector('[data-phone-camera-modal]')
+  const status = modal?.querySelector('[data-phone-camera-status]')
+  const preview = modal?.querySelector('[data-phone-camera-preview]')
+  const video = modal?.querySelector('[data-phone-camera-video]')
+
+  if (status) status.textContent = message
+  status?.classList.remove('hidden')
+  preview?.classList.add('hidden')
+  video?.classList.add('hidden')
+}
+
+export async function preparePhoneImage(file) {
+  if (!file?.type?.startsWith('image/')) return file
+
+  const bitmapFile = await resizeWithImageBitmap(file)
+  if (bitmapFile !== file) return bitmapFile
+
+  const ImageDecoderClass = globalThis.ImageDecoder
+  if (typeof ImageDecoderClass !== 'function' || typeof file.stream !== 'function') {
+    return resizeWithImageElement(file)
+  }
+
+  let decoder = null
+  let frame = null
+
+  try {
+    decoder = new ImageDecoderClass({
+      data: file.stream(),
+      type: file.type,
+    })
+    await decoder.tracks.ready
+
+    const track = decoder.tracks.selectedTrack
+    const width = track?.codedWidth || 0
+    const height = track?.codedHeight || 0
+
+    if (!width || !height) return file
+
+    const maxEdge = 1600
+    const maxPixels = 2_500_000
+    const scale = Math.min(
+      1,
+      maxEdge / Math.max(width, height),
+      Math.sqrt(maxPixels / Math.max(width * height, 1))
+    )
+
+    const outputWidth = Math.max(1, Math.round(width * scale))
+    const outputHeight = Math.max(1, Math.round(height * scale))
+    const result = await decoder.decode({
+      frameIndex: 0,
+      completeFramesOnly: true,
+      desiredWidth: outputWidth,
+      desiredHeight: outputHeight,
+    })
+    frame = result.image
+
+    const output = document.createElement('canvas')
+    output.width = outputWidth
+    output.height = outputHeight
+
+    const context = output.getContext('2d', { alpha: false })
+    if (!context) return file
+
+    context.drawImage(frame, 0, 0, outputWidth, outputHeight)
+    const blob = await new Promise(resolve => output.toBlob(resolve, 'image/jpeg', 0.88))
+
+    if (!blob) return file
+
+    return new File([blob], cameraFileName(file.name), {
+      type: 'image/jpeg',
+      lastModified: file.lastModified || Date.now(),
+    })
+  } catch {
+    return resizeWithImageElement(file)
+  } finally {
+    frame?.close?.()
+    decoder?.close?.()
+  }
+}
+
+async function resizeWithImageBitmap(file) {
+  if (typeof createImageBitmap !== 'function') return file
+
+  let bitmap = null
+
+  try {
+    bitmap = await createImageBitmap(file, {
+      imageOrientation: 'from-image',
+      resizeWidth: 1280,
+      resizeQuality: 'high',
+    })
+
+    const scale = Math.min(1, 1600 / Math.max(bitmap.width, bitmap.height))
+    const width = Math.max(1, Math.round(bitmap.width * scale))
+    const height = Math.max(1, Math.round(bitmap.height * scale))
+    const output = document.createElement('canvas')
+    output.width = width
+    output.height = height
+    const context = output.getContext('2d', { alpha: false })
+    if (!context) return file
+
+    context.drawImage(bitmap, 0, 0, width, height)
+    const blob = await new Promise(resolve => output.toBlob(resolve, 'image/jpeg', 0.86))
+
+    return blob
+      ? new File([blob], cameraFileName(file.name), {
+          type: 'image/jpeg',
+          lastModified: file.lastModified || Date.now(),
+        })
+      : file
+  } catch {
+    return file
+  } finally {
+    bitmap?.close?.()
+  }
+}
+
+async function resizeWithImageElement(file) {
+  const sourceUrl = URL.createObjectURL(file)
+
+  try {
+    const image = await new Promise((resolve, reject) => {
+      const element = new Image()
+      element.onload = () => resolve(element)
+      element.onerror = reject
+      element.src = sourceUrl
+    })
+    const maxEdge = 1600
+    const maxPixels = 2_500_000
+    const scale = Math.min(
+      1,
+      maxEdge / Math.max(image.naturalWidth, image.naturalHeight),
+      Math.sqrt(maxPixels / Math.max(image.naturalWidth * image.naturalHeight, 1))
+    )
+    const output = document.createElement('canvas')
+    output.width = Math.max(1, Math.round(image.naturalWidth * scale))
+    output.height = Math.max(1, Math.round(image.naturalHeight * scale))
+    const context = output.getContext('2d', { alpha: false })
+    if (!context) return file
+
+    context.drawImage(image, 0, 0, output.width, output.height)
+    const blob = await new Promise(resolve => output.toBlob(resolve, 'image/jpeg', 0.88))
+
+    return blob
+      ? new File([blob], cameraFileName(file.name), { type: 'image/jpeg' })
+      : file
+  } catch {
+    return file
+  } finally {
+    URL.revokeObjectURL(sourceUrl)
+  }
+}
+
+function cameraFileName(name) {
+  const base = String(name || `plant-bud-camera-${Date.now()}`).replace(/\.[^.]+$/, '')
+  return `${base}.jpg`
 }
 
 function bindUploadMenus() {
@@ -60,6 +481,7 @@ function bindUploadMenus() {
     if (event.key === 'Escape') {
       closeUploadMenus()
       closePhoneUpload()
+      closeCameraReview()
     }
   })
 }
@@ -202,6 +624,11 @@ document.addEventListener('click', (event) => {
   if (event.target === modal) closePhoneUpload()
   if (linkToggle) toggleManualLink(linkToggle)
   if (linkButton) copyManualLink(linkButton)
+
+  const cameraClose = event.target.closest?.('[data-phone-camera-close]')
+  const cameraModal = event.target.closest?.('[data-phone-camera-modal]')
+
+  if (cameraClose || event.target === cameraModal) closeCameraReview()
 })
 
 function toggleManualLink(button) {

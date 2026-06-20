@@ -4,8 +4,10 @@
  */
 
 export const controllers = {
+  Admin: () => import('#controllers/admin_controller'),
   Community: () => import('#controllers/community_controller'),
   GardenDesigners: () => import('#controllers/garden_designers_controller'),
+  GardenerDashboard: () => import('#controllers/gardener_dashboard_controller'),
   Generals: () => import('#controllers/generals_controller'),
   Homepages: () => import('#controllers/homepages_controller'),
   NewAccount: () => import('#controllers/new_account_controller'),

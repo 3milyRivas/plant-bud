@@ -1,0 +1,307 @@
+@layout()
+@slot('title')
+<title>Plant Bud - Request Service</title>
+@endslot
+
+@let(viewerProfile = auth.user?.accountProfile)
+@let(displayName = viewerProfile?.displayName || auth.user?.fullName || auth.user?.username || 'Profile')
+@let(avatarUrl = viewerAvatarUrl)
+@let(avatarInitial = displayName ? Array.from(displayName)[0].toLocaleUpperCase('en') : 'P')
+
+<div class="relative z-10 min-h-dvh overflow-hidden text-[#113e14]">
+  @!component('components/app-navbar', {
+    section: 'Request service',
+    active: 'services',
+    maxWidth: 'max-w-[min(1500px,calc(100vw-2rem))]',
+    avatarUrl,
+    avatarInitial,
+    displayName,
+    roleLabel: auth.user?.role || 'guest',
+    planLabel: viewerProfile?.planLabel || 'Free',
+  })
+
+  <main class="relative z-10 mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))] px-4 pb-24 pt-8 sm:px-5 lg:px-10">
+    <div class="mb-7 flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <p class="text-sm font-black uppercase tracking-[0.2em] text-[#ebe3a7]">Gardener services</p>
+        <h1 class="mt-2 font-abril text-4xl leading-tight text-white md:text-5xl">Plan your request</h1>
+      </div>
+      <a href="/maintenance" class="rounded-full border border-white/30 bg-white/16 px-5 py-3 text-sm font-black text-white backdrop-blur-xl transition hover:-translate-y-0.5 hover:bg-white/28">
+        Back to gardeners
+      </a>
+    </div>
+
+    <section class="grid gap-7 lg:grid-cols-[0.88fr_1.12fr] lg:items-start">
+      <aside class="overflow-hidden rounded-[2rem] border border-white/22 bg-[#113e14]/90 text-white shadow-[0_28px_85px_rgba(17,62,20,0.30)] backdrop-blur-2xl">
+        <div class="relative bg-[linear-gradient(145deg,rgba(168,184,65,0.24),rgba(220,161,93,0.18),rgba(235,227,167,0.12))] p-6">
+          <div class="absolute -right-10 -top-12 h-40 w-40 rounded-full bg-[#dca15d]/20 blur-2xl"></div>
+          <a href="{{ gardener.profileHref }}" class="relative mx-auto w-full max-w-md flex min-h-[22rem] items-center justify-center overflow-hidden rounded-[1.75rem] border border-white/20 bg-[#f5f2df]/10 p-3 shadow-2xl">
+            @if(gardener.photo)
+              <img src="{{ gardener.photo }}" alt="{{ gardener.name }}" class="block max-h-[26rem] h-auto w-auto max-w-full rounded-[1.25rem] object-contain">
+            @else
+              <span class="flex h-48 w-48 items-center justify-center rounded-full border-8 border-white/90 bg-[#416543] text-8xl font-black text-[#ebe3a7] shadow-[0_24px_70px_rgba(0,0,0,0.28)]" aria-label="{{ gardener.name }}">
+                {{ gardener.initial }}
+              </span>
+            @endif
+          </a>
+        </div>
+
+        <div class="p-6 sm:p-7 md:p-8">
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div class="min-w-0">
+              <p class="text-xs font-black uppercase tracking-[0.2em] text-[#ebe3a7]">Gardener profile</p>
+              <h2 class="mt-3 font-abril text-4xl leading-tight">{{ gardener.name }}</h2>
+              <a href="{{ gardener.profileHref }}" class="mt-1 block text-sm font-black text-[#dca15d] hover:text-[#ebe3a7]">{{ '@' + gardener.username }}</a>
+            </div>
+            <div class="rounded-2xl bg-[#ebe3a7]/14 px-4 py-2 text-right">
+              <div class="flex gap-0.5 text-base text-[#dca15d]" aria-label="{{ gardener.rating }} out of 5 stars">
+                @each(star in [1, 2, 3, 4, 5])
+                  <span class="{{ Number(gardener.rating) >= star ? 'opacity-100' : 'opacity-30' }}">&#9733;</span>
+                @end
+              </div>
+              <p class="mt-0.5 text-[10px] font-black uppercase tracking-[0.12em] text-[#ebe3a7]">{{ gardener.rating }} rating</p>
+            </div>
+          </div>
+
+          <p class="mt-5 text-sm font-semibold leading-7 text-white/76">{{ gardener.bio }}</p>
+
+          <div class="mt-6 grid gap-3 sm:grid-cols-2">
+            <div class="rounded-[1.25rem] border border-white/10 bg-white/10 p-4">
+              <p class="text-[10px] font-black uppercase tracking-[0.15em] text-white/50">Specialty</p>
+              <p class="mt-2 text-sm font-black">{{ gardener.specialty }}</p>
+            </div>
+            <div class="rounded-[1.25rem] border border-white/10 bg-[#a8b841]/16 p-4">
+              <p class="text-[10px] font-black uppercase tracking-[0.15em] text-white/50">Experience</p>
+              <p class="mt-2 text-sm font-black">{{ gardener.experience }}</p>
+            </div>
+            <div class="rounded-[1.25rem] border border-white/10 bg-[#dca15d]/14 p-4">
+              <p class="text-[10px] font-black uppercase tracking-[0.15em] text-white/50">Service area</p>
+              <p class="mt-2 text-sm font-black">{{ gardener.location }}</p>
+            </div>
+            <div class="rounded-[1.25rem] border border-white/10 bg-white/10 p-4">
+              <p class="text-[10px] font-black uppercase tracking-[0.15em] text-white/50">Availability</p>
+              <p class="mt-2 text-sm font-black">{{ gardener.schedule }}</p>
+            </div>
+          </div>
+
+          <div class="mt-5 flex flex-wrap gap-2">
+            @each(service in gardener.services)
+              <span class="rounded-full border border-white/12 bg-white/8 px-3 py-1.5 text-xs font-black text-[#ebe3a7]">{{ service }}</span>
+            @end
+          </div>
+        </div>
+      </aside>
+
+    @form({
+      action: `/request/${gardener.id}`,
+      method: 'POST',
+      class: 'rounded-[2rem] border border-white/55 bg-[#f5f2df]/94 p-6 shadow-[0_28px_85px_rgba(17,62,20,0.22)] backdrop-blur-2xl sm:p-8',
+      'data-service-request-form': true
+    })
+        <div class="mb-8 border-b border-[#416543]/12 pb-7">
+          <p class="text-xs font-black uppercase tracking-[0.2em] text-[#416543]">Request details</p>
+          <h2 class="mt-2 text-4xl font-black">Tell {{ gardener.name }} what you need</h2>
+          <p class="mt-3 max-w-2xl text-sm font-semibold leading-6 text-[#416543]">Share enough context for the gardener to understand the space, timing, and type of help you are looking for.</p>
+      </div>
+
+        @if(errors.request)
+          <div class="mb-5 rounded-2xl border border-[#dca15d]/35 bg-[#dca15d]/14 px-4 py-3 text-sm font-black text-[#7b4c1f]">
+            <p>Please review the following:</p>
+            <ul class="mt-2 list-disc space-y-1 pl-5">
+              @each(error in errors.request)
+                <li>{{ error }}</li>
+              @end
+            </ul>
+          </div>
+        @endif
+
+      <div class="grid gap-5 sm:grid-cols-2">
+        <label class="block">
+            <span class="text-sm font-black text-[#416543]">Budget</span>
+            <span class="mt-2 flex min-h-14 items-center gap-3 rounded-2xl border border-[#416543]/14 bg-white/72 px-4 py-3 transition focus-within:border-[#a8b841] focus-within:bg-white">
+            <img src="/resources/images/services/payment.png" alt="" class="h-5 w-5 object-contain">
+            <input name="budget" type="text" value="{{ old.budget ?? '' }}" placeholder="0" inputmode="decimal" required maxlength="12" class="w-full bg-transparent text-sm font-semibold outline-none" data-budget-input>
+          </span>
+          <span class="mt-1 block text-xs font-bold text-[#416543]/65">Minimum $5.00</span>
+        </label>
+
+        <div class="block sm:col-span-2" data-location-picker>
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <span class="text-sm font-black text-[#416543]">Private service location</span>
+              <p class="mt-1 text-xs font-bold leading-5 text-[#416543]/65">Search for a place, click anywhere on the map, or use your current location. Only you and the gardener can see it while the request is active.</p>
+            </div>
+            <button type="button" class="w-fit rounded-full bg-[#113e14] px-4 py-2.5 text-xs font-black text-[#ebe3a7] transition hover:bg-[#416543]" data-use-current-location>
+              Use my location
+            </button>
+          </div>
+
+          <div class="relative mt-4">
+            <span class="flex min-h-14 items-center gap-3 rounded-2xl border border-[#416543]/14 bg-white/72 px-4 py-3 transition focus-within:border-[#a8b841] focus-within:bg-white">
+              <img src="/resources/images/services/location.png" alt="" class="h-5 w-5 object-contain">
+              <input name="location" type="text" value="{{ old.location ?? '' }}" placeholder="Search an address or describe the meeting point" required minlength="8" maxlength="255" autocomplete="off" class="w-full bg-transparent text-sm font-semibold outline-none" data-service-location-input>
+            </span>
+            <div class="absolute inset-x-0 top-[calc(100%+0.5rem)] z-[1000] hidden overflow-hidden rounded-2xl border border-[#416543]/15 bg-white p-2 shadow-2xl" data-location-search-results></div>
+          </div>
+
+          <input name="latitude" type="hidden" value="{{ old.latitude ?? '' }}" data-service-latitude>
+          <input name="longitude" type="hidden" value="{{ old.longitude ?? '' }}" data-service-longitude>
+
+          <div class="mt-4 h-80 overflow-hidden rounded-[1.5rem] border border-[#416543]/15 bg-[#dfe8cf]" data-service-location-map></div>
+          <div class="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <p class="text-xs font-bold text-[#416543]/70" data-location-status>Select an exact point on the map before sending the request.</p>
+            <span class="hidden rounded-full bg-[#a8b841]/18 px-3 py-1.5 text-xs font-black text-[#416543]" data-location-coordinates></span>
+          </div>
+        </div>
+
+        <label class="block">
+            <span class="text-sm font-black text-[#416543]">Preferred date</span>
+            <input name="scheduled_for" value="{{ old.scheduled_for ?? '' }}" type="date" min="{{ requestDateMin }}" max="{{ requestDateMax }}" required class="mt-2 min-h-14 w-full rounded-2xl border border-[#416543]/14 bg-white/72 px-4 py-3 text-sm font-semibold outline-none transition focus:border-[#a8b841] focus:bg-white">
+            <span class="mt-1 block text-xs font-bold text-[#416543]/65">Select a date within the next two years.</span>
+        </label>
+
+        <fieldset class="rounded-[1.25rem] border border-[#416543]/12 bg-[#ebe3a7]/38 p-4 sm:col-span-2">
+          <legend class="px-2 text-sm font-black text-[#416543]">Preferred arrival range</legend>
+          <p class="mb-4 text-xs font-bold leading-5 text-[#416543]/70">
+            {{ gardener.name }} accepts requests during: {{ gardener.schedule }}. Choose the period in which the gardener may arrive.
+          </p>
+          <div class="grid gap-3 sm:grid-cols-2">
+            <label class="block">
+              <span class="text-xs font-black uppercase tracking-[0.12em] text-[#416543]/70">From</span>
+              <input name="arrival_window_start" value="{{ old.arrival_window_start ?? arrivalWindowDefaults.start }}" type="time" required class="mt-2 min-h-14 w-full rounded-2xl border border-[#416543]/14 bg-white px-4 text-sm font-black text-[#113e14] outline-none focus:border-[#a8b841]">
+            </label>
+            <label class="block">
+              <span class="text-xs font-black uppercase tracking-[0.12em] text-[#416543]/70">Until</span>
+              <input name="arrival_window_end" value="{{ old.arrival_window_end ?? arrivalWindowDefaults.end }}" type="time" required class="mt-2 min-h-14 w-full rounded-2xl border border-[#416543]/14 bg-white px-4 text-sm font-black text-[#113e14] outline-none focus:border-[#a8b841]">
+            </label>
+          </div>
+        </fieldset>
+
+        <label class="block">
+            <span class="text-sm font-black text-[#416543]">Service type</span>
+            <select name="service_type" required class="mt-2 min-h-14 w-full rounded-2xl border border-[#416543]/14 bg-white/72 px-4 py-3 text-sm font-semibold outline-none transition focus:border-[#a8b841] focus:bg-white">
+            <option value="maintenance" @if(gardener.serviceType === 'maintenance') selected @endif>Maintenance</option>
+            <option value="garden_design" @if(gardener.serviceType === 'garden_design') selected @endif>Garden design</option>
+            <option value="consultation" @if(gardener.serviceType === 'consultation') selected @endif>Consultation</option>
+            <option value="delivery" @if(gardener.serviceType === 'delivery') selected @endif>Delivery</option>
+            <option value="other">Other</option>
+          </select>
+        </label>
+      </div>
+
+      <label class="mt-5 block">
+          <span class="text-sm font-black text-[#416543]">What do you need?</span>
+          <textarea name="notes" rows="7" required minlength="20" maxlength="2000" placeholder="Describe the problem, plants involved, space size, urgency, or special notes." class="mt-2 w-full resize-none rounded-[1.25rem] border border-[#416543]/14 bg-white/72 px-5 py-4 text-sm font-semibold leading-6 outline-none transition focus:border-[#a8b841] focus:bg-white">{{ old.notes ?? '' }}</textarea>
+          <span class="mt-1 block text-xs font-bold text-[#416543]/65">At least 20 characters. Give the gardener enough context to evaluate the work.</span>
+      </label>
+
+        @let(selectedPaymentMethod = old.payment_method ?? paymentMethods[0].value)
+        <section class="mt-6 overflow-hidden rounded-[1.5rem] border border-[#416543]/14 bg-[#113e14] text-white shadow-xl" data-payment-selector>
+          <div class="flex flex-col gap-3 border-b border-white/10 bg-[linear-gradient(120deg,rgba(168,184,65,0.22),rgba(220,161,93,0.16))] p-5 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p class="text-xs font-black uppercase tracking-[0.18em] text-[#ebe3a7]">Payment method</p>
+              <h3 class="mt-1 text-2xl font-black">Choose how you want to pay</h3>
+            </div>
+            <span class="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-black text-[#ebe3a7]" data-payment-summary>Choose a method</span>
+          </div>
+          <div class="p-5">
+            <p class="text-sm font-semibold leading-6 text-white/72">These are the payment methods accepted by {{ gardener.name }}.</p>
+
+            <div class="mt-5 grid gap-3 sm:grid-cols-3">
+              @each(method in paymentMethods)
+                <label class="cursor-pointer">
+                  <input name="payment_method" value="{{ method.value }}" type="radio" required class="peer sr-only" {{ selectedPaymentMethod === method.value ? 'checked' : '' }} data-payment-method>
+                  <span class="flex min-h-12 items-center justify-center rounded-2xl border border-white/15 bg-white/8 px-4 text-center text-sm font-black text-white transition peer-checked:border-[#ebe3a7] peer-checked:bg-[#ebe3a7] peer-checked:text-[#113e14] peer-focus-visible:ring-2 peer-focus-visible:ring-[#dca15d]">{{ method.label }}</span>
+                </label>
+              @end
+            </div>
+
+            <div class="mt-5 hidden rounded-[1.25rem] border border-white/10 bg-white/6 p-4" data-payment-panel="card">
+              <p class="mb-4 text-sm font-semibold leading-6 text-white/72">Your budget is held and released only after both parties confirm completion.</p>
+              <div class="grid gap-4 sm:grid-cols-2">
+              <label class="block sm:col-span-2">
+                <span class="text-xs font-black uppercase tracking-[0.12em] text-white/62">Name on card</span>
+                <input name="cardholder_name" value="Plant Bud Demo" type="text" readonly aria-readonly="true" class="mt-2 min-h-12 w-full cursor-not-allowed rounded-2xl border border-white/14 bg-white/10 px-4 text-sm font-bold text-white/78 outline-none" data-payment-detail data-cardholder-name>
+              </label>
+              <label class="block sm:col-span-2">
+                <span class="text-xs font-black uppercase tracking-[0.12em] text-white/62">Card number</span>
+                <input name="card_number" value="0000 0000 0000 0000" type="text" readonly aria-readonly="true" class="mt-2 min-h-12 w-full cursor-not-allowed rounded-2xl border border-white/14 bg-white/10 px-4 text-sm font-bold tracking-[0.12em] text-white/78 outline-none" data-payment-detail data-card-number>
+              </label>
+              <label class="block">
+                <span class="text-xs font-black uppercase tracking-[0.12em] text-white/62">Expiry</span>
+                <input name="card_expiry" value="03/67" type="text" readonly aria-readonly="true" class="mt-2 min-h-12 w-full cursor-not-allowed rounded-2xl border border-white/14 bg-white/10 px-4 text-sm font-bold text-white/78 outline-none" data-payment-detail data-card-expiry>
+              </label>
+              <label class="block">
+                <span class="text-xs font-black uppercase tracking-[0.12em] text-white/62">Security code</span>
+                <input name="card_cvc" value="123" type="text" readonly aria-readonly="true" class="mt-2 min-h-12 w-full cursor-not-allowed rounded-2xl border border-white/14 bg-white/10 px-4 text-sm font-bold text-white/78 outline-none" data-payment-detail data-card-cvc>
+              </label>
+              </div>
+              <div class="mt-4 flex items-center gap-3 rounded-2xl border border-white/10 bg-white/8 px-4 py-3 text-xs font-bold text-white/62">
+                <span class="flex h-8 w-8 items-center justify-center rounded-full bg-[#a8b841] text-[#113e14]">✓</span>
+                Demo payment details are fixed and cannot be edited.
+              </div>
+            </div>
+
+            <div class="mt-5 hidden rounded-[1.25rem] border border-white/10 bg-white/6 p-4" data-payment-panel="paypal">
+              <p class="text-sm font-semibold leading-6 text-white/72">Your budget is protected until both parties confirm the completed service.</p>
+              <label class="mt-4 block">
+                <span class="text-xs font-black uppercase tracking-[0.12em] text-white/62">PayPal email</span>
+                <input name="paypal_email" value="testplantbud@gmail.com" type="email" readonly aria-readonly="true" class="mt-2 min-h-12 w-full cursor-not-allowed rounded-2xl border border-white/14 bg-white/10 px-4 text-sm font-bold text-white/78 outline-none" data-payment-detail>
+              </label>
+              <p class="mt-3 text-xs font-bold text-white/58">Demo PayPal account. It is displayed only to simulate checkout.</p>
+            </div>
+
+            <div class="mt-5 hidden rounded-[1.25rem] border border-white/10 bg-white/6 p-4" data-payment-panel="cash">
+              <p class="text-sm font-semibold leading-6 text-white/72">Pay the gardener in cash when the service is completed. No funds are held when you send this request.</p>
+            </div>
+
+            @let(selectedDiscountSteps = Number(old.discount_steps ?? 0))
+            <section class="mt-5 rounded-[1.25rem] border border-[#ebe3a7]/18 bg-[#ebe3a7]/10 p-4" data-points-redemption>
+              <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div>
+                  <p class="text-xs font-black uppercase tracking-[0.16em] text-[#ebe3a7]">Reward discount</p>
+                  <h4 class="mt-1 text-lg font-black">Redeem points on this request</h4>
+                  <p class="mt-1 text-xs font-bold leading-5 text-white/60">Every 500 points applies 10% off. Maximum 20% per request. Available only with Card or PayPal.</p>
+                </div>
+                <span class="w-fit rounded-full bg-white/10 px-4 py-2 text-xs font-black text-[#ebe3a7]">{{ Number(rewardPoints || 0).toLocaleString('en-US') }} points</span>
+              </div>
+
+              <label class="mt-4 block">
+                <span class="sr-only">Points discount</span>
+                <select name="discount_steps" class="min-h-12 w-full rounded-2xl border border-white/15 bg-[#113e14] px-4 text-sm font-black text-white outline-none focus:border-[#ebe3a7]" data-discount-steps>
+                  <option value="0">Do not redeem points</option>
+                  @each(option in discountOptions)
+                    <option value="{{ option.steps }}" {{ selectedDiscountSteps === option.steps ? 'selected' : '' }}>
+                      Use {{ option.points.toLocaleString('en-US') }} points for {{ option.percent }}% off
+                    </option>
+                  @end
+                </select>
+              </label>
+
+              <div class="mt-4 grid grid-cols-1 gap-3 rounded-2xl bg-white/8 p-4 text-sm sm:grid-cols-2">
+                <span class="font-bold text-white/60">Discount</span>
+                <strong class="text-right text-[#ebe3a7]" data-discount-summary>0% · $0.00</strong>
+                <span class="font-bold text-white/60">Payment after discount</span>
+                <strong class="text-right text-white" data-discount-total>$0.00</strong>
+              </div>
+              <p class="mt-3 hidden text-xs font-black text-[#dca15d]" data-discount-unavailable>Point discounts are not available for cash payments.</p>
+            </section>
+          </div>
+        </section>
+
+        <label class="mt-5 flex cursor-pointer items-start gap-3 rounded-[1.25rem] border border-[#416543]/12 bg-white/55 p-4">
+          <input name="intent_confirmed" value="1" type="checkbox" required class="mt-1 h-4 w-4 accent-[#113e14]">
+          <span class="text-sm font-bold leading-6 text-[#416543]">I confirm this is a genuine service request and I intend to coordinate the work with this gardener.</span>
+        </label>
+
+        <div class="mt-8 flex flex-col gap-3 border-t border-[#416543]/12 pt-6 sm:flex-row sm:items-center sm:justify-between">
+          <p class="max-w-sm text-xs font-bold leading-5 text-[#416543]/75">Your contact details are shared with the gardener and your payment remains protected until both parties confirm completion.</p>
+          <button type="submit" class="w-full rounded-full bg-[#113e14] px-8 py-3 text-sm font-black text-[#ebe3a7] shadow-lg transition hover:-translate-y-0.5 hover:bg-[#416543] sm:w-auto" data-request-submit>
+          Send request
+        </button>
+      </div>
+    @end
+  </section>
+  </main>
+</div>
+@end

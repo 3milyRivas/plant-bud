@@ -1,0 +1,190 @@
+@layout()
+@slot('title')
+<title>Plant Bud - Gardener Dashboard</title>
+@endslot
+
+<div class="phone-gardener-dashboard relative z-10 min-h-dvh overflow-hidden text-[#113e14]" data-gardener-dashboard="phone">
+  @!component('components/app-navbar', {
+    section: 'Dashboard',
+    active: 'dashboard',
+    avatarUrl: dashboardProfile.avatarUrl,
+    avatarInitial: dashboardProfile.avatarInitial,
+    displayName: dashboardProfile.displayName,
+    roleLabel: 'Gardener',
+    planLabel: dashboardProfile.planLabel,
+  })
+
+  <main class="relative z-10 mx-auto w-full max-w-xl px-3 pb-28 pt-2">
+    <section class="pb-5 pt-3" data-phone-first-content>
+      <div class="relative overflow-hidden rounded-[1.8rem] border border-white/20 bg-[#113e14]/94 p-5 text-white shadow-[0_24px_70px_rgba(17,62,20,0.3)]">
+        <div class="absolute -right-16 -top-16 h-44 w-44 rounded-full bg-[#a8b841]/18 blur-3xl"></div>
+        <div class="relative">
+          <div class="flex items-center justify-between gap-3">
+            <p class="text-[10px] font-black uppercase tracking-[0.18em] text-[#ebe3a7]">{{ todayLabel }}</p>
+            <span class="flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-[10px] font-black">
+              <span class="h-2 w-2 rounded-full {{ gardener.isAvailable ? 'bg-[#a8b841]' : 'bg-[#dca15d]' }}"></span>
+              {{ gardener.isAvailable ? 'Available' : 'Paused' }}
+            </span>
+          </div>
+          <h1 class="mt-4 font-abril text-4xl leading-[1.02]">Your workday, at a glance.</h1>
+          <p class="mt-3 text-sm font-semibold leading-6 text-white/68">
+            New clients, visits, and completed work for {{ dashboardProfile.displayName }}.
+          </p>
+
+          <div class="mt-5 grid grid-cols-2 gap-2.5" data-dashboard-mobile-stats>
+            <a href="/requested" class="rounded-[1.2rem] border border-white/10 bg-white/10 p-4">
+              <p class="text-[9px] font-black uppercase tracking-[0.13em] text-white/55">New</p>
+              <p class="mt-1 text-3xl font-black">{{ stats.pending }}</p>
+              <span class="mt-1 block text-[10px] font-bold text-[#ebe3a7]">Open inbox</span>
+            </a>
+            <div class="rounded-[1.2rem] border border-white/10 bg-[#a8b841]/16 p-4">
+              <p class="text-[9px] font-black uppercase tracking-[0.13em] text-white/55">Active</p>
+              <p class="mt-1 text-3xl font-black">{{ stats.active }}</p>
+              <span class="mt-1 block text-[10px] font-bold text-white/55">{{ stats.today }} today</span>
+            </div>
+            <div class="rounded-[1.2rem] border border-white/10 bg-[#dca15d]/15 p-4">
+              <p class="text-[9px] font-black uppercase tracking-[0.13em] text-white/55">Completed</p>
+              <p class="mt-1 text-3xl font-black">{{ stats.completedThisMonth }}</p>
+              <span class="mt-1 block text-[10px] font-bold text-white/55">This month</span>
+            </div>
+            <div class="rounded-[1.2rem] border border-white/10 bg-[#ebe3a7]/12 p-4">
+              <p class="text-[9px] font-black uppercase tracking-[0.13em] text-white/55">Earnings</p>
+              <p class="mt-2 truncate text-xl font-black">{{ stats.monthlyRevenue }}</p>
+              <span class="mt-2 block text-[10px] font-bold text-white/55">Monthly</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-4">
+      <div class="mb-4 flex items-end justify-between">
+        <div>
+          <p class="text-[10px] font-black uppercase tracking-[0.18em] text-[#ebe3a7]">Next up</p>
+          <h2 class="mt-1 text-2xl font-black text-white">Upcoming visits</h2>
+        </div>
+        <a href="/requested" class="rounded-full bg-white/12 px-4 py-2 text-[10px] font-black text-white">View all</a>
+      </div>
+
+      <div class="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2 [scrollbar-width:none]" data-dashboard-upcoming>
+        @each(service in upcoming)
+          <article class="w-[84vw] max-w-[21rem] flex-none snap-start rounded-[1.5rem] border border-white/55 bg-white/94 p-5 shadow-[0_16px_45px_rgba(17,62,20,0.16)]">
+            <div class="flex items-start justify-between gap-3">
+              <span class="rounded-full bg-[#113e14] px-3 py-1.5 text-[10px] font-black text-[#ebe3a7]">{{ service.dateLabel }} · {{ service.arrivalWindow }}</span>
+              <strong class="text-sm">{{ service.budget }}</strong>
+            </div>
+            <div class="mt-5 flex items-center gap-3">
+              @if(service.clientPhoto)
+                <img src="{{ service.clientPhoto }}" alt="" class="h-12 w-12 rounded-2xl object-cover">
+              @else
+                <span class="grid h-12 w-12 place-items-center rounded-2xl bg-[#ebe3a7] text-lg font-black">{{ service.clientInitial }}</span>
+              @endif
+              <span class="min-w-0">
+                <strong class="block truncate">{{ service.clientName }}</strong>
+                <small class="mt-0.5 block truncate font-bold text-[#416543]">{{ service.serviceType }}</small>
+              </span>
+            </div>
+            <p class="mt-4 line-clamp-2 text-xs font-semibold leading-5 text-[#416543]">{{ service.address }}</p>
+            <div class="mt-4 flex items-center justify-between border-t border-[#416543]/10 pt-4">
+              <span class="rounded-full bg-[#a8b841]/20 px-3 py-1 text-[10px] font-black">{{ service.statusLabel }}</span>
+              <a href="/requested" class="text-xs font-black">Open →</a>
+            </div>
+          </article>
+        @else
+          <div class="w-full rounded-[1.5rem] border border-dashed border-white/40 bg-white/10 p-7 text-center text-white">
+            <h3 class="font-black">No visits scheduled</h3>
+            <p class="mt-2 text-xs font-semibold leading-5 text-white/65">Schedule an accepted request to build your route.</p>
+            <a href="/requested" class="mt-4 inline-flex rounded-full bg-[#dca15d] px-5 py-2.5 text-xs font-black text-[#113e14]">Review inbox</a>
+          </div>
+        @end
+      </div>
+    </section>
+
+    <section class="py-4">
+      <div class="mb-4">
+        <p class="text-[10px] font-black uppercase tracking-[0.18em] text-[#ebe3a7]">Priority</p>
+        <h2 class="mt-1 text-2xl font-black text-white">Needs attention</h2>
+      </div>
+      <div class="space-y-3">
+        @each(service in attention)
+          <a href="/requested" class="flex items-center gap-3 rounded-[1.35rem] border border-[#ebe3a7]/50 bg-[#ebe3a7]/94 p-4 shadow-lg">
+            <span class="grid h-11 w-11 flex-none place-items-center rounded-2xl bg-[#dca15d]/22 text-sm font-black">{{ service.clientInitial }}</span>
+            <span class="min-w-0 flex-1">
+              <strong class="block truncate text-sm">{{ service.clientName }}</strong>
+              <small class="mt-1 block truncate font-bold text-[#416543]">{{ service.statusLabel }} · {{ service.serviceType }}</small>
+            </span>
+            <span class="text-lg font-black" aria-hidden="true">›</span>
+          </a>
+        @else
+          <div class="rounded-[1.35rem] border border-white/20 bg-white/10 p-5 text-white">
+            <p class="font-black">You're all caught up</p>
+            <p class="mt-1 text-xs font-semibold leading-5 text-white/65">Nothing needs an immediate response.</p>
+          </div>
+        @end
+      </div>
+    </section>
+
+    <section class="py-4">
+      <div class="rounded-[1.6rem] border border-white/55 bg-[#f5f2df]/94 p-5 shadow-xl">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <p class="text-[10px] font-black uppercase tracking-[0.16em] text-[#416543]">Profile health</p>
+            <h2 class="mt-1 text-xl font-black">{{ profileProgress }}% ready</h2>
+          </div>
+          <span class="rounded-full bg-[#113e14] px-3 py-1.5 text-xs font-black text-[#ebe3a7]">{{ gardener.rating }} ★</span>
+        </div>
+        <div class="mt-4 h-2 overflow-hidden rounded-full bg-[#416543]/12">
+          <div class="h-full rounded-full bg-[#a8b841]" style="width: {{ profileProgress }}%"></div>
+        </div>
+        <div class="mt-4 grid grid-cols-2 gap-2">
+          @each(item in profileChecklist)
+            <div class="flex min-w-0 items-center gap-2 rounded-xl bg-white/65 px-3 py-2">
+              <span class="grid h-5 w-5 flex-none place-items-center rounded-full {{ item.complete ? 'bg-[#a8b841]' : 'bg-[#dca15d]/20' }} text-[10px] font-black">{{ item.complete ? '✓' : '·' }}</span>
+              <span class="truncate text-[10px] font-black">{{ item.label }}</span>
+            </div>
+          @end
+        </div>
+        <a href="/profile/settings" class="mt-4 flex min-h-11 w-full items-center justify-center rounded-full bg-[#dca15d] px-5 text-xs font-black">Manage profile and availability</a>
+      </div>
+    </section>
+
+    <section class="py-4">
+      <div class="mb-4">
+        <p class="text-[10px] font-black uppercase tracking-[0.18em] text-[#ebe3a7]">Recent work</p>
+        <h2 class="mt-1 text-2xl font-black text-white">Completed services</h2>
+      </div>
+      <div class="grid gap-3">
+        @each(service in recentCompleted)
+          <article class="flex items-center gap-3 rounded-[1.35rem] border border-white/55 bg-white/92 p-4 shadow-lg">
+            <span class="grid h-11 w-11 flex-none place-items-center rounded-2xl bg-[#a8b841]/20 text-sm font-black">✓</span>
+            <span class="min-w-0 flex-1">
+              <strong class="block truncate text-sm">{{ service.clientName }}</strong>
+              <small class="mt-1 block truncate font-bold text-[#416543]">{{ service.serviceType }} · {{ service.dateDetail }}</small>
+            </span>
+            <strong class="text-sm">{{ service.finalAmount }}</strong>
+          </article>
+        @else
+          <div class="rounded-[1.35rem] border border-white/20 bg-white/10 p-5 text-white">
+            <p class="text-sm font-black">Completed work will appear here.</p>
+          </div>
+        @end
+      </div>
+    </section>
+
+    <section class="grid grid-cols-3 gap-2 py-4" aria-label="Gardener tools">
+      <a href="/scanner" class="flex min-h-20 flex-col items-center justify-center rounded-[1.2rem] bg-white/12 p-3 text-center text-white backdrop-blur-xl">
+        <img src="/resources/images/phone-icons/Scanner.png" alt="" class="h-7 w-7 object-contain">
+        <span class="mt-2 text-[10px] font-black">Scanner</span>
+      </a>
+      <a href="/designer" class="flex min-h-20 flex-col items-center justify-center rounded-[1.2rem] bg-white/12 p-3 text-center text-white backdrop-blur-xl">
+        <img src="/resources/images/phone-icons/Designer.png" alt="" class="h-7 w-7 object-contain">
+        <span class="mt-2 text-[10px] font-black">Designer</span>
+      </a>
+      <a href="/community" class="flex min-h-20 flex-col items-center justify-center rounded-[1.2rem] bg-[#dca15d] p-3 text-center">
+        <img src="/resources/images/phone-icons/Community.png" alt="" class="h-7 w-7 object-contain">
+        <span class="mt-2 text-[10px] font-black">Share work</span>
+      </a>
+    </section>
+  </main>
+</div>
+@end

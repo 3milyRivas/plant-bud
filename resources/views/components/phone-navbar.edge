@@ -1,0 +1,221 @@
+@let(section = $props.get('section') ?? 'Plant Bud')
+@let(active = $props.get('active') ?? '')
+@let(homeHref = $props.get('homeHref') ?? '/homepage')
+@let(profileHref = auth.user ? '/profile' : '/login')
+@let(avatarUrl = $props.get('avatarUrl') ?? auth.user?.accountProfile?.avatarUrl ?? auth.user?.profilePicture)
+@let(bannerUrl = auth.user?.accountProfile?.bannerUrl ?? '/profiles/banner.png')
+@let(avatarInitial = $props.get('avatarInitial') ?? auth.user?.initials ?? 'P')
+@let(displayName = $props.get('displayName') ?? auth.user?.accountProfile?.displayName ?? auth.user?.fullName ?? 'Plant Bud')
+@let(username = auth.user?.username ? '@' + auth.user.username : 'Grow with Plant Bud')
+@let(planLabel = $props.get('planLabel') ?? auth.user?.accountProfile?.planLabel ?? 'Free')
+@let(notificationLabel = notificationCount ? `Notifications, ${notificationCount} unread` : 'Notifications')
+@let(bottomItems = [
+  { key: 'homepage', href: homeHref, label: 'Home', icon: '/resources/images/phone-icons/Home.png', activeKeys: ['homepage'] },
+  { key: 'community', href: '/community', label: 'Community', icon: '/resources/images/phone-icons/Community.png', activeKeys: ['community', 'favorites'] },
+  { key: 'services', href: '/maintenance', label: 'Services', icon: '/resources/images/phone-icons/Services.png', activeKeys: ['services', 'requested', 'dashboard', 'nurseries', 'nursery'] },
+  { key: 'profile', href: profileHref, label: 'Profile', icon: null, activeKeys: ['profile', 'profile-settings'] },
+])
+@let(drawerItems = [
+  { href: '/requested', label: 'Requested', description: 'Track service requests', icon: '/resources/images/phone-icons/Requested.png' },
+  { href: '/ornamental', label: 'Catalog', description: 'Explore plants and care guides', icon: '/resources/images/phone-icons/Nurseries.png' },
+  { href: '/favorites', label: 'Saved', description: 'Open saved community posts', icon: '/resources/images/phone-icons/Saved.png' },
+  { href: '/nurseries', label: 'Nurseries', description: 'Discover nearby plant sellers', icon: '/resources/images/phone-icons/Nurseries.png' },
+  { href: '/plans', label: 'Plans', description: planLabel === 'Premium' ? 'Manage your Premium plan' : 'Unlock all Plant Bud tools', icon: '/resources/images/phone-icons/Plans.png' },
+])
+
+<input id="plantBudPhoneDrawer" type="checkbox" class="peer sr-only" data-phone-nav-toggle>
+
+<header class="fixed inset-x-0 top-0 z-[100000] px-3 pt-[max(0.65rem,env(safe-area-inset-top))]" data-phone-navbar>
+  <div class="phone-navbar-shell relative mx-auto grid h-14 max-w-xl items-center overflow-hidden rounded-[1.35rem] border border-white/30 bg-white/20 px-1.5 text-[#113e14] shadow-[0_16px_45px_rgba(17,62,20,0.18)] backdrop-blur-xl backdrop-saturate-150 before:pointer-events-none before:absolute before:inset-x-5 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-white/80 before:to-transparent">
+    <label for="plantBudPhoneDrawer" class="grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-white/18 transition active:scale-95 active:bg-white/35" aria-label="Open navigation menu">
+      <img src="/resources/images/phone-icons/menu.png" alt="" class="h-7 w-7 object-contain">
+    </label>
+
+    <div class="phone-now-bar relative mx-auto h-11 w-full overflow-hidden" data-phone-now-bar data-now-bar-index="0">
+      <button type="button" class="relative block h-full w-full overflow-hidden px-1 text-[#113e14]" data-now-bar-cycle aria-label="Show weather">
+        <span class="phone-now-bar-panel is-active" data-now-bar-panel="brand">
+          <img src="/resources/images/essential/pb-logo.png" alt="Plant Bud" class="h-9 w-auto max-w-[8.25rem] object-contain mix-blend-multiply">
+        </span>
+        <span class="phone-now-bar-panel" data-now-bar-panel="weather" aria-hidden="true">
+          <span class="phone-now-bar-icon bg-[#ebe3a7]/80" data-now-bar-weather-icon aria-hidden="true">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <circle cx="12" cy="12" r="3.5" stroke-width="2"/>
+              <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span class="phone-now-bar-copy min-w-0 text-left">
+            <strong class="phone-now-bar-title block text-[10px] font-black" data-now-bar-weather-main>Check today's plant care</strong>
+            <small class="phone-now-bar-detail block text-[8px] font-bold text-[#416543]" data-now-bar-weather-detail>Local weather</small>
+          </span>
+        </span>
+        <span class="phone-now-bar-panel" data-now-bar-panel="requests" aria-hidden="true">
+          <span class="phone-now-bar-icon bg-[#dca15d]/22" aria-hidden="true">
+            <img src="/resources/images/phone-icons/Requested.png" alt="" class="h-4 w-4 object-contain">
+          </span>
+          <span class="phone-now-bar-copy min-w-0 text-left">
+            <strong class="phone-now-bar-title block text-[10px] font-black">{{ nowBarRequest.label }}</strong>
+            <small class="phone-now-bar-detail block text-[8px] font-bold text-[#416543]">{{ nowBarRequest.count ? nowBarRequest.count + ' active' : 'Requests' }}</small>
+          </span>
+        </span>
+      </button>
+      <span class="phone-now-bar-progress" aria-hidden="true"></span>
+    </div>
+
+    <a href="/notification" class="phone-navbar-notification {{ notificationCount ? 'phone-navbar-notification--counted' : '' }} {{ active === 'notification' ? 'bg-[#ebe3a7]/90' : 'bg-white/28' }} relative ml-auto flex h-11 items-center rounded-full border border-white/35 p-1 shadow-sm transition active:scale-95" aria-label="{{ notificationLabel }}">
+      <span class="grid h-9 w-9 flex-none place-items-center rounded-full">
+        <img src="/resources/images/phone-icons/Notifications.png" alt="" class="h-6 w-6 object-contain">
+      </span>
+      @if(notificationCount)
+        <span class="phone-navbar-notification-count mr-1 grid min-h-5 min-w-5 place-items-center rounded-full bg-[#dca15d] px-1.5 text-[9px] font-black leading-none text-[#113e14] shadow-sm" data-phone-notification-count aria-hidden="true">
+          {{ notificationCount > 99 ? '99+' : notificationCount }}
+        </span>
+      @endif
+    </a>
+  </div>
+</header>
+
+<div class="h-[4.4rem]" aria-hidden="true" data-phone-top-nav-spacer></div>
+
+<label for="plantBudPhoneDrawer" class="pointer-events-none fixed inset-0 z-[100001] bg-[#071b09]/0 opacity-0 backdrop-blur-none transition duration-300 peer-checked:pointer-events-auto peer-checked:bg-[#071b09]/55 peer-checked:opacity-100 peer-checked:backdrop-blur-sm" aria-label="Close navigation menu"></label>
+
+<aside class="fixed inset-y-0 left-0 z-[100002] w-[min(88vw,22rem)] -translate-x-[105%] overflow-y-auto border-r border-white/25 bg-[#f5f2df] text-[#113e14] shadow-[24px_0_70px_rgba(17,62,20,0.3)] transition-transform duration-300 ease-out peer-checked:translate-x-0" aria-label="Plant Bud menu" data-phone-nav-drawer>
+  <div class="relative h-44 overflow-hidden bg-[#113e14]">
+    <img src="{{ bannerUrl }}" alt="" class="h-full w-full object-cover">
+    <label for="plantBudPhoneDrawer" class="absolute right-4 top-[max(1rem,env(safe-area-inset-top))] grid h-10 w-10 cursor-pointer place-items-center rounded-full border border-white/20 bg-[#113e14]/65 text-xl font-black text-white shadow-lg backdrop-blur-xl" aria-label="Close navigation menu">&times;</label>
+  </div>
+
+  <div class="relative px-5 pb-[max(2rem,env(safe-area-inset-bottom))]">
+    <div class="-mt-12 flex items-end gap-3">
+      <a href="{{ profileHref }}" class="block h-24 w-24 overflow-hidden rounded-full border-4 border-[#f5f2df] bg-[#113e14] text-[#ebe3a7] shadow-xl">
+        @if(avatarUrl)
+          <img src="{{ avatarUrl }}" alt="" class="h-full w-full object-cover">
+        @else
+          <span class="grid h-full w-full place-items-center text-3xl font-black">{{ avatarInitial }}</span>
+        @endif
+      </a>
+      <span class="mb-3 rounded-full border border-[#416543]/10 bg-white/75 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-[#416543] shadow-sm">My space</span>
+    </div>
+
+    <a href="{{ profileHref }}" class="mt-3 block">
+      <strong class="block truncate text-xl font-black">{{ displayName }}</strong>
+      <span class="mt-0.5 block truncate text-sm font-bold text-[#416543]">{{ username }}</span>
+    </a>
+
+    <div class="phone-drawer-account-actions mt-4 grid grid-cols-[minmax(0,1fr)_auto] gap-2 rounded-[1.35rem] border border-[#416543]/10 bg-white/62 p-2 shadow-[0_10px_28px_rgba(17,62,20,0.08)]" data-phone-drawer-account-actions>
+      <a href="/profile/settings" class="phone-drawer-settings flex min-w-0 items-center gap-3 rounded-[1rem] bg-[#ebe3a7]/68 px-3 py-2.5 transition active:scale-[0.98]" aria-label="Settings">
+        <span class="grid h-10 w-10 flex-none place-items-center rounded-xl bg-white/80 shadow-sm">
+          <img src="/resources/images/phone-icons/Settings.png" alt="" class="h-5 w-5 object-contain">
+        </span>
+        <span class="min-w-0">
+          <strong class="block text-sm font-black">Settings</strong>
+          <small class="block truncate text-[10px] font-bold text-[#416543]/70">Profile and preferences</small>
+        </span>
+      </a>
+      @if(auth.user)
+        @form({ route: 'session.destroy', method: 'POST', class: 'flex' })
+          <button type="submit" class="phone-drawer-logout group flex min-w-[4.4rem] flex-col items-center justify-center rounded-[1rem] border border-[#dca15d]/24 bg-[#dca15d]/10 px-2 py-2 text-[#7b472c] transition active:scale-95" aria-label="Log out">
+            <svg class="h-5 w-5 transition group-active:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+              <path d="M10 17l5-5-5-5M15 12H3M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="mt-1 text-[10px] font-black">Log out</span>
+          </button>
+        @end
+      @endif
+    </div>
+
+    <div class="mt-4 flex items-center justify-between rounded-2xl border border-[#416543]/10 bg-white/65 px-4 py-3">
+      <span>
+        <span class="block text-[10px] font-black uppercase tracking-[0.16em] text-[#416543]">Current plan</span>
+        <strong class="mt-0.5 block text-sm">{{ planLabel }}</strong>
+      </span>
+      <a href="/plans" class="rounded-full bg-[#dca15d] px-4 py-2 text-xs font-black">{{ planLabel === 'Premium' ? 'Manage' : 'Upgrade' }}</a>
+    </div>
+
+    <nav class="mt-5 space-y-1.5" aria-label="More Plant Bud links">
+      @if(auth.user?.role === 'gardener')
+        <a href="/gardener/dashboard" class="flex items-center gap-4 rounded-[1.15rem] px-3 py-3 transition active:scale-[0.98] active:bg-[#ebe3a7]">
+          <span class="grid h-11 w-11 flex-none place-items-center rounded-2xl bg-[#dca15d]/22">
+            <img src="/resources/images/phone-icons/Services.png" alt="" class="h-6 w-6 object-contain">
+          </span>
+          <span class="min-w-0">
+            <strong class="block text-sm font-black">Gardener dashboard</strong>
+            <small class="mt-0.5 block truncate text-[11px] font-bold text-[#416543]/70">Schedule, clients, and earnings</small>
+          </span>
+        </a>
+      @endif
+      @each(item in drawerItems)
+        <a href="{{ item.href }}" class="flex items-center gap-4 rounded-[1.15rem] px-3 py-3 transition active:scale-[0.98] active:bg-[#ebe3a7]">
+          <span class="grid h-11 w-11 flex-none place-items-center rounded-2xl bg-[#ebe3a7]/65">
+            <img src="{{ item.icon }}" alt="" class="h-6 w-6 object-contain">
+          </span>
+          <span class="min-w-0">
+            <strong class="block text-sm font-black">{{ item.label }}</strong>
+            <small class="mt-0.5 block truncate text-[11px] font-bold text-[#416543]/70">{{ item.description }}</small>
+          </span>
+        </a>
+      @end
+    </nav>
+
+    <div class="mt-6 rounded-[1.4rem] bg-[#113e14] p-5 text-[#ebe3a7] shadow-lg">
+      <img src="/resources/images/essential/logo.png" alt="" class="h-10 w-10">
+      <p class="mt-3 font-abril text-xl">Plant Bud</p>
+      <p class="mt-1 text-xs font-semibold leading-5 text-white/60">CHOOSE TO BE THE PLANT'S BEST BUD</p>
+    </div>
+  </div>
+
+  <div class="phone-drawer-swipe-cue pointer-events-none fixed right-1 top-1/2 z-10 h-14 w-1 -translate-y-1/2 rounded-full bg-[#416543]/18" aria-hidden="true"></div>
+</aside>
+
+<nav class="fixed inset-x-0 bottom-0 z-[100000] px-3 pb-[max(0.7rem,env(safe-area-inset-bottom))]" aria-label="Primary mobile navigation" data-phone-bottom-nav>
+  <div class="relative mx-auto grid h-[4.6rem] max-w-xl grid-cols-5 items-center overflow-visible rounded-[1.65rem] border border-white/30 bg-white/20 px-2 shadow-[0_-12px_42px_rgba(17,62,20,0.18)] backdrop-blur-xl backdrop-saturate-150 before:pointer-events-none before:absolute before:inset-x-7 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-white/80 before:to-transparent">
+    @each(item in bottomItems.slice(0, 2))
+      @let(isActive = item.activeKeys.includes(active))
+      <a href="{{ item.href }}" class="{{ isActive ? 'bg-[#ebe3a7]/90 shadow-lg' : 'bg-white/30' }} relative z-10 mx-auto grid h-12 w-12 place-items-center rounded-2xl border border-white/35 transition active:scale-90" aria-label="{{ item.label }}">
+        <img src="{{ item.icon }}" alt="" class="h-6 w-6 object-contain">
+      </a>
+    @end
+
+    <details class="group relative mx-auto" data-phone-tools-menu>
+      <summary class="{{ ['scanner', 'designer'].includes(active) ? 'bg-[#ebe3a7]' : 'bg-[#dca15d]' }} -mt-7 grid h-16 w-16 cursor-pointer list-none place-items-center rounded-[1.4rem] border-4 border-[#113e14] shadow-[0_12px_28px_rgba(0,0,0,0.3)] transition active:scale-90" aria-label="Scanner and designer">
+        <img src="/resources/images/phone-icons/Scanner-Designer.png" alt="" class="h-8 w-8 object-contain">
+      </summary>
+      <div class="absolute bottom-[calc(100%+0.85rem)] left-1/2 w-52 -translate-x-1/2 overflow-hidden rounded-[1.35rem] border border-white/80 bg-white/94 p-2.5 text-[#113e14] shadow-[0_22px_60px_rgba(17,62,20,0.26)] backdrop-blur-2xl" data-phone-tools-panel>
+        <div class="mb-2 rounded-[1rem] bg-[#ebe3a7]/55 px-3.5 py-2.5">
+          <p class="text-[9px] font-black uppercase tracking-[0.16em] text-[#416543]">Plant tools</p>
+          <p class="mt-0.5 text-sm font-black">Choose your workspace</p>
+        </div>
+        <a href="/scanner" class="flex items-center gap-3 rounded-[1rem] px-2.5 py-2.5 text-xs font-black transition hover:bg-[#416543]/10">
+          <span class="grid h-10 w-10 place-items-center rounded-xl bg-[#ebe3a7]/65">
+            <img src="/resources/images/phone-icons/Scanner.png" alt="" class="h-5 w-5 object-contain">
+          </span>
+          <span>
+            <strong class="block">Scanner</strong>
+            <small class="mt-0.5 block font-bold text-[#416543]/65">Identify plant health</small>
+          </span>
+        </a>
+        <a href="/designer" class="mt-1 flex items-center gap-3 rounded-[1rem] px-2.5 py-2.5 text-xs font-black transition hover:bg-[#416543]/10">
+          <span class="grid h-10 w-10 place-items-center rounded-xl bg-[#dca15d]/22">
+            <img src="/resources/images/phone-icons/Designer.png" alt="" class="h-5 w-5 object-contain">
+          </span>
+          <span>
+            <strong class="block">Designer</strong>
+            <small class="mt-0.5 block font-bold text-[#416543]/65">Create a garden layout</small>
+          </span>
+        </a>
+      </div>
+    </details>
+
+    @each(item in bottomItems.slice(2))
+      @let(isActive = item.activeKeys.includes(active))
+      <a href="{{ item.href }}" class="{{ isActive ? 'bg-[#ebe3a7]/90 shadow-lg' : 'bg-white/30' }} relative z-10 mx-auto grid h-12 w-12 place-items-center overflow-hidden rounded-2xl border border-white/35 transition active:scale-90" aria-label="{{ item.label }}">
+        @if(item.icon)
+          <img src="{{ item.icon }}" alt="" class="h-6 w-6 object-contain">
+        @elseif(avatarUrl)
+          <img src="{{ avatarUrl }}" alt="" class="h-9 w-9 rounded-xl object-cover">
+        @else
+          <span class="grid h-9 w-9 place-items-center rounded-xl bg-[#ebe3a7] text-sm font-black text-[#113e14]">{{ avatarInitial }}</span>
+        @endif
+      </a>
+    @end
+  </div>
+</nav>

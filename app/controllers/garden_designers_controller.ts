@@ -1,13 +1,33 @@
 import { spawn, spawnSync } from 'node:child_process'
+import { randomUUID } from 'node:crypto'
 import { existsSync } from 'node:fs'
 import fs from 'node:fs/promises'
-import { extname, relative, resolve as resolvePath, sep } from 'node:path'
+import path, { extname, relative, resolve as resolvePath, sep } from 'node:path'
 import type { HttpContext } from '@adonisjs/core/http'
+import {
+  buildDesignerAssetSearchProfile,
+  rankDesignerAssetPhotos,
+  type DesignerAssetPhoto,
+} from '#services/designer_asset_search'
 import axios from 'axios'
 import env from '#start/env'
 import app from '@adonisjs/core/services/app'
 import SubscriptionService from '#services/subscription_service'
+import GardenProject from '#models/garden_project'
+import { DateTime } from 'luxon'
 
+const projectImageOptions = {
+  size: '12mb',
+  extnames: ['jpg', 'jpeg', 'png', 'webp'],
+}
+const projectImagePattern = /^garden-\d+-[0-9a-f-]+\.(jpg|jpeg|png|webp)$/i
+const emptyProjectState = JSON.stringify({
+  els: [],
+  zIndexCounter: 10,
+  layerCounter: 0,
+  canvasWidth: 0,
+  canvasHeight: 0,
+})
 export default class GardenDesignerController {
   private subscriptions = new SubscriptionService()
   private pexelsUrl = 'https://api.pexels.com/v1/search'
@@ -77,7 +97,7 @@ export default class GardenDesignerController {
     },
   ]
 
-  async show({ auth, response, session, view }: HttpContext) {
+  async index({ auth, response, session, view }: HttpContext) {
     const user = auth.user!
     const subscription = await this.subscriptions.getSubscriptionSummary(user)
 
@@ -87,11 +107,219 @@ export default class GardenDesignerController {
       return response.redirect().toRoute('plans.index')
     }
 
+    const projects = await GardenProject.query()
+      .where('userId', user.id)
+      .orderBy('updatedAt', 'desc')
+
+    return view.render('pages/garden/projects', {
+      user,
+      accountProfile: subscription.profile,
+      subscription,
+      projects: projects.map((project) => this.projectCard(project)),
+    })
+  }
+
+  async store(ctx: HttpContext) {
+    const { auth, request, response, session } = ctx
+    const premiumAccess = await this.requirePremiumAccess(ctx)
+    if (!premiumAccess.allowed) return response.redirect().toRoute('plans.index')
+
+    const name = this.cleanText(request.input('name'), 80) || 'Untitled garden'
+    const description = this.cleanText(request.input('description'), 240)
+    const project = await GardenProject.create({
+      userId: auth.user!.id,
+      name,
+      description,
+      stateJson: emptyProjectState,
+      inventoryJson: '[]',
+      baseImageName: null,
+      itemCount: 0,
+      lastOpenedAt: DateTime.now(),
+    })
+
+    session.flash('success', 'Garden project created.')
+    return response.redirect().toRoute('garden_designer.projects.show', { id: project.id })
+  }
+
+  async show({ auth, params, response, session, view }: HttpContext) {
+    const user = auth.user!
+    const subscription = await this.subscriptions.getSubscriptionSummary(user)
+
+    if (!subscription.isPremium) {
+      session.flash('error', 'The 2D Garden Designer is included with Plant Bud Premium.')
+      return response.redirect().toRoute('plans.index')
+    }
+
+    const project = await this.findOwnedProject(user.id, params.id)
+    if (!project) return response.notFound('Garden project not found')
+
+    project.lastOpenedAt = DateTime.now()
+    await project.save()
+
     return view.render('pages/garden/designer', {
       user,
       accountProfile: subscription.profile,
       subscription,
+      project: this.projectPayload(project),
+      projectJson: JSON.stringify(this.projectPayload(project)).replace(/</g, '\\u003c'),
     })
+  }
+
+  async update(ctx: HttpContext) {
+    const { auth, params, request, response } = ctx
+    const premiumAccess = await this.requirePremiumAccess(ctx)
+    if (!premiumAccess.allowed) return response.status(402).json(premiumAccess.payload)
+
+    const project = await this.findOwnedProject(auth.user!.id, params.id)
+    if (!project) return response.notFound({ error: 'Garden project not found' })
+
+    const name = this.cleanText(request.input('name'), 80)
+    const description = this.cleanText(request.input('description'), 240)
+    const state = request.input('state')
+    const inventory = request.input('inventory')
+
+    if (name) project.name = name
+    if (request.input('description') !== undefined) project.description = description
+
+    if (state !== undefined) {
+      const stateJson = typeof state === 'string' ? state : JSON.stringify(state)
+      if (stateJson.length > 15_000_000) {
+        return response.status(413).json({ error: 'Project state is too large' })
+      }
+      project.stateJson = stateJson
+      project.itemCount = this.projectItemCount(stateJson)
+    }
+
+    if (inventory !== undefined) {
+      const inventoryJson = typeof inventory === 'string' ? inventory : JSON.stringify(inventory)
+      project.inventoryJson = inventoryJson.slice(0, 15_000_000)
+    }
+
+    await project.save()
+    return response.ok({
+      ok: true,
+      project: this.projectPayload(project),
+    })
+  }
+
+  async storeImage(ctx: HttpContext) {
+    const { auth, params, request, response } = ctx
+    const premiumAccess = await this.requirePremiumAccess(ctx)
+    if (!premiumAccess.allowed) return response.status(402).json(premiumAccess.payload)
+
+    const project = await this.findOwnedProject(auth.user!.id, params.id)
+    if (!project) return response.notFound({ error: 'Garden project not found' })
+
+    const image = request.file('image', projectImageOptions)
+    if (!image || !image.isValid) {
+      return response.badRequest({
+        error: 'Use a JPG, PNG or WEBP garden image smaller than 12 MB.',
+      })
+    }
+
+    const directory = this.projectImageDirectory(auth.user!.id, project.id)
+    const extension = (image.extname || 'jpg').toLowerCase()
+    const fileName = `garden-${project.id}-${randomUUID()}.${extension}`
+
+    await fs.mkdir(directory, { recursive: true })
+    await image.move(directory, { name: fileName, overwrite: false })
+
+    if (project.baseImageName) {
+      await fs.rm(path.join(directory, project.baseImageName), { force: true })
+    }
+
+    project.baseImageName = fileName
+    await project.save()
+
+    return response.ok({
+      ok: true,
+      mediaUrl: this.projectMediaUrl(project),
+    })
+  }
+
+  async duplicate(ctx: HttpContext) {
+    const { auth, params, response, session } = ctx
+    const premiumAccess = await this.requirePremiumAccess(ctx)
+    if (!premiumAccess.allowed) return response.redirect().toRoute('plans.index')
+
+    const source = await this.findOwnedProject(auth.user!.id, params.id)
+    if (!source) return response.notFound('Garden project not found')
+
+    const project = await GardenProject.create({
+      userId: source.userId,
+      name: `${source.name} copy`.slice(0, 80),
+      description: source.description,
+      stateJson: source.stateJson,
+      inventoryJson: source.inventoryJson,
+      baseImageName: null,
+      itemCount: source.itemCount,
+      lastOpenedAt: null,
+    })
+
+    if (source.baseImageName) {
+      const sourcePath = path.join(
+        this.projectImageDirectory(source.userId, source.id),
+        source.baseImageName
+      )
+      const extension = extname(source.baseImageName).replace('.', '') || 'jpg'
+      const fileName = `garden-${project.id}-${randomUUID()}.${extension}`
+      const directory = this.projectImageDirectory(project.userId, project.id)
+
+      try {
+        await fs.mkdir(directory, { recursive: true })
+        await fs.copyFile(sourcePath, path.join(directory, fileName))
+        project.baseImageName = fileName
+        await project.save()
+      } catch {
+        await fs.rm(directory, { recursive: true, force: true })
+      }
+    }
+
+    session.flash('success', 'Garden project duplicated.')
+    return response.redirect().toRoute('garden_designer.index')
+  }
+
+  async destroy(ctx: HttpContext) {
+    const { auth, params, response, session } = ctx
+    const premiumAccess = await this.requirePremiumAccess(ctx)
+    if (!premiumAccess.allowed) return response.redirect().toRoute('plans.index')
+
+    const project = await this.findOwnedProject(auth.user!.id, params.id)
+    if (!project) return response.notFound({ error: 'Garden project not found' })
+
+    await fs.rm(this.projectImageDirectory(project.userId, project.id), {
+      recursive: true,
+      force: true,
+    })
+    await project.delete()
+
+    session.flash('success', 'Garden project deleted.')
+    return response.redirect().toRoute('garden_designer.index')
+  }
+
+  async media(ctx: HttpContext) {
+    const { auth, params, response } = ctx
+    const premiumAccess = await this.requirePremiumAccess(ctx)
+    if (!premiumAccess.allowed) return response.status(402).send('Premium plan required')
+
+    const project = await this.findOwnedProject(auth.user!.id, params.id)
+    if (!project?.baseImageName || !projectImagePattern.test(project.baseImageName)) {
+      return response.notFound('Garden image not found')
+    }
+
+    const directory = this.projectImageDirectory(project.userId, project.id)
+    const filePath = path.resolve(directory, project.baseImageName)
+    if (!filePath.startsWith(`${directory}${path.sep}`)) {
+      return response.notFound('Garden image not found')
+    }
+
+    response
+      .header('Cache-Control', 'private, max-age=3600')
+      .header('X-Content-Type-Options', 'nosniff')
+      .download(filePath, false, (error) => {
+        if (error.code === 'ENOENT') return ['Garden image not found', 404]
+        return ['Unable to read garden image', 500]
+      })
   }
 
   async searchAssets(ctx: HttpContext) {
@@ -103,8 +331,8 @@ export default class GardenDesignerController {
     }
 
     const query = request.input('query')?.toString().trim()
-    const perPage = Number(request.input('per_page') ?? 15)
-    const safePerPage = Number.isFinite(perPage) ? Math.min(Math.max(perPage, 1), 30) : 15
+    const perPage = Number(request.input('per_page') ?? 40)
+    const safePerPage = Number.isFinite(perPage) ? Math.min(Math.max(perPage, 20), 60) : 40
 
     if (!query) {
       return response.badRequest({
@@ -112,7 +340,8 @@ export default class GardenDesignerController {
       })
     }
 
-    const fallbackPhotos = this.searchLocalAssets(query)
+    const profile = buildDesignerAssetSearchProfile(query)
+    const fallbackPhotos = this.searchLocalAssets(profile.translatedQuery).slice(0, 20)
     const apiKey = env.get('PEXELS_API_KEY')?.trim()
 
     if (!apiKey) {
@@ -126,7 +355,7 @@ export default class GardenDesignerController {
     try {
       const { data } = await axios.get(this.pexelsUrl, {
         params: {
-          query,
+          query: profile.apiQuery,
           per_page: safePerPage,
         },
         headers: {
@@ -135,13 +364,32 @@ export default class GardenDesignerController {
         timeout: 15000,
       })
 
-      const photos = (data.photos || []).map((photo: any) => ({
+      const rankedPhotos = rankDesignerAssetPhotos(
+        (data.photos || []).map(
+          (photo: any): DesignerAssetPhoto => ({
+            id: photo.id,
+            alt: photo.alt || '',
+            url: photo.src?.large2x || photo.src?.original || photo.src?.medium || '',
+            thumbnail: photo.src?.medium || photo.src?.small || '',
+            photographer: photo.photographer || '',
+            photographerUrl: photo.photographer_url || '',
+            width: Number(photo.width) || 0,
+            height: Number(photo.height) || 0,
+          })
+        ),
+        profile,
+        20
+      )
+      const photos = rankedPhotos.map((photo) => ({
         id: photo.id,
         alt: photo.alt,
+        cleanBackground: photo.cleanBackground,
+        photographer: photo.photographer,
+        photographerUrl: photo.photographerUrl,
         src: {
-          medium: photo.src?.medium,
-          large2x: photo.src?.large2x,
-          original: photo.src?.original,
+          medium: photo.thumbnail,
+          large2x: photo.url,
+          original: photo.url,
         },
       }))
 
@@ -149,6 +397,7 @@ export default class GardenDesignerController {
         query,
         photos: photos.length ? photos : fallbackPhotos,
         source: photos.length ? 'pexels' : 'local',
+        intent: profile.displayQuery,
       })
     } catch (error: any) {
       console.error('PEXELS ERROR:', error?.response?.data || error.message)
@@ -258,7 +507,7 @@ export default class GardenDesignerController {
         resolve({
           error: 'Python AI environment was not found',
           detail:
-            'Install Python 3.12, run npm run setup, and restart npm run dev before using background removal.',
+            'Install Python 3.12 and run npm run setup:python before using background removal.',
         })
         return
       }
@@ -377,9 +626,7 @@ export default class GardenDesignerController {
       const searchable = `${asset.alt} ${asset.tags.join(' ')}`.toLowerCase()
       return terms.every((term) => searchable.includes(term))
     })
-    const assets = matchingAssets.length ? matchingAssets : this.localAssets
-
-    return assets.map((asset) => ({
+    return matchingAssets.map((asset) => ({
       id: asset.id,
       alt: asset.alt,
       src: {
@@ -420,6 +667,77 @@ export default class GardenDesignerController {
             feature: '2D Garden Designer',
           },
     }
+  }
+
+  private findOwnedProject(userId: number, projectId: unknown) {
+    const id = Number(projectId)
+    if (!Number.isInteger(id) || id <= 0) return null
+
+    return GardenProject.query().where('id', id).where('userId', userId).first()
+  }
+
+  private projectPayload(project: GardenProject) {
+    return {
+      id: project.id,
+      name: project.name,
+      description: project.description,
+      state: this.parseJson(project.stateJson, JSON.parse(emptyProjectState)),
+      inventory: this.parseJson(project.inventoryJson, []),
+      itemCount: project.itemCount,
+      mediaUrl: this.projectMediaUrl(project),
+      updatedAt: project.updatedAt?.toISO(),
+    }
+  }
+
+  private projectCard(project: GardenProject) {
+    const updatedAt = project.updatedAt || project.createdAt
+    const elapsedDays = Math.max(0, Math.floor(DateTime.now().diff(updatedAt, 'days').days))
+
+    return {
+      id: project.id,
+      name: project.name,
+      description: project.description || 'A Plant Bud garden concept ready to keep growing.',
+      itemCount: project.itemCount,
+      imageUrl: this.projectMediaUrl(project),
+      updatedLabel:
+        elapsedDays === 0
+          ? 'Edited today'
+          : elapsedDays === 1
+            ? 'Edited yesterday'
+            : `Edited ${elapsedDays} days ago`,
+      updatedAt: updatedAt.toFormat('LLL d, yyyy'),
+    }
+  }
+
+  private projectMediaUrl(project: GardenProject) {
+    if (!project.baseImageName) return null
+    const version = project.updatedAt?.toMillis() || Date.now()
+    return `/designer/projects/${project.id}/media?v=${version}`
+  }
+
+  private projectImageDirectory(userId: number, projectId: number) {
+    return path.resolve(app.makePath('storage/garden_projects', String(userId), String(projectId)))
+  }
+
+  private projectItemCount(stateJson: string) {
+    const state = this.parseJson<{ els?: unknown[] }>(stateJson, {})
+    return Array.isArray(state.els) ? state.els.length : 0
+  }
+
+  private parseJson<T>(value: string | null, fallback: T): T {
+    if (!value) return fallback
+
+    try {
+      return JSON.parse(value) as T
+    } catch {
+      return fallback
+    }
+  }
+
+  private cleanText(value: unknown, maxLength: number) {
+    if (typeof value !== 'string') return null
+    const cleaned = value.trim().replace(/\s+/g, ' ')
+    return cleaned ? cleaned.slice(0, maxLength) : null
   }
 
   private getContentType(filePath: string) {

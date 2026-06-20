@@ -1,0 +1,438 @@
+@layout()
+@slot('title')
+<title>Plant Bud - Service Requests</title>
+@endslot
+
+@let(viewerProfile = auth.user?.accountProfile)
+@let(displayName = viewerProfile?.displayName || auth.user?.fullName || auth.user?.username || 'Profile')
+@let(avatarUrl = viewerAvatarUrl)
+@let(avatarInitial = displayName ? Array.from(displayName)[0].toLocaleUpperCase('en') : 'P')
+@let(isSentMode = mode === 'sent')
+
+<div class="phone-requested-page relative z-10 min-h-dvh overflow-hidden text-[#113e14]" data-phone-requested data-request-mode="{{ mode }}">
+  @!component('components/app-navbar', {
+    section: isSentMode ? 'My requests' : 'Service inbox',
+    active: 'requested',
+    maxWidth: 'max-w-[min(1500px,calc(100vw-2rem))]',
+    avatarUrl,
+    avatarInitial,
+    displayName,
+    roleLabel: auth.user?.role || 'account',
+    planLabel: viewerProfile?.planLabel || 'Free',
+  })
+
+  <main class="relative z-10 mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))] px-4 pb-24 pt-3 sm:px-5 lg:px-10">
+    @if(flashMessages.get('success'))
+      <div class="mb-5 rounded-[1.25rem] border border-[#a8b841]/30 bg-[#ebe3a7]/94 px-5 py-4 text-sm font-black text-[#113e14] shadow-xl backdrop-blur-xl">
+        {{ flashMessages.get('success') }}
+      </div>
+    @endif
+    @if(flashMessages.get('requestError'))
+      <div class="mb-5 rounded-[1.25rem] border border-[#dca15d]/40 bg-[#f5f2df]/94 px-5 py-4 text-sm font-black text-[#7b4c1f] shadow-xl backdrop-blur-xl">
+        {{ flashMessages.get('requestError') }}
+      </div>
+    @endif
+
+    <section class="phone-requested-hero pb-8 pt-4" data-phone-first-content>
+      <div class="relative overflow-hidden rounded-[2rem] border border-white/24 bg-[#113e14]/90 p-7 text-white shadow-[0_28px_90px_rgba(17,62,20,0.28)] backdrop-blur-2xl md:p-10">
+        <div class="absolute -right-20 -top-24 h-64 w-64 rounded-full bg-[#a8b841]/18 blur-3xl"></div>
+        <div class="absolute -bottom-24 right-40 h-56 w-56 rounded-full bg-[#dca15d]/18 blur-3xl"></div>
+
+        <div class="relative grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
+          <div>
+            <p class="text-sm font-black uppercase tracking-[0.2em] text-[#ebe3a7]">
+              {{ isSentMode ? 'Requested by you' : 'Gardener workspace' }}
+            </p>
+            <h1 class="mt-4 max-w-3xl font-abril text-5xl leading-[1.04] md:text-6xl">
+              {{ isSentMode ? 'Track every service request' : 'Review and respond to clients' }}
+            </h1>
+            <p class="mt-5 max-w-2xl text-base font-semibold leading-7 text-white/76">
+              {{ isSentMode ? 'Track responses, dates, final amounts, and confirm completed work together with the gardener.' : 'Accept new work, agree on a date, and confirm completion together with the client before the transaction closes.' }}
+            </p>
+          </div>
+
+          @if(isSentMode)
+            <div class="phone-requested-hero-actions flex flex-col gap-3 sm:flex-row sm:items-center">
+              @if(viewerProfile?.isPremium)
+                <div class="rounded-[1.25rem] border border-[#ebe3a7]/20 bg-[#ebe3a7]/12 px-5 py-3 text-center">
+                  <p class="text-3xl font-black">{{ Number(rewardPoints || 0).toLocaleString('en-US') }}</p>
+                  <p class="text-[10px] font-black uppercase tracking-[0.16em] text-white/55">Reward points</p>
+                </div>
+              @endif
+              <a href="/maintenance" class="inline-flex w-full items-center justify-center rounded-full bg-[#dca15d] px-6 py-3 text-sm font-black text-[#113e14] shadow-lg transition hover:-translate-y-0.5 hover:bg-[#ebe3a7] sm:w-auto">
+                Find gardeners
+              </a>
+              <a href="/nurseries" class="inline-flex w-full items-center justify-center rounded-full border border-white/18 bg-white/10 px-6 py-3 text-sm font-black text-white transition hover:bg-white/18 sm:w-auto">
+                Find nurseries
+              </a>
+            </div>
+          @else
+            <a href="/profile/settings" class="inline-flex w-full items-center justify-center rounded-full bg-[#dca15d] px-6 py-3 text-sm font-black text-[#113e14] shadow-lg transition hover:-translate-y-0.5 hover:bg-[#ebe3a7] sm:w-fit">
+              Manage availability
+            </a>
+          @endif
+        </div>
+
+        <div class="phone-requested-stats relative mt-9 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <div class="rounded-[1.25rem] border border-white/10 bg-white/10 p-5">
+            <p class="text-xs font-black uppercase tracking-[0.16em] text-white/60">Pending</p>
+            <p class="mt-2 text-4xl font-black">{{ stats.pending }}</p>
+          </div>
+          <div class="rounded-[1.25rem] border border-white/10 bg-[#a8b841]/18 p-5">
+            <p class="text-xs font-black uppercase tracking-[0.16em] text-white/60">Active</p>
+            <p class="mt-2 text-4xl font-black">{{ stats.active }}</p>
+          </div>
+          <div class="rounded-[1.25rem] border border-white/10 bg-[#dca15d]/16 p-5">
+            <p class="text-xs font-black uppercase tracking-[0.16em] text-white/60">Awaiting</p>
+            <p class="mt-2 text-4xl font-black">{{ stats.awaiting }}</p>
+          </div>
+          <div class="rounded-[1.25rem] border border-white/10 bg-[#ebe3a7]/12 p-5">
+            <p class="text-xs font-black uppercase tracking-[0.16em] text-white/60">Verified</p>
+            <p class="mt-2 text-4xl font-black">{{ stats.verified }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="pt-4">
+      <div class="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p class="text-sm font-black uppercase tracking-[0.2em] text-[#ebe3a7]">Request activity</p>
+          <h2 class="mt-2 text-3xl font-black text-white md:text-4xl">
+            {{ isSentMode ? 'Your requested gardeners' : 'Services waiting for your response' }}
+          </h2>
+        </div>
+        <p class="text-sm font-bold text-white/70">{{ requests.length }} total</p>
+      </div>
+
+      <div class="phone-requested-list grid gap-6">
+        @each(serviceRequest in requests)
+          @let(statusTone = serviceRequest.isVerified
+            ? 'bg-[#a8b841]/22 text-[#29472b]'
+            : serviceRequest.status === 'cancelled'
+              ? 'bg-[#dca15d]/22 text-[#7b4c1f]'
+              : serviceRequest.status === 'completed'
+                ? 'bg-[#dca15d] text-[#113e14]'
+                : serviceRequest.status === 'scheduled'
+                  ? 'bg-[#113e14] text-[#ebe3a7]'
+                  : serviceRequest.status === 'accepted'
+                    ? 'bg-[#a8b841]/28 text-[#113e14]'
+                    : 'bg-[#ebe3a7] text-[#113e14]')
+
+          <article class="phone-request-card overflow-hidden rounded-[1.6rem] border border-white/50 bg-white/90 shadow-[0_20px_60px_rgba(17,62,20,0.17)] backdrop-blur-2xl">
+            <div class="h-2 bg-[linear-gradient(90deg,#a8b841,#dca15d,#ebe3a7)]"></div>
+            <div class="p-6 md:p-8">
+              <div class="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
+                <div class="min-w-0 flex-1">
+                  @if(isSentMode)
+                    <div class="flex items-center gap-4">
+                      <a href="{{ serviceRequest.gardenerProfileHref || '#' }}" class="shrink-0">
+                        @if(serviceRequest.gardenerPhoto)
+                          <img src="{{ serviceRequest.gardenerPhoto }}" alt="{{ serviceRequest.gardenerName }}" class="h-20 w-20 rounded-[1.25rem] border-4 border-white object-cover shadow-lg">
+                        @else
+                          <span class="flex h-20 w-20 items-center justify-center rounded-[1.25rem] border-4 border-white bg-[#113e14] text-3xl font-black text-[#ebe3a7] shadow-lg" aria-label="{{ serviceRequest.gardenerName }}">
+                            {{ serviceRequest.gardenerInitial }}
+                          </span>
+                        @endif
+                      </a>
+                      <div class="min-w-0">
+                        <p class="text-xs font-black uppercase tracking-[0.18em] text-[#416543]">{{ serviceRequest.serviceTypeLabel }}</p>
+                        <h2 class="truncate text-2xl font-black">{{ serviceRequest.gardenerName }}</h2>
+                        <p class="mt-1 truncate text-sm font-bold text-[#416543]">{{ serviceRequest.gardenerSpecialty }}</p>
+                        @if(serviceRequest.gardenerUsername)
+                          <p class="mt-1 text-xs font-black text-[#416543]/70">{{ '@' + serviceRequest.gardenerUsername }}</p>
+                        @endif
+                      </div>
+                    </div>
+                  @else
+                    <div class="flex items-center gap-4">
+                      <a href="{{ serviceRequest.clientProfileHref }}" class="shrink-0">
+                        @if(serviceRequest.clientPhoto)
+                          <img src="{{ serviceRequest.clientPhoto }}" alt="{{ serviceRequest.clientName }}" class="h-20 w-20 rounded-[1.25rem] border-4 border-white object-cover shadow-lg">
+                        @else
+                          <span class="flex h-20 w-20 items-center justify-center rounded-[1.25rem] border-4 border-white bg-[#113e14] text-3xl font-black text-[#ebe3a7] shadow-lg" aria-label="{{ serviceRequest.clientName }}">
+                            {{ serviceRequest.clientInitial }}
+                          </span>
+                        @endif
+                      </a>
+                      <div class="min-w-0">
+                        <p class="text-xs font-black uppercase tracking-[0.18em] text-[#416543]">{{ serviceRequest.serviceTypeLabel }}</p>
+                        <h2 class="truncate text-2xl font-black">{{ serviceRequest.clientName }}</h2>
+                        <p class="mt-1 text-sm font-bold text-[#416543]">{{ '@' + serviceRequest.clientUsername }}</p>
+                      </div>
+                    </div>
+                  @endif
+                </div>
+                <span class="{{ statusTone }} rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.14em]">
+                  {{ serviceRequest.statusLabel }}
+                </span>
+              </div>
+
+              <div class="mt-6 rounded-[1.25rem] border border-[#416543]/10 bg-[#f5f2df]/76 p-4">
+                <p class="text-xs font-black uppercase tracking-[0.15em] text-[#416543]/70">Client request</p>
+                <p class="mt-2 text-sm font-semibold leading-6 text-[#416543]">{{ serviceRequest.notes }}</p>
+              </div>
+
+              @if(serviceRequest.gardenerResponse)
+                <div class="mt-4 rounded-[1.25rem] border border-[#a8b841]/20 bg-[#a8b841]/10 p-4">
+                  <p class="text-xs font-black uppercase tracking-[0.15em] text-[#416543]/70">Gardener response</p>
+                  <p class="mt-2 text-sm font-semibold leading-6 text-[#416543]">{{ serviceRequest.gardenerResponse }}</p>
+                </div>
+              @endif
+
+              @if(serviceRequest.waitingForLabel)
+                <div class="mt-4 rounded-[1.25rem] border border-[#dca15d]/28 bg-[#dca15d]/12 px-5 py-4 text-sm font-black text-[#7b4c1f]">
+                  {{ serviceRequest.waitingForLabel }}
+                </div>
+              @endif
+
+              @let(paymentTone = serviceRequest.isCashPayment
+                ? 'border-[#dca15d]/30 bg-[#dca15d]/12'
+                : serviceRequest.paymentStatus === 'released'
+                ? 'border-[#a8b841]/30 bg-[#a8b841]/12'
+                : serviceRequest.paymentStatus === 'refunded'
+                  ? 'border-[#dca15d]/30 bg-[#dca15d]/12'
+                  : 'border-[#416543]/15 bg-[#113e14] text-white')
+              <div class="{{ paymentTone }} mt-4 flex flex-col gap-4 rounded-[1.25rem] border p-5 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <p class="text-xs font-black uppercase tracking-[0.15em] {{ serviceRequest.paymentStatus === 'held' ? 'text-[#ebe3a7]' : 'text-[#416543]/70' }}">Payment</p>
+                  <p class="mt-1 text-lg font-black">{{ serviceRequest.paymentStatusLabel }}</p>
+                  <p class="mt-1 text-xs font-bold {{ serviceRequest.paymentStatus === 'held' ? 'text-white/62' : 'text-[#416543]/70' }}">{{ serviceRequest.paymentMethodLabel }}</p>
+                  @if(serviceRequest.hasPointsDiscount)
+                    <p class="mt-2 text-xs font-black {{ serviceRequest.paymentStatus === 'held' ? 'text-[#ebe3a7]' : 'text-[#416543]' }}">
+                      {{ serviceRequest.discountPercent }}% off · {{ serviceRequest.pointsRedeemed.toLocaleString('en-US') }} points redeemed
+                      @if(serviceRequest.pointsRefunded)
+                        · Points returned
+                      @endif
+                    </p>
+                  @endif
+                </div>
+                <div class="grid grid-cols-1 gap-2 text-right text-xs font-bold sm:grid-cols-2">
+                  @if(serviceRequest.hasPaymentHold)
+                    <span class="{{ serviceRequest.paymentStatus === 'held' ? 'text-white/60' : 'text-[#416543]/65' }}">Held</span>
+                    <strong>{{ serviceRequest.heldAmount }}</strong>
+                    @if(serviceRequest.hasPointsDiscount)
+                      <span class="{{ serviceRequest.paymentStatus === 'held' ? 'text-white/60' : 'text-[#416543]/65' }}">Discount</span>
+                      <strong>{{ serviceRequest.discountAmount }}</strong>
+                    @endif
+                  @else
+                    <span class="text-[#416543]/65">Method</span>
+                    <strong>Cash</strong>
+                  @endif
+                  @if(serviceRequest.paymentStatus === 'released')
+                    <span class="text-[#416543]/65">Released</span>
+                    <strong>{{ serviceRequest.releasedAmount }}</strong>
+                    @if(serviceRequest.hasRefund)
+                      <span class="text-[#416543]/65">Returned</span>
+                      <strong>{{ serviceRequest.refundedAmount }}</strong>
+                    @endif
+                  @elseif(serviceRequest.paymentStatus === 'refunded')
+                    <span class="text-[#416543]/65">Returned</span>
+                    <strong>{{ serviceRequest.refundedAmount }}</strong>
+                  @endif
+                </div>
+              </div>
+
+              <div class="mt-4 grid gap-3 text-sm font-bold text-[#416543] sm:grid-cols-2 xl:grid-cols-4">
+                <div class="rounded-2xl bg-[#ebe3a7]/48 p-4">
+                  <p class="text-xs uppercase tracking-[0.12em] text-[#416543]/65">Original budget</p>
+                  <p class="mt-1 text-[#113e14]">{{ serviceRequest.budget }}</p>
+                </div>
+                <div class="rounded-2xl bg-[#dca15d]/14 p-4">
+                  <p class="text-xs uppercase tracking-[0.12em] text-[#416543]/65">Final amount</p>
+                  <p class="mt-1 text-[#113e14]">{{ serviceRequest.finalAmount }}</p>
+                </div>
+                <div class="rounded-2xl bg-[#416543]/8 p-4">
+                  <p class="text-xs uppercase tracking-[0.12em] text-[#416543]/65">Location</p>
+                  <p class="mt-1 text-[#113e14]">{{ serviceRequest.address }}</p>
+                  @if(serviceRequest.mapUrl)
+                    <div class="mt-3 flex flex-wrap gap-2">
+                      <a href="{{ serviceRequest.mapUrl }}" target="_blank" rel="noreferrer" class="rounded-full bg-white px-3 py-1.5 text-xs font-black text-[#416543]">OpenStreetMap</a>
+                      <a href="{{ serviceRequest.directionsUrl }}" target="_blank" rel="noreferrer" class="rounded-full bg-[#113e14] px-3 py-1.5 text-xs font-black text-[#ebe3a7]">Get directions</a>
+                    </div>
+                    <p class="mt-2 text-[10px] font-black uppercase tracking-[0.1em] text-[#416543]/55">Private precise pin · visible only to the client and gardener</p>
+                  @elseif(serviceRequest.locationRemoved)
+                    <p class="mt-2 text-[10px] font-black uppercase tracking-[0.1em] text-[#416543]/55">Removed automatically for privacy</p>
+                  @endif
+                </div>
+                <div class="rounded-2xl bg-[#a8b841]/12 p-4">
+                  <p class="text-xs uppercase tracking-[0.12em] text-[#416543]/65">Service date</p>
+                  <p class="mt-1 text-[#113e14]">{{ serviceRequest.scheduledFor }}</p>
+                  <p class="mt-1 text-xs text-[#416543]">Arrival: {{ serviceRequest.arrivalWindow }}</p>
+                </div>
+              </div>
+
+              @if(serviceRequest.hasPreciseLocation)
+                <section class="mt-4 overflow-hidden rounded-[1.25rem] border border-[#416543]/12 bg-white/70">
+                  <div class="flex flex-col gap-3 border-b border-[#416543]/10 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <p class="text-xs font-black uppercase tracking-[0.15em] text-[#416543]/70">Private service map</p>
+                      <p class="mt-1 text-sm font-bold text-[#113e14]">Available only while this request remains active.</p>
+                    </div>
+                    <a href="{{ serviceRequest.directionsUrl }}" target="_blank" rel="noreferrer" class="w-fit rounded-full bg-[#113e14] px-4 py-2.5 text-xs font-black text-[#ebe3a7]">Directions in Google Maps</a>
+                  </div>
+                  <div class="h-72 w-full" data-private-request-map data-latitude="{{ serviceRequest.latitude }}" data-longitude="{{ serviceRequest.longitude }}"></div>
+                </section>
+              @endif
+
+              @if(isSentMode)
+                <div class="mt-4 grid gap-3 rounded-[1.25rem] border border-[#416543]/10 bg-white/65 p-4 text-sm font-semibold text-[#416543] sm:grid-cols-2">
+                  <span><strong class="text-[#113e14]">Area:</strong> {{ serviceRequest.gardenerLocation }}</span>
+                  <span><strong class="text-[#113e14]">Availability:</strong> {{ serviceRequest.gardenerSchedule }}</span>
+                  <span><strong class="text-[#113e14]">Experience:</strong> {{ serviceRequest.gardenerExperience }}</span>
+                  <span class="flex items-center gap-2">
+                    <strong class="text-[#113e14]">Rating:</strong>
+                    <span class="flex gap-0.5 text-[#d08a36]" aria-label="{{ serviceRequest.gardenerRating }} out of 5 stars">
+                      @each(star in [1, 2, 3, 4, 5])
+                        <span class="{{ Number(serviceRequest.gardenerRating) >= star ? 'opacity-100' : 'opacity-25' }}">&#9733;</span>
+                      @end
+                    </span>
+                    <span>{{ serviceRequest.gardenerRating }}</span>
+                  </span>
+                  <span><strong class="text-[#113e14]">Phone:</strong> {{ serviceRequest.gardenerPhone }}</span>
+                  <span><strong class="text-[#113e14]">Email:</strong> {{ serviceRequest.gardenerEmail }}</span>
+                  @if(serviceRequest.gardenerServices.length)
+                    <div class="flex flex-wrap gap-2 sm:col-span-2">
+                      @each(service in serviceRequest.gardenerServices)
+                        <span class="rounded-full bg-[#ebe3a7]/60 px-3 py-1.5 text-xs font-black text-[#113e14]">{{ service }}</span>
+                      @end
+                    </div>
+                  @endif
+                </div>
+
+                @if(serviceRequest.canConfirmComplete)
+                  <div class="mt-5 rounded-[1.25rem] border border-[#dca15d]/28 bg-[#dca15d]/12 p-5">
+                    <h3 class="text-lg font-black text-[#113e14]">Confirm completed service</h3>
+                    <p class="mt-2 text-sm font-semibold leading-6 text-[#416543]">
+                      {{ serviceRequest.isCashPayment ? 'The cash payment is verified' : 'The held payment is released to the gardener and reward points are processed' }} only after both you and the gardener confirm completion.
+                      @if(serviceRequest.isCashPayment)
+                        Cash payments do not earn reward points.
+                      @elseif(serviceRequest.isPremiumClient && serviceRequest.potentialRewardPoints > 0)
+                        You will receive <strong>{{ serviceRequest.potentialRewardPoints.toLocaleString('en-US') }} points</strong>.
+                      @endif
+                    </p>
+                    <div class="mt-4 flex flex-wrap gap-3">
+                      @form({ action: `/requested/${serviceRequest.id}/action`, method: 'POST' })
+                        <input type="hidden" name="action" value="confirm_complete">
+                        <button type="submit" class="rounded-full bg-[#113e14] px-6 py-3 text-sm font-black text-[#ebe3a7] shadow-md transition hover:-translate-y-0.5 hover:bg-[#416543]">Service completed</button>
+                      @end
+                      @if(serviceRequest.canCancel)
+                        @form({ action: `/requested/${serviceRequest.id}/action`, method: 'POST' })
+                          <input type="hidden" name="action" value="cancel">
+                          <button type="submit" class="rounded-full border border-[#416543]/16 bg-white px-6 py-3 text-sm font-black text-[#416543] transition hover:bg-[#ebe3a7]">Cancel</button>
+                        @end
+                      @endif
+                    </div>
+                  </div>
+                @elseif(serviceRequest.isVerified)
+                  <div class="mt-5 rounded-[1.25rem] border border-[#a8b841]/25 bg-[#a8b841]/12 p-4 text-sm font-bold text-[#416543]">
+                    {{ serviceRequest.isCashPayment ? 'Cash payment verified' : 'Payment released' }} and transaction completed {{ serviceRequest.verifiedAt }} after both parties confirmed the service.
+                    @if(serviceRequest.rewardPointsAwarded > 0)
+                      {{ serviceRequest.rewardPointsAwarded.toLocaleString('en-US') }} reward points were credited.
+                    @endif
+                  </div>
+                  @form({ action: `/requested/${serviceRequest.id}/delete`, method: 'POST', class: 'mt-4 flex justify-end' })
+                    <button type="submit" class="rounded-full border border-[#dca15d]/30 bg-white px-5 py-2.5 text-xs font-black text-[#7b4c1f] transition hover:bg-[#dca15d]/15" aria-label="Remove completed request from list">
+                      Remove from list
+                    </button>
+                  @end
+                @endif
+
+                @if(serviceRequest.canCancel && !serviceRequest.canConfirmComplete)
+                  @form({ action: `/requested/${serviceRequest.id}/action`, method: 'POST', class: 'mt-4 flex justify-end' })
+                    <input type="hidden" name="action" value="cancel">
+                    <button type="submit" class="rounded-full border border-[#416543]/16 bg-white px-5 py-2.5 text-xs font-black text-[#416543] transition hover:bg-[#ebe3a7]">Cancel request</button>
+                  @end
+                @endif
+              @else
+                <div class="mt-4 flex flex-col gap-2 rounded-[1.25rem] border border-[#416543]/10 bg-white/65 p-4 text-sm font-semibold text-[#416543] sm:flex-row sm:items-center sm:justify-between">
+                  <span>{{ serviceRequest.clientPhone }}</span>
+                  <span>{{ serviceRequest.clientEmail }}</span>
+                  <a href="{{ serviceRequest.clientProfileHref }}" class="font-black text-[#113e14] hover:text-[#416543]">View client profile</a>
+                </div>
+
+                @if(serviceRequest.canAccept || serviceRequest.canSchedule || serviceRequest.canConfirmComplete || serviceRequest.canCancel)
+                  <div class="mt-5 grid gap-4 xl:grid-cols-2">
+                    @if(serviceRequest.canAccept)
+                      @form({ action: `/requested/${serviceRequest.id}/action`, method: 'POST', class: 'rounded-[1.25rem] border border-[#a8b841]/20 bg-[#a8b841]/10 p-4' })
+                        <input type="hidden" name="action" value="accept">
+                        <p class="text-sm font-black">Accept request</p>
+                        <textarea name="gardener_response" rows="2" required minlength="10" maxlength="2000" placeholder="Explain what you can do and the next step" class="mt-3 w-full resize-none rounded-2xl border border-[#416543]/12 bg-white/80 px-4 py-3 text-sm font-semibold outline-none focus:border-[#a8b841]"></textarea>
+                        <button type="submit" class="mt-3 rounded-full bg-[#113e14] px-5 py-2.5 text-xs font-black text-[#ebe3a7] transition hover:bg-[#416543]">Accept</button>
+                      @end
+                    @endif
+
+                    @if(serviceRequest.canSchedule)
+                      @form({ action: `/requested/${serviceRequest.id}/action`, method: 'POST', class: 'rounded-[1.25rem] border border-[#dca15d]/20 bg-[#dca15d]/10 p-4' })
+                        <input type="hidden" name="action" value="schedule">
+                        <p class="text-sm font-black">Schedule service</p>
+                        <input name="scheduled_for" type="date" value="{{ serviceRequest.scheduledForInput }}" min="{{ requestDateMin }}" max="{{ requestDateMax }}" required class="mt-3 min-h-11 w-full rounded-2xl border border-[#416543]/12 bg-white/80 px-4 py-2 text-sm font-semibold outline-none focus:border-[#dca15d]">
+                        <textarea name="gardener_response" rows="2" required minlength="10" maxlength="2000" placeholder="Confirm the date and share arrival instructions" class="mt-3 w-full resize-none rounded-2xl border border-[#416543]/12 bg-white/80 px-4 py-3 text-sm font-semibold outline-none focus:border-[#dca15d]"></textarea>
+                        <button type="submit" class="mt-3 rounded-full bg-[#dca15d] px-5 py-2.5 text-xs font-black text-[#113e14] transition hover:bg-[#ebe3a7]">Set date</button>
+                      @end
+                    @endif
+
+                    @if(serviceRequest.canConfirmComplete)
+                      @form({ action: `/requested/${serviceRequest.id}/action`, method: 'POST', class: 'rounded-[1.25rem] border border-[#416543]/14 bg-[#f5f2df] p-4' })
+                        <input type="hidden" name="action" value="confirm_complete">
+                        <p class="text-sm font-black">Confirm completed service</p>
+                        <label class="mt-3 flex min-h-11 items-center gap-2 rounded-2xl border border-[#416543]/12 bg-white/80 px-4">
+                          <span class="font-black text-[#416543]">$</span>
+                          <input name="final_amount" type="text" inputmode="decimal" required placeholder="75" data-max-amount="{{ serviceRequest.heldAmountInput }}" class="w-full bg-transparent py-2 text-sm font-semibold outline-none" data-budget-input>
+                        </label>
+                        @if(serviceRequest.hasPaymentHold)
+                          @if(serviceRequest.hasPointsDiscount)
+                            <p class="mt-2 text-xs font-bold text-[#416543]/65">Maximum service amount: {{ serviceRequest.budget }}. The client's {{ serviceRequest.discountPercent }}% discount is applied automatically.</p>
+                          @else
+                            <p class="mt-2 text-xs font-bold text-[#416543]/65">Maximum available: {{ serviceRequest.heldAmount }}</p>
+                          @endif
+                        @else
+                          <p class="mt-2 text-xs font-bold text-[#416543]/65">Enter the amount received in cash.</p>
+                        @endif
+                        <textarea name="gardener_response" rows="2" required minlength="10" maxlength="2000" placeholder="Summary of the completed work" class="mt-3 w-full resize-none rounded-2xl border border-[#416543]/12 bg-white/80 px-4 py-3 text-sm font-semibold outline-none focus:border-[#a8b841]"></textarea>
+                        <button type="submit" class="mt-3 rounded-full bg-[#113e14] px-5 py-2.5 text-xs font-black text-[#ebe3a7] transition hover:bg-[#416543]">Service completed</button>
+                      @end
+                    @endif
+
+                    @if(serviceRequest.canCancel)
+                      @form({ action: `/requested/${serviceRequest.id}/action`, method: 'POST', class: 'flex items-end justify-end rounded-[1.25rem] border border-[#416543]/10 bg-white/55 p-4' })
+                        <input type="hidden" name="action" value="cancel">
+                        <button type="submit" class="rounded-full border border-[#dca15d]/30 bg-white px-5 py-2.5 text-xs font-black text-[#7b4c1f] transition hover:bg-[#dca15d]/15">Decline / cancel</button>
+                      @end
+                    @endif
+                  </div>
+                @endif
+
+                @if(serviceRequest.isVerified)
+                  @form({ action: `/requested/${serviceRequest.id}/delete`, method: 'POST', class: 'mt-4 flex justify-end' })
+                    <button type="submit" class="rounded-full border border-[#dca15d]/30 bg-white px-5 py-2.5 text-xs font-black text-[#7b4c1f] transition hover:bg-[#dca15d]/15" aria-label="Remove completed request from list">
+                      Remove from list
+                    </button>
+                  @end
+                @endif
+              @endif
+
+              <p class="mt-5 text-xs font-bold uppercase tracking-[0.14em] text-[#416543]/65">
+                Requested {{ serviceRequest.createdAt }}
+                @if(serviceRequest.completedAt)
+                  · Completed {{ serviceRequest.completedAt }}
+                @endif
+              </p>
+            </div>
+          </article>
+        @else
+          <article class="rounded-[1.6rem] border border-white/50 bg-[#f5f2df]/94 p-12 text-center shadow-xl backdrop-blur-2xl">
+            <h2 class="text-3xl font-black">{{ isSentMode ? 'No requests yet' : 'Your service inbox is clear' }}</h2>
+            <p class="mx-auto mt-3 max-w-xl text-sm font-semibold leading-6 text-[#416543]">
+              {{ isSentMode ? 'Choose an available gardener and send your first service request.' : 'New client requests sent to your gardener profile will appear here.' }}
+            </p>
+            @if(isSentMode)
+              <a href="/maintenance" class="mt-6 inline-flex rounded-full bg-[#113e14] px-6 py-3 text-sm font-black text-[#ebe3a7] transition hover:-translate-y-0.5 hover:bg-[#416543]">Find gardeners</a>
+            @endif
+          </article>
+        @end
+      </div>
+    </section>
+  </main>
+</div>
+@end

@@ -1,0 +1,647 @@
+@layout()
+@slot('title')
+<title>Succulent Care</title>
+@endslot
+
+<div class="phone-care-page relative text-[#113e14]" data-phone-care-page="succulent">
+    @!component('components/header', {
+    title: "Taking care of plants is taking care of yourself",
+    text: "Sustainable outdoor solutions designed to inspire peaceful spaces and healthier living.",
+    imageBg:'bg-[url(/resources/images/care/bj-succ.jpg)]',
+    catalogHref: '/succulent',
+    careHref: '/care3',
+    })
+
+    <section class="phone-care-intro relative mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))] px-4 pb-16 pt-20 sm:px-5 lg:px-10">
+        <div class="relative z-10 w-full grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+
+
+            <div class="relative group">
+
+                <div class="relative overflow-hidden rounded-[42px] border border-[#ebe3a7]/38 shadow-2xl">
+                    <img decoding="async" src="/resources/images/care/succ-2.jpg" alt="Succulent plants"
+                        class="homepage-hero-media h-[320px] sm:h-[420px] lg:h-[620px] w-full object-cover transition duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-[#113e14]/35"></div>
+                </div>
+            </div>
+
+            <div
+                class="homepage-lively-card relative rounded-[34px] border border-[#ebe3a7]/48 bg-[#ebe3a7]/86 p-8 shadow-xl backdrop-blur-2xl sm:p-10 lg:p-12">
+                <div
+                    class="inline-flex items-center gap-3 rounded-full bg-[#113e14] px-5 py-2 text-sm font-black tracking-wide text-[#ebe3a7] shadow-sm mb-8">
+
+                    <div class="w-2.5 h-2.5 rounded-full bg-[#a8b841]"></div>
+                    Learn about:
+                </div>
+
+                <h2 class="font-abril text-4xl leading-tight text-[#113e14] md:text-5xl mb-8">
+                    Essential Care for
+                    Succulent Plants
+                </h2>
+
+                <div class="text-[#416543] text-lg font-semibold leading-[2rem] mb-10">
+
+                    Succulents are low-maintenance,
+                    water-storing plants known for their
+                    thick, fleshy leaves and geometric beauty.
+
+                    <br><br>
+
+                    Perfect for indoor and outdoor decoration,
+                    they bring freshness and elegance with
+                    minimal care requirements.
+
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    @!component('components/care/metric-card', {
+                    icon: 'resources/images/care/hand.png',
+                    title: 'Low Maintenance',
+                    text: 'Easy to care for daily',
+                    })
+                    @!component('components/care/metric-card', {
+                    icon: 'resources/images/care/11.png',
+                    title: 'Bright Spaces',
+                    text: 'Thrives with sunlight',
+                    })
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<section class="phone-care-species relative mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))] px-4 pb-16 pt-20 sm:px-5 lg:px-10">
+    <div class="relative z-10 w-full">
+        <div class="flex items-center justify-center mb-12">
+            <div class="h-[4px] w-20 bg-white/35"></div>
+            <div
+                class="mx-6 px-6 py-2 rounded-full bg-[#ebe3a7] border border-[#ebe3a7]/60 text-[#113e14] tracking-[0.2em] uppercase text-sm font-semibold">
+                Succulent Plants
+            </div>
+
+            <div class="h-[4px] w-20 bg-white/35"></div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div
+                class="group relative overflow-hidden rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.20)] hover:-translate-y-2 transition-all duration-500">
+                <div
+                    class="absolute -inset-2 bg-[#a8b841]/20 blur-2xl opacity-0 group-hover:opacity-100 transition duration-500">
+                </div>
+                <img loading="lazy" decoding="async" src="resources/images/care/plant-10.jpg" class="relative w-full h-[420px] object-cover group-hover:scale-110
+                    transition duration-700" alt="suc1">
+
+                <div class="absolute inset-0 bg-[#113e14]/45">
+                </div>
+
+                <div class="absolute bottom-0 left-0 p-6">
+                    <div class="text-white text-2xl font-bold mb-1">
+                        Kiwi Aeonium
+                    </div>
+                    <div class="text-white/80 text-sm">
+                        Minimal and elegant succulent
+                    </div>
+                </div>
+            </div>
+
+            <div class="group relative overflow-hidden rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.20)] hover:-translate-y-2
+                transition-all duration-500">
+                <div
+                    class="absolute -inset-2 bg-[#a8b841]/20 blur-2xl opacity-0 group-hover:opacity-100 transition duration-500">
+                </div>
+                <img loading="lazy" decoding="async" src="resources/images/care/plant-8.jpg" class="relative w-full h-[420px] object-cover group-hover:scale-110
+                    transition duration-700" alt="suc2">
+                <div class="absolute inset-0 bg-[#113e14]/45">
+                </div>
+
+                <div class="absolute bottom-0 left-0
+                    p-6">
+                    <div class="text-white text-2xl
+                        font-bold mb-1">
+                        Garden Croton
+                    </div>
+
+                    <div class="text-white/80 text-sm">
+                        Soft tones and geometric beauty
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="group relative overflow-hidden rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.20)] hover:-translate-y-2 transition-all duration-500">
+
+                <div
+                    class="absolute -inset-2 bg-[#a8b841]/20 blur-2xl opacity-0 group-hover:opacity-100 transition duration-500">
+                </div>
+
+                <img loading="lazy" decoding="async" src="resources/images/care/snake.jpg"
+                    class="relative w-full h-[420px] object-cover group-hover:scale-110 transition duration-700"
+                    alt="suc3">
+
+                <div class="absolute inset-0 bg-[#113e14]/45">
+                </div>
+
+                <div class="absolute bottom-0 left-0 p-6">
+
+                    <div class="text-white text-2xl font-bold mb-1">
+                        Snake plant
+                    </div>
+
+                    <div class="text-white/80 text-sm">
+                        Perfect for modern decoration
+                    </div>
+                </div>
+            </div>
+
+
+            <div
+                class="group relative overflow-hidden rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.20)] hover:-translate-y-2 transition-all duration-500">
+
+                <div
+                    class="absolute -inset-2 bg-[#a8b841]/20 blur-2xl opacity-0 group-hover:opacity-100 transition duration-500">
+                </div>
+
+                <img loading="lazy" decoding="async" src="resources/images/care/jade.jpg"
+                    class="relative w-full h-[420px] object-cover group-hover:scale-110 transition duration-700"
+                    alt="suc4">
+
+                <div class="absolute inset-0 bg-[#113e14]/45">
+                </div>
+
+                <div class="absolute bottom-0 left-0 p-6">
+
+                    <div class="text-white text-2xl font-bold mb-1">
+                        Jade Plant
+                    </div>
+
+                    <div class="text-white/80 text-sm">
+                        Fresh and resilient succulent
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="flex justify-center pt-16">
+            <div class="w-full max-w-[300px] h-[4px] bg-white/35">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="relative py-20 px-4 overflow-hidden sm:px-5 lg:px-6">
+
+    <div class="relative z-10 mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))]">
+
+        <div
+            class="care-focus-panel homepage-lively-card overflow-hidden rounded-[42px] border shadow-xl backdrop-blur-2xl">
+
+            <div class="grid grid-cols-1 lg:grid-cols-5">
+
+                <div class="lg:col-span-3 p-8 lg:p-12 flex flex-col justify-center">
+                    <div class="inline-flex items-center gap-3 w-fit px-4 py-2 rounded-full bg-[#ebe3a7] border border-[#416543]/10
+                    text-[#113e14] text-[13px] tracking-[2px] font-semibold mb-6">
+
+                        <div class="w-2.5 h-2.5 rounded-full bg-[#a8b841]"></div>
+                        SUCCULENT CARE
+                    </div>
+
+
+                    <h2 class="text-4xl lg:text-5xl font-abril text-[#113e14] leading-tight mb-6">
+                        Proper Lighting
+                    </h2>
+
+
+                    <div class="text-[#113e14]/78 font-poppins text-[15px] leading-[1.9rem] max-w-xl">
+
+                        Succulents thrive in bright spaces with plenty
+                        of indirect sunlight. Placing them near sunny
+                        windows helps maintain compact and healthy growth.
+
+                        <br><br>
+
+                        If natural light is limited, fluorescent or LED
+                        grow lights can support development when positioned
+                        6-12 inches above the plants for several hours daily.
+                    </div>
+
+
+                    <div class="flex flex-wrap gap-4 mt-8">
+
+
+                        <div
+                            class="flex items-center gap-4 bg-[#416543]/8 border border-[#416543]/12 rounded-2xl px-4 py-3 hover:bg-[#ebe3a7]/70 transition-all duration-300">
+                            <div class="w-11 h-11 rounded-xl bg-[#a8b841]/20 flex items-center justify-center">
+                                <img loading="lazy" decoding="async" src="/resources/images/care/11.png" alt="sun icon"
+                                    class="w-6 h-6 object-contain">
+                            </div>
+
+                            <div>
+                                <div class="text-[#113e14] text-sm font-black">
+                                    Natural Light
+                                </div>
+
+                                <div class="text-[#416543] text-[12px] font-semibold">
+                                    Healthy daily growth
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div
+                            class="flex items-center gap-4 bg-[#416543]/8 border border-[#416543]/12 rounded-2xl px-4 py-3 hover:bg-[#ebe3a7]/70 transition-all duration-300">
+
+                            <div class="w-11 h-11 rounded-xl bg-[#a8b841]/20 flex items-center justify-center">
+
+                                <img loading="lazy" decoding="async" src="/resources/images/care/ll.png"
+                                    alt="light icon" class="w-6 h-6 object-contain">
+                            </div>
+
+                            <div>
+                                <div class="text-[#113e14] text-sm font-black">
+                                    Artificial Light
+                                </div>
+
+                                <div class="text-[#416543] text-[12px] font-semibold">
+                                    Perfect indoors
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="lg:col-span-2 relative h-[320px] sm:h-[420px] lg:h-[520px]">
+
+                    <img loading="lazy" decoding="async" src="/resources/images/care/succ2.jpg" alt="Plant lighting"
+                        class="absolute inset-0 w-full h-full object-cover">
+
+
+                    <div class="absolute inset-0 bg-[#113e14]/32"></div>
+                    <div
+                        class="absolute bottom-6 left-6 bg-[#a8b841]/90 backdrop-blur-md border border-[#ebe3a7]/55 rounded-2xl px-5 py-4 shadow-xl">
+                        <div class="flex items-center gap-3">
+                            <div class="w-11 h-11 rounded-xl bg-[#ebe3a7]/65 flex items-center justify-center">
+                                <img loading="lazy" decoding="async" src="/resources/images/care/leaf.png"
+                                    alt="leaf icon" class="w-6 h-6">
+                            </div>
+
+                            <div>
+                                <p class="text-[#113e14] text-sm font-black">
+                                    14-16 Hours
+                                </p>
+
+                                <p class="text-[#416543] text-xs font-semibold">
+                                    Recommended light exposure
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="w-full py-28 px-6 relative overflow-hidden">
+
+    <div class="mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))] px-4 sm:px-5 lg:px-6 relative z-10">
+        <div class="text-center mb-20">
+            <div
+                class="inline-flex items-center gap-3 rounded-full bg-[#ebe3a7]/82 px-6 py-3 text-[#113e14] text-sm tracking-[0.25em] uppercase shadow-lg">
+                Succulent Care Guide
+            </div>
+
+            <h2 class="mt-8 font-abril text-5xl leading-tight text-white md:text-6xl">
+                Essential Care Tips
+                <span class="text-[#ebe3a7]">
+                    for Succulents
+                </span>
+            </h2>
+
+            <p class="mt-6 text-white/80 max-w-3xl mx-auto text-lg leading-relaxed">
+                Learn how to maintain healthy, vibrant,
+                and long-lasting succulent plants with proper care.
+            </p>
+        </div>
+
+
+        <div class="care-tip-grid grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10">
+
+
+            <div class="group relative">
+
+                <div class="relative h-full bg-[#ebe3a7]/78 backdrop-blur-2xl border border-white/20 rounded-[2.5rem] overflow-hidden
+                shadow-[0_20px_70px_rgba(0,0,0,0.18)] hover:-translate-y-2 transition-all duration-500">
+
+
+                    <div class="relative p-8 pb-6">
+                        <div class="flex items-center justify-between mb-8">
+
+                            <div
+                                class="w-14 h-14 rounded-2xl bg-[#113e14] text-[#ebe3a7] flex items-center justify-center text-xl font-poppins font-bold shadow-lg">
+                                01
+                            </div>
+                        </div>
+
+                        <h3 class="text-3xl font-poppins font-bold text-[#113e14] leading-tight">
+                            Proper Watering
+                        </h3>
+                    </div>
+
+
+                    <div class="mx-8 h-[1px] bg-white/20"></div>
+                    <div class="p-8">
+
+                        <p class="text-[#416543] font-semibold leading-relaxed mb-6">
+                            Succulents need very little water.
+                            It is recommended to let the soil dry
+                            out completely before watering again.
+                            Water deeply so that water flows out
+                            of the pot's drainage holes. After that,
+                            the soil should dry out again before
+                            the next watering.
+                        </p>
+
+                        <p class="text-[#113e14]/72 leading-relaxed text-sm">
+                            Frequent shallow waterings can cause weak
+                            or deformed growth - In winter, succulents
+                            need less water - Excess moisture promotes
+                            disease and rot
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="group relative">
+
+                <div
+                    class="relative h-full bg-[#ebe3a7]/82 border border-[#ebe3a7]/48 rounded-[34px] overflow-hidden shadow-xl backdrop-blur-2xl transition hover:-translate-y-1 duration-300">
+
+                    <div class="relative p-8 pb-6">
+                        <div class="flex items-center justify-between mb-8">
+                            <div
+                                class="w-14 h-14 rounded-2xl bg-[#113e14] text-[#ebe3a7] flex items-center justify-center text-xl font-poppins font-bold shadow-lg">
+                                02
+                            </div>
+                        </div>
+
+                        <h3 class="text-3xl font-poppins font-bold text-[#113e14] leading-tight">
+                            Soil and Nutrition
+                        </h3>
+                    </div>
+
+                    <div class="mx-8 h-[1px] bg-white/20"></div>
+                    <div class="p-8">
+                        <p class="text-[#416543] font-semibold leading-relaxed mb-6">
+                            Use well-draining soil, preferably a cactus
+                            or succulent mix.
+                        </p>
+
+                        <p class="text-[#113e14]/72 leading-relaxed text-sm">
+                            Most succulents and cacti grow best in sandy,
+                            well-drained soil. It is recommended to use
+                            potting mixes combined with coarse sand to
+                            improve drainage. They also note that pots
+                            should have drainage holes to prevent water
+                            from becoming trapped. Excess moisture can
+                            cause root rot and serious damage to the plant.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="group relative">
+
+                <div
+                    class="relative h-full bg-[#ebe3a7]/82 border border-[#ebe3a7]/48 rounded-[34px] overflow-hidden shadow-xl backdrop-blur-2xl transition hover:-translate-y-1 duration-300">
+
+                    <div class="relative p-8 pb-6">
+                        <div class="flex items-center justify-between mb-8">
+                            <div
+                                class="w-14 h-14 rounded-2xl bg-[#113e14] text-[#ebe3a7] flex items-center justify-center text-xl font-poppins font-bold shadow-lg">
+                                03
+                            </div>
+                        </div>
+
+                        <h3 class="text-3xl font-poppins font-bold text-[#113e14] leading-tight">
+                            Fertilization
+                        </h3>
+                    </div>
+
+                    <div class="mx-8 h-[1px] bg-white/20"></div>
+                    <div class="p-8">
+                        <p class="text-[#416543] font-semibold leading-relaxed mb-6">
+
+                            Succulents require few nutrients.
+                            It is recommended to fertilize cacti
+                            and succulents only once or twice a year,
+                            especially during spring and summer.
+                            It is important to note that many succulents
+                            tolerate dry, warm conditions. It is also
+                            worth noting that during the winter, some
+                            species prefer cooler temperatures and
+                            lower humidity.
+
+                        </p>
+
+                        <p class="text-[#113e14]/72 leading-relaxed text-sm">
+
+                            It is also recommended to:
+                            - use diluted fertilizers
+                            - use fertilizers with more phosphorus
+                            than nitrogen
+                            - avoid over-fertilizing
+
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="group relative">
+
+                <div
+                    class="relative h-full bg-[#ebe3a7]/82 border border-[#ebe3a7]/48 rounded-[34px] overflow-hidden shadow-xl backdrop-blur-2xl transition hover:-translate-y-1 duration-300">
+
+                    <div class="relative p-8 pb-6">
+                        <div class="flex items-center justify-between mb-8">
+
+                            <div
+                                class="w-14 h-14 rounded-2xl bg-[#113e14] text-[#ebe3a7] flex items-center justify-center text-xl font-poppins font-bold shadow-lg">
+                                04
+                            </div>
+
+                        </div>
+
+                        <h3 class="text-3xl font-black text-[#113e14] leading-tight">
+                            Growing in Pots
+                        </h3>
+                    </div>
+
+                    <div class="mx-8 h-[1px] bg-white/20"></div>
+                    <div class="p-8">
+                        <p class="text-[#416543] font-semibold leading-relaxed mb-6">
+                            Succulents do very well in containers
+                            and pots.
+                        </p>
+
+                        <p class="text-[#113e14]/72 leading-relaxed text-sm">
+                            However, the soil in pots can dry out
+                            quickly, so it's important to check the
+                            moisture level regularly. Overwatering
+                            is also one of the most common mistakes
+                            when growing succulents.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="group relative md:col-span-2 xl:col-span-2">
+
+                <div
+                    class="relative h-full bg-[#ebe3a7]/82 border border-[#ebe3a7]/48 rounded-[34px] overflow-hidden shadow-xl backdrop-blur-2xl transition hover:-translate-y-1 duration-300">
+                    <div class="relative p-8 pb-6">
+                        <div class="flex items-center justify-between mb-8">
+                            <div
+                                class="w-14 h-14 rounded-2xl bg-[#113e14] text-[#ebe3a7] flex items-center justify-center text-xl font-poppins font-bold shadow-lg">
+                                05
+                            </div>
+                        </div>
+
+                        <h3 class="text-3xl font-black text-[#113e14] leading-tight">
+                            Pests and Diseases
+                        </h3>
+                    </div>
+
+                    <div class="mx-8 h-[1px] bg-white/20"></div>
+
+                    <div class="p-8">
+                        <p class="text-[#416543] font-semibold leading-relaxed mb-6">
+
+                            When caring for succulents, it's important
+                            to keep in mind that pests aren't very common,
+                            but they can still appear:
+
+                            - mealybugs
+                            - scale insects
+                            - mites
+
+                        </p>
+
+                        <p class="text-[#113e14]/72 leading-relaxed text-sm">
+
+                            To control them, they recommend:
+                            - wiping away pests with cotton and alcohol
+                            - maintaining good lighting
+                            - avoiding overwatering
+                            - constantly monitoring the plants
+
+                            <br><br>
+
+                            It is also important to know that excessive
+                            humidity can cause mold and rot.
+
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr class="care-closing-divider mx-10 border-t-2 border-white/20 mb-24">
+
+<div class="care-closing mx-auto w-full max-w-[min(90rem,calc(100vw-2rem))] px-4 pb-24 sm:px-5 lg:px-6">
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+
+
+        <div class="relative group">
+            <div class="absolute -top-5 -left-5 w-full h-full border-2 border-[#113e14] rounded-[2.5rem]">
+            </div>
+
+            <div class="relative overflow-hidden rounded-[2.5rem] shadow-[0_25px_70px_rgba(0,0,0,0.25)]">
+                <img loading="lazy" decoding="async" src="/resources/images/care/succ-1.jpg" alt="Succulent care"
+                    class="w-full h-[260px] sm:h-[360px] lg:h-[500px] object-cover group-hover:scale-105 transition duration-700">
+
+                <div class="absolute inset-0 bg-[#113e14]/35">
+                </div>
+
+            </div>
+        </div>
+
+
+        <div>
+            <div class="text-[#113e14] uppercase tracking-[0.3em] text-sm font-bold mb-5">
+                Succulent Plant Care
+            </div>
+
+            <h2 class="text-5xl md:text-6xl font-black text-white leading-tight mb-8">
+                General Tips for
+                <span class="text-[#ebe3a7]">
+                    Caring for Succulents
+                </span>
+            </h2>
+
+
+            <div class="space-y-5 text-white/85 text-lg leading-relaxed">
+                <p>
+                    The most important steps for caring for your succulents are:
+                </p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                    <div class="flex items-center gap-3">
+                        <div class="w-3 h-3 rounded-full bg-[#113e14]"></div>
+                        <p>provide plenty of light</p>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <div class="w-3 h-3 rounded-full bg-[#113e14]"></div>
+                        <p>use sandy, well-drained soil</p>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <div class="w-3 h-3 rounded-full bg-[#113e14]"></div>
+                        <p>use pots with drainage holes</p>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <div class="w-3 h-3 rounded-full bg-[#113e14]"></div>
+                        <p>let the soil dry out between waterings</p>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <div class="w-3 h-3 rounded-full bg-[#113e14]"></div>
+                        <p>avoid excess moisture</p>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <div class="w-3 h-3 rounded-full bg-[#113e14]"></div>
+                        <p>fertilize a few times a year</p>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <div class="w-3 h-3 rounded-full bg-[#113e14]"></div>
+                        <p>check for pests and diseases</p>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <div class="w-3 h-3 rounded-full bg-[#113e14]"></div>
+                        <p>avoid waterlogging</p>
+                    </div>
+                </div>
+            </div>
+
+            <a href="/nurseries" class="mt-10 inline-flex w-full items-center justify-center sm:w-auto px-8 py-4 bg-[#dca15d] hover:bg-[#ebe3a7] text-[#113e14] font-bold text-lg rounded-2xl
+                 shadow-[0_15px_35px_rgba(0,0,0,0.2)] hover:-translate-y-1 transition-all duration-300">
+                get a plant
+            </a>
+        </div>
+    </div>
+</div>
+@end

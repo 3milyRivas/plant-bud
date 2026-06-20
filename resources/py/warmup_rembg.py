@@ -1,5 +1,5 @@
-from rembg import new_session
+from background_removal import DEFAULT_MODEL, create_background_session
 
 
-new_session("u2net")
-print("rembg u2net model is ready")
+create_background_session(allow_download=True)
+print(f"rembg {DEFAULT_MODEL} model is ready")

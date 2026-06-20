@@ -24,6 +24,7 @@ type SignupRole = 'client' | 'gardener' | 'nursery'
 
 const NURSERY_USERNAME_PREFIX = 'nursery_'
 const SIGNUP_USERNAME_MAX_LENGTH = 15
+const RESERVED_OWNER_EMAIL = 'davidalfredomenjivar@gmail.com'
 const RESERVED_HANDLE_KEYS = new Set([
   'admin',
   'administrator',
@@ -67,15 +68,18 @@ type NormalizedSignup = {
 }
 
 export default class NewAccountController {
-  async createClient({ view }: HttpContext) {
+  async createClient({ response, view }: HttpContext) {
+    this.preventAuthPageCaching(response)
     return view.render('pages/auth/signup_client')
   }
 
-  async createGardener({ view }: HttpContext) {
+  async createGardener({ response, view }: HttpContext) {
+    this.preventAuthPageCaching(response)
     return view.render('pages/auth/signup_gardener')
   }
 
-  async createNursery({ view }: HttpContext) {
+  async createNursery({ response, view }: HttpContext) {
+    this.preventAuthPageCaching(response)
     return view.render('pages/auth/signup_nursery')
   }
 
@@ -168,10 +172,16 @@ export default class NewAccountController {
         auth: ['Signup failed'],
       })
 
-      session.flash('old', safeOldInput(request.all()))
+      session.flash('authOld', safeOldInput(request.all()))
 
       return response.redirect().back()
     }
+  }
+
+  private preventAuthPageCaching(response: HttpContext['response']) {
+    response.header('Cache-Control', 'no-store, no-cache, must-revalidate, private')
+    response.header('Pragma', 'no-cache')
+    response.header('Expires', '0')
   }
 
   async createDemoGuest({ response, auth, session }: HttpContext) {
@@ -297,9 +307,7 @@ export default class NewAccountController {
       if (!normalized.ownerName) errors.owner_name = ['Owner or manager name is required']
     }
 
-    if (normalized.role === 'gardener' || normalized.role === 'nursery') {
-      if (!normalized.phone) errors.phone = ['Phone number is required']
-    }
+    if (!normalized.phone) errors.phone = ['Phone number is required']
 
     if (normalized.phone && !/^[0-9]{4}-[0-9]{4}$/.test(normalized.phone)) {
       errors.phone = ['Phone must use the format 0000-0000']
@@ -341,7 +349,11 @@ export default class NewAccountController {
     const phoneExists = normalized.phone ? await User.findBy('phone', normalized.phone) : null
     const duiExists = normalized.dui ? await User.findBy('dui', normalized.dui) : null
 
-    if (emailExists) errors.email = ['Email already exists']
+    if (normalized.email === RESERVED_OWNER_EMAIL) {
+      errors.email = ['This email is reserved for the protected owner account']
+    } else if (emailExists) {
+      errors.email = ['Email already exists']
+    }
     if (usernameExists) errors.username = ['Username already exists']
     if (nurseryExists) errors.nursery_name = ['Nursery name already exists']
     if (nurseryNameConflictsWithUser) {

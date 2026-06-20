@@ -7,7 +7,6 @@ import env from '#start/env'
 import PlantScan from '#models/plant_scan'
 import SubscriptionService from '#services/subscription_service'
 
-
 export default class PlantsController {
   private subscriptions = new SubscriptionService()
   private apiKeys = this.getPlantIdApiKeys()
@@ -53,7 +52,7 @@ export default class PlantsController {
     const user = auth.user!
     const image = request.file('image', {
       size: '10mb',
-      extnames: ['jpg', 'jpeg', 'png', 'webp'],      
+      extnames: ['jpg', 'jpeg', 'png', 'webp'],
     })
 
     if (!image) {
@@ -234,7 +233,6 @@ export default class PlantsController {
       scan_history: scanHistory,
     })
   }
-  
 
   private getSpecies(top: any) {
     return top?.name || top?.species?.scientificName || top?.scientific_name || 'Unknown plant'
@@ -653,7 +651,8 @@ export default class PlantsController {
         watering: plantInfo?.watering,
         sunlight: plantInfo?.sunlight,
         soil: 'Use a potting mix that drains well and keeps roots oxygenated.',
-        propagation: plantInfo?.propagation_methods?.join(', ') || 'Propagation details unavailable.',
+        propagation:
+          plantInfo?.propagation_methods?.join(', ') || 'Propagation details unavailable.',
         general: [
           'Avoid waterlogging.',
           'Ensure good drainage.',
@@ -783,7 +782,8 @@ export default class PlantsController {
       scanResult.reliability?.level || 'low',
       scanResult.health?.score
     )
-    const confidenceDelta = Number(scanResult.confidence || 0) - Number(previousScan.confidence || 0)
+    const confidenceDelta =
+      Number(scanResult.confidence || 0) - Number(previousScan.confidence || 0)
     const careDelta = currentCareScore.score - previousCareScore.score
 
     return {
@@ -799,7 +799,8 @@ export default class PlantsController {
         id: previousScan.id,
         label: previousScan.createdAtLabel,
         species: previousScan.species,
-        common_name: previousSummary?.common_name || previousSummary?.plant_info?.common_name || null,
+        common_name:
+          previousSummary?.common_name || previousSummary?.plant_info?.common_name || null,
         health_status: previousScan.healthStatus || 'unknown',
         confidence: previousScan.confidence,
         care_score: previousCareScore.score,
@@ -1121,8 +1122,4 @@ export default class PlantsController {
       return fallback
     }
   }
-
 }
-
-
-

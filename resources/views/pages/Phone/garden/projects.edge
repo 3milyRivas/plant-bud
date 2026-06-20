@@ -1,0 +1,160 @@
+@layout()
+@slot('title')
+<title>Plant Bud - Garden Projects</title>
+@endslot
+
+<div class="designer-projects-page phone-designer-projects relative min-h-dvh overflow-hidden text-[#113e14]" data-designer-projects="phone">
+  @!component('components/app-navbar', {
+    section: 'Garden projects',
+    active: 'designer',
+    planLabel: subscription?.planLabel ?? 'Premium',
+  })
+
+  <main class="relative z-10 mx-auto w-full max-w-xl px-3 pb-28 pt-2">
+    <section class="designer-projects-intro" data-phone-first-content>
+      <div class="designer-projects-intro-copy">
+        <p>Plant Bud Design Studio</p>
+        <h1>Garden workspace</h1>
+        <span>Your saved spaces, ready whenever inspiration returns.</span>
+      </div>
+
+      <div class="designer-projects-overview" aria-label="Designer workspace overview">
+        <article>
+          <strong>{{ projects.length }}</strong>
+          <span>Saved</span>
+        </article>
+        <article>
+          <strong>Auto</strong>
+          <span>Synced</span>
+        </article>
+        <article>
+          <strong>Any</strong>
+          <span>Device</span>
+        </article>
+      </div>
+    </section>
+
+    <section class="designer-project-create">
+      <div class="designer-project-create-copy">
+        <span>+</span>
+        <div>
+          <p>New garden</p>
+          <strong>Start a fresh project</strong>
+        </div>
+      </div>
+
+      <form method="POST" action="/designer/projects" class="designer-new-project-card">
+        {{ csrfField() }}
+        <label>
+          <span>Project name</span>
+          <input name="name" maxlength="80" placeholder="My new garden" required>
+        </label>
+        <label>
+          <span>Short note</span>
+          <input name="description" maxlength="240" placeholder="What are you planning?">
+        </label>
+        <button type="submit">Create project</button>
+      </form>
+    </section>
+
+    @if(flashMessages.get('success'))
+      <p class="designer-projects-flash">{{ flashMessages.get('success') }}</p>
+    @endif
+
+    <section class="designer-projects-library" aria-labelledby="projects-title">
+      <div class="designer-projects-heading">
+        <div>
+          <p>Your collection</p>
+          <h2 id="projects-title">Garden projects</h2>
+          <small>Tap a project to continue designing.</small>
+        </div>
+        <span>{{ projects.length }}</span>
+      </div>
+
+      @if(projects.length)
+        <div class="designer-projects-grid">
+          @each(project in projects)
+            <article class="designer-project-card" data-designer-project-card="{{ project.id }}">
+              <a href="/designer/projects/{{ project.id }}" class="designer-project-preview" aria-label="Open {{ project.name }}">
+                @if(project.imageUrl)
+                  <img src="{{ project.imageUrl }}" alt="Garden photo for {{ project.name }}">
+                @else
+                  <div>
+                    <span><img src="/resources/images/essential/logo.png" alt="Plant Bud"></span>
+                    <p>Add your garden photo</p>
+                  </div>
+                @endif
+                <span>{{ project.itemCount }} items</span>
+              </a>
+
+              <div class="designer-project-card-body">
+                <div>
+                  <div class="designer-project-card-meta">
+                    <p>{{ project.updatedLabel }}</p>
+                    <span>{{ project.itemCount }} items</span>
+                  </div>
+                  <h3>{{ project.name }}</h3>
+                  <span class="designer-project-description">{{ project.description }}</span>
+                </div>
+                <div class="designer-project-card-actions">
+                  <a href="/designer/projects/{{ project.id }}">Continue editing</a>
+                  <form method="POST" action="/designer/projects/{{ project.id }}/duplicate">
+                    {{ csrfField() }}
+                    <button type="submit">Duplicate</button>
+                  </form>
+                  <button
+                    type="button"
+                    class="is-danger"
+                    data-designer-project-delete
+                    data-project-name="{{ project.name }}"
+                    data-delete-action="/designer/projects/{{ project.id }}/delete"
+                  >Delete</button>
+                </div>
+              </div>
+            </article>
+          @end
+        </div>
+      @else
+        <div class="designer-projects-empty">
+          <span><img src="/resources/images/essential/logo.png" alt="Plant Bud"></span>
+          <h3>Create your first garden.</h3>
+          <p>Your image, objects and edits will stay connected to your Plant Bud account.</p>
+        </div>
+      @endif
+    </section>
+  </main>
+
+  <div
+    class="designer-delete-modal"
+    data-designer-delete-modal
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="designer-delete-title"
+    aria-describedby="designer-delete-description"
+    aria-hidden="true"
+    hidden
+  >
+    <button type="button" class="designer-delete-backdrop" data-designer-delete-cancel aria-label="Close confirmation"></button>
+    <div class="designer-delete-dialog" role="document">
+      <div class="designer-delete-brand" aria-hidden="true">
+        <span><img src="/resources/images/essential/logo.png" alt=""></span>
+        <p>Plant Bud</p>
+      </div>
+      <div class="designer-delete-icon" aria-hidden="true">!</div>
+      <p class="designer-delete-eyebrow">Permanent action</p>
+      <h2 id="designer-delete-title">Delete this garden?</h2>
+      <p id="designer-delete-description">
+        <strong data-designer-delete-project-name>Your garden</strong> and its saved design will be permanently removed from your Plant Bud account. This cannot be undone.
+      </p>
+      <div class="designer-delete-actions">
+        <button type="button" data-designer-delete-cancel>Keep project</button>
+        <form method="POST" action="" data-designer-delete-form>
+          {{ csrfField() }}
+          <button type="submit">Delete permanently</button>
+        </form>
+      </div>
+      <small>Confirmation from Plant Bud</small>
+    </div>
+  </div>
+</div>
+@end

@@ -50,6 +50,12 @@ export default class AccountProfile extends BaseModel {
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
+  @column.dateTime()
+  declare notificationsSeenAt: DateTime | null
+
+  @column.dateTime()
+  declare notificationsClearedAt: DateTime | null
+
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
 

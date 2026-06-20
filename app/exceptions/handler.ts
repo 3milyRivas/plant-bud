@@ -1,4 +1,6 @@
 import app from '@adonisjs/core/services/app'
+import { detectDeviceFrontend, resolvePageTemplate } from '#services/device_frontend'
+import { appUrl } from '#config/app'
 import { type HttpContext, ExceptionHandler } from '@adonisjs/core/http'
 import type { StatusPageRange, StatusPageRenderer } from '@adonisjs/core/types/http'
 
@@ -21,11 +23,19 @@ export default class HttpExceptionHandler extends ExceptionHandler {
    * to return the HTML contents to send as a response.
    */
   protected statusPages: Record<StatusPageRange, StatusPageRenderer> = {
-    '404': (error, { view }) => {
-      return view.render('pages/errors/not_found', { error })
+    '404': (error, { request, response, view }) => {
+      const frontend = detectDeviceFrontend(request.headers())
+      this.shareLayoutState(view, request.url(), frontend)
+      response.header('Accept-CH', 'Sec-CH-UA-Mobile')
+      response.header('Vary', 'User-Agent, Sec-CH-UA-Mobile')
+      return view.render(resolvePageTemplate('pages/errors/not_found', frontend), { error })
     },
-    '500..599': (error, { view }) => {
-      return view.render('pages/errors/server_error', { error })
+    '500..599': (error, { request, response, view }) => {
+      const frontend = detectDeviceFrontend(request.headers())
+      this.shareLayoutState(view, request.url(), frontend)
+      response.header('Accept-CH', 'Sec-CH-UA-Mobile')
+      response.header('Vary', 'User-Agent, Sec-CH-UA-Mobile')
+      return view.render(resolvePageTemplate('pages/errors/server_error', frontend), { error })
     },
   }
 
@@ -45,5 +55,20 @@ export default class HttpExceptionHandler extends ExceptionHandler {
    */
   async report(error: unknown, ctx: HttpContext) {
     return super.report(error, ctx)
+  }
+
+  private shareLayoutState(
+    view: HttpContext['view'],
+    requestUrl: string,
+    frontend: ReturnType<typeof detectDeviceFrontend>
+  ) {
+    const baseUrl = appUrl.replace(/\/$/, '')
+
+    view.share({
+      frontend,
+      canonicalUrl: new URL(requestUrl, `${baseUrl}/`).toString(),
+      socialImageUrl: `${baseUrl}/profiles/banner.png`,
+      notificationCount: 0,
+    })
   }
 }

@@ -27,7 +27,7 @@ export class AccountLinkSchema extends BaseModel {
 }
 
 export class AccountProfileSchema extends BaseModel {
-  static $columns = ['avatarUrl', 'bannerUrl', 'bio', 'createdAt', 'displayName', 'id', 'location', 'premiumRenewsAt', 'premiumStartedAt', 'rewardPoints', 'scannerMonthlyLimit', 'subscriptionPlan', 'updatedAt', 'userId', 'websiteUrl'] as const
+  static $columns = ['avatarUrl', 'bannerUrl', 'bio', 'createdAt', 'displayName', 'id', 'location', 'notificationsClearedAt', 'notificationsSeenAt', 'premiumRenewsAt', 'premiumStartedAt', 'rewardPoints', 'scannerMonthlyLimit', 'subscriptionPlan', 'updatedAt', 'userId', 'websiteUrl'] as const
   $columns = AccountProfileSchema.$columns
   @column()
   declare avatarUrl: string
@@ -44,6 +44,10 @@ export class AccountProfileSchema extends BaseModel {
   @column()
   declare location: string | null
   @column.dateTime()
+  declare notificationsClearedAt: DateTime | null
+  @column.dateTime()
+  declare notificationsSeenAt: DateTime | null
+  @column.dateTime()
   declare premiumRenewsAt: DateTime | null
   @column.dateTime()
   declare premiumStartedAt: DateTime | null
@@ -59,6 +63,29 @@ export class AccountProfileSchema extends BaseModel {
   declare userId: number
   @column()
   declare websiteUrl: string | null
+}
+
+export class AdminAuditLogSchema extends BaseModel {
+  static $columns = ['action', 'actorEmail', 'actorUserId', 'createdAt', 'id', 'ipAddress', 'summary', 'targetId', 'targetType'] as const
+  $columns = AdminAuditLogSchema.$columns
+  @column()
+  declare action: string
+  @column()
+  declare actorEmail: string
+  @column()
+  declare actorUserId: number | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare ipAddress: string | null
+  @column()
+  declare summary: string
+  @column()
+  declare targetId: string | null
+  @column()
+  declare targetType: string
 }
 
 export class CommunityPostSchema extends BaseModel {
@@ -110,6 +137,33 @@ export class FollowSchema extends BaseModel {
   declare id: number
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
+}
+
+export class GardenProjectSchema extends BaseModel {
+  static $columns = ['baseImageName', 'createdAt', 'description', 'id', 'inventoryJson', 'itemCount', 'lastOpenedAt', 'name', 'stateJson', 'updatedAt', 'userId'] as const
+  $columns = GardenProjectSchema.$columns
+  @column()
+  declare baseImageName: string | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column()
+  declare description: string | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare inventoryJson: string
+  @column()
+  declare itemCount: number
+  @column.dateTime()
+  declare lastOpenedAt: DateTime | null
+  @column()
+  declare name: string
+  @column()
+  declare stateJson: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare userId: number
 }
 
 export class GardenerProfileSchema extends BaseModel {
@@ -440,7 +494,7 @@ export class ProfileReviewSchema extends BaseModel {
 }
 
 export class ServiceRequestSchema extends BaseModel {
-  static $columns = ['address', 'arrivalWindowEnd', 'arrivalWindowStart', 'budget', 'clientConfirmedAt', 'clientUserId', 'completedAt', 'createdAt', 'discountAmount', 'discountPercent', 'finalAmount', 'gardenerConfirmedAt', 'gardenerProfileId', 'gardenerResponse', 'googlePlaceId', 'heldAmount', 'id', 'latitude', 'locationRemovedAt', 'longitude', 'notes', 'nurseryProfileId', 'paymentBrand', 'paymentHeldAt', 'paymentLastFour', 'paymentMethod', 'paymentRefundedAt', 'paymentReleasedAt', 'paymentStatus', 'pointsRedeemed', 'pointsRefundedAt', 'refundedAmount', 'releasedAmount', 'rewardAwardedAt', 'rewardPointsAwarded', 'scheduledFor', 'serviceType', 'status', 'updatedAt', 'verifiedAt'] as const
+  static $columns = ['address', 'arrivalWindowEnd', 'arrivalWindowStart', 'budget', 'clientConfirmedAt', 'clientHiddenAt', 'clientUserId', 'completedAt', 'createdAt', 'discountAmount', 'discountPercent', 'finalAmount', 'gardenerConfirmedAt', 'gardenerHiddenAt', 'gardenerProfileId', 'gardenerResponse', 'googlePlaceId', 'heldAmount', 'id', 'latitude', 'locationRemovedAt', 'longitude', 'notes', 'nurseryProfileId', 'paymentBrand', 'paymentHeldAt', 'paymentLastFour', 'paymentMethod', 'paymentRefundedAt', 'paymentReleasedAt', 'paymentStatus', 'pointsRedeemed', 'pointsRefundedAt', 'refundedAmount', 'releasedAmount', 'rewardAwardedAt', 'rewardPointsAwarded', 'scheduledFor', 'serviceType', 'status', 'updatedAt', 'verifiedAt'] as const
   $columns = ServiceRequestSchema.$columns
   @column()
   declare address: string | null
@@ -452,6 +506,8 @@ export class ServiceRequestSchema extends BaseModel {
   declare budget: number | null
   @column.dateTime()
   declare clientConfirmedAt: DateTime | null
+  @column.dateTime()
+  declare clientHiddenAt: DateTime | null
   @column()
   declare clientUserId: number
   @column.dateTime()
@@ -466,6 +522,8 @@ export class ServiceRequestSchema extends BaseModel {
   declare finalAmount: number | null
   @column.dateTime()
   declare gardenerConfirmedAt: DateTime | null
+  @column.dateTime()
+  declare gardenerHiddenAt: DateTime | null
   @column()
   declare gardenerProfileId: number | null
   @column()
@@ -524,9 +582,24 @@ export class ServiceRequestSchema extends BaseModel {
   declare verifiedAt: DateTime | null
 }
 
+export class SessionSchema extends BaseModel {
+  static $columns = ['data', 'expiresAt', 'id', 'userId'] as const
+  $columns = SessionSchema.$columns
+  @column()
+  declare data: string
+  @column.dateTime()
+  declare expiresAt: DateTime
+  @column({ isPrimary: true })
+  declare id: string
+  @column()
+  declare userId: string | null
+}
+
 export class UserSchema extends BaseModel {
-  static $columns = ['createdAt', 'dui', 'email', 'firstName', 'id', 'lastName', 'password', 'phone', 'profilePicture', 'role', 'updatedAt', 'username'] as const
+  static $columns = ['accessLevel', 'createdAt', 'dui', 'email', 'firstName', 'id', 'lastName', 'password', 'phone', 'profilePicture', 'role', 'updatedAt', 'username'] as const
   $columns = UserSchema.$columns
+  @column()
+  declare accessLevel: string
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime | null
   @column()

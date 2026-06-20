@@ -1,0 +1,26 @@
+@if(typeof auth !== 'undefined' && auth.user && auth.user.isAdmin)
+  <details class="admin-floating-menu group fixed z-[200000]" data-admin-floating-menu>
+    <summary class="admin-floating-menu-button grid cursor-pointer list-none place-items-center rounded-full border-2 border-[#ebe3a7] bg-[#113e14] text-[#ebe3a7] shadow-[0_18px_45px_rgba(0,0,0,0.35)] transition hover:-translate-y-1" aria-label="Open administration menu" title="Administration">
+      <svg class="h-5 w-5 transition group-open:rotate-90 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3l7 4v5c0 4.5-2.9 7.6-7 9-4.1-1.4-7-4.5-7-9V7l7-4zM9 12l2 2 4-4" />
+      </svg>
+    </summary>
+    <div class="admin-floating-menu-panel absolute right-0 w-[min(19rem,calc(100vw-1.5rem))] overflow-y-auto rounded-[1.5rem] border border-white/70 bg-white/95 p-3 text-[#113e14] shadow-2xl backdrop-blur-2xl">
+      <div class="rounded-[1.15rem] bg-[#113e14] p-4 text-white">
+        <p class="text-[10px] font-black uppercase tracking-[0.2em] text-[#ebe3a7]">Protected access</p>
+        <p class="mt-1 text-lg font-black">Administration</p>
+        <p class="mt-1 truncate text-xs font-bold text-white/65">{{ auth.user.email }}</p>
+      </div>
+      <a href="/admin" class="mt-2 flex items-center justify-between rounded-[1rem] px-4 py-3 text-sm font-black transition hover:bg-[#ebe3a7]/55">
+        <span>Open control panel</span>
+        <span aria-hidden="true">&rarr;</span>
+      </a>
+      <a href="/admin#recent-posts" class="mt-1 block rounded-[1rem] px-4 py-3 text-sm font-black transition hover:bg-[#ebe3a7]/55">
+        Review recent posts
+      </a>
+      <a href="/admin#accounts" class="mt-1 block rounded-[1rem] px-4 py-3 text-sm font-black transition hover:bg-[#ebe3a7]/55">
+        Manage accounts
+      </a>
+    </div>
+  </details>
+@endif

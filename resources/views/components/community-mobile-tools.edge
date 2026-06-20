@@ -1,0 +1,142 @@
+<section class="community-mobile-tools" aria-label="Community shortcuts" data-community-mobile-tools>
+  <div class="flex items-end justify-between gap-4 px-1">
+    <div>
+      <p class="text-[10px] font-black uppercase tracking-[0.18em] text-[#ebe3a7]/75">Explore community</p>
+      <h2 class="mt-1 text-xl font-black text-white">Useful spaces</h2>
+    </div>
+    <span class="rounded-full bg-white/18 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.12em] text-[#ebe3a7]">Swipe</span>
+  </div>
+
+  <div class="community-mobile-tools-track mt-3 flex gap-3 overflow-x-auto pb-2" data-community-mobile-tools-track>
+    <article class="community-mobile-tool-card community-mobile-tool-card--dark community-mobile-tool-card--list">
+      <span class="community-mobile-tool-icon">
+        <img src="/resources/images/phone-icons/Saved.png" alt="">
+      </span>
+      <p class="community-mobile-tool-eyebrow">Quick access</p>
+      <h3>Favorite accounts</h3>
+      <p>{{ favoriteAccounts.length ? favoriteAccounts.length + ' saved profiles ready to open.' : 'Save profiles to keep them one tap away.' }}</p>
+      <details class="community-mobile-tool-details">
+        <summary><span>Profiles</span><span class="community-mobile-tool-details-label">Show list</span></summary>
+        <div class="community-mobile-tool-list">
+          @each(account in favoriteAccounts)
+            <a href="/users/{{ account.username }}" class="community-mobile-profile-row">
+              @if(account.avatarUrl)
+                <img src="{{ account.avatarUrl }}" alt="" loading="lazy" decoding="async">
+              @else
+                <span class="community-mobile-profile-initial">{{ account.initial }}</span>
+              @endif
+              <span class="min-w-0">
+                <strong>{{ account.displayName }}</strong>
+                <small>{{ '@' + account.username }} - {{ account.relationLabel }}</small>
+              </span>
+            </a>
+          @else
+            <a href="/maintenance" class="community-mobile-tool-empty">Find profiles to save</a>
+          @end
+        </div>
+      </details>
+    </article>
+
+    <article class="community-mobile-tool-card community-mobile-tool-card--list">
+      <span class="community-mobile-tool-icon">
+        <img src="/resources/images/phone-icons/Gardeners.png" alt="">
+      </span>
+      <p class="community-mobile-tool-eyebrow">Discover</p>
+      <h3>Gardeners & nurseries</h3>
+      <p>Meet professionals and plant sellers suggested for you.</p>
+      <details class="community-mobile-tool-details">
+        <summary><span>Suggested profiles</span><span class="community-mobile-tool-details-label">Show list</span></summary>
+        <div class="community-mobile-tool-list">
+          @each(user in suggestions)
+            <a href="/users/{{ user.username }}" class="community-mobile-profile-row">
+              @if(user.avatarUrl)
+                <img src="{{ user.avatarUrl }}" alt="" loading="lazy" decoding="async">
+              @else
+                <span class="community-mobile-profile-initial">{{ user.initial }}</span>
+              @endif
+              <span class="min-w-0">
+                <strong>{{ user.displayName }}</strong>
+                <small>{{ user.roleLabel }} - {{ '@' + user.username }}</small>
+              </span>
+            </a>
+          @else
+            <a href="/maintenance" class="community-mobile-tool-empty">Browse available services</a>
+          @end
+        </div>
+      </details>
+    </article>
+
+    <article class="community-mobile-tool-card community-mobile-tool-card--sand community-mobile-tool-card--list">
+      <span class="community-mobile-tool-icon">
+        <img src="/resources/images/phone-icons/Community.png" alt="">
+      </span>
+      <p class="community-mobile-tool-eyebrow">Friends</p>
+      <h3>Your circle</h3>
+      <p>{{ friendAccounts.length ? friendAccounts.length + ' mutual friends in your community.' : 'Mutual follows will appear here.' }}</p>
+      <details class="community-mobile-tool-details">
+        <summary><span>Mutual friends</span><span class="community-mobile-tool-details-label">Show list</span></summary>
+        <div class="community-mobile-tool-list">
+          @each(account in friendAccounts)
+            <a href="/users/{{ account.username }}" class="community-mobile-profile-row">
+              @if(account.avatarUrl)
+                <img src="{{ account.avatarUrl }}" alt="" loading="lazy" decoding="async">
+              @else
+                <span class="community-mobile-profile-initial">{{ account.initial }}</span>
+              @endif
+              <span class="min-w-0">
+                <strong>{{ account.displayName }}</strong>
+                <small>{{ '@' + account.username }} - {{ account.roleLabel }}</small>
+              </span>
+            </a>
+          @else
+            <a href="/community" class="community-mobile-tool-empty">Explore community profiles</a>
+          @end
+        </div>
+      </details>
+    </article>
+
+    <article class="community-mobile-tool-card community-mobile-tool-card--list">
+      <span class="community-mobile-tool-icon community-mobile-tool-icon--text">#</span>
+      <p class="community-mobile-tool-eyebrow">Trending now</p>
+      <h3>Plant conversations</h3>
+      <p>Jump directly into the topics growing today.</p>
+      <details class="community-mobile-tool-details">
+        <summary><span>Trending hashtags</span><span class="community-mobile-tool-details-label">Show list</span></summary>
+        <div class="community-mobile-tool-list">
+          @each(tag in trendingHashtags)
+            <a href="/community/hashtags/{{ tag.tag }}" class="community-mobile-hashtag-row">
+              <span>#</span>
+              <strong>{{ tag.tag }}</strong>
+              <small>{{ tag.postsCount }} posts</small>
+            </a>
+          @else
+            <span class="community-mobile-tool-empty">New tags will appear here.</span>
+          @end
+        </div>
+      </details>
+    </article>
+
+    <article class="community-mobile-tool-card community-mobile-tool-card--green">
+      <span class="community-mobile-tool-icon">
+        <img src="/resources/images/phone-icons/Scanner-Designer.png" alt="">
+      </span>
+      <p class="community-mobile-tool-eyebrow">Plant Bud tools</p>
+      <h3>Continue growing</h3>
+      <p>Open the most useful areas without leaving your flow.</p>
+      <div class="community-mobile-tool-grid">
+        <a href="/scanner">Scanner</a>
+        <a href="/designer">Designer</a>
+        <a href="/ornamental">Catalog</a>
+        <a href="/favorites">Saved</a>
+      </div>
+    </article>
+  </div>
+
+  <div class="community-mobile-tools-dots" aria-label="Community shortcut pages" data-community-mobile-tools-dots>
+    <button type="button" class="is-active" data-community-mobile-tools-dot="0" aria-label="Show Favorite accounts" aria-current="true"></button>
+    <button type="button" data-community-mobile-tools-dot="1" aria-label="Show Gardeners and nurseries" aria-current="false"></button>
+    <button type="button" data-community-mobile-tools-dot="2" aria-label="Show Your circle" aria-current="false"></button>
+    <button type="button" data-community-mobile-tools-dot="3" aria-label="Show Trending hashtags" aria-current="false"></button>
+    <button type="button" data-community-mobile-tools-dot="4" aria-label="Show Plant Bud tools" aria-current="false"></button>
+  </div>
+</section>

@@ -1,0 +1,210 @@
+@layout()
+@slot('title')
+<title>Welcome to Plant Bud</title>
+@endslot
+@vite(['resources/js/tips.js'])
+
+<div class="phone-welcome-v2 relative z-10 min-h-dvh overflow-x-hidden text-white" data-phone-welcome>
+  <header class="phone-welcome-v2-nav fixed inset-x-0 top-0 z-50">
+    <div class="mx-auto flex items-center justify-between">
+      <a href="/" aria-label="Plant Bud home">
+        <img src="/resources/images/essential/logo.png" alt="Plant Bud">
+      </a>
+      <div class="flex items-center">
+        <a href="/login" class="phone-welcome-v2-login">Login</a>
+        <a href="/register" class="phone-welcome-v2-primary">Get Started</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="phone-welcome-v2-hero">
+    <img src="/resources/images/welcome/header3.png" alt="" class="phone-welcome-v2-hero-bg">
+    <div class="phone-welcome-v2-hero-shade"></div>
+
+    <div class="phone-welcome-v2-hero-content phone-welcome-v2-enter">
+      <span class="phone-welcome-v2-eyebrow">
+        <i></i>
+        Green spaces start here
+      </span>
+      <h1>
+        Grow Your <strong>Plants</strong>
+        <span>Live a Better Life</span>
+      </h1>
+      <p>
+        Learn plant care, build greener habits, and bring nature into every space with a friendlier guide by your side.
+      </p>
+      <a href="/register" class="phone-welcome-v2-hero-cta">
+        Start growing
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <div class="phone-welcome-v2-hero-gallery phone-welcome-v2-enter is-delayed">
+      <article class="phone-welcome-v2-float">
+        <span>Plant Bud</span>
+        <strong>Care feels easier when the journey feels warm.</strong>
+      </article>
+      <img src="/resources/images/welcome/section2.jpg" alt="Plants in a welcoming green space" class="phone-welcome-v2-float is-delayed">
+      <img src="/resources/images/homepagee/plant-4.png" alt="Healthy indoor plant" class="phone-welcome-v2-float is-late">
+      <article class="is-dark phone-welcome-v2-float is-delayed">
+        <span>Small habits</span>
+        <strong>Healthy plants begin with simple routines.</strong>
+      </article>
+    </div>
+  </section>
+
+  <main class="phone-welcome-v2-main">
+    <section class="phone-welcome-v2-stats">
+      <div class="phone-welcome-v2-section-heading">
+        <span>Real green data</span>
+        <h2>Nature is bigger than we imagine.</h2>
+      </div>
+      <div class="phone-welcome-v2-scroll">
+        @each(stat in [
+          { value: '390,900', label: 'Known plant species', note: 'Estimated by Royal Botanic Gardens, Kew.' },
+          { value: '7,039', label: 'Edible plant species', note: 'Documented in useful plant data.' },
+          { value: '31%', label: 'Of land is forest', note: 'About 4.06 billion hectares worldwide.' }
+        ])
+          <article class="phone-welcome-v2-stat phone-welcome-v2-lift">
+            <strong>{{ stat.value }}</strong>
+            <h3>{{ stat.label }}</h3>
+            <p>{{ stat.note }}</p>
+          </article>
+        @endeach
+      </div>
+    </section>
+
+    <section class="phone-welcome-v2-about">
+      <div class="phone-welcome-v2-section-heading is-light">
+        <span>What is Plant Bud?</span>
+        <h2>A warm place to begin a <em>greener routine.</em></h2>
+        <p>Clear guidance, useful tools, trusted services, and a community built around everyday plant care.</p>
+      </div>
+
+      <div class="phone-welcome-v2-benefits">
+        @each(item in [
+          { image: 'benefit1.png', title: 'Learn clearly', text: 'Care information organized for real routines.' },
+          { image: 'benefit3.png', title: 'Build habits', text: 'Make water, light, and soil easier to understand.' },
+          { image: 'benefit4.png', title: 'Improve spaces', text: 'Create healthier rooms, patios, and gardens.' },
+          { image: 'benefit5.png', title: 'Grow together', text: 'Share progress and learn from green people.' }
+        ])
+          <article class="phone-welcome-v2-lift">
+            <span><img src="/resources/images/welcome/{{ item.image }}" alt=""></span>
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.text }}</p>
+          </article>
+        @endeach
+      </div>
+    </section>
+
+    <section class="phone-welcome-v2-features">
+      <div class="phone-welcome-v2-section-heading is-light">
+        <span>Everything in one place</span>
+        <h2>Understand your plant. Know what comes next.</h2>
+      </div>
+
+      <div class="phone-welcome-v2-feature-stack">
+        @each(feature in [
+          { image: 'benefit1.png', kicker: 'Plant knowledge', title: 'Care guides that feel clear', text: 'Explore watering, sunlight, soil, plant families, and warning signs.' },
+          { image: 'benefit2.png', kicker: 'Smart tools', title: 'Answers when something looks wrong', text: 'Use Scanner and Designer to make plant decisions with more confidence.' },
+          { image: 'benefit5.png', kicker: 'Green connection', title: 'People who can help you grow', text: 'Reach gardeners, nurseries, and a community full of useful experience.' }
+        ])
+          <article class="phone-welcome-v2-lift">
+            <span class="phone-welcome-v2-feature-icon">
+              <img src="/resources/images/welcome/{{ feature.image }}" alt="">
+            </span>
+            <div>
+              <small>{{ feature.kicker }}</small>
+              <h3>{{ feature.title }}</h3>
+              <p>{{ feature.text }}</p>
+            </div>
+          </article>
+        @endeach
+      </div>
+    </section>
+
+    <section class="phone-welcome-v2-problems">
+      <div class="phone-welcome-v2-problem-lead">
+        <span>Problems it helps solve</span>
+        <h2>From “what is wrong?” to “what should I do next?”</h2>
+        <p>Plant Bud turns confusing symptoms into calmer, more useful next steps.</p>
+      </div>
+      <div class="phone-welcome-v2-problem-grid">
+        @each(problem in [
+          { step: '01', title: 'Yellow leaves', text: 'Review water, light, nutrients, and drainage.' },
+          { step: '02', title: 'Too much water', text: 'Check soil, pots, and roots before adding more.' },
+          { step: '03', title: 'Wrong placement', text: 'Understand sunlight and space needs faster.' },
+          { step: '04', title: 'No care routine', text: 'Turn care into small repeatable habits.' }
+        ])
+          <article class="phone-welcome-v2-lift">
+            <span>{{ problem.step }}</span>
+            <h3>{{ problem.title }}</h3>
+            <p>{{ problem.text }}</p>
+          </article>
+        @endeach
+      </div>
+    </section>
+
+    <section class="phone-welcome-v2-audience">
+      <div class="phone-welcome-v2-section-heading is-light">
+        <span>Made for the whole green world</span>
+        <h2>People, plants, and green businesses.</h2>
+      </div>
+      <div class="phone-welcome-v2-scroll">
+        @each(service in [
+          { title: 'Plant owners', text: 'Understand symptoms and organize daily care.' },
+          { title: 'Gardeners', text: 'Share experience, receive requests, and build trust.' },
+          { title: 'Nurseries', text: 'Present plants and connect with new customers.' },
+          { title: 'Communities', text: 'Make shared spaces healthier and greener.' }
+        ])
+          <article class="phone-welcome-v2-lift">
+            <i></i>
+            <h3>{{ service.title }}</h3>
+            <p>{{ service.text }}</p>
+          </article>
+        @endeach
+      </div>
+    </section>
+
+    <section class="phone-welcome-v2-purpose">
+      @each(card in [
+        { image: 'mission.png', title: 'Mission', text: 'Inspire people to care for plants through simple knowledge, warmer habits, and sustainable spaces.' },
+        { image: 'vision.png', title: 'Vision', text: 'Make plant care feel natural in everyday life, from small homes to growing communities.' }
+      ])
+        <article class="phone-welcome-v2-lift">
+          <span><img src="/resources/images/welcome/{{ card.image }}" alt=""></span>
+          <h2>{{ card.title }}</h2>
+          <p>{{ card.text }}</p>
+        </article>
+      @endeach
+    </section>
+
+    <section class="phone-welcome-v2-values">
+      <div class="phone-welcome-v2-section-heading is-light">
+        <span>Our values</span>
+        <h2>A friendlier way to stay close to nature.</h2>
+      </div>
+      <div>
+        @each(value in [
+          { image: 'value1.png', name: 'Empathy' },
+          { image: 'value2.png', name: 'Responsibility' },
+          { image: 'value3.png', name: 'Sustainability' },
+          { image: 'value4.png', name: 'Passion' }
+        ])
+          <article class="phone-welcome-v2-lift">
+            <span><img src="/resources/images/welcome/{{ value.image }}" alt=""></span>
+            <h3>{{ value.name }}</h3>
+          </article>
+        @endeach
+      </div>
+    </section>
+
+    <section class="phone-welcome-v2-final phone-welcome-v2-lift">
+      <span>Join the green journey</span>
+      <h2>Choose to be the Plant's Best Bud.</h2>
+      <p>Create your account and start building a healthier relationship with plants and everyday care.</p>
+      <a href="/register" class="phone-welcome-v2-primary">Get Started</a>
+    </section>
+  </main>
+</div>
+@end

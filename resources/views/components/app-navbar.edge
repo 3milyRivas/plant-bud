@@ -1,3 +1,6 @@
+@if(frontend === 'Phone')
+  @!component('components/phone-navbar', $props)
+@else
 @let(section = $props.get('section') ?? 'Plant Bud')
 @let(homeHref = $props.get('homeHref') ?? (auth.user ? '/homepage' : '/'))
 @let(defaultItems = [
@@ -7,7 +10,7 @@
     label: 'Tools',
     icon: '/resources/images/homepagee/scanner.png',
     eyebrow: 'Create and diagnose',
-    activeKeys: ['scanner', 'designer', 'ornamental', 'horticultural', 'succulent'],
+    activeKeys: ['scanner', 'designer', 'dashboard', 'ornamental', 'horticultural', 'succulent'],
     children: [
       {
         href: '/scanner',
@@ -20,9 +23,10 @@
         description: 'Plan a garden layout in 2D.',
       },
       {
-        href: '/ornamental',
-        label: 'Catalog',
-        description: 'Explore plant collections and care guides.',
+        href: '/gardener/dashboard',
+        label: 'Gardener dashboard',
+        description: 'Review your work board, schedule, and earnings.',
+        gardenerOnly: true,
       },
     ],
   },
@@ -49,6 +53,11 @@
         label: 'Nurseries',
         description: 'Browse plant sellers.',
       },
+      {
+        href: '/ornamental',
+        label: 'Catalog',
+        description: 'Explore plant collections and care guides.',
+      },
     ],
   },
   {
@@ -57,7 +66,7 @@
     label: 'Community',
     icon: '/resources/images/homepagee/comunity.png',
     eyebrow: 'People and activity',
-    activeKeys: ['community', 'favorites', 'notification'],
+    activeKeys: ['community', 'favorites'],
     children: [
       {
         href: '/community',
@@ -73,6 +82,7 @@
         href: '/notification',
         label: 'Notifications',
         description: 'Recent interactions.',
+        phoneOnly: true,
       },
     ],
   },
@@ -187,12 +197,14 @@
                       <p class="mt-1 text-lg font-black leading-tight text-[#113e14]">{{ item.label }}</p>
                     </div>
                     @each(child in item.children)
-                      <a href="{{ child.href }}" class="mt-2 block rounded-[1rem] px-4 py-3 transition hover:bg-[#416543]/10">
-                        <span class="block text-sm font-black text-[#113e14]">{{ child.label }}</span>
-                        @if(child.description)
-                          <span class="mt-0.5 block text-xs font-bold leading-5 text-[#416543]">{{ child.description }}</span>
-                        @endif
-                      </a>
+                      @if((!child.phoneOnly || frontend === 'Phone') && (!child.gardenerOnly || auth.user?.role === 'gardener'))
+                        <a href="{{ child.href }}" class="mt-2 block rounded-[1rem] px-4 py-3 transition hover:bg-[#416543]/10">
+                          <span class="block text-sm font-black text-[#113e14]">{{ child.label }}</span>
+                          @if(child.description)
+                            <span class="mt-0.5 block text-xs font-bold leading-5 text-[#416543]">{{ child.description }}</span>
+                          @endif
+                        </a>
+                      @endif
                     @end
                   </div>
                 </div>
@@ -210,7 +222,20 @@
       @endif
     </div>
 
-    <details class="group relative justify-self-end" data-app-profile-menu>
+    <div class="flex items-center justify-self-end gap-2" data-pb-navbar-account>
+      @if(auth.user && frontend === 'PC')
+        <a href="/notification" class="{{ active === 'notification' ? 'bg-[#ebe3a7] text-[#113e14]' : 'bg-white/14 text-white hover:bg-white/24' }} relative flex h-12 w-12 items-center justify-center rounded-full border border-white/28 shadow-lg transition" aria-label="Notifications{{ notificationCount ? `, ${notificationCount} unread` : '' }}" title="Notifications">
+          <img src="/resources/images/community/notifications.png" alt="" class="h-6 w-6 object-contain">
+          @if(notificationCount)
+            <span class="absolute -right-1 -top-1 grid min-h-5 min-w-5 place-items-center rounded-full border-2 border-[#416543] bg-[#dca15d] px-1 text-[10px] font-black leading-none text-[#113e14] shadow-sm" aria-hidden="true">
+              {{ notificationCount > 99 ? '99+' : notificationCount }}
+            </span>
+            <span class="sr-only" aria-live="polite">{{ notificationCount }} unread notifications</span>
+          @endif
+        </a>
+      @endif
+
+      <details class="group relative" data-app-profile-menu>
       <summary class="list-none">
         <span class="flex h-12 w-12 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 border-white/70 bg-[#113e14] text-sm font-black leading-none text-[#ebe3a7] shadow-lg transition hover:shadow-[0_0_18px_rgba(235,227,167,0.55)]">
           @if(avatarUrl)
@@ -277,7 +302,8 @@
           </div>
         @endif
       </div>
-    </details>
+      </details>
+    </div>
   </div>
 
   @if(searchError)
@@ -286,3 +312,4 @@
     </div>
   @endif
 </header>
+@endif

@@ -18,6 +18,7 @@ const MAX_REQUEST_DATE_YEARS = 2
 const MIN_LOCATION_LENGTH = 8
 const MIN_DESCRIPTION_LENGTH = 20
 const MIN_RESPONSE_LENGTH = 10
+const DEMO_CARD_NUMBER = '0000000000000000'
 type FormattedGardener = {
   name: string
   username: string
@@ -147,6 +148,7 @@ export default class ServicesController {
     if (user.role !== 'gardener') {
       const serviceRequests = await ServiceRequest.query()
         .where('clientUserId', user.id)
+        .whereNull('clientHiddenAt')
         .preload('gardenerProfile', (query) => {
           query.preload('user', (userQuery) => userQuery.preload('accountProfile'))
           query.preload('services', (serviceQuery) =>
@@ -182,6 +184,7 @@ export default class ServicesController {
     const serviceRequests = await ServiceRequest.query()
       .if(gardener, (query) => query.where('gardenerProfileId', gardener!.id))
       .if(!gardener, (query) => query.whereRaw('1 = 0'))
+      .whereNull('gardenerHiddenAt')
       .preload('client', (query) => query.preload('accountProfile'))
       .orderBy('createdAt', 'desc')
 
@@ -240,14 +243,9 @@ export default class ServicesController {
     const paymentMethod = this.parsePaymentMethod(request.input('payment_method'))
     const payment =
       paymentMethod === 'card'
-        ? this.parseCardPayment({
-            cardholderName: request.input('cardholder_name'),
-            cardNumber: request.input('card_number'),
-            expiry: request.input('card_expiry'),
-            cvc: request.input('card_cvc'),
-          })
+        ? { brand: 'Demo Card', lastFour: DEMO_CARD_NUMBER.slice(-4) }
         : paymentMethod === 'paypal'
-          ? this.parsePaypalPayment(request.input('paypal_email'))
+          ? { brand: 'PayPal', lastFour: null }
           : paymentMethod === 'cash'
             ? { brand: 'Cash', lastFour: null }
             : null
@@ -450,6 +448,34 @@ export default class ServicesController {
     })
   }
 
+  async dismissCompletedRequest({ auth, params, response, session }: HttpContext) {
+    const user = auth.user!
+    const serviceRequest = await ServiceRequest.find(Number(params.id))
+
+    if (!serviceRequest || serviceRequest.status !== 'completed' || !serviceRequest.verifiedAt) {
+      session.flash('requestError', 'Only completed requests can be removed from this list.')
+      return response.redirect('/requested')
+    }
+
+    if (user.role === 'client' && serviceRequest.clientUserId === user.id) {
+      serviceRequest.clientHiddenAt = DateTime.now()
+    } else if (user.role === 'gardener') {
+      const gardener = await GardenerProfile.query().where('userId', user.id).first()
+      if (!gardener || serviceRequest.gardenerProfileId !== gardener.id) {
+        session.flash('requestError', 'That request does not belong to your account.')
+        return response.redirect('/requested')
+      }
+      serviceRequest.gardenerHiddenAt = DateTime.now()
+    } else {
+      session.flash('requestError', 'That request does not belong to your account.')
+      return response.redirect('/requested')
+    }
+
+    await serviceRequest.save()
+    session.flash('success', 'Completed request removed from your list.')
+    return response.redirect('/requested')
+  }
+
   private async updateRequestAsGardener(input: {
     userId: number
     requestId: number
@@ -487,7 +513,10 @@ export default class ServicesController {
           return { ok: false, message: 'Only pending requests can be accepted.' }
         }
         if (!this.hasRequiredResponse(input.responseText)) {
-          return { ok: false, message: 'Write a response of at least 10 characters before accepting.' }
+          return {
+            ok: false,
+            message: 'Write a response of at least 10 characters before accepting.',
+          }
         }
         serviceRequest.status = 'accepted'
       } else if (input.action === 'schedule') {
@@ -733,8 +762,7 @@ export default class ServicesController {
           Math.round((Number(serviceRequest.heldAmount || 0) - payableAmount) * 100) / 100
         )
     serviceRequest.paymentReleasedAt = now
-    serviceRequest.paymentRefundedAt =
-      Number(serviceRequest.refundedAmount || 0) > 0 ? now : null
+    serviceRequest.paymentRefundedAt = Number(serviceRequest.refundedAmount || 0) > 0 ? now : null
     this.clearPrivateLocation(serviceRequest, now)
     await serviceRequest.save()
 
@@ -812,11 +840,7 @@ export default class ServicesController {
     return new Set(rows.map((row) => Number(row.favorite_user_id)).filter(Boolean))
   }
 
-  private profileMediaUrl(
-    userId: number,
-    url?: string | null,
-    updatedAt?: DateTime | null
-  ) {
+  private profileMediaUrl(userId: number, url?: string | null, updatedAt?: DateTime | null) {
     if (!url) return null
 
     const legacySecureUrl = url.match(/^\/profile\/media\/(avatar|banner)\/([^/]+)$/)
@@ -832,9 +856,7 @@ export default class ServicesController {
 
   private parseBudget(value: unknown) {
     const amount = Number(String(value || '').replace(/[^0-9.]/g, ''))
-    return Number.isFinite(amount) &&
-      amount >= MIN_REQUEST_BUDGET &&
-      amount <= MAX_REQUEST_BUDGET
+    return Number.isFinite(amount) && amount >= MIN_REQUEST_BUDGET && amount <= MAX_REQUEST_BUDGET
       ? Math.round(amount * 100) / 100
       : null
   }
@@ -926,17 +948,13 @@ export default class ServicesController {
     return schedule
       .split(/\n+/)
       .map((line) => {
-        const times = Array.from(
-          line.matchAll(/\b(\d{1,2})(?::(\d{2}))\s*(AM|PM)?\b/gi)
-        )
+        const times = Array.from(line.matchAll(/\b(\d{1,2})(?::(\d{2}))\s*(AM|PM)?\b/gi))
           .map((match) => this.normalizeScheduleTime(match[1], match[2], match[3]))
           .filter((time): time is string => Boolean(time))
           .slice(0, 2)
         const days = this.parseScheduleDays(line)
 
-        return days.length && times.length === 2
-          ? { days, start: times[0], end: times[1] }
-          : null
+        return days.length && times.length === 2 ? { days, start: times[0], end: times[1] } : null
       })
       .filter((window): window is ScheduleWindow => Boolean(window))
   }
@@ -1029,52 +1047,10 @@ export default class ServicesController {
     return allowed.includes(normalized as ServiceType) ? (normalized as ServiceType) : null
   }
 
-  private parseCardPayment(input: {
-    cardholderName: unknown
-    cardNumber: unknown
-    expiry: unknown
-    cvc: unknown
-  }) {
-    const cardholderName = String(input.cardholderName || '').trim()
-    const cardNumber = String(input.cardNumber || '').replace(/\D/g, '')
-    const expiry = String(input.expiry || '').trim()
-    const cvc = String(input.cvc || '').replace(/\D/g, '')
-
-    if (
-      cardholderName.length < 3 ||
-      cardholderName.length > 100 ||
-      cardNumber.length < 13 ||
-      cardNumber.length > 19 ||
-      !/^\d{2}\/\d{2}$/.test(expiry) ||
-      !/^\d{3,4}$/.test(cvc)
-    ) {
-      return null
-    }
-
-    const [month, year] = expiry.split('/').map(Number)
-    const expiryDate = DateTime.local(2000 + year, month).endOf('month')
-    if (month < 1 || month > 12 || !expiryDate.isValid || expiryDate < DateTime.now()) {
-      return null
-    }
-
-    return {
-      brand: this.cardBrand(cardNumber),
-      lastFour: cardNumber.slice(-4),
-    }
-  }
-
-  private parsePaypalPayment(value: unknown) {
-    const email = String(value || '').trim().toLowerCase()
-    if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return null
-
-    return {
-      brand: 'PayPal',
-      lastFour: null,
-    }
-  }
-
   private parsePaymentMethod(value: unknown) {
-    const method = String(value || '').trim().toLowerCase()
+    const method = String(value || '')
+      .trim()
+      .toLowerCase()
     return ['cash', 'paypal', 'card'].includes(method)
       ? (method as 'cash' | 'paypal' | 'card')
       : null
@@ -1094,13 +1070,6 @@ export default class ServicesController {
     ].filter((method) => selected.has(method.value))
 
     return methods.length ? methods : [{ value: 'cash', label: 'Cash' }]
-  }
-
-  private cardBrand(cardNumber: string) {
-    if (/^4/.test(cardNumber)) return 'Visa'
-    if (/^(5[1-5]|2[2-7])/.test(cardNumber)) return 'Mastercard'
-    if (/^3[47]/.test(cardNumber)) return 'American Express'
-    return 'Card'
   }
 
   private refundHeldPayment(serviceRequest: ServiceRequest, now: DateTime) {
@@ -1216,7 +1185,9 @@ export default class ServicesController {
       budget: this.formatMoney(serviceRequest.budget, 'No budget'),
       ...this.paymentDetails(serviceRequest),
       finalAmount: this.formatMoney(serviceRequest.finalAmount, 'Pending final amount'),
-      finalAmountInput: serviceRequest.finalAmount ? Number(serviceRequest.finalAmount).toFixed(2) : '',
+      finalAmountInput: serviceRequest.finalAmount
+        ? Number(serviceRequest.finalAmount).toFixed(2)
+        : '',
       gardenerResponse: serviceRequest.gardenerResponse || null,
       createdAt: serviceRequest.createdAt.toFormat('DD, h:mm a'),
       completedAt: serviceRequest.completedAt
@@ -1229,8 +1200,7 @@ export default class ServicesController {
       clientConfirmed: Boolean(serviceRequest.clientConfirmedAt),
       gardenerConfirmed: Boolean(serviceRequest.gardenerConfirmedAt),
       confirmationPending:
-        Boolean(serviceRequest.clientConfirmedAt) !==
-        Boolean(serviceRequest.gardenerConfirmedAt),
+        Boolean(serviceRequest.clientConfirmedAt) !== Boolean(serviceRequest.gardenerConfirmedAt),
       waitingForLabel: this.waitingForConfirmationLabel(serviceRequest),
       rewardPointsAwarded: Number(serviceRequest.rewardPointsAwarded || 0),
       isThisWeek: scheduledFor ? scheduledFor.hasSame(DateTime.now(), 'week') : false,
@@ -1292,8 +1262,7 @@ export default class ServicesController {
       clientConfirmed: Boolean(serviceRequest.clientConfirmedAt),
       gardenerConfirmed: Boolean(serviceRequest.gardenerConfirmedAt),
       confirmationPending:
-        Boolean(serviceRequest.clientConfirmedAt) !==
-        Boolean(serviceRequest.gardenerConfirmedAt),
+        Boolean(serviceRequest.clientConfirmedAt) !== Boolean(serviceRequest.gardenerConfirmedAt),
       waitingForLabel: this.waitingForConfirmationLabel(serviceRequest),
       canConfirmComplete:
         ['accepted', 'scheduled'].includes(serviceRequest.status) &&
@@ -1411,9 +1380,7 @@ export default class ServicesController {
       isCashPayment: isCash,
       hasPaymentHold: !isCash && Number(serviceRequest.heldAmount || 0) > 0,
       heldAmount: this.formatMoney(serviceRequest.heldAmount, isCash ? 'Cash' : 'No payment held'),
-      heldAmountInput: isCash
-        ? ''
-        : Number(serviceRequest.budget || 0).toFixed(2),
+      heldAmountInput: isCash ? '' : Number(serviceRequest.budget || 0).toFixed(2),
       releasedAmount: this.formatMoney(serviceRequest.releasedAmount, 'Not released'),
       refundedAmount: this.formatMoney(serviceRequest.refundedAmount, 'No refund'),
       hasRefund: Number(serviceRequest.refundedAmount || 0) > 0,

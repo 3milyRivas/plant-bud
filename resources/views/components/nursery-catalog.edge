@@ -31,10 +31,10 @@
       @end
     </div>
 
-    <div class="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3" data-nursery-catalog-list>
+    <div class="nursery-catalog-grid mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3" data-nursery-catalog-list>
       @each(group in groups)
         @each(product in group.products)
-              <article class="group overflow-hidden rounded-[1.75rem] border border-[#416543]/12 bg-white shadow-[0_16px_45px_rgba(17,62,20,0.10)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_22px_55px_rgba(17,62,20,0.16)]" data-catalog-product data-catalog-category="{{ group.name.toLowerCase() }}">
+              <article class="nursery-catalog-product group overflow-hidden rounded-[1.75rem] border border-[#416543]/12 bg-white shadow-[0_16px_45px_rgba(17,62,20,0.10)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_22px_55px_rgba(17,62,20,0.16)]" data-catalog-product data-catalog-category="{{ group.name.toLowerCase() }}">
                 <div class="relative aspect-[4/3] overflow-hidden bg-[#dfe8cf]">
                   @if(product.imageUrl)
                     <img src="{{ product.imageUrl }}" alt="{{ product.name }}" loading="lazy" class="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]">

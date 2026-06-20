@@ -10,7 +10,7 @@ import { test } from '@japa/runner'
 test.group('Profile settings', (group) => {
   group.each.setup(() => testUtils.db().withGlobalTransaction())
 
-  test('gardener can configure private card and PayPal payout destinations', async ({
+  test('gardener payout destinations use fixed demo card and PayPal details', async ({
     browserContext,
     visit,
     assert,
@@ -52,23 +52,35 @@ test.group('Profile settings', (group) => {
       .locator('[data-payment-method-checkbox][value="Paypal"]')
       .check({ force: true })
     await profilePage.locator('[data-payment-method-checkbox][value="Card"]').check({ force: true })
-    await profilePage.locator('input[name="payout_paypal_email"]').fill('payments@example.com')
-    await profilePage.locator('input[name="payout_cardholder_name"]').fill('Payout Gardener')
-    await profilePage.locator('input[name="payout_card_number"]').fill('4242424242424242')
+    assert.isFalse(await profilePage.locator('input[name="payout_paypal_email"]').isEditable())
+    assert.isFalse(await profilePage.locator('input[name="payout_card_number"]').isEditable())
+    assert.equal(
+      await profilePage.locator('input[name="payout_paypal_email"]').inputValue(),
+      'testplantbud@gmail.com'
+    )
+    assert.equal(
+      await profilePage.locator('input[name="payout_card_number"]').inputValue(),
+      '0000 0000 0000 0000'
+    )
+    await profilePage.locator('input[name="payout_paypal_email"]').evaluate((input) => {
+      input.value = 'manipulated@example.com'
+    })
+    await profilePage.locator('input[name="payout_card_number"]').evaluate((input) => {
+      input.value = '4242 4242 4242 4242'
+    })
     await profilePage.getByRole('button', { name: 'Save changes' }).click()
     await profilePage.waitForURL('**/profile')
 
     await gardener.refresh()
     assert.include(gardener.paymentMethods || '', 'Paypal')
     assert.include(gardener.paymentMethods || '', 'Card')
-    assert.equal(gardener.payoutPaypalEmail, 'payments@example.com')
-    assert.equal(gardener.payoutCardholderName, 'Payout Gardener')
-    assert.equal(gardener.payoutCardBrand, 'Visa')
-    assert.equal(gardener.payoutCardLastFour, '4242')
-    assert.notInclude(JSON.stringify(gardener.serialize()), '4242424242424242')
+    assert.equal(gardener.payoutPaypalEmail, 'testplantbud@gmail.com')
+    assert.equal(gardener.payoutCardholderName, 'Plant Bud Demo Account')
+    assert.equal(gardener.payoutCardBrand, 'Demo Card')
+    assert.equal(gardener.payoutCardLastFour, '0000')
   })
 
-  test('nursery can configure a PayPal payout account from its own profile', async ({
+  test('nursery PayPal payout destination is fixed to the demo account', async ({
     browserContext,
     visit,
     assert,
@@ -110,15 +122,18 @@ test.group('Profile settings', (group) => {
     await communityProfile
       .locator('[data-payment-method-checkbox][value="Paypal"]')
       .check({ force: true })
-    await communityProfile
-      .locator('input[name="payout_paypal_email"]')
-      .fill('nursery.payments@example.com')
+    assert.isFalse(
+      await communityProfile.locator('input[name="payout_paypal_email"]').isEditable()
+    )
+    await communityProfile.locator('input[name="payout_paypal_email"]').evaluate((input) => {
+      input.value = 'nursery.manipulated@example.com'
+    })
     await communityProfile.getByRole('button', { name: 'Save changes' }).click()
     await communityProfile.waitForURL('**/profile')
 
     await nursery.refresh()
     assert.include(nursery.paymentMethods || '', 'Paypal')
-    assert.equal(nursery.payoutPaypalEmail, 'nursery.payments@example.com')
+    assert.equal(nursery.payoutPaypalEmail, 'testplantbud@gmail.com')
     assert.isNull(nursery.payoutCardLastFour)
   })
 
